@@ -1,0 +1,31 @@
+{
+  "crmApp": {
+    "prospect": {
+      "home": {
+        "title": "Prospects",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Prospect",
+        "createOrEditLabel": "Create or edit a Prospect",
+        "notFound": "No Prospects found"
+      },
+      "created": "A new Prospect is created with identifier {{ param }}",
+      "updated": "A Prospect is updated with identifier {{ param }}",
+      "deleted": "A Prospect is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Prospect {{ id }}?"
+      },
+      "detail": {
+        "title": "Prospect"
+      },
+      "id": "ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "source": "Source",
+      "status": "Status",
+      "convertedTo": "Converted To",
+      "convertedBy": "Converted By"
+    }
+  }
+}

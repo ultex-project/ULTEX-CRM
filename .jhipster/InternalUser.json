@@ -1,0 +1,24 @@
+{
+  "annotations": {
+    "changelogDate": "20250922204840"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fullName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "UserRole",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ADMIN,MANAGER,COMMERCIAL"
+    }
+  ],
+  "name": "InternalUser",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

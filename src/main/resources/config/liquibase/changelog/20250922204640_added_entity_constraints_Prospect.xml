@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Prospect.
+    -->
+    <changeSet id="20250922204640-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="converted_to_id"
+                                 baseTableName="prospect"
+                                 constraintName="fk_prospect__converted_to_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="converted_by_id"
+                                 baseTableName="prospect"
+                                 constraintName="fk_prospect__converted_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="internal_user"
+                                 />
+    </changeSet>
+</databaseChangeLog>

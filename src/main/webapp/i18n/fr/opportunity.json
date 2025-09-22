@@ -1,0 +1,30 @@
+{
+  "crmApp": {
+    "opportunity": {
+      "home": {
+        "title": "Opportunities",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Opportunity",
+        "createOrEditLabel": "Créer ou éditer un Opportunity",
+        "notFound": "Aucun Opportunity trouvé"
+      },
+      "created": "Un nouveau Opportunity a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Opportunity avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Opportunity avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Opportunity {{ id }} ?"
+      },
+      "detail": {
+        "title": "Opportunity"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "amount": "Amount",
+      "stage": "Stage",
+      "closeDate": "Close Date",
+      "assignedTo": "Assigned To",
+      "client": "Client"
+    }
+  }
+}

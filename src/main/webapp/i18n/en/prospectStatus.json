@@ -1,0 +1,11 @@
+{
+  "crmApp": {
+    "ProspectStatus": {
+      "null": "",
+      "NEW": "NEW",
+      "CONTACTED": "CONTACTED",
+      "QUALIFIED": "QUALIFIED",
+      "LOST": "LOST"
+    }
+  }
+}

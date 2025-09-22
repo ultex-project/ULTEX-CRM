@@ -1,0 +1,10 @@
+{
+  "crmApp": {
+    "UserRole": {
+      "null": "",
+      "ADMIN": "ADMIN",
+      "MANAGER": "MANAGER",
+      "COMMERCIAL": "COMMERCIAL"
+    }
+  }
+}

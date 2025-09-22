@@ -1,0 +1,52 @@
+{
+  "annotations": {
+    "changelogDate": "20250922204740"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "stage",
+      "fieldType": "OpportunityStage",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "LEAD,NEGOTIATION,WON,LOST"
+    },
+    {
+      "fieldName": "closeDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "Opportunity",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "internalUser",
+      "relationshipName": "assignedTo",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "client",
+      "otherEntityRelationshipName": "opportunities",
+      "relationshipName": "client",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

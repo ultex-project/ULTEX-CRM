@@ -1,0 +1,18 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "crmApp",
+    "buildTool": "maven",
+    "clientFramework": "react",
+    "enableTranslation": true,
+    "entities": ["Client", "Prospect", "Opportunity", "InternalUser"],
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "YmNmMjA3ZjNiMWNlMDdhMTA3MThmYWVjN2FmZmQ5NTAyNDYxOGFmYzVhOGE2YjFlYWY2Yjc5NGFkZTQyOWUyN2FiZTc0OWY2NjZmNTZiMGMyMTYxODBiNWFhMWZhYmMzYjIxNDJhYzc4ODJlZTg0ZDY1ODY5MDA3NjhiMDhkM2Q=",
+    "languages": ["fr", "en"],
+    "lastLiquibaseTimestamp": 1758574120000,
+    "nativeLanguage": "fr",
+    "packageName": "com.ultex.crm",
+    "prodDatabaseType": "postgresql"
+  }
+}

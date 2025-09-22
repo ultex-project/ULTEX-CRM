@@ -1,0 +1,11 @@
+{
+  "crmApp": {
+    "OpportunityStage": {
+      "null": "",
+      "LEAD": "LEAD",
+      "NEGOTIATION": "NEGOTIATION",
+      "WON": "WON",
+      "LOST": "LOST"
+    }
+  }
+}

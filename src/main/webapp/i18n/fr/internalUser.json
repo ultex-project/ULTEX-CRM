@@ -1,0 +1,25 @@
+{
+  "crmApp": {
+    "internalUser": {
+      "home": {
+        "title": "InternalUsers",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Internal User",
+        "createOrEditLabel": "Créer ou éditer un Internal User",
+        "notFound": "Aucun Internal User trouvé"
+      },
+      "created": "Un nouveau Internal User a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Internal User avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Internal User avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Internal User {{ id }} ?"
+      },
+      "detail": {
+        "title": "Internal User"
+      },
+      "id": "ID",
+      "fullName": "Full Name",
+      "role": "Role"
+    }
+  }
+}

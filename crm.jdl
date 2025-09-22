@@ -1,0 +1,82 @@
+application {
+  config {
+    baseName crmApp,
+    applicationType monolith,
+    packageName com.ultex.crm,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+    buildTool maven,
+    clientFramework react,
+    enableTranslation true,
+    nativeLanguage fr,
+    languages [en, fr]
+  }
+  entities *
+}
+
+entity Client {
+  firstName String required,
+  lastName String required,
+  email String required unique,
+  phone String,
+  company String,
+  status ClientStatus required
+}
+
+entity Prospect {
+  firstName String required,
+  lastName String required,
+  email String required unique,
+  phone String,
+  source String,
+  status ProspectStatus required
+}
+
+entity Opportunity {
+  title String required,
+  description String,
+  amount BigDecimal required,
+  stage OpportunityStage required,
+  closeDate Instant
+}
+
+entity InternalUser {
+  fullName String required,
+  role UserRole required
+}
+
+/* ENUMS */
+enum ClientStatus {
+  ACTIVE, INACTIVE, ARCHIVED
+}
+
+enum ProspectStatus {
+  NEW, CONTACTED, QUALIFIED, LOST
+}
+
+enum OpportunityStage {
+  LEAD, NEGOTIATION, WON, LOST
+}
+
+enum UserRole {
+  ADMIN, MANAGER, COMMERCIAL
+}
+
+/* RELATIONS */
+relationship OneToMany {
+  Client{opportunities} to Opportunity{client}
+}
+
+relationship ManyToOne {
+  Opportunity{assignedTo} to InternalUser,
+  Prospect{convertedBy} to InternalUser
+}
+
+relationship OneToOne {
+  Prospect{convertedTo} to Client
+}
+
+/* OPTIONS */
+paginate Client, Prospect, Opportunity with pagination
+service all with serviceClass
+dto all with mapstruct
