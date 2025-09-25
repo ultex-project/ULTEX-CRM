@@ -1,0 +1,16 @@
+{
+  "crmApp": {
+    "admin": {
+      "dashboard": {
+        "title": "CRM Admin Dashboard",
+        "chartTitle": "Opportunities by Stage",
+        "recentActivity": "Recent Activity",
+        "quickActions": "Quick Actions",
+        "createClient": "+ Create Client",
+        "createProspect": "+ Create Prospect",
+        "createOpportunity": "+ Create Opportunity",
+        "convertProspect": "Convert Prospect"
+      }
+    }
+  }
+}

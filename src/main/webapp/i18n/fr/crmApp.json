@@ -1,0 +1,16 @@
+{
+  "crmApp": {
+    "admin": {
+      "dashboard": {
+        "title": "Tableau de bord administrateur CRM",
+        "chartTitle": "Opportunités par étape",
+        "recentActivity": "Activité récente",
+        "quickActions": "Actions rapides",
+        "createClient": "+ Créer un client",
+        "createProspect": "+ Créer une opportunité",
+        "createOpportunity": "+ Créer une affaire",
+        "convertProspect": "Convertir un prospect"
+      }
+    }
+  }
+}
