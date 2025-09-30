@@ -14,22 +14,43 @@ application {
   entities *
 }
 
+// ===== ENTITIES =====
+
 entity Client {
+  clientId Long, // Custom ID field (you can generate this in service layer)
   firstName String required,
   lastName String required,
   email String required unique,
-  phone String,
-  company String,
-  status ClientStatus required
+  phone1 String,
+  phone2 String,
+  cin String,
+  address String,
+  city String,
+  country String,
+  deliveryAddress String,
+  referredBy String, // "Référé Par" — could be a reference to another Client or User
+  status ClientStatus required,
+  createdAt Instant,
+  updatedAt Instant
 }
 
 entity Prospect {
   firstName String required,
   lastName String required,
   email String required unique,
-  phone String,
+  phone1 String,
+  phone2 String,
   source String,
-  status ProspectStatus required
+  cin String,
+  address String,
+  city String,
+  country String,
+  deliveryAddress String,
+  referredBy String,
+  status ProspectStatus required,
+  convertedDate Instant,
+  createdAt Instant,
+  updatedAt Instant
 }
 
 entity Opportunity {
@@ -37,12 +58,43 @@ entity Opportunity {
   description String,
   amount BigDecimal required,
   stage OpportunityStage required,
-  closeDate Instant
+  closeDate Instant,
+  createdAt Instant,
+  updatedAt Instant
 }
 
 entity InternalUser {
   fullName String required,
-  role UserRole required
+  role UserRole required,
+  email String required unique,
+  phone String,
+  createdAt Instant,
+  updatedAt Instant
+}
+
+entity Company {
+  name String required,
+  address String,
+  city String,
+  country String,
+  phone String,
+  email String,
+  website String,
+  industry String,
+  createdAt Instant,
+  updatedAt Instant
+}
+
+entity Contact {
+  firstName String required,
+  lastName String required,
+  email String required,
+  phone String,
+  cin String,
+  position String,
+  quality String, // "Qualité du contact"
+  createdAt Instant,
+  updatedAt Instant
 }
 
 /* ENUMS */
@@ -62,21 +114,64 @@ enum UserRole {
   ADMIN, MANAGER, COMMERCIAL
 }
 
-/* RELATIONS */
+/* RELATIONSHIPS */
+
+// --- Core Business Logic Relationships ---
+
+// Client has many Opportunities
 relationship OneToMany {
-  Client{opportunities} to Opportunity{client}
+  Client{opportunities} to Opportunity{client required}
 }
 
+// Opportunity is assigned to one InternalUser
 relationship ManyToOne {
-  Opportunity{assignedTo} to InternalUser,
-  Prospect{convertedBy} to InternalUser
+  Opportunity{assignedTo required} to InternalUser{opportunities}
 }
 
+// --- Conversion Flow ---
+
+// Prospect can be converted into one Client (OneToOne)
 relationship OneToOne {
-  Prospect{convertedTo} to Client
+  Prospect{convertedTo} to Client{convertedFromProspect}
+}
+
+// Prospect was converted by one InternalUser
+relationship ManyToOne {
+  Prospect{convertedBy required} to InternalUser{convertedProspects}
+}
+
+// --- Entity-Company Relationships ---
+
+// Client optionally belongs to one Company
+relationship ManyToOne {
+  Client{company} to Company{clients}
+}
+
+// Prospect optionally belongs to one Company
+relationship ManyToOne {
+  Prospect{company} to Company{prospects}
+}
+
+// Contact belongs to one Company (required)
+relationship ManyToOne {
+  Contact{company required} to Company{contacts}
+}
+
+// --- Contact Linking Relationships ---
+
+// Contact optionally links to one Client
+relationship ManyToOne {
+  Contact{client} to Client{contacts}
+}
+
+// Contact optionally links to one Prospect
+relationship ManyToOne {
+  Contact{prospect} to Prospect{contacts}
 }
 
 /* OPTIONS */
-paginate Client, Prospect, Opportunity with pagination
+
+paginate Client, Prospect, Opportunity, Company, Contact with pagination
 service all with serviceClass
 dto all with mapstruct
+search all with elasticsearch

@@ -1,0 +1,20 @@
+.dashboard-layout {
+  .dashboard-main {
+    transition: margin-left 0.3s ease;
+    margin-left: 260px; // Match sidebar default
+    &.sidebar-collapsed {
+      margin-left: 80px; // Match sidebar collapsed
+    }
+  }
+
+  // Mobile: Hide sidebar, main content takes full width
+  @media (max-width: 1024px) {
+    .dashboard-main {
+      margin-left: 0 !important;
+
+      &.sidebar-collapsed {
+        margin-left: 0 !important;
+      }
+    }
+  }
+}

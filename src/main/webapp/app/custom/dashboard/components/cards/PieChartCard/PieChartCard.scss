@@ -1,0 +1,52 @@
+.chart-card {
+  background: #ffffff;
+  border: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+  }
+
+  .card-text {
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+
+  .dropdown-menu-icon {
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 0.875rem;
+
+    &:hover {
+      color: #495057;
+    }
+  }
+
+  .recharts-pie-label {
+    fill: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  .recharts-legend-item {
+    margin-right: 1rem;
+  }
+
+  .recharts-legend-item-text {
+    font-size: 0.75rem;
+    color: #495057;
+  }
+}

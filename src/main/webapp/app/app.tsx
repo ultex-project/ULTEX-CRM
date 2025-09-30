@@ -4,7 +4,7 @@ import 'app/config/dayjs';
 
 import React, { useEffect } from 'react';
 import { Card } from 'reactstrap';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useLocation } from 'react-router-dom'; // 👈 Add useLocation
 import { ToastContainer } from 'react-toastify';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -19,8 +19,10 @@ import AppRoutes from 'app/routes';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
-export const App = () => {
+// 👇 Create a wrapper component to use useLocation
+const AppContent = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation(); // 👈 Get current route
 
   useEffect(() => {
     dispatch(getSession());
@@ -34,12 +36,18 @@ export const App = () => {
   const isInProduction = useAppSelector(state => state.applicationProfile.inProduction);
   const isOpenAPIEnabled = useAppSelector(state => state.applicationProfile.isOpenAPIEnabled);
 
-  const paddingTop = '60px';
+  // 👇 Check if current route is dashboard (or starts with /dashboard)
+  const isDashboardRoute = location.pathname.startsWith('/dashboard');
+
+  // 👇 Adjust padding: no header = no top padding
+  const paddingTop = isDashboardRoute ? '0' : '60px';
+
   return (
-    <BrowserRouter basename={baseHref}>
-      <div className="app-container" style={{ paddingTop }}>
-        <ToastContainer position="top-left" className="toastify-container" toastClassName="toastify-toast" />
-        <ErrorBoundary>
+    <div className="app-container" style={{ paddingTop }}>
+      <ToastContainer position="top-left" className="toastify-container" toastClassName="toastify-toast" />
+      <ErrorBoundary>
+        {/* 👇 Only render Header if NOT on dashboard */}
+        {!isDashboardRoute && (
           <Header
             isAuthenticated={isAuthenticated}
             isAdmin={isAdmin}
@@ -48,18 +56,23 @@ export const App = () => {
             isInProduction={isInProduction}
             isOpenAPIEnabled={isOpenAPIEnabled}
           />
+        )}
+      </ErrorBoundary>
+      <div id="app-view-container">
+        <ErrorBoundary>
+          <AppRoutes />
         </ErrorBoundary>
-        <div className="container-fluid view-container" id="app-view-container">
-          <Card className="jh-card">
-            <ErrorBoundary>
-              <AppRoutes />
-            </ErrorBoundary>
-          </Card>
-          <Footer />
-        </div>
+        {/* 👇 Only render Footer if NOT on dashboard */}
+        {!isDashboardRoute && <Footer />}
       </div>
-    </BrowserRouter>
+    </div>
   );
 };
+
+export const App = () => (
+  <BrowserRouter basename={baseHref}>
+    <AppContent />
+  </BrowserRouter>
+);
 
 export default App;

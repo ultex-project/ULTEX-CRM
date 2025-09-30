@@ -3,10 +3,16 @@
     "title": "CrmApp",
     "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
     "menu": {
+      "overview": "Aperçu",
+      "companies": "Entreprises",
+      "contacts": "Contacts",
+      "deals": "Affaires",
+      "reports": "Rapports",
+      "calendar": "Calendrier",
       "home": "Accueil",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Entités",
+        "main": "Entities",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "client": "Client",
         "prospect": "Prospect",
@@ -34,7 +40,11 @@
         "database": "Base de données",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
-      "language": "Langue"
+      "language": "Langue",
+      "title": "Ultex"
+    },
+    "dashboard": {
+      "title": "Bonjour ,"
     },
     "form": {
       "username.label": "Nom d'utilisateur",

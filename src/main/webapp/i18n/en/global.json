@@ -1,8 +1,17 @@
 {
   "global": {
-    "title": "CrmApp",
+    "title": "ULTEx CRM",
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
     "menu": {
+      "overview": "Overview",
+      "companies": "Companies",
+      "contacts": "Contacts",
+      "deals": "Deals",
+      "reports": "Reports",
+      "calendar": "Calendar",
+      "analytics": "Analytics",
+      "expand": "Expand sidebar",
+      "collapse": "Collapse sidebar",
       "home": "Home",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
@@ -34,7 +43,11 @@
         "database": "Database",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
-      "language": "Language"
+      "language": "Language",
+      "title": "Ultex"
+    },
+    "dashboard": {
+      "title": "Hi ,"
     },
     "form": {
       "username.label": "Username",

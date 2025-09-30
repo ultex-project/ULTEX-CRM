@@ -1,0 +1,39 @@
+.metric-card {
+  background: #ffffff;
+  border: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #212529;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+
+  .progress {
+    background-color: #f0f2f5;
+    border-radius: 4px;
+    height: 6px;
+
+    .progress-bar {
+      background-color: #7e57c2;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+  }
+}
