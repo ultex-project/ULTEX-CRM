@@ -1,11 +1,11 @@
-id;full_name;role
-1;délectable au-dessous de jusque;MANAGER
-2;chasser présidence de peur de;ADMIN
-3;dynamique;COMMERCIAL
-4;glouglou chez probablement;COMMERCIAL
-5;davantage subsister;ADMIN
-6;maigre;ADMIN
-7;sitôt que;COMMERCIAL
-8;tendre étant donné que propre;MANAGER
-9;quoique fade au moyen de;ADMIN
-10;concernant vite candide;COMMERCIAL
+id;full_name;role;email;phone;created_at;updated_at
+1;délectable au-dessous de jusque;MANAGER;Jehanne_Fleury@hotmail.fr;0336624986;2025-09-22T14:38:21;2025-09-21T20:50:50
+2;hôte grâce à;ADMIN;Huguette.Marty@hotmail.fr;0153990737;2025-09-22T15:56:17;2025-09-22T13:16:40
+3;candide;ADMIN;Artheme42@gmail.com;0782286686;2025-09-22T17:57:36;2025-09-22T09:54:55
+4;résister;COMMERCIAL;Sylvie_Lucas@hotmail.fr;+33 484984532;2025-09-22T17:16:46;2025-09-22T05:30:00
+5;vivace secours trouver;MANAGER;Ascension18@hotmail.fr;0355529048;2025-09-22T13:08:32;2025-09-22T18:58:06
+6;peindre;COMMERCIAL;Eve.Lecomte@gmail.com;+33 243442803;2025-09-22T17:54:55;2025-09-22T20:12:46
+7;horrible réunir;ADMIN;Amandine_Lucas34@hotmail.fr;+33 722271535;2025-09-22T13:59:39;2025-09-22T15:01:33
+8;sans doute magenta;MANAGER;Gaston.Garnier65@hotmail.fr;+33 711073916;2025-09-22T12:08:06;2025-09-22T14:39:44
+9;voter;ADMIN;Cassien_Dufour52@hotmail.fr;0176251780;2025-09-21T21:34:02;2025-09-22T01:59:24
+10;membre à vie ouch;ADMIN;Leufroy_Martin1@gmail.com;0211256374;2025-09-21T23:09:20;2025-09-22T07:13:44

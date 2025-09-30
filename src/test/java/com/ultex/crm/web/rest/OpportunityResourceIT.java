@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultex.crm.IntegrationTest;
+import com.ultex.crm.domain.Client;
+import com.ultex.crm.domain.InternalUser;
 import com.ultex.crm.domain.Opportunity;
 import com.ultex.crm.domain.enumeration.OpportunityStage;
 import com.ultex.crm.repository.OpportunityRepository;
@@ -54,6 +56,12 @@ class OpportunityResourceIT {
     private static final Instant DEFAULT_CLOSE_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CLOSE_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_CREATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
     private static final String ENTITY_API_URL = "/api/opportunities";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -85,13 +93,36 @@ class OpportunityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Opportunity createEntity() {
-        return new Opportunity()
+    public static Opportunity createEntity(EntityManager em) {
+        Opportunity opportunity = new Opportunity()
             .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
             .amount(DEFAULT_AMOUNT)
             .stage(DEFAULT_STAGE)
-            .closeDate(DEFAULT_CLOSE_DATE);
+            .closeDate(DEFAULT_CLOSE_DATE)
+            .createdAt(DEFAULT_CREATED_AT)
+            .updatedAt(DEFAULT_UPDATED_AT);
+        // Add required entity
+        InternalUser internalUser;
+        if (TestUtil.findAll(em, InternalUser.class).isEmpty()) {
+            internalUser = InternalUserResourceIT.createEntity();
+            em.persist(internalUser);
+            em.flush();
+        } else {
+            internalUser = TestUtil.findAll(em, InternalUser.class).get(0);
+        }
+        opportunity.setAssignedTo(internalUser);
+        // Add required entity
+        Client client;
+        if (TestUtil.findAll(em, Client.class).isEmpty()) {
+            client = ClientResourceIT.createEntity();
+            em.persist(client);
+            em.flush();
+        } else {
+            client = TestUtil.findAll(em, Client.class).get(0);
+        }
+        opportunity.setClient(client);
+        return opportunity;
     }
 
     /**
@@ -100,18 +131,41 @@ class OpportunityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Opportunity createUpdatedEntity() {
-        return new Opportunity()
+    public static Opportunity createUpdatedEntity(EntityManager em) {
+        Opportunity updatedOpportunity = new Opportunity()
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
             .amount(UPDATED_AMOUNT)
             .stage(UPDATED_STAGE)
-            .closeDate(UPDATED_CLOSE_DATE);
+            .closeDate(UPDATED_CLOSE_DATE)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
+        // Add required entity
+        InternalUser internalUser;
+        if (TestUtil.findAll(em, InternalUser.class).isEmpty()) {
+            internalUser = InternalUserResourceIT.createUpdatedEntity();
+            em.persist(internalUser);
+            em.flush();
+        } else {
+            internalUser = TestUtil.findAll(em, InternalUser.class).get(0);
+        }
+        updatedOpportunity.setAssignedTo(internalUser);
+        // Add required entity
+        Client client;
+        if (TestUtil.findAll(em, Client.class).isEmpty()) {
+            client = ClientResourceIT.createUpdatedEntity();
+            em.persist(client);
+            em.flush();
+        } else {
+            client = TestUtil.findAll(em, Client.class).get(0);
+        }
+        updatedOpportunity.setClient(client);
+        return updatedOpportunity;
     }
 
     @BeforeEach
     void initTest() {
-        opportunity = createEntity();
+        opportunity = createEntity(em);
     }
 
     @AfterEach
@@ -231,7 +285,9 @@ class OpportunityResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(sameNumber(DEFAULT_AMOUNT))))
             .andExpect(jsonPath("$.[*].stage").value(hasItem(DEFAULT_STAGE.toString())))
-            .andExpect(jsonPath("$.[*].closeDate").value(hasItem(DEFAULT_CLOSE_DATE.toString())));
+            .andExpect(jsonPath("$.[*].closeDate").value(hasItem(DEFAULT_CLOSE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
     }
 
     @Test
@@ -250,7 +306,9 @@ class OpportunityResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.amount").value(sameNumber(DEFAULT_AMOUNT)))
             .andExpect(jsonPath("$.stage").value(DEFAULT_STAGE.toString()))
-            .andExpect(jsonPath("$.closeDate").value(DEFAULT_CLOSE_DATE.toString()));
+            .andExpect(jsonPath("$.closeDate").value(DEFAULT_CLOSE_DATE.toString()))
+            .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
+            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
     }
 
     @Test
@@ -277,7 +335,9 @@ class OpportunityResourceIT {
             .description(UPDATED_DESCRIPTION)
             .amount(UPDATED_AMOUNT)
             .stage(UPDATED_STAGE)
-            .closeDate(UPDATED_CLOSE_DATE);
+            .closeDate(UPDATED_CLOSE_DATE)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
         OpportunityDTO opportunityDTO = opportunityMapper.toDto(updatedOpportunity);
 
         restOpportunityMockMvc
@@ -403,7 +463,9 @@ class OpportunityResourceIT {
             .description(UPDATED_DESCRIPTION)
             .amount(UPDATED_AMOUNT)
             .stage(UPDATED_STAGE)
-            .closeDate(UPDATED_CLOSE_DATE);
+            .closeDate(UPDATED_CLOSE_DATE)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
 
         restOpportunityMockMvc
             .perform(

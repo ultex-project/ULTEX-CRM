@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Col, Row } from 'reactstrap';
+import { Button, Col, FormText, Row } from 'reactstrap';
 import { Translate, ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -57,6 +57,8 @@ export const OpportunityUpdate = () => {
       values.amount = Number(values.amount);
     }
     values.closeDate = convertDateTimeToServer(values.closeDate);
+    values.createdAt = convertDateTimeToServer(values.createdAt);
+    values.updatedAt = convertDateTimeToServer(values.updatedAt);
 
     const entity = {
       ...opportunityEntity,
@@ -76,11 +78,15 @@ export const OpportunityUpdate = () => {
     isNew
       ? {
           closeDate: displayDefaultDateTime(),
+          createdAt: displayDefaultDateTime(),
+          updatedAt: displayDefaultDateTime(),
         }
       : {
           stage: 'LEAD',
           ...opportunityEntity,
           closeDate: convertDateTimeFromServer(opportunityEntity.closeDate),
+          createdAt: convertDateTimeFromServer(opportunityEntity.createdAt),
+          updatedAt: convertDateTimeFromServer(opportunityEntity.updatedAt),
           assignedTo: opportunityEntity?.assignedTo?.id,
           client: opportunityEntity?.client?.id,
         };
@@ -160,11 +166,28 @@ export const OpportunityUpdate = () => {
                 placeholder="YYYY-MM-DD HH:mm"
               />
               <ValidatedField
+                label={translate('crmApp.opportunity.createdAt')}
+                id="opportunity-createdAt"
+                name="createdAt"
+                data-cy="createdAt"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+              <ValidatedField
+                label={translate('crmApp.opportunity.updatedAt')}
+                id="opportunity-updatedAt"
+                name="updatedAt"
+                data-cy="updatedAt"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+              <ValidatedField
                 id="opportunity-assignedTo"
                 name="assignedTo"
                 data-cy="assignedTo"
                 label={translate('crmApp.opportunity.assignedTo')}
                 type="select"
+                required
               >
                 <option value="" key="0" />
                 {internalUsers
@@ -175,12 +198,16 @@ export const OpportunityUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <ValidatedField
                 id="opportunity-client"
                 name="client"
                 data-cy="client"
                 label={translate('crmApp.opportunity.client')}
                 type="select"
+                required
               >
                 <option value="" key="0" />
                 {clients
@@ -191,6 +218,9 @@ export const OpportunityUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/opportunity" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

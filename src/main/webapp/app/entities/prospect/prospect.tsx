@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { JhiItemCount, JhiPagination, Translate, getPaginationState } from 'react-jhipster';
+import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -123,22 +124,64 @@ export const Prospect = () => {
                 <th className="hand" onClick={sort('email')}>
                   <Translate contentKey="crmApp.prospect.email">Email</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('email')} />
                 </th>
-                <th className="hand" onClick={sort('phone')}>
-                  <Translate contentKey="crmApp.prospect.phone">Phone</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('phone')} />
+                <th className="hand" onClick={sort('phone1')}>
+                  <Translate contentKey="crmApp.prospect.phone1">Phone 1</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phone1')} />
+                </th>
+                <th className="hand" onClick={sort('phone2')}>
+                  <Translate contentKey="crmApp.prospect.phone2">Phone 2</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phone2')} />
                 </th>
                 <th className="hand" onClick={sort('source')}>
                   <Translate contentKey="crmApp.prospect.source">Source</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('source')} />
                 </th>
+                <th className="hand" onClick={sort('cin')}>
+                  <Translate contentKey="crmApp.prospect.cin">Cin</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('cin')} />
+                </th>
+                <th className="hand" onClick={sort('address')}>
+                  <Translate contentKey="crmApp.prospect.address">Address</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('address')} />
+                </th>
+                <th className="hand" onClick={sort('city')}>
+                  <Translate contentKey="crmApp.prospect.city">City</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('city')} />
+                </th>
+                <th className="hand" onClick={sort('country')}>
+                  <Translate contentKey="crmApp.prospect.country">Country</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('country')} />
+                </th>
+                <th className="hand" onClick={sort('deliveryAddress')}>
+                  <Translate contentKey="crmApp.prospect.deliveryAddress">Delivery Address</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('deliveryAddress')} />
+                </th>
+                <th className="hand" onClick={sort('referredBy')}>
+                  <Translate contentKey="crmApp.prospect.referredBy">Referred By</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('referredBy')} />
+                </th>
                 <th className="hand" onClick={sort('status')}>
                   <Translate contentKey="crmApp.prospect.status">Status</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
+                </th>
+                <th className="hand" onClick={sort('convertedDate')}>
+                  <Translate contentKey="crmApp.prospect.convertedDate">Converted Date</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('convertedDate')} />
+                </th>
+                <th className="hand" onClick={sort('createdAt')}>
+                  <Translate contentKey="crmApp.prospect.createdAt">Created At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('createdAt')} />
+                </th>
+                <th className="hand" onClick={sort('updatedAt')}>
+                  <Translate contentKey="crmApp.prospect.updatedAt">Updated At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('updatedAt')} />
                 </th>
                 <th>
                   <Translate contentKey="crmApp.prospect.convertedTo">Converted To</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="crmApp.prospect.convertedBy">Converted By</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.prospect.company">Company</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -154,15 +197,28 @@ export const Prospect = () => {
                   <td>{prospect.firstName}</td>
                   <td>{prospect.lastName}</td>
                   <td>{prospect.email}</td>
-                  <td>{prospect.phone}</td>
+                  <td>{prospect.phone1}</td>
+                  <td>{prospect.phone2}</td>
                   <td>{prospect.source}</td>
+                  <td>{prospect.cin}</td>
+                  <td>{prospect.address}</td>
+                  <td>{prospect.city}</td>
+                  <td>{prospect.country}</td>
+                  <td>{prospect.deliveryAddress}</td>
+                  <td>{prospect.referredBy}</td>
                   <td>
                     <Translate contentKey={`crmApp.ProspectStatus.${prospect.status}`} />
                   </td>
+                  <td>
+                    {prospect.convertedDate ? <TextFormat type="date" value={prospect.convertedDate} format={APP_DATE_FORMAT} /> : null}
+                  </td>
+                  <td>{prospect.createdAt ? <TextFormat type="date" value={prospect.createdAt} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{prospect.updatedAt ? <TextFormat type="date" value={prospect.updatedAt} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{prospect.convertedTo ? <Link to={`/client/${prospect.convertedTo.id}`}>{prospect.convertedTo.id}</Link> : ''}</td>
                   <td>
                     {prospect.convertedBy ? <Link to={`/internal-user/${prospect.convertedBy.id}`}>{prospect.convertedBy.id}</Link> : ''}
                   </td>
+                  <td>{prospect.company ? <Link to={`/company/${prospect.company.id}`}>{prospect.company.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/prospect/${prospect.id}`} color="info" size="sm" data-cy="entityDetailsButton">

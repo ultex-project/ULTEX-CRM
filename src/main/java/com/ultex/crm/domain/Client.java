@@ -5,6 +5,7 @@ import com.ultex.crm.domain.enumeration.ClientStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -27,6 +28,9 @@ public class Client implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "client_id")
+    private Long clientId;
+
     @NotNull
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -39,25 +43,58 @@ public class Client implements Serializable {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "phone")
-    private String phone;
+    @Column(name = "phone_1")
+    private String phone1;
 
-    @Column(name = "company")
-    private String company;
+    @Column(name = "phone_2")
+    private String phone2;
+
+    @Column(name = "cin")
+    private String cin;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "delivery_address")
+    private String deliveryAddress;
+
+    @Column(name = "referred_by")
+    private String referredBy;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ClientStatus status;
 
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "assignedTo", "client" }, allowSetters = true)
     private Set<Opportunity> opportunities = new HashSet<>();
 
-    @JsonIgnoreProperties(value = { "convertedTo", "convertedBy" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "clients", "prospects", "contacts" }, allowSetters = true)
+    private Company company;
+
+    @JsonIgnoreProperties(value = { "convertedTo", "convertedBy", "company", "contacts" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "convertedTo")
-    private Prospect prospect;
+    private Prospect convertedFromProspect;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "company", "client", "prospect" }, allowSetters = true)
+    private Set<Contact> contacts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -72,6 +109,19 @@ public class Client implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getClientId() {
+        return this.clientId;
+    }
+
+    public Client clientId(Long clientId) {
+        this.setClientId(clientId);
+        return this;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 
     public String getFirstName() {
@@ -113,30 +163,108 @@ public class Client implements Serializable {
         this.email = email;
     }
 
-    public String getPhone() {
-        return this.phone;
+    public String getPhone1() {
+        return this.phone1;
     }
 
-    public Client phone(String phone) {
-        this.setPhone(phone);
+    public Client phone1(String phone1) {
+        this.setPhone1(phone1);
         return this;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhone1(String phone1) {
+        this.phone1 = phone1;
     }
 
-    public String getCompany() {
-        return this.company;
+    public String getPhone2() {
+        return this.phone2;
     }
 
-    public Client company(String company) {
-        this.setCompany(company);
+    public Client phone2(String phone2) {
+        this.setPhone2(phone2);
         return this;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setPhone2(String phone2) {
+        this.phone2 = phone2;
+    }
+
+    public String getCin() {
+        return this.cin;
+    }
+
+    public Client cin(String cin) {
+        this.setCin(cin);
+        return this;
+    }
+
+    public void setCin(String cin) {
+        this.cin = cin;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public Client address(String address) {
+        this.setAddress(address);
+        return this;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public Client city(String city) {
+        this.setCity(city);
+        return this;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return this.country;
+    }
+
+    public Client country(String country) {
+        this.setCountry(country);
+        return this;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getDeliveryAddress() {
+        return this.deliveryAddress;
+    }
+
+    public Client deliveryAddress(String deliveryAddress) {
+        this.setDeliveryAddress(deliveryAddress);
+        return this;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public String getReferredBy() {
+        return this.referredBy;
+    }
+
+    public Client referredBy(String referredBy) {
+        this.setReferredBy(referredBy);
+        return this;
+    }
+
+    public void setReferredBy(String referredBy) {
+        this.referredBy = referredBy;
     }
 
     public ClientStatus getStatus() {
@@ -150,6 +278,32 @@ public class Client implements Serializable {
 
     public void setStatus(ClientStatus status) {
         this.status = status;
+    }
+
+    public Instant getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public Client createdAt(Instant createdAt) {
+        this.setCreatedAt(createdAt);
+        return this;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public Client updatedAt(Instant updatedAt) {
+        this.setUpdatedAt(updatedAt);
+        return this;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public Set<Opportunity> getOpportunities() {
@@ -183,22 +337,66 @@ public class Client implements Serializable {
         return this;
     }
 
-    public Prospect getProspect() {
-        return this.prospect;
+    public Company getCompany() {
+        return this.company;
     }
 
-    public void setProspect(Prospect prospect) {
-        if (this.prospect != null) {
-            this.prospect.setConvertedTo(null);
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public Client company(Company company) {
+        this.setCompany(company);
+        return this;
+    }
+
+    public Prospect getConvertedFromProspect() {
+        return this.convertedFromProspect;
+    }
+
+    public void setConvertedFromProspect(Prospect prospect) {
+        if (this.convertedFromProspect != null) {
+            this.convertedFromProspect.setConvertedTo(null);
         }
         if (prospect != null) {
             prospect.setConvertedTo(this);
         }
-        this.prospect = prospect;
+        this.convertedFromProspect = prospect;
     }
 
-    public Client prospect(Prospect prospect) {
-        this.setProspect(prospect);
+    public Client convertedFromProspect(Prospect prospect) {
+        this.setConvertedFromProspect(prospect);
+        return this;
+    }
+
+    public Set<Contact> getContacts() {
+        return this.contacts;
+    }
+
+    public void setContacts(Set<Contact> contacts) {
+        if (this.contacts != null) {
+            this.contacts.forEach(i -> i.setClient(null));
+        }
+        if (contacts != null) {
+            contacts.forEach(i -> i.setClient(this));
+        }
+        this.contacts = contacts;
+    }
+
+    public Client contacts(Set<Contact> contacts) {
+        this.setContacts(contacts);
+        return this;
+    }
+
+    public Client addContacts(Contact contact) {
+        this.contacts.add(contact);
+        contact.setClient(this);
+        return this;
+    }
+
+    public Client removeContacts(Contact contact) {
+        this.contacts.remove(contact);
+        contact.setClient(null);
         return this;
     }
 
@@ -226,12 +424,21 @@ public class Client implements Serializable {
     public String toString() {
         return "Client{" +
             "id=" + getId() +
+            ", clientId=" + getClientId() +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", email='" + getEmail() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", company='" + getCompany() + "'" +
+            ", phone1='" + getPhone1() + "'" +
+            ", phone2='" + getPhone2() + "'" +
+            ", cin='" + getCin() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", city='" + getCity() + "'" +
+            ", country='" + getCountry() + "'" +
+            ", deliveryAddress='" + getDeliveryAddress() + "'" +
+            ", referredBy='" + getReferredBy() + "'" +
             ", status='" + getStatus() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", updatedAt='" + getUpdatedAt() + "'" +
             "}";
     }
 }

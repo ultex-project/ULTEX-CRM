@@ -6,6 +6,10 @@
   "dto": "mapstruct",
   "fields": [
     {
+      "fieldName": "clientId",
+      "fieldType": "Long"
+    },
+    {
       "fieldName": "firstName",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
@@ -21,11 +25,35 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "phone",
+      "fieldName": "phone1",
       "fieldType": "String"
     },
     {
-      "fieldName": "company",
+      "fieldName": "phone2",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cin",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "city",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "country",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "deliveryAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "referredBy",
       "fieldType": "String"
     },
     {
@@ -33,6 +61,14 @@
       "fieldType": "ClientStatus",
       "fieldValidateRules": ["required"],
       "fieldValues": "ACTIVE,INACTIVE,ARCHIVED"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant"
     }
   ],
   "name": "Client",
@@ -43,6 +79,27 @@
       "otherEntityRelationshipName": "client",
       "relationshipName": "opportunities",
       "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "clients",
+      "relationshipName": "company",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "prospect",
+      "otherEntityRelationshipName": "convertedTo",
+      "relationshipName": "convertedFromProspect",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "contact",
+      "otherEntityRelationshipName": "client",
+      "relationshipName": "contacts",
+      "relationshipSide": "right",
       "relationshipType": "one-to-many"
     }
   ],

@@ -15,6 +15,8 @@ import com.ultex.crm.repository.InternalUserRepository;
 import com.ultex.crm.service.dto.InternalUserDTO;
 import com.ultex.crm.service.mapper.InternalUserMapper;
 import jakarta.persistence.EntityManager;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
@@ -40,6 +42,18 @@ class InternalUserResourceIT {
 
     private static final UserRole DEFAULT_ROLE = UserRole.ADMIN;
     private static final UserRole UPDATED_ROLE = UserRole.MANAGER;
+
+    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
+    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PHONE = "AAAAAAAAAA";
+    private static final String UPDATED_PHONE = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_CREATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String ENTITY_API_URL = "/api/internal-users";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -73,7 +87,13 @@ class InternalUserResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InternalUser createEntity() {
-        return new InternalUser().fullName(DEFAULT_FULL_NAME).role(DEFAULT_ROLE);
+        return new InternalUser()
+            .fullName(DEFAULT_FULL_NAME)
+            .role(DEFAULT_ROLE)
+            .email(DEFAULT_EMAIL)
+            .phone(DEFAULT_PHONE)
+            .createdAt(DEFAULT_CREATED_AT)
+            .updatedAt(DEFAULT_UPDATED_AT);
     }
 
     /**
@@ -83,7 +103,13 @@ class InternalUserResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InternalUser createUpdatedEntity() {
-        return new InternalUser().fullName(UPDATED_FULL_NAME).role(UPDATED_ROLE);
+        return new InternalUser()
+            .fullName(UPDATED_FULL_NAME)
+            .role(UPDATED_ROLE)
+            .email(UPDATED_EMAIL)
+            .phone(UPDATED_PHONE)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
     }
 
     @BeforeEach
@@ -177,6 +203,23 @@ class InternalUserResourceIT {
 
     @Test
     @Transactional
+    void checkEmailIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        internalUser.setEmail(null);
+
+        // Create the InternalUser, which fails.
+        InternalUserDTO internalUserDTO = internalUserMapper.toDto(internalUser);
+
+        restInternalUserMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(internalUserDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllInternalUsers() throws Exception {
         // Initialize the database
         insertedInternalUser = internalUserRepository.saveAndFlush(internalUser);
@@ -188,7 +231,11 @@ class InternalUserResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(internalUser.getId().intValue())))
             .andExpect(jsonPath("$.[*].fullName").value(hasItem(DEFAULT_FULL_NAME)))
-            .andExpect(jsonPath("$.[*].role").value(hasItem(DEFAULT_ROLE.toString())));
+            .andExpect(jsonPath("$.[*].role").value(hasItem(DEFAULT_ROLE.toString())))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
+            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
     }
 
     @Test
@@ -204,7 +251,11 @@ class InternalUserResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(internalUser.getId().intValue()))
             .andExpect(jsonPath("$.fullName").value(DEFAULT_FULL_NAME))
-            .andExpect(jsonPath("$.role").value(DEFAULT_ROLE.toString()));
+            .andExpect(jsonPath("$.role").value(DEFAULT_ROLE.toString()))
+            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
+            .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
+            .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
+            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
     }
 
     @Test
@@ -226,7 +277,13 @@ class InternalUserResourceIT {
         InternalUser updatedInternalUser = internalUserRepository.findById(internalUser.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedInternalUser are not directly saved in db
         em.detach(updatedInternalUser);
-        updatedInternalUser.fullName(UPDATED_FULL_NAME).role(UPDATED_ROLE);
+        updatedInternalUser
+            .fullName(UPDATED_FULL_NAME)
+            .role(UPDATED_ROLE)
+            .email(UPDATED_EMAIL)
+            .phone(UPDATED_PHONE)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
         InternalUserDTO internalUserDTO = internalUserMapper.toDto(updatedInternalUser);
 
         restInternalUserMockMvc
@@ -316,6 +373,8 @@ class InternalUserResourceIT {
         InternalUser partialUpdatedInternalUser = new InternalUser();
         partialUpdatedInternalUser.setId(internalUser.getId());
 
+        partialUpdatedInternalUser.updatedAt(UPDATED_UPDATED_AT);
+
         restInternalUserMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedInternalUser.getId())
@@ -345,7 +404,13 @@ class InternalUserResourceIT {
         InternalUser partialUpdatedInternalUser = new InternalUser();
         partialUpdatedInternalUser.setId(internalUser.getId());
 
-        partialUpdatedInternalUser.fullName(UPDATED_FULL_NAME).role(UPDATED_ROLE);
+        partialUpdatedInternalUser
+            .fullName(UPDATED_FULL_NAME)
+            .role(UPDATED_ROLE)
+            .email(UPDATED_EMAIL)
+            .phone(UPDATED_PHONE)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
 
         restInternalUserMockMvc
             .perform(

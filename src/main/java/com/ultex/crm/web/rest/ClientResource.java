@@ -148,9 +148,9 @@ public class ClientResource {
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(name = "filter", required = false) String filter
     ) {
-        if ("prospect-is-null".equals(filter)) {
-            LOG.debug("REST request to get all Clients where prospect is null");
-            return new ResponseEntity<>(clientService.findAllWhereProspectIsNull(), HttpStatus.OK);
+        if ("convertedfromprospect-is-null".equals(filter)) {
+            LOG.debug("REST request to get all Clients where convertedFromProspect is null");
+            return new ResponseEntity<>(clientService.findAllWhereConvertedFromProspectIsNull(), HttpStatus.OK);
         }
         LOG.debug("REST request to get a page of Clients");
         Page<ClientDTO> page = clientService.findAll(pageable);

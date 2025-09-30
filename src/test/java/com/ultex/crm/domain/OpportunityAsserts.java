@@ -54,7 +54,9 @@ public class OpportunityAsserts {
                 assertThat(a.getAmount()).as("check amount").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getAmount())
             )
             .satisfies(a -> assertThat(a.getStage()).as("check stage").isEqualTo(expected.getStage()))
-            .satisfies(a -> assertThat(a.getCloseDate()).as("check closeDate").isEqualTo(expected.getCloseDate()));
+            .satisfies(a -> assertThat(a.getCloseDate()).as("check closeDate").isEqualTo(expected.getCloseDate()))
+            .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()))
+            .satisfies(a -> assertThat(a.getUpdatedAt()).as("check updatedAt").isEqualTo(expected.getUpdatedAt()));
     }
 
     /**

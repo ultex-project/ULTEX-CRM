@@ -47,12 +47,21 @@ public class ClientAsserts {
     public static void assertClientUpdatableFieldsEquals(Client expected, Client actual) {
         assertThat(actual)
             .as("Verify Client relevant properties")
+            .satisfies(a -> assertThat(a.getClientId()).as("check clientId").isEqualTo(expected.getClientId()))
             .satisfies(a -> assertThat(a.getFirstName()).as("check firstName").isEqualTo(expected.getFirstName()))
             .satisfies(a -> assertThat(a.getLastName()).as("check lastName").isEqualTo(expected.getLastName()))
             .satisfies(a -> assertThat(a.getEmail()).as("check email").isEqualTo(expected.getEmail()))
-            .satisfies(a -> assertThat(a.getPhone()).as("check phone").isEqualTo(expected.getPhone()))
-            .satisfies(a -> assertThat(a.getCompany()).as("check company").isEqualTo(expected.getCompany()))
-            .satisfies(a -> assertThat(a.getStatus()).as("check status").isEqualTo(expected.getStatus()));
+            .satisfies(a -> assertThat(a.getPhone1()).as("check phone1").isEqualTo(expected.getPhone1()))
+            .satisfies(a -> assertThat(a.getPhone2()).as("check phone2").isEqualTo(expected.getPhone2()))
+            .satisfies(a -> assertThat(a.getCin()).as("check cin").isEqualTo(expected.getCin()))
+            .satisfies(a -> assertThat(a.getAddress()).as("check address").isEqualTo(expected.getAddress()))
+            .satisfies(a -> assertThat(a.getCity()).as("check city").isEqualTo(expected.getCity()))
+            .satisfies(a -> assertThat(a.getCountry()).as("check country").isEqualTo(expected.getCountry()))
+            .satisfies(a -> assertThat(a.getDeliveryAddress()).as("check deliveryAddress").isEqualTo(expected.getDeliveryAddress()))
+            .satisfies(a -> assertThat(a.getReferredBy()).as("check referredBy").isEqualTo(expected.getReferredBy()))
+            .satisfies(a -> assertThat(a.getStatus()).as("check status").isEqualTo(expected.getStatus()))
+            .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()))
+            .satisfies(a -> assertThat(a.getUpdatedAt()).as("check updatedAt").isEqualTo(expected.getUpdatedAt()));
     }
 
     /**
@@ -62,6 +71,8 @@ public class ClientAsserts {
      * @param actual the actual entity
      */
     public static void assertClientUpdatableRelationshipsEquals(Client expected, Client actual) {
-        // empty method
+        assertThat(actual)
+            .as("Verify Client relationships")
+            .satisfies(a -> assertThat(a.getCompany()).as("check company").isEqualTo(expected.getCompany()));
     }
 }

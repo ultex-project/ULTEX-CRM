@@ -93,14 +93,14 @@ public class ClientService {
     }
 
     /**
-     *  Get all the clients where Prospect is {@code null}.
+     *  Get all the clients where ConvertedFromProspect is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<ClientDTO> findAllWhereProspectIsNull() {
-        LOG.debug("Request to get all clients where Prospect is null");
+    public List<ClientDTO> findAllWhereConvertedFromProspectIsNull() {
+        LOG.debug("Request to get all clients where ConvertedFromProspect is null");
         return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
-            .filter(client -> client.getProspect() == null)
+            .filter(client -> client.getConvertedFromProspect() == null)
             .map(clientMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

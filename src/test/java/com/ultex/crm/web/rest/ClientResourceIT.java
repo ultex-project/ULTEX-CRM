@@ -15,6 +15,8 @@ import com.ultex.crm.repository.ClientRepository;
 import com.ultex.crm.service.dto.ClientDTO;
 import com.ultex.crm.service.mapper.ClientMapper;
 import jakarta.persistence.EntityManager;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
@@ -35,6 +37,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ClientResourceIT {
 
+    private static final Long DEFAULT_CLIENT_ID = 1L;
+    private static final Long UPDATED_CLIENT_ID = 2L;
+
     private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
     private static final String UPDATED_FIRST_NAME = "BBBBBBBBBB";
 
@@ -44,14 +49,38 @@ class ClientResourceIT {
     private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PHONE = "AAAAAAAAAA";
-    private static final String UPDATED_PHONE = "BBBBBBBBBB";
+    private static final String DEFAULT_PHONE_1 = "AAAAAAAAAA";
+    private static final String UPDATED_PHONE_1 = "BBBBBBBBBB";
 
-    private static final String DEFAULT_COMPANY = "AAAAAAAAAA";
-    private static final String UPDATED_COMPANY = "BBBBBBBBBB";
+    private static final String DEFAULT_PHONE_2 = "AAAAAAAAAA";
+    private static final String UPDATED_PHONE_2 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CIN = "AAAAAAAAAA";
+    private static final String UPDATED_CIN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CITY = "AAAAAAAAAA";
+    private static final String UPDATED_CITY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COUNTRY = "AAAAAAAAAA";
+    private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DELIVERY_ADDRESS = "AAAAAAAAAA";
+    private static final String UPDATED_DELIVERY_ADDRESS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REFERRED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_REFERRED_BY = "BBBBBBBBBB";
 
     private static final ClientStatus DEFAULT_STATUS = ClientStatus.ACTIVE;
     private static final ClientStatus UPDATED_STATUS = ClientStatus.INACTIVE;
+
+    private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_CREATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String ENTITY_API_URL = "/api/clients";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -86,12 +115,21 @@ class ClientResourceIT {
      */
     public static Client createEntity() {
         return new Client()
+            .clientId(DEFAULT_CLIENT_ID)
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
             .email(DEFAULT_EMAIL)
-            .phone(DEFAULT_PHONE)
-            .company(DEFAULT_COMPANY)
-            .status(DEFAULT_STATUS);
+            .phone1(DEFAULT_PHONE_1)
+            .phone2(DEFAULT_PHONE_2)
+            .cin(DEFAULT_CIN)
+            .address(DEFAULT_ADDRESS)
+            .city(DEFAULT_CITY)
+            .country(DEFAULT_COUNTRY)
+            .deliveryAddress(DEFAULT_DELIVERY_ADDRESS)
+            .referredBy(DEFAULT_REFERRED_BY)
+            .status(DEFAULT_STATUS)
+            .createdAt(DEFAULT_CREATED_AT)
+            .updatedAt(DEFAULT_UPDATED_AT);
     }
 
     /**
@@ -102,12 +140,21 @@ class ClientResourceIT {
      */
     public static Client createUpdatedEntity() {
         return new Client()
+            .clientId(UPDATED_CLIENT_ID)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .email(UPDATED_EMAIL)
-            .phone(UPDATED_PHONE)
-            .company(UPDATED_COMPANY)
-            .status(UPDATED_STATUS);
+            .phone1(UPDATED_PHONE_1)
+            .phone2(UPDATED_PHONE_2)
+            .cin(UPDATED_CIN)
+            .address(UPDATED_ADDRESS)
+            .city(UPDATED_CITY)
+            .country(UPDATED_COUNTRY)
+            .deliveryAddress(UPDATED_DELIVERY_ADDRESS)
+            .referredBy(UPDATED_REFERRED_BY)
+            .status(UPDATED_STATUS)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
     }
 
     @BeforeEach
@@ -245,12 +292,21 @@ class ClientResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(client.getId().intValue())))
+            .andExpect(jsonPath("$.[*].clientId").value(hasItem(DEFAULT_CLIENT_ID.intValue())))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
-            .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].phone1").value(hasItem(DEFAULT_PHONE_1)))
+            .andExpect(jsonPath("$.[*].phone2").value(hasItem(DEFAULT_PHONE_2)))
+            .andExpect(jsonPath("$.[*].cin").value(hasItem(DEFAULT_CIN)))
+            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
+            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
+            .andExpect(jsonPath("$.[*].deliveryAddress").value(hasItem(DEFAULT_DELIVERY_ADDRESS)))
+            .andExpect(jsonPath("$.[*].referredBy").value(hasItem(DEFAULT_REFERRED_BY)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
     }
 
     @Test
@@ -265,12 +321,21 @@ class ClientResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(client.getId().intValue()))
+            .andExpect(jsonPath("$.clientId").value(DEFAULT_CLIENT_ID.intValue()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-            .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
-            .andExpect(jsonPath("$.company").value(DEFAULT_COMPANY))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
+            .andExpect(jsonPath("$.phone1").value(DEFAULT_PHONE_1))
+            .andExpect(jsonPath("$.phone2").value(DEFAULT_PHONE_2))
+            .andExpect(jsonPath("$.cin").value(DEFAULT_CIN))
+            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
+            .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
+            .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
+            .andExpect(jsonPath("$.deliveryAddress").value(DEFAULT_DELIVERY_ADDRESS))
+            .andExpect(jsonPath("$.referredBy").value(DEFAULT_REFERRED_BY))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+            .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
+            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
     }
 
     @Test
@@ -293,12 +358,21 @@ class ClientResourceIT {
         // Disconnect from session so that the updates on updatedClient are not directly saved in db
         em.detach(updatedClient);
         updatedClient
+            .clientId(UPDATED_CLIENT_ID)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .email(UPDATED_EMAIL)
-            .phone(UPDATED_PHONE)
-            .company(UPDATED_COMPANY)
-            .status(UPDATED_STATUS);
+            .phone1(UPDATED_PHONE_1)
+            .phone2(UPDATED_PHONE_2)
+            .cin(UPDATED_CIN)
+            .address(UPDATED_ADDRESS)
+            .city(UPDATED_CITY)
+            .country(UPDATED_COUNTRY)
+            .deliveryAddress(UPDATED_DELIVERY_ADDRESS)
+            .referredBy(UPDATED_REFERRED_BY)
+            .status(UPDATED_STATUS)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
         ClientDTO clientDTO = clientMapper.toDto(updatedClient);
 
         restClientMockMvc
@@ -385,12 +459,15 @@ class ClientResourceIT {
         partialUpdatedClient.setId(client.getId());
 
         partialUpdatedClient
+            .clientId(UPDATED_CLIENT_ID)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .email(UPDATED_EMAIL)
-            .phone(UPDATED_PHONE)
-            .company(UPDATED_COMPANY)
-            .status(UPDATED_STATUS);
+            .phone1(UPDATED_PHONE_1)
+            .phone2(UPDATED_PHONE_2)
+            .country(UPDATED_COUNTRY)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
 
         restClientMockMvc
             .perform(
@@ -419,12 +496,21 @@ class ClientResourceIT {
         partialUpdatedClient.setId(client.getId());
 
         partialUpdatedClient
+            .clientId(UPDATED_CLIENT_ID)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .email(UPDATED_EMAIL)
-            .phone(UPDATED_PHONE)
-            .company(UPDATED_COMPANY)
-            .status(UPDATED_STATUS);
+            .phone1(UPDATED_PHONE_1)
+            .phone2(UPDATED_PHONE_2)
+            .cin(UPDATED_CIN)
+            .address(UPDATED_ADDRESS)
+            .city(UPDATED_CITY)
+            .country(UPDATED_COUNTRY)
+            .deliveryAddress(UPDATED_DELIVERY_ADDRESS)
+            .referredBy(UPDATED_REFERRED_BY)
+            .status(UPDATED_STATUS)
+            .createdAt(UPDATED_CREATED_AT)
+            .updatedAt(UPDATED_UPDATED_AT);
 
         restClientMockMvc
             .perform(

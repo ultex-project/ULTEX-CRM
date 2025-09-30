@@ -1,11 +1,11 @@
-id;first_name;last_name;email;phone;company;status
-1;Annabelle;Gerard;Astride76@hotmail.fr;0764499296;aimable;ARCHIVED
-2;Lucienne;Blanchard;Moisette63@hotmail.fr;+33 407417738;avare;ACTIVE
-3;Ismérie;Charpentier;Geraud_Faure@hotmail.fr;0509222880;adversaire quant à après que;ACTIVE
-4;Ulysse;Rey;Beuve17@gmail.com;0730107593;lentement ici touriste;ARCHIVED
-5;Jocelyn;Arnaud;Veronique.Colin69@gmail.com;+33 595806519;manier;INACTIVE
-6;Léopold;Roger;Ludivine10@yahoo.fr;+33 736609251;chef de cuisine en bas de;INACTIVE
-7;Simone;Bernard;Baptiste42@yahoo.fr;0648275219;hé;INACTIVE
-8;Perrine;Sanchez;Audebert79@yahoo.fr;0555208106;sauvage;ARCHIVED
-9;Hermine;Dupuis;Argine.Renaud91@yahoo.fr;0692948526;au point que de peur de;ACTIVE
-10;Olive;Legrand;Eudoxie_Sanchez21@yahoo.fr;+33 115572465;sitôt que;INACTIVE
+id;client_id;first_name;last_name;email;phone_1;phone_2;cin;address;city;country;delivery_address;referred_by;status;created_at;updated_at
+1;5470;Guilhemine;Richard;Guilhemine_Pons@gmail.com;d'après loger jusqu’à ce que;tôt;vers badaboum;mêler diététiste;Clermont-Ferrand;Suède;de par;quant à;INACTIVE;2025-09-22T08:51:07;2025-09-22T01:45:41
+2;29423;Arthurine;Robert;Ulysse.Rey30@gmail.com;de façon à ce que barrer;cependant à l'insu de;agréable;chef;Rueil-Malmaison;Monaco;quasiment drelin snob;absorber;ARCHIVED;2025-09-22T03:35:44;2025-09-22T09:18:38
+3;5041;Jacqueline;Maillard;Priscille57@yahoo.fr;confier fournir touriste;commissionnaire;loufoque gestionnaire fonctionnaire;tsoin-tsoin approximativement;Créteil;Bosnie-Herzégovine;tchou tchouu circulaire conseil municipal;demain;INACTIVE;2025-09-22T07:28:55;2025-09-22T03:28:27
+4;31164;Morgan;Dupuy;Angilran_Leroy@yahoo.fr;parmi tant de la part de;sale grâce à hirsute;dynamique;secours charitable déjà;Hyères;Angola;mater;prout psitt;ACTIVE;2025-09-21T22:19:32;2025-09-22T00:20:51
+5;25785;Andéol;Thomas;Georges.Lopez12@yahoo.fr;bzzz hors;électorat former;au-dehors cot cot;recueillir;Noisy-le-Grand;Brésil;briser mairie rédaction;attraper blablabla cyan;ACTIVE;2025-09-21T22:22:09;2025-09-22T08:35:32
+6;32741;Noëlle;Remy;Melisande_Perez@gmail.com;commis;pleuvoir parlementaire au-dessous de;là-haut;alors que triste;Neuilly-sur-Seine;Saint-Marin;avant que;plouf bien que tourner;ACTIVE;2025-09-22T06:35:09;2025-09-22T16:20:22
+7;21549;Quentin;Lucas;Gerberge19@yahoo.fr;incognito;de façon à ce que;prout au cas où;du côté de;Quimper;Tunisie;informer antagoniste;concurrence près jusqu’à ce que;INACTIVE;2025-09-22T15:32:32;2025-09-22T09:31:36
+8;24606;Eugénie;Roche;Audeline_Lacroix@hotmail.fr;traduire après que cadre;mentir mélancolique membre de l’équipe;d'abord que;contre divinement;Créteil;Bolivie;doucement géométrique lorsque;parce que;ACTIVE;2025-09-21T20:50:16;2025-09-22T15:32:42
+9;22376;Bastien;Guillot;Alpinien35@gmail.com;fonctionnaire de;chasser magnifique grâce à;attacher;si tellement;Les Abymes;Ukraine;turquoise entrer quand ?;assez neutre simple;ACTIVE;2025-09-22T03:58:04;2025-09-22T16:44:55
+10;15345;Orlane;Roy;Angoustan52@gmail.com;connaître vu que;à seule fin de au cas où avant de;vu que;mal lunatique hi;Montpellier;Birmanie;boum;de façon que prout distraire;ACTIVE;2025-09-22T07:03:53;2025-09-22T20:17:58

@@ -1,11 +1,11 @@
-id;first_name;last_name;email;phone;source;status
-1;Aldric;Philippe;Barnabe_Louis@hotmail.fr;+33 438790755;aigre à peine euh;LOST
-2;Aloïse;David;Asceline25@yahoo.fr;0101191066;tirer actionnaire;QUALIFIED
-3;Aloyse;Riviere;Perceval3@yahoo.fr;+33 161269766;si bien que certainement;QUALIFIED
-4;Rodrigue;Leroy;Sigebert.Thomas@hotmail.fr;0607084303;incalculable approcher;LOST
-5;Florent;Da silva;Benigne57@hotmail.fr;+33 430634480;entretenir pourpre;CONTACTED
-6;Ameline;Joly;Sidoine5@gmail.com;0270407208;pour que soupçonner;CONTACTED
-7;Doriane;Bourgeois;Astarte.Michel51@hotmail.fr;0379230787;selon;NEW
-8;Prosper;Garnier;Ameline_Muller16@gmail.com;0439167901;concurrence commis;NEW
-9;Hugues;Schmitt;Gregoire_Moulin@yahoo.fr;0249308022;peut-être;QUALIFIED
-10;Évariste;Fontaine;Felicie_Cousin11@yahoo.fr;+33 324620613;doucement;CONTACTED
+id;first_name;last_name;email;phone_1;phone_2;source;cin;address;city;country;delivery_address;referred_by;status;converted_date;created_at;updated_at;converted_by_id
+1;Aldric;Philippe;Barnabe_Louis@hotmail.fr;mépriser incalculable plutôt;rendre;si biathlète;cadre;autrement de façon à ce que;Fort-de-France;Japon;aux alentours de prouver à la faveur de;certainement super;LOST;2025-09-22T07:55:18;2025-09-22T19:07:07;2025-09-22T09:52:00;1
+2;Diane;Moulin;Segolene.Girard@gmail.com;subito de peur de secours;même si touchant snif;glouglou concernant jusqu’à ce que;areu areu;paf assez;Chambéry;Panama;quasi;même si;NEW;2025-09-21T21:25:45;2025-09-21T21:56:44;2025-09-22T04:03:56;2
+3;Agathe;Richard;Annabelle_Bonnet86@yahoo.fr;zzzz;autoriser;ha ha;enfoncer toc-toc;ainsi;Pau;Chili;bien que tard en;figurer de façon que;LOST;2025-09-22T16:25:01;2025-09-22T14:58:29;2025-09-22T06:27:12;3
+4;Valentin;Fleury;Christophe81@gmail.com;depuis équipe de recherche;malade sale;dans quelque secours;solitaire négocier biathlète;vlan pendant que de manière à;La Seyne-sur-Mer;Islande;pourvu que infime;magnifique;NEW;2025-09-22T03:00:24;2025-09-22T11:19:30;2025-09-22T19:09:26;4
+5;Arlette;Bernard;Ambroise.Fournier@hotmail.fr;pin-pon;candide;communauté étudiante vroum;altruiste entre;ah d'abord loufoque;Limoges;Israël;hystérique;puisque;NEW;2025-09-22T18:19:59;2025-09-22T02:04:45;2025-09-22T18:09:17;5
+6;Maxellende;Mercier;Aubry.Roger37@hotmail.fr;touriste;de façon que près vétuste;de façon à ce que membre à vie;splendide antagoniste;aussi en decà de;Nanterre;Zimbabwe;avant que vroum;pourpre;NEW;2025-09-22T01:05:07;2025-09-21T22:44:15;2025-09-22T09:17:21;6
+7;Sylvestre;Lambert;Betty.Clement73@gmail.com;ronron proche de horrible;habile ôter dès que;fidèle;à force de afin que après que;corps enseignant si bien que;Rennes;Laos;étant donné que;aïe vu que;CONTACTED;2025-09-22T02:31:31;2025-09-22T04:02:00;2025-09-22T01:53:33;7
+8;Gaud;Masson;Clement3@yahoo.fr;alentour;baiser;entre accomplir sitôt que;devant libérer;super extatique;Aulnay-sous-Bois;Burundi;autour de;clac;LOST;2025-09-22T12:08:20;2025-09-22T00:41:39;2025-09-22T02:19:53;8
+9;Gilles;Gautier;Gustavine_Rodriguez@hotmail.fr;imposer patientèle;concernant a;trembler;puisque bof environ;simple situer broum;Neuilly-sur-Seine;Vanuatu;bavarder fort;ha ha actionnaire joliment;CONTACTED;2025-09-21T22:34:15;2025-09-22T02:45:32;2025-09-22T11:48:08;9
+10;Germaine;Carre;Ophelie8@hotmail.fr;jeune;extra;à demi;équipe espérer accommoder;au-dehors;Dunkerque;Nauru;à même au point que au-dessous de;au point que lorsque parmi;LOST;2025-09-22T10:44:01;2025-09-22T17:06:58;2025-09-21T22:43:21;10

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { Translate, getSortState } from 'react-jhipster';
+import { TextFormat, Translate, getSortState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC } from 'app/shared/util/pagination.constants';
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -94,6 +95,22 @@ export const InternalUser = () => {
                   <Translate contentKey="crmApp.internalUser.role">Role</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('role')} />
                 </th>
+                <th className="hand" onClick={sort('email')}>
+                  <Translate contentKey="crmApp.internalUser.email">Email</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('email')} />
+                </th>
+                <th className="hand" onClick={sort('phone')}>
+                  <Translate contentKey="crmApp.internalUser.phone">Phone</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phone')} />
+                </th>
+                <th className="hand" onClick={sort('createdAt')}>
+                  <Translate contentKey="crmApp.internalUser.createdAt">Created At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('createdAt')} />
+                </th>
+                <th className="hand" onClick={sort('updatedAt')}>
+                  <Translate contentKey="crmApp.internalUser.updatedAt">Updated At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('updatedAt')} />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -108,6 +125,14 @@ export const InternalUser = () => {
                   <td>{internalUser.fullName}</td>
                   <td>
                     <Translate contentKey={`crmApp.UserRole.${internalUser.role}`} />
+                  </td>
+                  <td>{internalUser.email}</td>
+                  <td>{internalUser.phone}</td>
+                  <td>
+                    {internalUser.createdAt ? <TextFormat type="date" value={internalUser.createdAt} format={APP_DATE_FORMAT} /> : null}
+                  </td>
+                  <td>
+                    {internalUser.updatedAt ? <TextFormat type="date" value={internalUser.updatedAt} format={APP_DATE_FORMAT} /> : null}
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

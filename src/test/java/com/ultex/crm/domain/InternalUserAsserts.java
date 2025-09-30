@@ -48,7 +48,11 @@ public class InternalUserAsserts {
         assertThat(actual)
             .as("Verify InternalUser relevant properties")
             .satisfies(a -> assertThat(a.getFullName()).as("check fullName").isEqualTo(expected.getFullName()))
-            .satisfies(a -> assertThat(a.getRole()).as("check role").isEqualTo(expected.getRole()));
+            .satisfies(a -> assertThat(a.getRole()).as("check role").isEqualTo(expected.getRole()))
+            .satisfies(a -> assertThat(a.getEmail()).as("check email").isEqualTo(expected.getEmail()))
+            .satisfies(a -> assertThat(a.getPhone()).as("check phone").isEqualTo(expected.getPhone()))
+            .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()))
+            .satisfies(a -> assertThat(a.getUpdatedAt()).as("check updatedAt").isEqualTo(expected.getUpdatedAt()));
     }
 
     /**
