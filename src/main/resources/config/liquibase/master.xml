@@ -25,6 +25,7 @@
     <include file="config/liquibase/changelog/20251005212212_added_entity_ProduitDemande.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251005212213_added_entity_HistoriqueCRM.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251005212214_added_entity_KycClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005231809_added_entity_History.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250922204540_added_entity_constraints_Client.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250922204640_added_entity_constraints_Prospect.xml" relativeToChangelogFile="false"/>

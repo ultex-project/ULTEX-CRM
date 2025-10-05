@@ -11,6 +11,7 @@ import demandeClient from 'app/entities/demande-client/demande-client.reducer';
 import produitDemande from 'app/entities/produit-demande/produit-demande.reducer';
 import historiqueCRM from 'app/entities/historique-crm/historique-crm.reducer';
 import kycClient from 'app/entities/kyc-client/kyc-client.reducer';
+import history from 'app/entities/history/history.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const entitiesReducers = {
@@ -27,6 +28,7 @@ const entitiesReducers = {
   produitDemande,
   historiqueCRM,
   kycClient,
+  history,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

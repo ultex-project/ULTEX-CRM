@@ -20,12 +20,13 @@
       "DemandeClient",
       "ProduitDemande",
       "HistoriqueCRM",
-      "KycClient"
+      "KycClient",
+      "History"
     ],
     "jhipsterVersion": "8.11.0",
     "jwtSecretKey": "YmNmMjA3ZjNiMWNlMDdhMTA3MThmYWVjN2FmZmQ5NTAyNDYxOGFmYzVhOGE2YjFlYWY2Yjc5NGFkZTQyOWUyN2FiZTc0OWY2NjZmNTZiMGMyMTYxODBiNWFhMWZhYmMzYjIxNDJhYzc4ODJlZTg0ZDY1ODY5MDA3NjhiMDhkM2Q=",
     "languages": ["fr", "en"],
-    "lastLiquibaseTimestamp": 1759699334000,
+    "lastLiquibaseTimestamp": 1759706289000,
     "nativeLanguage": "fr",
     "packageName": "com.ultex.crm",
     "prodDatabaseType": "postgresql"
