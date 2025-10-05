@@ -13,7 +13,7 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from 'app/config/store';
-import './Sidebar.scss';
+import './sidebar.scss';
 
 interface SidebarProps {
   isCollapsed?: boolean;
