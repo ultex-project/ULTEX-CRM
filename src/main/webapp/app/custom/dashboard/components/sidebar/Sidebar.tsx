@@ -112,10 +112,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
         <div className="logo-container">
           {!isCollapsed && (
             <>
-              <div className="logo-icon">Ultex</div>
-              <span className="logo-text">
-                <Translate contentKey="global.title">CRM</Translate>
-              </span>
+              <div className="logo-icon">
+                <img src={'/content/images/logo.svg'} />
+              </div>
             </>
           )}
         </div>
