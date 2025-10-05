@@ -1,5 +1,167 @@
 // src/main/webapp/app/entities/prospect/ProspectListPage.scss
 
+.prospect-page {
+  .prospect-hero {
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(105, 121, 248, 0.12) 0%, rgba(244, 245, 255, 0.92) 65%);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle at center, rgba(105, 121, 248, 0.25), transparent 70%);
+      transform: rotate(25deg);
+    }
+
+    .card-body {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  .prospect-hero__badge {
+    letter-spacing: 0.12rem;
+    background: rgba(105, 121, 248, 0.14);
+    color: #4c51bf;
+    padding: 0.35rem 1rem;
+  }
+
+  .prospect-hero__title {
+    font-weight: 700;
+    color: #1f2933;
+  }
+
+  .prospect-hero__stat {
+    min-width: 120px;
+
+    &-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      color: #6b7280;
+    }
+
+    &-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+  }
+
+  .prospect-hero__secondary {
+    border-radius: 999px;
+    border-color: rgba(79, 70, 229, 0.25);
+    color: #3f3d56;
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .prospect-metric {
+    border-radius: 16px;
+    background: #ffffff;
+
+    &__label {
+      font-size: 0.85rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.06rem;
+    }
+
+    &__value {
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: #111827;
+    }
+
+    &__progress {
+      height: 6px;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .prospect-toolbar {
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid #edf0ff;
+
+    &__search {
+      .input-group-text {
+        background: transparent;
+        border: none;
+        padding-left: 0;
+      }
+
+      .form-control {
+        border: none;
+        box-shadow: none;
+        padding-left: 0;
+      }
+    }
+
+    &__chip {
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.95rem;
+      border: 1px solid transparent;
+
+      &.active {
+        box-shadow: 0 8px 16px rgba(58, 99, 255, 0.18);
+      }
+    }
+  }
+
+  .prospect-advanced {
+    background: linear-gradient(145deg, rgba(244, 246, 255, 0.85), rgba(255, 255, 255, 0.95));
+    border-radius: 16px;
+    border: 1px solid #dde5ff;
+    padding: 1.5rem;
+
+    .global-rule {
+      background: #ffffff;
+      border: 1px dashed rgba(99, 102, 241, 0.35);
+    }
+
+    .filter-group {
+      background: #ffffff;
+      border-color: rgba(199, 210, 254, 0.75);
+    }
+  }
+
+  .prospect-status-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+  }
+
+  .prospect-table-card {
+    border-radius: 18px;
+
+    .sortable {
+      color: #4b5563;
+      font-weight: 600;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #1d4ed8;
+      }
+    }
+
+    tbody tr {
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(79, 70, 229, 0.06);
+      }
+    }
+  }
+}
+
 .avatar-circle {
   width: 36px;
   height: 36px;
@@ -72,15 +234,6 @@
     color: white;
   }
 }
-.advanced-search-card {
-  background-color: #f8f9fb;
-  border: 1px solid #e9ecef;
-}
-
-.advanced-search-card .card-header {
-  border-bottom: 1px solid #e9ecef;
-}
-
 .filter-group {
   border: 1px solid #dee2e6;
   border-radius: 8px;

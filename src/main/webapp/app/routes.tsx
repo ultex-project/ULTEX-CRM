@@ -19,6 +19,7 @@ import DashboardLayout from 'app/custom/dashboard/DashboardLayout';
 import AdminDashboard from 'app/custom/dashboard/AdminDashboard';
 import ProspectListPage from 'app/custom/dashboard/modules/contact/ProspectListPage';
 import ProspectCreatePage from 'app/custom/dashboard/modules/contact/ProspectCreatePage';
+import ProspectViewPage from 'app/custom/dashboard/modules/contact/ProspectViewPage';
 
 const loading = <div>loading ...</div>;
 
@@ -73,6 +74,7 @@ const AppRoutes = () => {
           <Route index element={<AdminDashboard />} />
           <Route path="contact/new" element={<ProspectCreatePage />} />
           <Route path="contact" element={<ProspectListPage />} />
+          <Route path="prospect/:id/view" element={<ProspectViewPage />} />
         </Route>
         <Route
           path="*"

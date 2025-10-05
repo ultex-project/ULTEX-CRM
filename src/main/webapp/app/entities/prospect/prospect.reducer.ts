@@ -20,8 +20,28 @@ const apiUrl = 'api/prospects';
 
 export const getEntities = createAsyncThunk(
   'prospect/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ page, size, sort, query }: IQueryParams) => {
+    const params: string[] = [];
+
+    if (query) {
+      params.push(query);
+    }
+
+    if (typeof page === 'number') {
+      params.push(`page=${page}`);
+    }
+
+    if (typeof size === 'number') {
+      params.push(`size=${size}`);
+    }
+
+    if (sort) {
+      params.push(`sort=${sort}`);
+    }
+
+    params.push(`cacheBuster=${new Date().getTime()}`);
+
+    const requestUrl = `${apiUrl}?${params.join('&')}`;
     return axios.get<IProspect[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
