@@ -35,6 +35,19 @@ entity Client {
   createdAt Instant,
   updatedAt Instant
 }
+entity History {
+  entityName String required,
+  entityId Long required,
+  action String required,
+  fieldChanged String,
+  oldValue String,
+  newValue String,
+  performedBy String required,
+  performedDate Instant required,
+  details TextBlob,
+  ipAddress String,
+  userAgent String
+}
 entity SocieteLiee {
   raisonSociale String required,
   formeJuridique String,
