@@ -152,6 +152,11 @@ public class ClientResource {
             LOG.debug("REST request to get all Clients where convertedFromProspect is null");
             return new ResponseEntity<>(clientService.findAllWhereConvertedFromProspectIsNull(), HttpStatus.OK);
         }
+
+        if ("kycclient-is-null".equals(filter)) {
+            LOG.debug("REST request to get all Clients where kycClient is null");
+            return new ResponseEntity<>(clientService.findAllWhereKycClientIsNull(), HttpStatus.OK);
+        }
         LOG.debug("REST request to get a page of Clients");
         Page<ClientDTO> page = clientService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

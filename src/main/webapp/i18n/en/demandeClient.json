@@ -1,0 +1,33 @@
+{
+  "crmApp": {
+    "demandeClient": {
+      "home": {
+        "title": "Demande Clients",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Demande Client",
+        "createOrEditLabel": "Create or edit a Demande Client",
+        "notFound": "No Demande Clients found"
+      },
+      "created": "A new Demande Client is created with identifier {{ param }}",
+      "updated": "A Demande Client is updated with identifier {{ param }}",
+      "deleted": "A Demande Client is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Demande Client {{ id }}?"
+      },
+      "detail": {
+        "title": "Demande Client"
+      },
+      "id": "ID",
+      "reference": "Reference",
+      "dateDemande": "Date Demande",
+      "servicePrincipal": "Service Principal",
+      "sousServices": "Sous Services",
+      "provenance": "Provenance",
+      "incoterm": "Incoterm",
+      "devise": "Devise",
+      "nombreProduits": "Nombre Produits",
+      "remarqueGenerale": "Remarque Generale",
+      "client": "Client"
+    }
+  }
+}

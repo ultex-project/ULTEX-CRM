@@ -6,61 +6,70 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "clientId",
-      "fieldType": "Long"
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "pattern"],
+      "fieldValidateRulesPattern": "[A-Z0-9]{4,}"
     },
     {
-      "fieldName": "firstName",
+      "fieldName": "nomComplet",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "lastName",
+      "fieldName": "photoUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateNaissance",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "lieuNaissance",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nationalite",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "genre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fonction",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "languePreferee",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "telephonePrincipal",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "pattern"],
+      "fieldValidateRulesPattern": "^\\+[0-9]{8,15}$"
+    },
+    {
+      "fieldName": "whatsapp",
+      "fieldType": "String"
     },
     {
       "fieldName": "email",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "phone1",
       "fieldType": "String"
     },
     {
-      "fieldName": "phone2",
+      "fieldName": "adressePersonnelle",
       "fieldType": "String"
     },
     {
-      "fieldName": "cin",
+      "fieldName": "adressesLivraison",
       "fieldType": "String"
     },
     {
-      "fieldName": "address",
+      "fieldName": "reseauxSociaux",
       "fieldType": "String"
-    },
-    {
-      "fieldName": "city",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "country",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "deliveryAddress",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "referredBy",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "status",
-      "fieldType": "ClientStatus",
-      "fieldValidateRules": ["required"],
-      "fieldValues": "ACTIVE,INACTIVE,ARCHIVED"
     },
     {
       "fieldName": "createdAt",

@@ -1,0 +1,29 @@
+{
+  "crmApp": {
+    "kycClient": {
+      "home": {
+        "title": "KycClients",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Kyc Client",
+        "createOrEditLabel": "Créer ou éditer un Kyc Client",
+        "notFound": "Aucun Kyc Client trouvé"
+      },
+      "created": "Un nouveau Kyc Client a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Kyc Client avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Kyc Client avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Kyc Client {{ id }} ?"
+      },
+      "detail": {
+        "title": "Kyc Client"
+      },
+      "id": "ID",
+      "scoreStaff": "Score Staff",
+      "comportements": "Comportements",
+      "remarques": "Remarques",
+      "completudeKyc": "Completude Kyc",
+      "responsable": "Responsable",
+      "client": "Client"
+    }
+  }
+}

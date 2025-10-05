@@ -1,0 +1,30 @@
+{
+  "crmApp": {
+    "historiqueCRM": {
+      "home": {
+        "title": "HistoriqueCRMS",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Historique CRM",
+        "createOrEditLabel": "Créer ou éditer un Historique CRM",
+        "notFound": "Aucun Historique CRM trouvé"
+      },
+      "created": "Un nouveau Historique CRM a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Historique CRM avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Historique CRM avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Historique CRM {{ id }} ?"
+      },
+      "detail": {
+        "title": "Historique CRM"
+      },
+      "id": "ID",
+      "dateInteraction": "Date Interaction",
+      "canal": "Canal",
+      "agent": "Agent",
+      "resume": "Resume",
+      "etat": "Etat",
+      "observation": "Observation",
+      "client": "Client"
+    }
+  }
+}

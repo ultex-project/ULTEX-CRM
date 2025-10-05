@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "changelogDate": "20251005212208"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "raisonSociale",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "formeJuridique",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ice",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "rc",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nif",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "secteurActivite",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tailleEntreprise",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adresseSiege",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "representantLegal",
+      "fieldType": "String"
+    }
+  ],
+  "name": "SocieteLiee",
+  "relationships": [
+    {
+      "otherEntityName": "client",
+      "relationshipName": "client",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,32 @@
+{
+  "crmApp": {
+    "contactAssocie": {
+      "home": {
+        "title": "ContactAssocies",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Contact Associe",
+        "createOrEditLabel": "Créer ou éditer un Contact Associe",
+        "notFound": "Aucun Contact Associe trouvé"
+      },
+      "created": "Un nouveau Contact Associe a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Contact Associe avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Contact Associe avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Contact Associe {{ id }} ?"
+      },
+      "detail": {
+        "title": "Contact Associe"
+      },
+      "id": "ID",
+      "nom": "Nom",
+      "prenom": "Prenom",
+      "relation": "Relation",
+      "telephone": "Telephone",
+      "whatsapp": "Whatsapp",
+      "email": "Email",
+      "autorisation": "Autorisation",
+      "remarques": "Remarques",
+      "client": "Client"
+    }
+  }
+}

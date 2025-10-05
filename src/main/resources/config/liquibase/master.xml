@@ -18,11 +18,25 @@
     <include file="config/liquibase/changelog/20250922204840_added_entity_InternalUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250930075224_added_entity_Company.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250930075225_added_entity_Contact.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212208_added_entity_SocieteLiee.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212209_added_entity_ContactAssocie.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212210_added_entity_DocumentClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212211_added_entity_DemandeClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212212_added_entity_ProduitDemande.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212213_added_entity_HistoriqueCRM.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212214_added_entity_KycClient.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250922204540_added_entity_constraints_Client.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250922204640_added_entity_constraints_Prospect.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250922204740_added_entity_constraints_Opportunity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250930075225_added_entity_constraints_Contact.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212208_added_entity_constraints_SocieteLiee.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212209_added_entity_constraints_ContactAssocie.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212210_added_entity_constraints_DocumentClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212211_added_entity_constraints_DemandeClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212212_added_entity_constraints_ProduitDemande.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212213_added_entity_constraints_HistoriqueCRM.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251005212214_added_entity_constraints_KycClient.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

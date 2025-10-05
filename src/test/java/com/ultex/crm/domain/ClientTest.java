@@ -3,6 +3,7 @@ package com.ultex.crm.domain;
 import static com.ultex.crm.domain.ClientTestSamples.*;
 import static com.ultex.crm.domain.CompanyTestSamples.*;
 import static com.ultex.crm.domain.ContactTestSamples.*;
+import static com.ultex.crm.domain.KycClientTestSamples.*;
 import static com.ultex.crm.domain.OpportunityTestSamples.*;
 import static com.ultex.crm.domain.ProspectTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -96,5 +97,19 @@ class ClientTest {
         client.setContacts(new HashSet<>());
         assertThat(client.getContacts()).doesNotContain(contactBack);
         assertThat(contactBack.getClient()).isNull();
+    }
+
+    @Test
+    void kycClientTest() {
+        Client client = getClientRandomSampleGenerator();
+        KycClient kycClientBack = getKycClientRandomSampleGenerator();
+
+        client.setKycClient(kycClientBack);
+        assertThat(client.getKycClient()).isEqualTo(kycClientBack);
+        assertThat(kycClientBack.getClient()).isEqualTo(client);
+
+        client.kycClient(null);
+        assertThat(client.getKycClient()).isNull();
+        assertThat(kycClientBack.getClient()).isNull();
     }
 }

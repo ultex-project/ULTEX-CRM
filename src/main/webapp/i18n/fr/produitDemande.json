@@ -1,0 +1,42 @@
+{
+  "crmApp": {
+    "produitDemande": {
+      "home": {
+        "title": "ProduitDemandes",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Produit Demande",
+        "createOrEditLabel": "Créer ou éditer un Produit Demande",
+        "notFound": "Aucun Produit Demande trouvé"
+      },
+      "created": "Un nouveau Produit Demande a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Produit Demande avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Produit Demande avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Produit Demande {{ id }} ?"
+      },
+      "detail": {
+        "title": "Produit Demande"
+      },
+      "id": "ID",
+      "typeProduit": "Type Produit",
+      "typeDemande": "Type Demande",
+      "nomProduit": "Nom Produit",
+      "description": "Description",
+      "quantite": "Quantite",
+      "unite": "Unite",
+      "prix": "Prix",
+      "fraisExpedition": "Frais Expedition",
+      "poidsKg": "Poids Kg",
+      "volumeTotalCbm": "Volume Total Cbm",
+      "dimensions": "Dimensions",
+      "nombreCartons": "Nombre Cartons",
+      "piecesParCarton": "Pieces Par Carton",
+      "hsCode": "Hs Code",
+      "prixCible": "Prix Cible",
+      "ficheTechniqueUrl": "Fiche Technique Url",
+      "photosUrl": "Photos Url",
+      "piecesJointesUrl": "Pieces Jointes Url",
+      "demande": "Demande"
+    }
+  }
+}

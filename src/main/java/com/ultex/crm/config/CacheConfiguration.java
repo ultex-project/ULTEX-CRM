@@ -64,6 +64,13 @@ public class CacheConfiguration {
             createCache(cm, com.ultex.crm.domain.Company.class.getName() + ".prospects");
             createCache(cm, com.ultex.crm.domain.Company.class.getName() + ".contacts");
             createCache(cm, com.ultex.crm.domain.Contact.class.getName());
+            createCache(cm, com.ultex.crm.domain.SocieteLiee.class.getName());
+            createCache(cm, com.ultex.crm.domain.ContactAssocie.class.getName());
+            createCache(cm, com.ultex.crm.domain.DocumentClient.class.getName());
+            createCache(cm, com.ultex.crm.domain.DemandeClient.class.getName());
+            createCache(cm, com.ultex.crm.domain.ProduitDemande.class.getName());
+            createCache(cm, com.ultex.crm.domain.HistoriqueCRM.class.getName());
+            createCache(cm, com.ultex.crm.domain.KycClient.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

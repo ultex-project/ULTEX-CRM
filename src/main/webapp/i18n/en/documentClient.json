@@ -1,0 +1,27 @@
+{
+  "crmApp": {
+    "documentClient": {
+      "home": {
+        "title": "Document Clients",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Document Client",
+        "createOrEditLabel": "Create or edit a Document Client",
+        "notFound": "No Document Clients found"
+      },
+      "created": "A new Document Client is created with identifier {{ param }}",
+      "updated": "A Document Client is updated with identifier {{ param }}",
+      "deleted": "A Document Client is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Document Client {{ id }}?"
+      },
+      "detail": {
+        "title": "Document Client"
+      },
+      "id": "ID",
+      "typeDocument": "Type Document",
+      "numeroDocument": "Numero Document",
+      "fichierUrl": "Fichier Url",
+      "client": "Client"
+    }
+  }
+}
