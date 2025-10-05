@@ -17,22 +17,103 @@ application {
 // ===== ENTITIES =====
 
 entity Client {
-  clientId Long, // Custom ID field (you can generate this in service layer)
-  firstName String required,
-  lastName String required,
-  email String required unique,
-  phone1 String,
-  phone2 String,
-  cin String,
-  address String,
-  city String,
-  country String,
-  deliveryAddress String,
-  referredBy String, // "Référé Par" — could be a reference to another Client or User
-  status ClientStatus required,
+  code String required pattern(/[A-Z0-9]{4,}/), // généré automatiquement (lettre + chiffre)
+  nomComplet String required,
+  photoUrl String, // pour identification rapide
+  dateNaissance LocalDate,
+  lieuNaissance String,
+  nationalite String required,
+  genre String, // Homme / Femme
+  fonction String, // Importateur, Directeur Achats, etc.
+  languePreferee String, // FR / AR / EN / Autre
+  telephonePrincipal String required pattern(/^\+[0-9]{8,15}$/),
+  whatsapp String,
+  email String,
+  adressePersonnelle String,
+  adressesLivraison String, // liste ou concat
+  reseauxSociaux String, // LinkedIn, Facebook, WeChat, etc.
   createdAt Instant,
   updatedAt Instant
 }
+entity SocieteLiee {
+  raisonSociale String required,
+  formeJuridique String,
+  ice String,
+  rc String,
+  nif String,
+  secteurActivite String,
+  tailleEntreprise String,
+  adresseSiege String,
+  representantLegal String
+}
+
+entity ContactAssocie {
+  nom String required,
+  prenom String required,
+  relation String,
+  telephone String,
+  whatsapp String,
+  email String,
+  autorisation String, // Info, Mandataire, Signataire
+  remarques String
+}
+
+entity DocumentClient {
+  typeDocument String required, // CIN, Passeport, RC, ICE, etc.
+  numeroDocument String,
+  fichierUrl String
+}
+
+entity DemandeClient {
+  reference String required,
+  dateDemande Instant required,
+  servicePrincipal String, // Import / Export
+  sousServices String, // multi-sélection
+  provenance String,
+  incoterm String,
+  devise String,
+  nombreProduits Integer,
+  remarqueGenerale String
+}
+
+entity ProduitDemande {
+  typeProduit String,
+  typeDemande String, // Proforma, Sourcing, Négociation...
+  nomProduit String,
+  description TextBlob,
+  quantite Double,
+  unite String,
+  prix Double,
+  fraisExpedition Double,
+  poidsKg Double,
+  volumeTotalCbm Double,
+  dimensions String,
+  nombreCartons Integer,
+  piecesParCarton Integer,
+  hsCode String,
+  prixCible Double,
+  ficheTechniqueUrl String,
+  photosUrl String,
+  piecesJointesUrl String
+}
+
+entity HistoriqueCRM {
+  dateInteraction Instant required,
+  canal String, // WhatsApp, Email, Téléphone...
+  agent String,
+  resume TextBlob,
+  etat String, // Traité, En cours, Faible qualité, etc.
+  observation String
+}
+
+entity KycClient {
+  scoreStaff Integer,
+  comportements String, // multi-sélection : Bon payeur, Exigeant, Négociateur...
+  remarques String,
+  completudeKyc Integer, // 0–100 %
+  responsable String
+}
+
 
 entity Prospect {
   firstName String required,
@@ -122,10 +203,27 @@ enum UserRole {
 relationship OneToMany {
   Client{opportunities} to Opportunity{client required}
 }
-
+relationship ManyToOne {
+  ContactAssocie{client} to Client
+}
+relationship ManyToOne {
+  ProduitDemande{demande} to DemandeClient
+}
+relationship ManyToOne {
+  HistoriqueCRM{client} to Client
+}
 // Opportunity is assigned to one InternalUser
 relationship ManyToOne {
   Opportunity{assignedTo required} to InternalUser{opportunities}
+}
+relationship ManyToOne {
+  DocumentClient{client} to Client
+}
+relationship ManyToOne {
+  DemandeClient{client} to Client
+}
+relationship OneToOne {
+  KycClient{client} to Client
 }
 
 // --- Conversion Flow ---
@@ -168,7 +266,9 @@ relationship ManyToOne {
 relationship ManyToOne {
   Contact{prospect} to Prospect{contacts}
 }
-
+relationship ManyToOne {
+  SocieteLiee{client} to Client
+}
 /* OPTIONS */
 
 paginate Client, Prospect, Opportunity, Company, Contact with pagination
