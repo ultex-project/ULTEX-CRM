@@ -3,6 +3,7 @@ package com.ultex.crm.service.dto;
 import com.ultex.crm.domain.enumeration.ProspectStatus;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -22,16 +23,39 @@ public class ProspectDTO implements Serializable {
     @NotNull
     private String email;
 
-    private String phone;
+    private String phone1;
+
+    private String phone2;
 
     private String source;
+
+    private String cin;
+
+    private String address;
+
+    private String city;
+
+    private String country;
+
+    private String deliveryAddress;
+
+    private String referredBy;
 
     @NotNull
     private ProspectStatus status;
 
+    private Instant convertedDate;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
+
     private ClientDTO convertedTo;
 
+    @NotNull
     private InternalUserDTO convertedBy;
+
+    private CompanyDTO company;
 
     public Long getId() {
         return id;
@@ -65,12 +89,20 @@ public class ProspectDTO implements Serializable {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhone1() {
+        return phone1;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhone1(String phone1) {
+        this.phone1 = phone1;
+    }
+
+    public String getPhone2() {
+        return phone2;
+    }
+
+    public void setPhone2(String phone2) {
+        this.phone2 = phone2;
     }
 
     public String getSource() {
@@ -81,12 +113,84 @@ public class ProspectDTO implements Serializable {
         this.source = source;
     }
 
+    public String getCin() {
+        return cin;
+    }
+
+    public void setCin(String cin) {
+        this.cin = cin;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public String getReferredBy() {
+        return referredBy;
+    }
+
+    public void setReferredBy(String referredBy) {
+        this.referredBy = referredBy;
+    }
+
     public ProspectStatus getStatus() {
         return status;
     }
 
     public void setStatus(ProspectStatus status) {
         this.status = status;
+    }
+
+    public Instant getConvertedDate() {
+        return convertedDate;
+    }
+
+    public void setConvertedDate(Instant convertedDate) {
+        this.convertedDate = convertedDate;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public ClientDTO getConvertedTo() {
@@ -103,6 +207,14 @@ public class ProspectDTO implements Serializable {
 
     public void setConvertedBy(InternalUserDTO convertedBy) {
         this.convertedBy = convertedBy;
+    }
+
+    public CompanyDTO getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyDTO company) {
+        this.company = company;
     }
 
     @Override
@@ -134,11 +246,22 @@ public class ProspectDTO implements Serializable {
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", email='" + getEmail() + "'" +
-            ", phone='" + getPhone() + "'" +
+            ", phone1='" + getPhone1() + "'" +
+            ", phone2='" + getPhone2() + "'" +
             ", source='" + getSource() + "'" +
+            ", cin='" + getCin() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", city='" + getCity() + "'" +
+            ", country='" + getCountry() + "'" +
+            ", deliveryAddress='" + getDeliveryAddress() + "'" +
+            ", referredBy='" + getReferredBy() + "'" +
             ", status='" + getStatus() + "'" +
+            ", convertedDate='" + getConvertedDate() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", updatedAt='" + getUpdatedAt() + "'" +
             ", convertedTo=" + getConvertedTo() +
             ", convertedBy=" + getConvertedBy() +
+            ", company=" + getCompany() +
             "}";
     }
 }

@@ -15,10 +15,42 @@
       "fieldType": "UserRole",
       "fieldValidateRules": ["required"],
       "fieldValues": "ADMIN,MANAGER,COMMERCIAL"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "phone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant"
     }
   ],
   "name": "InternalUser",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "opportunity",
+      "otherEntityRelationshipName": "assignedTo",
+      "relationshipName": "opportunities",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "prospect",
+      "otherEntityRelationshipName": "convertedBy",
+      "relationshipName": "convertedProspects",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceClass"
 }

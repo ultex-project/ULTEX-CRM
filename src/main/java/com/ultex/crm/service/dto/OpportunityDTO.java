@@ -28,8 +28,14 @@ public class OpportunityDTO implements Serializable {
 
     private Instant closeDate;
 
+    private Instant createdAt;
+
+    private Instant updatedAt;
+
+    @NotNull
     private InternalUserDTO assignedTo;
 
+    @NotNull
     private ClientDTO client;
 
     public Long getId() {
@@ -80,6 +86,22 @@ public class OpportunityDTO implements Serializable {
         this.closeDate = closeDate;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public InternalUserDTO getAssignedTo() {
         return assignedTo;
     }
@@ -127,6 +149,8 @@ public class OpportunityDTO implements Serializable {
             ", amount=" + getAmount() +
             ", stage='" + getStage() + "'" +
             ", closeDate='" + getCloseDate() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", updatedAt='" + getUpdatedAt() + "'" +
             ", assignedTo=" + getAssignedTo() +
             ", client=" + getClient() +
             "}";

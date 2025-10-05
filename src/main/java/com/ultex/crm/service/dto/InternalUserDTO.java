@@ -3,6 +3,7 @@ package com.ultex.crm.service.dto;
 import com.ultex.crm.domain.enumeration.UserRole;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -18,6 +19,15 @@ public class InternalUserDTO implements Serializable {
 
     @NotNull
     private UserRole role;
+
+    @NotNull
+    private String email;
+
+    private String phone;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
 
     public Long getId() {
         return id;
@@ -41,6 +51,38 @@ public class InternalUserDTO implements Serializable {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
@@ -71,6 +113,10 @@ public class InternalUserDTO implements Serializable {
             "id=" + getId() +
             ", fullName='" + getFullName() + "'" +
             ", role='" + getRole() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", updatedAt='" + getUpdatedAt() + "'" +
             "}";
     }
 }

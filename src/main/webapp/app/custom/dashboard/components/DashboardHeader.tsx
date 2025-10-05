@@ -34,12 +34,6 @@ const DashboardHeader = () => {
           </Button>
         </NavItem>
         <NavItem>
-          <Button color="link" className="nav-link p-2 position-relative">
-            <FontAwesomeIcon icon={faEnvelope} size="lg" />
-            <span className="badge bg-info rounded-pill position-absolute top-0 end-0">2</span>
-          </Button>
-        </NavItem>
-        <NavItem>
           <ProfileDropdown />
         </NavItem>
       </Nav>

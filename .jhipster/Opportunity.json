@@ -28,6 +28,14 @@
     {
       "fieldName": "closeDate",
       "fieldType": "Instant"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant"
     }
   ],
   "name": "Opportunity",
@@ -35,16 +43,19 @@
   "relationships": [
     {
       "otherEntityName": "internalUser",
+      "otherEntityRelationshipName": "opportunities",
       "relationshipName": "assignedTo",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     },
     {
       "otherEntityName": "client",
       "otherEntityRelationshipName": "opportunities",
       "relationshipName": "client",
       "relationshipSide": "right",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

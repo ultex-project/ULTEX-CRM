@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { JhiItemCount, JhiPagination, Translate, getPaginationState } from 'react-jhipster';
+import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -112,6 +113,10 @@ export const Client = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="crmApp.client.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+                <th className="hand" onClick={sort('clientId')}>
+                  <Translate contentKey="crmApp.client.clientId">Client Id</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('clientId')} />
+                </th>
                 <th className="hand" onClick={sort('firstName')}>
                   <Translate contentKey="crmApp.client.firstName">First Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('firstName')} />
@@ -123,16 +128,50 @@ export const Client = () => {
                 <th className="hand" onClick={sort('email')}>
                   <Translate contentKey="crmApp.client.email">Email</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('email')} />
                 </th>
-                <th className="hand" onClick={sort('phone')}>
-                  <Translate contentKey="crmApp.client.phone">Phone</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('phone')} />
+                <th className="hand" onClick={sort('phone1')}>
+                  <Translate contentKey="crmApp.client.phone1">Phone 1</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phone1')} />
                 </th>
-                <th className="hand" onClick={sort('company')}>
-                  <Translate contentKey="crmApp.client.company">Company</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('company')} />
+                <th className="hand" onClick={sort('phone2')}>
+                  <Translate contentKey="crmApp.client.phone2">Phone 2</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phone2')} />
+                </th>
+                <th className="hand" onClick={sort('cin')}>
+                  <Translate contentKey="crmApp.client.cin">Cin</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('cin')} />
+                </th>
+                <th className="hand" onClick={sort('address')}>
+                  <Translate contentKey="crmApp.client.address">Address</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('address')} />
+                </th>
+                <th className="hand" onClick={sort('city')}>
+                  <Translate contentKey="crmApp.client.city">City</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('city')} />
+                </th>
+                <th className="hand" onClick={sort('country')}>
+                  <Translate contentKey="crmApp.client.country">Country</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('country')} />
+                </th>
+                <th className="hand" onClick={sort('deliveryAddress')}>
+                  <Translate contentKey="crmApp.client.deliveryAddress">Delivery Address</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('deliveryAddress')} />
+                </th>
+                <th className="hand" onClick={sort('referredBy')}>
+                  <Translate contentKey="crmApp.client.referredBy">Referred By</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('referredBy')} />
                 </th>
                 <th className="hand" onClick={sort('status')}>
                   <Translate contentKey="crmApp.client.status">Status</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
+                </th>
+                <th className="hand" onClick={sort('createdAt')}>
+                  <Translate contentKey="crmApp.client.createdAt">Created At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('createdAt')} />
+                </th>
+                <th className="hand" onClick={sort('updatedAt')}>
+                  <Translate contentKey="crmApp.client.updatedAt">Updated At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('updatedAt')} />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.client.company">Company</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -145,14 +184,24 @@ export const Client = () => {
                       {client.id}
                     </Button>
                   </td>
+                  <td>{client.clientId}</td>
                   <td>{client.firstName}</td>
                   <td>{client.lastName}</td>
                   <td>{client.email}</td>
-                  <td>{client.phone}</td>
-                  <td>{client.company}</td>
+                  <td>{client.phone1}</td>
+                  <td>{client.phone2}</td>
+                  <td>{client.cin}</td>
+                  <td>{client.address}</td>
+                  <td>{client.city}</td>
+                  <td>{client.country}</td>
+                  <td>{client.deliveryAddress}</td>
+                  <td>{client.referredBy}</td>
                   <td>
                     <Translate contentKey={`crmApp.ClientStatus.${client.status}`} />
                   </td>
+                  <td>{client.createdAt ? <TextFormat type="date" value={client.createdAt} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{client.updatedAt ? <TextFormat type="date" value={client.updatedAt} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{client.company ? <Link to={`/company/${client.company.id}`}>{client.company.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/client/${client.id}`} color="info" size="sm" data-cy="entityDetailsButton">

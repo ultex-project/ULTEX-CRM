@@ -19,7 +19,13 @@
       },
       "id": "ID",
       "fullName": "Full Name",
-      "role": "Role"
+      "role": "Role",
+      "email": "Email",
+      "phone": "Phone",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "opportunities": "Opportunities",
+      "convertedProspects": "Converted Prospects"
     }
   }
 }

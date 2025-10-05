@@ -1,0 +1,124 @@
+// src/main/webapp/app/entities/prospect/ProspectListPage.scss
+
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.avatar-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.table td {
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.table th {
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.dropdown-menu {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dropdown-item {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #ffebee;
+}
+
+.pagination {
+  .page-link {
+    border-radius: 6px;
+    margin: 0 0.125rem;
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+  .active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+  }
+}
+.advanced-search-card {
+  background-color: #f8f9fb;
+  border: 1px solid #e9ecef;
+}
+
+.advanced-search-card .card-header {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.filter-group {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-group-root {
+  background-color: #f8f9fa;
+}
+
+.filter-group-body > .filter-group {
+  margin-top: 1rem;
+}
+
+.filter-rule {
+  background-color: #f9fafb;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.logical-chip {
+  background-color: #e9ecef;
+  color: #495057;
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.global-rule {
+  background-color: #f9fafb;
+}
+
+.filter-condition-select {
+  min-width: 110px;
+}

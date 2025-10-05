@@ -21,11 +21,23 @@
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
-      "phone": "Phone",
+      "phone1": "Phone 1",
+      "phone2": "Phone 2",
       "source": "Source",
+      "cin": "Cin",
+      "address": "Address",
+      "city": "City",
+      "country": "Country",
+      "deliveryAddress": "Delivery Address",
+      "referredBy": "Referred By",
       "status": "Status",
+      "convertedDate": "Converted Date",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
       "convertedTo": "Converted To",
-      "convertedBy": "Converted By"
+      "convertedBy": "Converted By",
+      "company": "Company",
+      "contacts": "Contacts"
     }
   }
 }

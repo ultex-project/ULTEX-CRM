@@ -1,6 +1,8 @@
 package com.ultex.crm.domain;
 
 import static com.ultex.crm.domain.ClientTestSamples.*;
+import static com.ultex.crm.domain.CompanyTestSamples.*;
+import static com.ultex.crm.domain.ContactTestSamples.*;
 import static com.ultex.crm.domain.OpportunityTestSamples.*;
 import static com.ultex.crm.domain.ProspectTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,16 +51,50 @@ class ClientTest {
     }
 
     @Test
-    void prospectTest() {
+    void companyTest() {
+        Client client = getClientRandomSampleGenerator();
+        Company companyBack = getCompanyRandomSampleGenerator();
+
+        client.setCompany(companyBack);
+        assertThat(client.getCompany()).isEqualTo(companyBack);
+
+        client.company(null);
+        assertThat(client.getCompany()).isNull();
+    }
+
+    @Test
+    void convertedFromProspectTest() {
         Client client = getClientRandomSampleGenerator();
         Prospect prospectBack = getProspectRandomSampleGenerator();
 
-        client.setProspect(prospectBack);
-        assertThat(client.getProspect()).isEqualTo(prospectBack);
+        client.setConvertedFromProspect(prospectBack);
+        assertThat(client.getConvertedFromProspect()).isEqualTo(prospectBack);
         assertThat(prospectBack.getConvertedTo()).isEqualTo(client);
 
-        client.prospect(null);
-        assertThat(client.getProspect()).isNull();
+        client.convertedFromProspect(null);
+        assertThat(client.getConvertedFromProspect()).isNull();
         assertThat(prospectBack.getConvertedTo()).isNull();
+    }
+
+    @Test
+    void contactsTest() {
+        Client client = getClientRandomSampleGenerator();
+        Contact contactBack = getContactRandomSampleGenerator();
+
+        client.addContacts(contactBack);
+        assertThat(client.getContacts()).containsOnly(contactBack);
+        assertThat(contactBack.getClient()).isEqualTo(client);
+
+        client.removeContacts(contactBack);
+        assertThat(client.getContacts()).doesNotContain(contactBack);
+        assertThat(contactBack.getClient()).isNull();
+
+        client.contacts(new HashSet<>(Set.of(contactBack)));
+        assertThat(client.getContacts()).containsOnly(contactBack);
+        assertThat(contactBack.getClient()).isEqualTo(client);
+
+        client.setContacts(new HashSet<>());
+        assertThat(client.getContacts()).doesNotContain(contactBack);
+        assertThat(contactBack.getClient()).isNull();
     }
 }

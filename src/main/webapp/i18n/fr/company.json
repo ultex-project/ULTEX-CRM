@@ -1,0 +1,36 @@
+{
+  "crmApp": {
+    "company": {
+      "home": {
+        "title": "Companies",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Company",
+        "createOrEditLabel": "Créer ou éditer un Company",
+        "notFound": "Aucun Company trouvé"
+      },
+      "created": "Un nouveau Company a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Company avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Company avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Company {{ id }} ?"
+      },
+      "detail": {
+        "title": "Company"
+      },
+      "id": "ID",
+      "name": "Name",
+      "address": "Address",
+      "city": "City",
+      "country": "Country",
+      "phone": "Phone",
+      "email": "Email",
+      "website": "Website",
+      "industry": "Industry",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "clients": "Clients",
+      "prospects": "Prospects",
+      "contacts": "Contacts"
+    }
+  }
+}

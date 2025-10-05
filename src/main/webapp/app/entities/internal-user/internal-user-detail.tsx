@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Col, Row } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { TextFormat, Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './internal-user.reducer';
@@ -43,6 +44,34 @@ export const InternalUserDetail = () => {
             </span>
           </dt>
           <dd>{internalUserEntity.role}</dd>
+          <dt>
+            <span id="email">
+              <Translate contentKey="crmApp.internalUser.email">Email</Translate>
+            </span>
+          </dt>
+          <dd>{internalUserEntity.email}</dd>
+          <dt>
+            <span id="phone">
+              <Translate contentKey="crmApp.internalUser.phone">Phone</Translate>
+            </span>
+          </dt>
+          <dd>{internalUserEntity.phone}</dd>
+          <dt>
+            <span id="createdAt">
+              <Translate contentKey="crmApp.internalUser.createdAt">Created At</Translate>
+            </span>
+          </dt>
+          <dd>
+            {internalUserEntity.createdAt ? <TextFormat value={internalUserEntity.createdAt} type="date" format={APP_DATE_FORMAT} /> : null}
+          </dd>
+          <dt>
+            <span id="updatedAt">
+              <Translate contentKey="crmApp.internalUser.updatedAt">Updated At</Translate>
+            </span>
+          </dt>
+          <dd>
+            {internalUserEntity.updatedAt ? <TextFormat value={internalUserEntity.updatedAt} type="date" format={APP_DATE_FORMAT} /> : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/internal-user" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

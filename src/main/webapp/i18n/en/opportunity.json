@@ -23,6 +23,8 @@
       "amount": "Amount",
       "stage": "Stage",
       "closeDate": "Close Date",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
       "assignedTo": "Assigned To",
       "client": "Client"
     }

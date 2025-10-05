@@ -46,11 +46,20 @@ public class Opportunity implements Serializable {
     @Column(name = "close_date")
     private Instant closeDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "opportunities", "convertedProspects" }, allowSetters = true)
     private InternalUser assignedTo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "opportunities", "prospect" }, allowSetters = true)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts" }, allowSetters = true)
     private Client client;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -133,6 +142,32 @@ public class Opportunity implements Serializable {
         this.closeDate = closeDate;
     }
 
+    public Instant getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public Opportunity createdAt(Instant createdAt) {
+        this.setCreatedAt(createdAt);
+        return this;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public Opportunity updatedAt(Instant updatedAt) {
+        this.setUpdatedAt(updatedAt);
+        return this;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public InternalUser getAssignedTo() {
         return this.assignedTo;
     }
@@ -188,6 +223,8 @@ public class Opportunity implements Serializable {
             ", amount=" + getAmount() +
             ", stage='" + getStage() + "'" +
             ", closeDate='" + getCloseDate() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", updatedAt='" + getUpdatedAt() + "'" +
             "}";
     }
 }

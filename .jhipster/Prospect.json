@@ -21,7 +21,11 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "phone",
+      "fieldName": "phone1",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "phone2",
       "fieldType": "String"
     },
     {
@@ -29,10 +33,46 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "cin",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "city",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "country",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "deliveryAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "referredBy",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "status",
       "fieldType": "ProspectStatus",
       "fieldValidateRules": ["required"],
       "fieldValues": "NEW,CONTACTED,QUALIFIED,LOST"
+    },
+    {
+      "fieldName": "convertedDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant"
     }
   ],
   "name": "Prospect",
@@ -40,15 +80,32 @@
   "relationships": [
     {
       "otherEntityName": "client",
+      "otherEntityRelationshipName": "convertedFromProspect",
       "relationshipName": "convertedTo",
       "relationshipSide": "left",
       "relationshipType": "one-to-one"
     },
     {
       "otherEntityName": "internalUser",
+      "otherEntityRelationshipName": "convertedProspects",
       "relationshipName": "convertedBy",
       "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "prospects",
+      "relationshipName": "company",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "contact",
+      "otherEntityRelationshipName": "prospect",
+      "relationshipName": "contacts",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",

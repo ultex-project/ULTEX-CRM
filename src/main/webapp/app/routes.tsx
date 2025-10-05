@@ -17,6 +17,8 @@ import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 import DashboardLayout from 'app/custom/dashboard/DashboardLayout';
 import AdminDashboard from 'app/custom/dashboard/AdminDashboard';
+import ProspectListPage from 'app/custom/dashboard/modules/contact/ProspectListPage';
+import ProspectCreatePage from 'app/custom/dashboard/modules/contact/ProspectCreatePage';
 
 const loading = <div>loading ...</div>;
 
@@ -69,6 +71,8 @@ const AppRoutes = () => {
           }
         >
           <Route index element={<AdminDashboard />} />
+          <Route path="contact/new" element={<ProspectCreatePage />} />
+          <Route path="contact" element={<ProspectListPage />} />
         </Route>
         <Route
           path="*"

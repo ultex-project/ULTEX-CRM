@@ -65,6 +65,22 @@ export const OpportunityDetail = () => {
             {opportunityEntity.closeDate ? <TextFormat value={opportunityEntity.closeDate} type="date" format={APP_DATE_FORMAT} /> : null}
           </dd>
           <dt>
+            <span id="createdAt">
+              <Translate contentKey="crmApp.opportunity.createdAt">Created At</Translate>
+            </span>
+          </dt>
+          <dd>
+            {opportunityEntity.createdAt ? <TextFormat value={opportunityEntity.createdAt} type="date" format={APP_DATE_FORMAT} /> : null}
+          </dd>
+          <dt>
+            <span id="updatedAt">
+              <Translate contentKey="crmApp.opportunity.updatedAt">Updated At</Translate>
+            </span>
+          </dt>
+          <dd>
+            {opportunityEntity.updatedAt ? <TextFormat value={opportunityEntity.updatedAt} type="date" format={APP_DATE_FORMAT} /> : null}
+          </dd>
+          <dt>
             <Translate contentKey="crmApp.opportunity.assignedTo">Assigned To</Translate>
           </dt>
           <dd>{opportunityEntity.assignedTo ? opportunityEntity.assignedTo.id : ''}</dd>

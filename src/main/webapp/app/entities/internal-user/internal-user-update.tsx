@@ -4,6 +4,7 @@ import { Button, Col, Row } from 'reactstrap';
 import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { UserRole } from 'app/shared/model/enumerations/user-role.model';
@@ -45,6 +46,8 @@ export const InternalUserUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
+    values.createdAt = convertDateTimeToServer(values.createdAt);
+    values.updatedAt = convertDateTimeToServer(values.updatedAt);
 
     const entity = {
       ...internalUserEntity,
@@ -60,10 +63,15 @@ export const InternalUserUpdate = () => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? {
+          createdAt: displayDefaultDateTime(),
+          updatedAt: displayDefaultDateTime(),
+        }
       : {
           role: 'ADMIN',
           ...internalUserEntity,
+          createdAt: convertDateTimeFromServer(internalUserEntity.createdAt),
+          updatedAt: convertDateTimeFromServer(internalUserEntity.updatedAt),
         };
 
   return (
@@ -114,6 +122,39 @@ export const InternalUserUpdate = () => {
                   </option>
                 ))}
               </ValidatedField>
+              <ValidatedField
+                label={translate('crmApp.internalUser.email')}
+                id="internal-user-email"
+                name="email"
+                data-cy="email"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                label={translate('crmApp.internalUser.phone')}
+                id="internal-user-phone"
+                name="phone"
+                data-cy="phone"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.internalUser.createdAt')}
+                id="internal-user-createdAt"
+                name="createdAt"
+                data-cy="createdAt"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+              <ValidatedField
+                label={translate('crmApp.internalUser.updatedAt')}
+                id="internal-user-updatedAt"
+                name="updatedAt"
+                data-cy="updatedAt"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/internal-user" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

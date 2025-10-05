@@ -1,11 +1,15 @@
 package com.ultex.crm.domain;
 
 import static com.ultex.crm.domain.ClientTestSamples.*;
+import static com.ultex.crm.domain.CompanyTestSamples.*;
+import static com.ultex.crm.domain.ContactTestSamples.*;
 import static com.ultex.crm.domain.InternalUserTestSamples.*;
 import static com.ultex.crm.domain.ProspectTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ultex.crm.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class ProspectTest {
@@ -46,5 +50,39 @@ class ProspectTest {
 
         prospect.convertedBy(null);
         assertThat(prospect.getConvertedBy()).isNull();
+    }
+
+    @Test
+    void companyTest() {
+        Prospect prospect = getProspectRandomSampleGenerator();
+        Company companyBack = getCompanyRandomSampleGenerator();
+
+        prospect.setCompany(companyBack);
+        assertThat(prospect.getCompany()).isEqualTo(companyBack);
+
+        prospect.company(null);
+        assertThat(prospect.getCompany()).isNull();
+    }
+
+    @Test
+    void contactsTest() {
+        Prospect prospect = getProspectRandomSampleGenerator();
+        Contact contactBack = getContactRandomSampleGenerator();
+
+        prospect.addContacts(contactBack);
+        assertThat(prospect.getContacts()).containsOnly(contactBack);
+        assertThat(contactBack.getProspect()).isEqualTo(prospect);
+
+        prospect.removeContacts(contactBack);
+        assertThat(prospect.getContacts()).doesNotContain(contactBack);
+        assertThat(contactBack.getProspect()).isNull();
+
+        prospect.contacts(new HashSet<>(Set.of(contactBack)));
+        assertThat(prospect.getContacts()).containsOnly(contactBack);
+        assertThat(contactBack.getProspect()).isEqualTo(prospect);
+
+        prospect.setContacts(new HashSet<>());
+        assertThat(prospect.getContacts()).doesNotContain(contactBack);
+        assertThat(contactBack.getProspect()).isNull();
     }
 }

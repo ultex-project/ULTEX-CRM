@@ -7,6 +7,8 @@ import Client from './client';
 import Prospect from './prospect';
 import Opportunity from './opportunity';
 import InternalUser from './internal-user';
+import Company from './company';
+import Contact from './contact';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -18,6 +20,8 @@ export default () => {
         <Route path="prospect/*" element={<Prospect />} />
         <Route path="opportunity/*" element={<Opportunity />} />
         <Route path="internal-user/*" element={<InternalUser />} />
+        <Route path="company/*" element={<Company />} />
+        <Route path="contact/*" element={<Contact />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

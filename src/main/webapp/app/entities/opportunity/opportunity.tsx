@@ -133,6 +133,14 @@ export const Opportunity = () => {
                   <Translate contentKey="crmApp.opportunity.closeDate">Close Date</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('closeDate')} />
                 </th>
+                <th className="hand" onClick={sort('createdAt')}>
+                  <Translate contentKey="crmApp.opportunity.createdAt">Created At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('createdAt')} />
+                </th>
+                <th className="hand" onClick={sort('updatedAt')}>
+                  <Translate contentKey="crmApp.opportunity.updatedAt">Updated At</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('updatedAt')} />
+                </th>
                 <th>
                   <Translate contentKey="crmApp.opportunity.assignedTo">Assigned To</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -158,6 +166,12 @@ export const Opportunity = () => {
                   </td>
                   <td>
                     {opportunity.closeDate ? <TextFormat type="date" value={opportunity.closeDate} format={APP_DATE_FORMAT} /> : null}
+                  </td>
+                  <td>
+                    {opportunity.createdAt ? <TextFormat type="date" value={opportunity.createdAt} format={APP_DATE_FORMAT} /> : null}
+                  </td>
+                  <td>
+                    {opportunity.updatedAt ? <TextFormat type="date" value={opportunity.updatedAt} format={APP_DATE_FORMAT} /> : null}
                   </td>
                   <td>
                     {opportunity.assignedTo ? (

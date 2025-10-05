@@ -23,5 +23,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="internal_user"
                                  />
+
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="prospect"
+                                 constraintName="fk_prospect__company_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="company"
+                                 />
     </changeSet>
 </databaseChangeLog>

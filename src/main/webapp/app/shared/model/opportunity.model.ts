@@ -10,8 +10,10 @@ export interface IOpportunity {
   amount?: number;
   stage?: keyof typeof OpportunityStage;
   closeDate?: dayjs.Dayjs | null;
-  assignedTo?: IInternalUser | null;
-  client?: IClient | null;
+  createdAt?: dayjs.Dayjs | null;
+  updatedAt?: dayjs.Dayjs | null;
+  assignedTo?: IInternalUser;
+  client?: IClient;
 }
 
 export const defaultValue: Readonly<IOpportunity> = {};
