@@ -25,7 +25,7 @@ export const InternalUserUpdate = () => {
   const userRoleValues = Object.keys(UserRole);
 
   const handleClose = () => {
-    navigate('/internal-user');
+    navigate(`/internal-user${location.search}`);
   };
 
   useEffect(() => {

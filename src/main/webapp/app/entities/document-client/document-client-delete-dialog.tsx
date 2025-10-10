@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import { deleteEntity, getEntity } from './document-client.reducer';
 
 export const DocumentClientDeleteDialog = () => {
   const dispatch = useAppDispatch();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
   const { id } = useParams<'id'>();
 
@@ -23,7 +24,7 @@ export const DocumentClientDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.documentClient.updateSuccess);
 
   const handleClose = () => {
-    navigate('/document-client');
+    navigate(`/document-client${pageLocation.search}`);
   };
 
   useEffect(() => {

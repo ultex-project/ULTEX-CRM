@@ -24,7 +24,7 @@ export const ProduitDemandeUpdate = () => {
   const updateSuccess = useAppSelector(state => state.produitDemande.updateSuccess);
 
   const handleClose = () => {
-    navigate('/produit-demande');
+    navigate(`/produit-demande${location.search}`);
   };
 
   useEffect(() => {

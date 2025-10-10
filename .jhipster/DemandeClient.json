@@ -45,6 +45,7 @@
     }
   ],
   "name": "DemandeClient",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "client",

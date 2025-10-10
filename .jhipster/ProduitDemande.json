@@ -79,6 +79,7 @@
     }
   ],
   "name": "ProduitDemande",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "demandeClient",

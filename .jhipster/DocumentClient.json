@@ -20,6 +20,7 @@
     }
   ],
   "name": "DocumentClient",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "client",

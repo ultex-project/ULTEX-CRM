@@ -25,7 +25,7 @@ export const DemandeClientUpdate = () => {
   const updateSuccess = useAppSelector(state => state.demandeClient.updateSuccess);
 
   const handleClose = () => {
-    navigate('/demande-client');
+    navigate(`/demande-client${location.search}`);
   };
 
   useEffect(() => {

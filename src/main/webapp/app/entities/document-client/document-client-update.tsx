@@ -24,7 +24,7 @@ export const DocumentClientUpdate = () => {
   const updateSuccess = useAppSelector(state => state.documentClient.updateSuccess);
 
   const handleClose = () => {
-    navigate('/document-client');
+    navigate(`/document-client${location.search}`);
   };
 
   useEffect(() => {

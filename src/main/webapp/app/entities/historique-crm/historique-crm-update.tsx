@@ -25,7 +25,7 @@ export const HistoriqueCRMUpdate = () => {
   const updateSuccess = useAppSelector(state => state.historiqueCRM.updateSuccess);
 
   const handleClose = () => {
-    navigate('/historique-crm');
+    navigate(`/historique-crm${location.search}`);
   };
 
   useEffect(() => {

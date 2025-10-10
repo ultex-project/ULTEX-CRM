@@ -27,6 +27,7 @@
     }
   ],
   "name": "KycClient",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "client",

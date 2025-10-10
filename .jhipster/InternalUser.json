@@ -35,6 +35,7 @@
     }
   ],
   "name": "InternalUser",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "opportunity",

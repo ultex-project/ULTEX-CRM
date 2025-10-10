@@ -4,12 +4,11 @@ import com.ultex.crm.domain.DocumentClient;
 import com.ultex.crm.repository.DocumentClientRepository;
 import com.ultex.crm.service.dto.DocumentClientDTO;
 import com.ultex.crm.service.mapper.DocumentClientMapper;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,16 +79,13 @@ public class DocumentClientService {
     /**
      * Get all the documentClients.
      *
+     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<DocumentClientDTO> findAll() {
+    public Page<DocumentClientDTO> findAll(Pageable pageable) {
         LOG.debug("Request to get all DocumentClients");
-        return documentClientRepository
-            .findAll()
-            .stream()
-            .map(documentClientMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        return documentClientRepository.findAll(pageable).map(documentClientMapper::toDto);
     }
 
     /**

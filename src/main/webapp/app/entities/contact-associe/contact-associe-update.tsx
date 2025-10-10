@@ -24,7 +24,7 @@ export const ContactAssocieUpdate = () => {
   const updateSuccess = useAppSelector(state => state.contactAssocie.updateSuccess);
 
   const handleClose = () => {
-    navigate('/contact-associe');
+    navigate(`/contact-associe${location.search}`);
   };
 
   useEffect(() => {
