@@ -20,7 +20,8 @@
         "client": "Client",
         "prospect": "Prospect",
         "opportunity": "Opportunity",
-        "internalUser": "Internal User"
+        "internalUser": "Internal User",
+        "history": "History"
       },
       "account": {
         "main": "Account",

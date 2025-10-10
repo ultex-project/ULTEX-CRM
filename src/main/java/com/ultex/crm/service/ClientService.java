@@ -106,6 +106,19 @@ public class ClientService {
     }
 
     /**
+     *  Get all the clients where KycClient is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ClientDTO> findAllWhereKycClientIsNull() {
+        LOG.debug("Request to get all clients where KycClient is null");
+        return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
+            .filter(client -> client.getKycClient() == null)
+            .map(clientMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
      * Get one client by id.
      *
      * @param id the id of the entity.

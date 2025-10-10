@@ -12,7 +12,7 @@ export const Logout = () => {
     if (authentication.logoutUrl) {
       window.location.href = authentication.logoutUrl;
     } else if (!authentication.isAuthenticated) {
-      window.location.href = '/';
+      window.location.href = '/login';
     }
   });
 

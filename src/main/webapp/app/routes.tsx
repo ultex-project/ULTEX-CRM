@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 
 import Loadable from 'react-loadable';
 
-import Login from 'app/modules/login/login';
+import LoginPage from 'app/custom/auth/LoginPage';
 import Register from 'app/modules/account/register/register';
 import Activate from 'app/modules/account/activate/activate';
 import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
@@ -19,6 +19,7 @@ import DashboardLayout from 'app/custom/dashboard/DashboardLayout';
 import AdminDashboard from 'app/custom/dashboard/AdminDashboard';
 import ProspectListPage from 'app/custom/dashboard/modules/contact/ProspectListPage';
 import ProspectCreatePage from 'app/custom/dashboard/modules/contact/ProspectCreatePage';
+import ProspectViewPage from 'app/custom/dashboard/modules/contact/ProspectViewPage';
 
 const loading = <div>loading ...</div>;
 
@@ -36,7 +37,7 @@ const AppRoutes = () => {
     <div className="view-routes">
       <ErrorBoundaryRoutes>
         <Route index element={<Home />} />
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={<LoginPage />} />
         <Route path="logout" element={<Logout />} />
         <Route path="account">
           <Route
@@ -73,6 +74,7 @@ const AppRoutes = () => {
           <Route index element={<AdminDashboard />} />
           <Route path="contact/new" element={<ProspectCreatePage />} />
           <Route path="contact" element={<ProspectListPage />} />
+          <Route path="prospect/:id/view" element={<ProspectViewPage />} />
         </Route>
         <Route
           path="*"

@@ -4,7 +4,7 @@ import { Button, Col, Row } from 'reactstrap';
 import { TextFormat, Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './client.reducer';
@@ -33,23 +33,75 @@ export const ClientDetail = () => {
           </dt>
           <dd>{clientEntity.id}</dd>
           <dt>
-            <span id="clientId">
-              <Translate contentKey="crmApp.client.clientId">Client Id</Translate>
+            <span id="code">
+              <Translate contentKey="crmApp.client.code">Code</Translate>
             </span>
           </dt>
-          <dd>{clientEntity.clientId}</dd>
+          <dd>{clientEntity.code}</dd>
           <dt>
-            <span id="firstName">
-              <Translate contentKey="crmApp.client.firstName">First Name</Translate>
+            <span id="nomComplet">
+              <Translate contentKey="crmApp.client.nomComplet">Nom Complet</Translate>
             </span>
           </dt>
-          <dd>{clientEntity.firstName}</dd>
+          <dd>{clientEntity.nomComplet}</dd>
           <dt>
-            <span id="lastName">
-              <Translate contentKey="crmApp.client.lastName">Last Name</Translate>
+            <span id="photoUrl">
+              <Translate contentKey="crmApp.client.photoUrl">Photo Url</Translate>
             </span>
           </dt>
-          <dd>{clientEntity.lastName}</dd>
+          <dd>{clientEntity.photoUrl}</dd>
+          <dt>
+            <span id="dateNaissance">
+              <Translate contentKey="crmApp.client.dateNaissance">Date Naissance</Translate>
+            </span>
+          </dt>
+          <dd>
+            {clientEntity.dateNaissance ? (
+              <TextFormat value={clientEntity.dateNaissance} type="date" format={APP_LOCAL_DATE_FORMAT} />
+            ) : null}
+          </dd>
+          <dt>
+            <span id="lieuNaissance">
+              <Translate contentKey="crmApp.client.lieuNaissance">Lieu Naissance</Translate>
+            </span>
+          </dt>
+          <dd>{clientEntity.lieuNaissance}</dd>
+          <dt>
+            <span id="nationalite">
+              <Translate contentKey="crmApp.client.nationalite">Nationalite</Translate>
+            </span>
+          </dt>
+          <dd>{clientEntity.nationalite}</dd>
+          <dt>
+            <span id="genre">
+              <Translate contentKey="crmApp.client.genre">Genre</Translate>
+            </span>
+          </dt>
+          <dd>{clientEntity.genre}</dd>
+          <dt>
+            <span id="fonction">
+              <Translate contentKey="crmApp.client.fonction">Fonction</Translate>
+            </span>
+          </dt>
+          <dd>{clientEntity.fonction}</dd>
+          <dt>
+            <span id="languePreferee">
+              <Translate contentKey="crmApp.client.languePreferee">Langue Preferee</Translate>
+            </span>
+          </dt>
+          <dd>{clientEntity.languePreferee}</dd>
+          <dt>
+            <span id="telephonePrincipal">
+              <Translate contentKey="crmApp.client.telephonePrincipal">Telephone Principal</Translate>
+            </span>
+          </dt>
+          <dd>{clientEntity.telephonePrincipal}</dd>
+          <dt>
+            <span id="whatsapp">
+              <Translate contentKey="crmApp.client.whatsapp">Whatsapp</Translate>
+            </span>
+          </dt>
+          <dd>{clientEntity.whatsapp}</dd>
           <dt>
             <span id="email">
               <Translate contentKey="crmApp.client.email">Email</Translate>
@@ -57,59 +109,23 @@ export const ClientDetail = () => {
           </dt>
           <dd>{clientEntity.email}</dd>
           <dt>
-            <span id="phone1">
-              <Translate contentKey="crmApp.client.phone1">Phone 1</Translate>
+            <span id="adressePersonnelle">
+              <Translate contentKey="crmApp.client.adressePersonnelle">Adresse Personnelle</Translate>
             </span>
           </dt>
-          <dd>{clientEntity.phone1}</dd>
+          <dd>{clientEntity.adressePersonnelle}</dd>
           <dt>
-            <span id="phone2">
-              <Translate contentKey="crmApp.client.phone2">Phone 2</Translate>
+            <span id="adressesLivraison">
+              <Translate contentKey="crmApp.client.adressesLivraison">Adresses Livraison</Translate>
             </span>
           </dt>
-          <dd>{clientEntity.phone2}</dd>
+          <dd>{clientEntity.adressesLivraison}</dd>
           <dt>
-            <span id="cin">
-              <Translate contentKey="crmApp.client.cin">Cin</Translate>
+            <span id="reseauxSociaux">
+              <Translate contentKey="crmApp.client.reseauxSociaux">Reseaux Sociaux</Translate>
             </span>
           </dt>
-          <dd>{clientEntity.cin}</dd>
-          <dt>
-            <span id="address">
-              <Translate contentKey="crmApp.client.address">Address</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.address}</dd>
-          <dt>
-            <span id="city">
-              <Translate contentKey="crmApp.client.city">City</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.city}</dd>
-          <dt>
-            <span id="country">
-              <Translate contentKey="crmApp.client.country">Country</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.country}</dd>
-          <dt>
-            <span id="deliveryAddress">
-              <Translate contentKey="crmApp.client.deliveryAddress">Delivery Address</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.deliveryAddress}</dd>
-          <dt>
-            <span id="referredBy">
-              <Translate contentKey="crmApp.client.referredBy">Referred By</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.referredBy}</dd>
-          <dt>
-            <span id="status">
-              <Translate contentKey="crmApp.client.status">Status</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.status}</dd>
+          <dd>{clientEntity.reseauxSociaux}</dd>
           <dt>
             <span id="createdAt">
               <Translate contentKey="crmApp.client.createdAt">Created At</Translate>

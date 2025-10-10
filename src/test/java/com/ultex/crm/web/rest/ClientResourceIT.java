@@ -10,12 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultex.crm.IntegrationTest;
 import com.ultex.crm.domain.Client;
-import com.ultex.crm.domain.enumeration.ClientStatus;
 import com.ultex.crm.repository.ClientRepository;
 import com.ultex.crm.service.dto.ClientDTO;
 import com.ultex.crm.service.mapper.ClientMapper;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -37,44 +38,50 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ClientResourceIT {
 
-    private static final Long DEFAULT_CLIENT_ID = 1L;
-    private static final Long UPDATED_CLIENT_ID = 2L;
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_FIRST_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NOM_COMPLET = "AAAAAAAAAA";
+    private static final String UPDATED_NOM_COMPLET = "BBBBBBBBBB";
 
-    private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_PHOTO_URL = "AAAAAAAAAA";
+    private static final String UPDATED_PHOTO_URL = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_DATE_NAISSANCE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_NAISSANCE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_LIEU_NAISSANCE = "AAAAAAAAAA";
+    private static final String UPDATED_LIEU_NAISSANCE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_NATIONALITE = "AAAAAAAAAA";
+    private static final String UPDATED_NATIONALITE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_GENRE = "AAAAAAAAAA";
+    private static final String UPDATED_GENRE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FONCTION = "AAAAAAAAAA";
+    private static final String UPDATED_FONCTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_LANGUE_PREFEREE = "AAAAAAAAAA";
+    private static final String UPDATED_LANGUE_PREFEREE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_TELEPHONE_PRINCIPAL = "+44002698195";
+    private static final String UPDATED_TELEPHONE_PRINCIPAL = "+32734151477900";
+
+    private static final String DEFAULT_WHATSAPP = "AAAAAAAAAA";
+    private static final String UPDATED_WHATSAPP = "BBBBBBBBBB";
 
     private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PHONE_1 = "AAAAAAAAAA";
-    private static final String UPDATED_PHONE_1 = "BBBBBBBBBB";
+    private static final String DEFAULT_ADRESSE_PERSONNELLE = "AAAAAAAAAA";
+    private static final String UPDATED_ADRESSE_PERSONNELLE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PHONE_2 = "AAAAAAAAAA";
-    private static final String UPDATED_PHONE_2 = "BBBBBBBBBB";
+    private static final String DEFAULT_ADRESSES_LIVRAISON = "AAAAAAAAAA";
+    private static final String UPDATED_ADRESSES_LIVRAISON = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CIN = "AAAAAAAAAA";
-    private static final String UPDATED_CIN = "BBBBBBBBBB";
-
-    private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
-    private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CITY = "AAAAAAAAAA";
-    private static final String UPDATED_CITY = "BBBBBBBBBB";
-
-    private static final String DEFAULT_COUNTRY = "AAAAAAAAAA";
-    private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
-
-    private static final String DEFAULT_DELIVERY_ADDRESS = "AAAAAAAAAA";
-    private static final String UPDATED_DELIVERY_ADDRESS = "BBBBBBBBBB";
-
-    private static final String DEFAULT_REFERRED_BY = "AAAAAAAAAA";
-    private static final String UPDATED_REFERRED_BY = "BBBBBBBBBB";
-
-    private static final ClientStatus DEFAULT_STATUS = ClientStatus.ACTIVE;
-    private static final ClientStatus UPDATED_STATUS = ClientStatus.INACTIVE;
+    private static final String DEFAULT_RESEAUX_SOCIAUX = "AAAAAAAAAA";
+    private static final String UPDATED_RESEAUX_SOCIAUX = "BBBBBBBBBB";
 
     private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -115,19 +122,21 @@ class ClientResourceIT {
      */
     public static Client createEntity() {
         return new Client()
-            .clientId(DEFAULT_CLIENT_ID)
-            .firstName(DEFAULT_FIRST_NAME)
-            .lastName(DEFAULT_LAST_NAME)
+            .code(DEFAULT_CODE)
+            .nomComplet(DEFAULT_NOM_COMPLET)
+            .photoUrl(DEFAULT_PHOTO_URL)
+            .dateNaissance(DEFAULT_DATE_NAISSANCE)
+            .lieuNaissance(DEFAULT_LIEU_NAISSANCE)
+            .nationalite(DEFAULT_NATIONALITE)
+            .genre(DEFAULT_GENRE)
+            .fonction(DEFAULT_FONCTION)
+            .languePreferee(DEFAULT_LANGUE_PREFEREE)
+            .telephonePrincipal(DEFAULT_TELEPHONE_PRINCIPAL)
+            .whatsapp(DEFAULT_WHATSAPP)
             .email(DEFAULT_EMAIL)
-            .phone1(DEFAULT_PHONE_1)
-            .phone2(DEFAULT_PHONE_2)
-            .cin(DEFAULT_CIN)
-            .address(DEFAULT_ADDRESS)
-            .city(DEFAULT_CITY)
-            .country(DEFAULT_COUNTRY)
-            .deliveryAddress(DEFAULT_DELIVERY_ADDRESS)
-            .referredBy(DEFAULT_REFERRED_BY)
-            .status(DEFAULT_STATUS)
+            .adressePersonnelle(DEFAULT_ADRESSE_PERSONNELLE)
+            .adressesLivraison(DEFAULT_ADRESSES_LIVRAISON)
+            .reseauxSociaux(DEFAULT_RESEAUX_SOCIAUX)
             .createdAt(DEFAULT_CREATED_AT)
             .updatedAt(DEFAULT_UPDATED_AT);
     }
@@ -140,19 +149,21 @@ class ClientResourceIT {
      */
     public static Client createUpdatedEntity() {
         return new Client()
-            .clientId(UPDATED_CLIENT_ID)
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
+            .code(UPDATED_CODE)
+            .nomComplet(UPDATED_NOM_COMPLET)
+            .photoUrl(UPDATED_PHOTO_URL)
+            .dateNaissance(UPDATED_DATE_NAISSANCE)
+            .lieuNaissance(UPDATED_LIEU_NAISSANCE)
+            .nationalite(UPDATED_NATIONALITE)
+            .genre(UPDATED_GENRE)
+            .fonction(UPDATED_FONCTION)
+            .languePreferee(UPDATED_LANGUE_PREFEREE)
+            .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
+            .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
-            .phone1(UPDATED_PHONE_1)
-            .phone2(UPDATED_PHONE_2)
-            .cin(UPDATED_CIN)
-            .address(UPDATED_ADDRESS)
-            .city(UPDATED_CITY)
-            .country(UPDATED_COUNTRY)
-            .deliveryAddress(UPDATED_DELIVERY_ADDRESS)
-            .referredBy(UPDATED_REFERRED_BY)
-            .status(UPDATED_STATUS)
+            .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
+            .adressesLivraison(UPDATED_ADRESSES_LIVRAISON)
+            .reseauxSociaux(UPDATED_RESEAUX_SOCIAUX)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
     }
@@ -214,10 +225,10 @@ class ClientResourceIT {
 
     @Test
     @Transactional
-    void checkFirstNameIsRequired() throws Exception {
+    void checkCodeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        client.setFirstName(null);
+        client.setCode(null);
 
         // Create the Client, which fails.
         ClientDTO clientDTO = clientMapper.toDto(client);
@@ -231,10 +242,10 @@ class ClientResourceIT {
 
     @Test
     @Transactional
-    void checkLastNameIsRequired() throws Exception {
+    void checkNomCompletIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        client.setLastName(null);
+        client.setNomComplet(null);
 
         // Create the Client, which fails.
         ClientDTO clientDTO = clientMapper.toDto(client);
@@ -248,10 +259,10 @@ class ClientResourceIT {
 
     @Test
     @Transactional
-    void checkEmailIsRequired() throws Exception {
+    void checkNationaliteIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        client.setEmail(null);
+        client.setNationalite(null);
 
         // Create the Client, which fails.
         ClientDTO clientDTO = clientMapper.toDto(client);
@@ -265,10 +276,10 @@ class ClientResourceIT {
 
     @Test
     @Transactional
-    void checkStatusIsRequired() throws Exception {
+    void checkTelephonePrincipalIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        client.setStatus(null);
+        client.setTelephonePrincipal(null);
 
         // Create the Client, which fails.
         ClientDTO clientDTO = clientMapper.toDto(client);
@@ -292,19 +303,21 @@ class ClientResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(client.getId().intValue())))
-            .andExpect(jsonPath("$.[*].clientId").value(hasItem(DEFAULT_CLIENT_ID.intValue())))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
+            .andExpect(jsonPath("$.[*].nomComplet").value(hasItem(DEFAULT_NOM_COMPLET)))
+            .andExpect(jsonPath("$.[*].photoUrl").value(hasItem(DEFAULT_PHOTO_URL)))
+            .andExpect(jsonPath("$.[*].dateNaissance").value(hasItem(DEFAULT_DATE_NAISSANCE.toString())))
+            .andExpect(jsonPath("$.[*].lieuNaissance").value(hasItem(DEFAULT_LIEU_NAISSANCE)))
+            .andExpect(jsonPath("$.[*].nationalite").value(hasItem(DEFAULT_NATIONALITE)))
+            .andExpect(jsonPath("$.[*].genre").value(hasItem(DEFAULT_GENRE)))
+            .andExpect(jsonPath("$.[*].fonction").value(hasItem(DEFAULT_FONCTION)))
+            .andExpect(jsonPath("$.[*].languePreferee").value(hasItem(DEFAULT_LANGUE_PREFEREE)))
+            .andExpect(jsonPath("$.[*].telephonePrincipal").value(hasItem(DEFAULT_TELEPHONE_PRINCIPAL)))
+            .andExpect(jsonPath("$.[*].whatsapp").value(hasItem(DEFAULT_WHATSAPP)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.[*].phone1").value(hasItem(DEFAULT_PHONE_1)))
-            .andExpect(jsonPath("$.[*].phone2").value(hasItem(DEFAULT_PHONE_2)))
-            .andExpect(jsonPath("$.[*].cin").value(hasItem(DEFAULT_CIN)))
-            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
-            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
-            .andExpect(jsonPath("$.[*].deliveryAddress").value(hasItem(DEFAULT_DELIVERY_ADDRESS)))
-            .andExpect(jsonPath("$.[*].referredBy").value(hasItem(DEFAULT_REFERRED_BY)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].adressePersonnelle").value(hasItem(DEFAULT_ADRESSE_PERSONNELLE)))
+            .andExpect(jsonPath("$.[*].adressesLivraison").value(hasItem(DEFAULT_ADRESSES_LIVRAISON)))
+            .andExpect(jsonPath("$.[*].reseauxSociaux").value(hasItem(DEFAULT_RESEAUX_SOCIAUX)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
     }
@@ -321,19 +334,21 @@ class ClientResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(client.getId().intValue()))
-            .andExpect(jsonPath("$.clientId").value(DEFAULT_CLIENT_ID.intValue()))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
+            .andExpect(jsonPath("$.nomComplet").value(DEFAULT_NOM_COMPLET))
+            .andExpect(jsonPath("$.photoUrl").value(DEFAULT_PHOTO_URL))
+            .andExpect(jsonPath("$.dateNaissance").value(DEFAULT_DATE_NAISSANCE.toString()))
+            .andExpect(jsonPath("$.lieuNaissance").value(DEFAULT_LIEU_NAISSANCE))
+            .andExpect(jsonPath("$.nationalite").value(DEFAULT_NATIONALITE))
+            .andExpect(jsonPath("$.genre").value(DEFAULT_GENRE))
+            .andExpect(jsonPath("$.fonction").value(DEFAULT_FONCTION))
+            .andExpect(jsonPath("$.languePreferee").value(DEFAULT_LANGUE_PREFEREE))
+            .andExpect(jsonPath("$.telephonePrincipal").value(DEFAULT_TELEPHONE_PRINCIPAL))
+            .andExpect(jsonPath("$.whatsapp").value(DEFAULT_WHATSAPP))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-            .andExpect(jsonPath("$.phone1").value(DEFAULT_PHONE_1))
-            .andExpect(jsonPath("$.phone2").value(DEFAULT_PHONE_2))
-            .andExpect(jsonPath("$.cin").value(DEFAULT_CIN))
-            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
-            .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
-            .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
-            .andExpect(jsonPath("$.deliveryAddress").value(DEFAULT_DELIVERY_ADDRESS))
-            .andExpect(jsonPath("$.referredBy").value(DEFAULT_REFERRED_BY))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+            .andExpect(jsonPath("$.adressePersonnelle").value(DEFAULT_ADRESSE_PERSONNELLE))
+            .andExpect(jsonPath("$.adressesLivraison").value(DEFAULT_ADRESSES_LIVRAISON))
+            .andExpect(jsonPath("$.reseauxSociaux").value(DEFAULT_RESEAUX_SOCIAUX))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
             .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
     }
@@ -358,19 +373,21 @@ class ClientResourceIT {
         // Disconnect from session so that the updates on updatedClient are not directly saved in db
         em.detach(updatedClient);
         updatedClient
-            .clientId(UPDATED_CLIENT_ID)
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
+            .code(UPDATED_CODE)
+            .nomComplet(UPDATED_NOM_COMPLET)
+            .photoUrl(UPDATED_PHOTO_URL)
+            .dateNaissance(UPDATED_DATE_NAISSANCE)
+            .lieuNaissance(UPDATED_LIEU_NAISSANCE)
+            .nationalite(UPDATED_NATIONALITE)
+            .genre(UPDATED_GENRE)
+            .fonction(UPDATED_FONCTION)
+            .languePreferee(UPDATED_LANGUE_PREFEREE)
+            .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
+            .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
-            .phone1(UPDATED_PHONE_1)
-            .phone2(UPDATED_PHONE_2)
-            .cin(UPDATED_CIN)
-            .address(UPDATED_ADDRESS)
-            .city(UPDATED_CITY)
-            .country(UPDATED_COUNTRY)
-            .deliveryAddress(UPDATED_DELIVERY_ADDRESS)
-            .referredBy(UPDATED_REFERRED_BY)
-            .status(UPDATED_STATUS)
+            .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
+            .adressesLivraison(UPDATED_ADRESSES_LIVRAISON)
+            .reseauxSociaux(UPDATED_RESEAUX_SOCIAUX)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
         ClientDTO clientDTO = clientMapper.toDto(updatedClient);
@@ -459,15 +476,19 @@ class ClientResourceIT {
         partialUpdatedClient.setId(client.getId());
 
         partialUpdatedClient
-            .clientId(UPDATED_CLIENT_ID)
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
+            .nomComplet(UPDATED_NOM_COMPLET)
+            .photoUrl(UPDATED_PHOTO_URL)
+            .dateNaissance(UPDATED_DATE_NAISSANCE)
+            .lieuNaissance(UPDATED_LIEU_NAISSANCE)
+            .nationalite(UPDATED_NATIONALITE)
+            .genre(UPDATED_GENRE)
+            .fonction(UPDATED_FONCTION)
+            .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
+            .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
-            .phone1(UPDATED_PHONE_1)
-            .phone2(UPDATED_PHONE_2)
-            .country(UPDATED_COUNTRY)
-            .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+            .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
+            .adressesLivraison(UPDATED_ADRESSES_LIVRAISON)
+            .createdAt(UPDATED_CREATED_AT);
 
         restClientMockMvc
             .perform(
@@ -496,19 +517,21 @@ class ClientResourceIT {
         partialUpdatedClient.setId(client.getId());
 
         partialUpdatedClient
-            .clientId(UPDATED_CLIENT_ID)
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
+            .code(UPDATED_CODE)
+            .nomComplet(UPDATED_NOM_COMPLET)
+            .photoUrl(UPDATED_PHOTO_URL)
+            .dateNaissance(UPDATED_DATE_NAISSANCE)
+            .lieuNaissance(UPDATED_LIEU_NAISSANCE)
+            .nationalite(UPDATED_NATIONALITE)
+            .genre(UPDATED_GENRE)
+            .fonction(UPDATED_FONCTION)
+            .languePreferee(UPDATED_LANGUE_PREFEREE)
+            .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
+            .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
-            .phone1(UPDATED_PHONE_1)
-            .phone2(UPDATED_PHONE_2)
-            .cin(UPDATED_CIN)
-            .address(UPDATED_ADDRESS)
-            .city(UPDATED_CITY)
-            .country(UPDATED_COUNTRY)
-            .deliveryAddress(UPDATED_DELIVERY_ADDRESS)
-            .referredBy(UPDATED_REFERRED_BY)
-            .status(UPDATED_STATUS)
+            .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
+            .adressesLivraison(UPDATED_ADRESSES_LIVRAISON)
+            .reseauxSociaux(UPDATED_RESEAUX_SOCIAUX)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
 

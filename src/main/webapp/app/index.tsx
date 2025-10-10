@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import getStore from 'app/config/store';
 import { registerLocale } from 'app/config/translation';
 import setupAxiosInterceptors from 'app/config/axios-interceptor';

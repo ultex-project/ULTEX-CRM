@@ -1,0 +1,46 @@
+{
+  "annotations": {
+    "changelogDate": "20251005212213"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "entityTableName": "historique_crm",
+  "fields": [
+    {
+      "fieldName": "dateInteraction",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "canal",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "agent",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "resume",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "etat",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "observation",
+      "fieldType": "String"
+    }
+  ],
+  "name": "HistoriqueCRM",
+  "relationships": [
+    {
+      "otherEntityName": "client",
+      "relationshipName": "client",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

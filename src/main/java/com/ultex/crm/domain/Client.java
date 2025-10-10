@@ -1,11 +1,11 @@
 package com.ultex.crm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ultex.crm.domain.enumeration.ClientStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -28,49 +28,56 @@ public class Client implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "client_id")
-    private Long clientId;
+    @NotNull
+    @Pattern(regexp = "[A-Z0-9]{4,}")
+    @Column(name = "code", nullable = false)
+    private String code;
 
     @NotNull
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @Column(name = "nom_complet", nullable = false)
+    private String nomComplet;
+
+    @Column(name = "photo_url")
+    private String photoUrl;
+
+    @Column(name = "date_naissance")
+    private LocalDate dateNaissance;
+
+    @Column(name = "lieu_naissance")
+    private String lieuNaissance;
 
     @NotNull
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @Column(name = "nationalite", nullable = false)
+    private String nationalite;
+
+    @Column(name = "genre")
+    private String genre;
+
+    @Column(name = "fonction")
+    private String fonction;
+
+    @Column(name = "langue_preferee")
+    private String languePreferee;
 
     @NotNull
-    @Column(name = "email", nullable = false, unique = true)
+    @Pattern(regexp = "^\\+[0-9]{8,15}$")
+    @Column(name = "telephone_principal", nullable = false)
+    private String telephonePrincipal;
+
+    @Column(name = "whatsapp")
+    private String whatsapp;
+
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_1")
-    private String phone1;
+    @Column(name = "adresse_personnelle")
+    private String adressePersonnelle;
 
-    @Column(name = "phone_2")
-    private String phone2;
+    @Column(name = "adresses_livraison")
+    private String adressesLivraison;
 
-    @Column(name = "cin")
-    private String cin;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "country")
-    private String country;
-
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
-    @Column(name = "referred_by")
-    private String referredBy;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private ClientStatus status;
+    @Column(name = "reseaux_sociaux")
+    private String reseauxSociaux;
 
     @Column(name = "created_at")
     private Instant createdAt;
@@ -96,6 +103,10 @@ public class Client implements Serializable {
     @JsonIgnoreProperties(value = { "company", "client", "prospect" }, allowSetters = true)
     private Set<Contact> contacts = new HashSet<>();
 
+    @JsonIgnoreProperties(value = { "client" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "client")
+    private KycClient kycClient;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -111,43 +122,147 @@ public class Client implements Serializable {
         this.id = id;
     }
 
-    public Long getClientId() {
-        return this.clientId;
+    public String getCode() {
+        return this.code;
     }
 
-    public Client clientId(Long clientId) {
-        this.setClientId(clientId);
+    public Client code(String code) {
+        this.setCode(code);
         return this;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getFirstName() {
-        return this.firstName;
+    public String getNomComplet() {
+        return this.nomComplet;
     }
 
-    public Client firstName(String firstName) {
-        this.setFirstName(firstName);
+    public Client nomComplet(String nomComplet) {
+        this.setNomComplet(nomComplet);
         return this;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setNomComplet(String nomComplet) {
+        this.nomComplet = nomComplet;
     }
 
-    public String getLastName() {
-        return this.lastName;
+    public String getPhotoUrl() {
+        return this.photoUrl;
     }
 
-    public Client lastName(String lastName) {
-        this.setLastName(lastName);
+    public Client photoUrl(String photoUrl) {
+        this.setPhotoUrl(photoUrl);
         return this;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public LocalDate getDateNaissance() {
+        return this.dateNaissance;
+    }
+
+    public Client dateNaissance(LocalDate dateNaissance) {
+        this.setDateNaissance(dateNaissance);
+        return this;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getLieuNaissance() {
+        return this.lieuNaissance;
+    }
+
+    public Client lieuNaissance(String lieuNaissance) {
+        this.setLieuNaissance(lieuNaissance);
+        return this;
+    }
+
+    public void setLieuNaissance(String lieuNaissance) {
+        this.lieuNaissance = lieuNaissance;
+    }
+
+    public String getNationalite() {
+        return this.nationalite;
+    }
+
+    public Client nationalite(String nationalite) {
+        this.setNationalite(nationalite);
+        return this;
+    }
+
+    public void setNationalite(String nationalite) {
+        this.nationalite = nationalite;
+    }
+
+    public String getGenre() {
+        return this.genre;
+    }
+
+    public Client genre(String genre) {
+        this.setGenre(genre);
+        return this;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getFonction() {
+        return this.fonction;
+    }
+
+    public Client fonction(String fonction) {
+        this.setFonction(fonction);
+        return this;
+    }
+
+    public void setFonction(String fonction) {
+        this.fonction = fonction;
+    }
+
+    public String getLanguePreferee() {
+        return this.languePreferee;
+    }
+
+    public Client languePreferee(String languePreferee) {
+        this.setLanguePreferee(languePreferee);
+        return this;
+    }
+
+    public void setLanguePreferee(String languePreferee) {
+        this.languePreferee = languePreferee;
+    }
+
+    public String getTelephonePrincipal() {
+        return this.telephonePrincipal;
+    }
+
+    public Client telephonePrincipal(String telephonePrincipal) {
+        this.setTelephonePrincipal(telephonePrincipal);
+        return this;
+    }
+
+    public void setTelephonePrincipal(String telephonePrincipal) {
+        this.telephonePrincipal = telephonePrincipal;
+    }
+
+    public String getWhatsapp() {
+        return this.whatsapp;
+    }
+
+    public Client whatsapp(String whatsapp) {
+        this.setWhatsapp(whatsapp);
+        return this;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 
     public String getEmail() {
@@ -163,121 +278,43 @@ public class Client implements Serializable {
         this.email = email;
     }
 
-    public String getPhone1() {
-        return this.phone1;
+    public String getAdressePersonnelle() {
+        return this.adressePersonnelle;
     }
 
-    public Client phone1(String phone1) {
-        this.setPhone1(phone1);
+    public Client adressePersonnelle(String adressePersonnelle) {
+        this.setAdressePersonnelle(adressePersonnelle);
         return this;
     }
 
-    public void setPhone1(String phone1) {
-        this.phone1 = phone1;
+    public void setAdressePersonnelle(String adressePersonnelle) {
+        this.adressePersonnelle = adressePersonnelle;
     }
 
-    public String getPhone2() {
-        return this.phone2;
+    public String getAdressesLivraison() {
+        return this.adressesLivraison;
     }
 
-    public Client phone2(String phone2) {
-        this.setPhone2(phone2);
+    public Client adressesLivraison(String adressesLivraison) {
+        this.setAdressesLivraison(adressesLivraison);
         return this;
     }
 
-    public void setPhone2(String phone2) {
-        this.phone2 = phone2;
+    public void setAdressesLivraison(String adressesLivraison) {
+        this.adressesLivraison = adressesLivraison;
     }
 
-    public String getCin() {
-        return this.cin;
+    public String getReseauxSociaux() {
+        return this.reseauxSociaux;
     }
 
-    public Client cin(String cin) {
-        this.setCin(cin);
+    public Client reseauxSociaux(String reseauxSociaux) {
+        this.setReseauxSociaux(reseauxSociaux);
         return this;
     }
 
-    public void setCin(String cin) {
-        this.cin = cin;
-    }
-
-    public String getAddress() {
-        return this.address;
-    }
-
-    public Client address(String address) {
-        this.setAddress(address);
-        return this;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public Client city(String city) {
-        this.setCity(city);
-        return this;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return this.country;
-    }
-
-    public Client country(String country) {
-        this.setCountry(country);
-        return this;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getDeliveryAddress() {
-        return this.deliveryAddress;
-    }
-
-    public Client deliveryAddress(String deliveryAddress) {
-        this.setDeliveryAddress(deliveryAddress);
-        return this;
-    }
-
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public String getReferredBy() {
-        return this.referredBy;
-    }
-
-    public Client referredBy(String referredBy) {
-        this.setReferredBy(referredBy);
-        return this;
-    }
-
-    public void setReferredBy(String referredBy) {
-        this.referredBy = referredBy;
-    }
-
-    public ClientStatus getStatus() {
-        return this.status;
-    }
-
-    public Client status(ClientStatus status) {
-        this.setStatus(status);
-        return this;
-    }
-
-    public void setStatus(ClientStatus status) {
-        this.status = status;
+    public void setReseauxSociaux(String reseauxSociaux) {
+        this.reseauxSociaux = reseauxSociaux;
     }
 
     public Instant getCreatedAt() {
@@ -400,6 +437,25 @@ public class Client implements Serializable {
         return this;
     }
 
+    public KycClient getKycClient() {
+        return this.kycClient;
+    }
+
+    public void setKycClient(KycClient kycClient) {
+        if (this.kycClient != null) {
+            this.kycClient.setClient(null);
+        }
+        if (kycClient != null) {
+            kycClient.setClient(this);
+        }
+        this.kycClient = kycClient;
+    }
+
+    public Client kycClient(KycClient kycClient) {
+        this.setKycClient(kycClient);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -424,19 +480,21 @@ public class Client implements Serializable {
     public String toString() {
         return "Client{" +
             "id=" + getId() +
-            ", clientId=" + getClientId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", lastName='" + getLastName() + "'" +
+            ", code='" + getCode() + "'" +
+            ", nomComplet='" + getNomComplet() + "'" +
+            ", photoUrl='" + getPhotoUrl() + "'" +
+            ", dateNaissance='" + getDateNaissance() + "'" +
+            ", lieuNaissance='" + getLieuNaissance() + "'" +
+            ", nationalite='" + getNationalite() + "'" +
+            ", genre='" + getGenre() + "'" +
+            ", fonction='" + getFonction() + "'" +
+            ", languePreferee='" + getLanguePreferee() + "'" +
+            ", telephonePrincipal='" + getTelephonePrincipal() + "'" +
+            ", whatsapp='" + getWhatsapp() + "'" +
             ", email='" + getEmail() + "'" +
-            ", phone1='" + getPhone1() + "'" +
-            ", phone2='" + getPhone2() + "'" +
-            ", cin='" + getCin() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", city='" + getCity() + "'" +
-            ", country='" + getCountry() + "'" +
-            ", deliveryAddress='" + getDeliveryAddress() + "'" +
-            ", referredBy='" + getReferredBy() + "'" +
-            ", status='" + getStatus() + "'" +
+            ", adressePersonnelle='" + getAdressePersonnelle() + "'" +
+            ", adressesLivraison='" + getAdressesLivraison() + "'" +
+            ", reseauxSociaux='" + getReseauxSociaux() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             "}";

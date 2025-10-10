@@ -1,9 +1,9 @@
 package com.ultex.crm.service.dto;
 
-import com.ultex.crm.domain.enumeration.ClientStatus;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -14,35 +14,41 @@ public class ClientDTO implements Serializable {
 
     private Long id;
 
-    private Long clientId;
+    @NotNull
+    @Pattern(regexp = "[A-Z0-9]{4,}")
+    private String code;
 
     @NotNull
-    private String firstName;
+    private String nomComplet;
+
+    private String photoUrl;
+
+    private LocalDate dateNaissance;
+
+    private String lieuNaissance;
 
     @NotNull
-    private String lastName;
+    private String nationalite;
+
+    private String genre;
+
+    private String fonction;
+
+    private String languePreferee;
 
     @NotNull
+    @Pattern(regexp = "^\\+[0-9]{8,15}$")
+    private String telephonePrincipal;
+
+    private String whatsapp;
+
     private String email;
 
-    private String phone1;
+    private String adressePersonnelle;
 
-    private String phone2;
+    private String adressesLivraison;
 
-    private String cin;
-
-    private String address;
-
-    private String city;
-
-    private String country;
-
-    private String deliveryAddress;
-
-    private String referredBy;
-
-    @NotNull
-    private ClientStatus status;
+    private String reseauxSociaux;
 
     private Instant createdAt;
 
@@ -58,28 +64,92 @@ public class ClientDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public String getCode() {
+        return code;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getNomComplet() {
+        return nomComplet;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setNomComplet(String nomComplet) {
+        this.nomComplet = nomComplet;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getLieuNaissance() {
+        return lieuNaissance;
+    }
+
+    public void setLieuNaissance(String lieuNaissance) {
+        this.lieuNaissance = lieuNaissance;
+    }
+
+    public String getNationalite() {
+        return nationalite;
+    }
+
+    public void setNationalite(String nationalite) {
+        this.nationalite = nationalite;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getFonction() {
+        return fonction;
+    }
+
+    public void setFonction(String fonction) {
+        this.fonction = fonction;
+    }
+
+    public String getLanguePreferee() {
+        return languePreferee;
+    }
+
+    public void setLanguePreferee(String languePreferee) {
+        this.languePreferee = languePreferee;
+    }
+
+    public String getTelephonePrincipal() {
+        return telephonePrincipal;
+    }
+
+    public void setTelephonePrincipal(String telephonePrincipal) {
+        this.telephonePrincipal = telephonePrincipal;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 
     public String getEmail() {
@@ -90,76 +160,28 @@ public class ClientDTO implements Serializable {
         this.email = email;
     }
 
-    public String getPhone1() {
-        return phone1;
+    public String getAdressePersonnelle() {
+        return adressePersonnelle;
     }
 
-    public void setPhone1(String phone1) {
-        this.phone1 = phone1;
+    public void setAdressePersonnelle(String adressePersonnelle) {
+        this.adressePersonnelle = adressePersonnelle;
     }
 
-    public String getPhone2() {
-        return phone2;
+    public String getAdressesLivraison() {
+        return adressesLivraison;
     }
 
-    public void setPhone2(String phone2) {
-        this.phone2 = phone2;
+    public void setAdressesLivraison(String adressesLivraison) {
+        this.adressesLivraison = adressesLivraison;
     }
 
-    public String getCin() {
-        return cin;
+    public String getReseauxSociaux() {
+        return reseauxSociaux;
     }
 
-    public void setCin(String cin) {
-        this.cin = cin;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public String getReferredBy() {
-        return referredBy;
-    }
-
-    public void setReferredBy(String referredBy) {
-        this.referredBy = referredBy;
-    }
-
-    public ClientStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ClientStatus status) {
-        this.status = status;
+    public void setReseauxSociaux(String reseauxSociaux) {
+        this.reseauxSociaux = reseauxSociaux;
     }
 
     public Instant getCreatedAt() {
@@ -212,19 +234,21 @@ public class ClientDTO implements Serializable {
     public String toString() {
         return "ClientDTO{" +
             "id=" + getId() +
-            ", clientId=" + getClientId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", lastName='" + getLastName() + "'" +
+            ", code='" + getCode() + "'" +
+            ", nomComplet='" + getNomComplet() + "'" +
+            ", photoUrl='" + getPhotoUrl() + "'" +
+            ", dateNaissance='" + getDateNaissance() + "'" +
+            ", lieuNaissance='" + getLieuNaissance() + "'" +
+            ", nationalite='" + getNationalite() + "'" +
+            ", genre='" + getGenre() + "'" +
+            ", fonction='" + getFonction() + "'" +
+            ", languePreferee='" + getLanguePreferee() + "'" +
+            ", telephonePrincipal='" + getTelephonePrincipal() + "'" +
+            ", whatsapp='" + getWhatsapp() + "'" +
             ", email='" + getEmail() + "'" +
-            ", phone1='" + getPhone1() + "'" +
-            ", phone2='" + getPhone2() + "'" +
-            ", cin='" + getCin() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", city='" + getCity() + "'" +
-            ", country='" + getCountry() + "'" +
-            ", deliveryAddress='" + getDeliveryAddress() + "'" +
-            ", referredBy='" + getReferredBy() + "'" +
-            ", status='" + getStatus() + "'" +
+            ", adressePersonnelle='" + getAdressePersonnelle() + "'" +
+            ", adressesLivraison='" + getAdressesLivraison() + "'" +
+            ", reseauxSociaux='" + getReseauxSociaux() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", company=" + getCompany() +

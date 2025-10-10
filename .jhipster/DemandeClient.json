@@ -1,0 +1,58 @@
+{
+  "annotations": {
+    "changelogDate": "20251005212211"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "reference",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateDemande",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "servicePrincipal",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sousServices",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "provenance",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "incoterm",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "devise",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nombreProduits",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "remarqueGenerale",
+      "fieldType": "String"
+    }
+  ],
+  "name": "DemandeClient",
+  "relationships": [
+    {
+      "otherEntityName": "client",
+      "relationshipName": "client",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

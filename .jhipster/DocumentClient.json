@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20251005212210"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "typeDocument",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "numeroDocument",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fichierUrl",
+      "fieldType": "String"
+    }
+  ],
+  "name": "DocumentClient",
+  "relationships": [
+    {
+      "otherEntityName": "client",
+      "relationshipName": "client",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

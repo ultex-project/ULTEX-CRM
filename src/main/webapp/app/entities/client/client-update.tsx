@@ -8,7 +8,6 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
-import { ClientStatus } from 'app/shared/model/enumerations/client-status.model';
 import { createEntity, getEntity, reset, updateEntity } from './client.reducer';
 
 export const ClientUpdate = () => {
@@ -24,7 +23,6 @@ export const ClientUpdate = () => {
   const loading = useAppSelector(state => state.client.loading);
   const updating = useAppSelector(state => state.client.updating);
   const updateSuccess = useAppSelector(state => state.client.updateSuccess);
-  const clientStatusValues = Object.keys(ClientStatus);
 
   const handleClose = () => {
     navigate(`/client${location.search}`);
@@ -50,9 +48,6 @@ export const ClientUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.clientId !== undefined && typeof values.clientId !== 'number') {
-      values.clientId = Number(values.clientId);
-    }
     values.createdAt = convertDateTimeToServer(values.createdAt);
     values.updatedAt = convertDateTimeToServer(values.updatedAt);
 
@@ -76,7 +71,6 @@ export const ClientUpdate = () => {
           updatedAt: displayDefaultDateTime(),
         }
       : {
-          status: 'ACTIVE',
           ...clientEntity,
           createdAt: convertDateTimeFromServer(clientEntity.createdAt),
           updatedAt: convertDateTimeFromServer(clientEntity.updatedAt),
@@ -109,69 +103,112 @@ export const ClientUpdate = () => {
                 />
               ) : null}
               <ValidatedField
-                label={translate('crmApp.client.clientId')}
-                id="client-clientId"
-                name="clientId"
-                data-cy="clientId"
+                label={translate('crmApp.client.code')}
+                id="client-code"
+                name="code"
+                data-cy="code"
                 type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  pattern: { value: /[A-Z0-9]{4,}/, message: translate('entity.validation.pattern', { pattern: '[A-Z0-9]{4,}' }) },
+                }}
               />
               <ValidatedField
-                label={translate('crmApp.client.firstName')}
-                id="client-firstName"
-                name="firstName"
-                data-cy="firstName"
+                label={translate('crmApp.client.nomComplet')}
+                id="client-nomComplet"
+                name="nomComplet"
+                data-cy="nomComplet"
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
               <ValidatedField
-                label={translate('crmApp.client.lastName')}
-                id="client-lastName"
-                name="lastName"
-                data-cy="lastName"
+                label={translate('crmApp.client.photoUrl')}
+                id="client-photoUrl"
+                name="photoUrl"
+                data-cy="photoUrl"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.client.dateNaissance')}
+                id="client-dateNaissance"
+                name="dateNaissance"
+                data-cy="dateNaissance"
+                type="date"
+              />
+              <ValidatedField
+                label={translate('crmApp.client.lieuNaissance')}
+                id="client-lieuNaissance"
+                name="lieuNaissance"
+                data-cy="lieuNaissance"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.client.nationalite')}
+                id="client-nationalite"
+                name="nationalite"
+                data-cy="nationalite"
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
+              <ValidatedField label={translate('crmApp.client.genre')} id="client-genre" name="genre" data-cy="genre" type="text" />
               <ValidatedField
-                label={translate('crmApp.client.email')}
-                id="client-email"
-                name="email"
-                data-cy="email"
+                label={translate('crmApp.client.fonction')}
+                id="client-fonction"
+                name="fonction"
+                data-cy="fonction"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.client.languePreferee')}
+                id="client-languePreferee"
+                name="languePreferee"
+                data-cy="languePreferee"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.client.telephonePrincipal')}
+                id="client-telephonePrincipal"
+                name="telephonePrincipal"
+                data-cy="telephonePrincipal"
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
+                  pattern: { value: /^\+[0-9]{8,15}$/, message: translate('entity.validation.pattern', { pattern: '^\\+[0-9]{8,15}$' }) },
                 }}
               />
-              <ValidatedField label={translate('crmApp.client.phone1')} id="client-phone1" name="phone1" data-cy="phone1" type="text" />
-              <ValidatedField label={translate('crmApp.client.phone2')} id="client-phone2" name="phone2" data-cy="phone2" type="text" />
-              <ValidatedField label={translate('crmApp.client.cin')} id="client-cin" name="cin" data-cy="cin" type="text" />
-              <ValidatedField label={translate('crmApp.client.address')} id="client-address" name="address" data-cy="address" type="text" />
-              <ValidatedField label={translate('crmApp.client.city')} id="client-city" name="city" data-cy="city" type="text" />
-              <ValidatedField label={translate('crmApp.client.country')} id="client-country" name="country" data-cy="country" type="text" />
               <ValidatedField
-                label={translate('crmApp.client.deliveryAddress')}
-                id="client-deliveryAddress"
-                name="deliveryAddress"
-                data-cy="deliveryAddress"
+                label={translate('crmApp.client.whatsapp')}
+                id="client-whatsapp"
+                name="whatsapp"
+                data-cy="whatsapp"
+                type="text"
+              />
+              <ValidatedField label={translate('crmApp.client.email')} id="client-email" name="email" data-cy="email" type="text" />
+              <ValidatedField
+                label={translate('crmApp.client.adressePersonnelle')}
+                id="client-adressePersonnelle"
+                name="adressePersonnelle"
+                data-cy="adressePersonnelle"
                 type="text"
               />
               <ValidatedField
-                label={translate('crmApp.client.referredBy')}
-                id="client-referredBy"
-                name="referredBy"
-                data-cy="referredBy"
+                label={translate('crmApp.client.adressesLivraison')}
+                id="client-adressesLivraison"
+                name="adressesLivraison"
+                data-cy="adressesLivraison"
                 type="text"
               />
-              <ValidatedField label={translate('crmApp.client.status')} id="client-status" name="status" data-cy="status" type="select">
-                {clientStatusValues.map(clientStatus => (
-                  <option value={clientStatus} key={clientStatus}>
-                    {translate(`crmApp.ClientStatus.${clientStatus}`)}
-                  </option>
-                ))}
-              </ValidatedField>
+              <ValidatedField
+                label={translate('crmApp.client.reseauxSociaux')}
+                id="client-reseauxSociaux"
+                name="reseauxSociaux"
+                data-cy="reseauxSociaux"
+                type="text"
+              />
               <ValidatedField
                 label={translate('crmApp.client.createdAt')}
                 id="client-createdAt"

@@ -1,0 +1,60 @@
+{
+  "annotations": {
+    "changelogDate": "20251005231809"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "entityName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "entityId",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "action",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fieldChanged",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "oldValue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "newValue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "performedBy",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "performedDate",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "details",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "ipAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "userAgent",
+      "fieldType": "String"
+    }
+  ],
+  "name": "History",
+  "relationships": [],
+  "searchEngine": "no"
+}

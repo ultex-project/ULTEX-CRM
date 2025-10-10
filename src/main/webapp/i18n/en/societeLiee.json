@@ -1,0 +1,33 @@
+{
+  "crmApp": {
+    "societeLiee": {
+      "home": {
+        "title": "Societe Liees",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Societe Liee",
+        "createOrEditLabel": "Create or edit a Societe Liee",
+        "notFound": "No Societe Liees found"
+      },
+      "created": "A new Societe Liee is created with identifier {{ param }}",
+      "updated": "A Societe Liee is updated with identifier {{ param }}",
+      "deleted": "A Societe Liee is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Societe Liee {{ id }}?"
+      },
+      "detail": {
+        "title": "Societe Liee"
+      },
+      "id": "ID",
+      "raisonSociale": "Raison Sociale",
+      "formeJuridique": "Forme Juridique",
+      "ice": "Ice",
+      "rc": "Rc",
+      "nif": "Nif",
+      "secteurActivite": "Secteur Activite",
+      "tailleEntreprise": "Taille Entreprise",
+      "adresseSiege": "Adresse Siege",
+      "representantLegal": "Representant Legal",
+      "client": "Client"
+    }
+  }
+}

@@ -9,6 +9,14 @@ import Opportunity from './opportunity';
 import InternalUser from './internal-user';
 import Company from './company';
 import Contact from './contact';
+import SocieteLiee from './societe-liee';
+import ContactAssocie from './contact-associe';
+import DocumentClient from './document-client';
+import DemandeClient from './demande-client';
+import ProduitDemande from './produit-demande';
+import HistoriqueCRM from './historique-crm';
+import KycClient from './kyc-client';
+import History from './history';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -22,6 +30,14 @@ export default () => {
         <Route path="internal-user/*" element={<InternalUser />} />
         <Route path="company/*" element={<Company />} />
         <Route path="contact/*" element={<Contact />} />
+        <Route path="societe-liee/*" element={<SocieteLiee />} />
+        <Route path="contact-associe/*" element={<ContactAssocie />} />
+        <Route path="document-client/*" element={<DocumentClient />} />
+        <Route path="demande-client/*" element={<DemandeClient />} />
+        <Route path="produit-demande/*" element={<ProduitDemande />} />
+        <Route path="historique-crm/*" element={<HistoriqueCRM />} />
+        <Route path="kyc-client/*" element={<KycClient />} />
+        <Route path="history/*" element={<History />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20251005212214"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "scoreStaff",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "comportements",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "remarques",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "completudeKyc",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "responsable",
+      "fieldType": "String"
+    }
+  ],
+  "name": "KycClient",
+  "relationships": [
+    {
+      "otherEntityName": "client",
+      "relationshipName": "client",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

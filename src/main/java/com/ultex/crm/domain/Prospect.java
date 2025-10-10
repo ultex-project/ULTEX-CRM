@@ -81,7 +81,7 @@ public class Prospect implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private Client convertedTo;

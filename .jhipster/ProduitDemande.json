@@ -1,0 +1,92 @@
+{
+  "annotations": {
+    "changelogDate": "20251005212212"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "typeProduit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "typeDemande",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nomProduit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "quantite",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "unite",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "prix",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "fraisExpedition",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "poidsKg",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "volumeTotalCbm",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "dimensions",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nombreCartons",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "piecesParCarton",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "hsCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "prixCible",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "ficheTechniqueUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "photosUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "piecesJointesUrl",
+      "fieldType": "String"
+    }
+  ],
+  "name": "ProduitDemande",
+  "relationships": [
+    {
+      "otherEntityName": "demandeClient",
+      "relationshipName": "demande",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
