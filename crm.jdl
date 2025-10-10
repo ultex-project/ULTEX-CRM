@@ -284,7 +284,7 @@ relationship ManyToOne {
 }
 /* OPTIONS */
 
-paginate Client, Prospect, Opportunity, Company, Contact with pagination
+paginate * with pagination
 service all with serviceClass
 dto all with mapstruct
 search all with elasticsearch
