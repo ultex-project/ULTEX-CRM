@@ -9,6 +9,12 @@
       "deals": "Affaires",
       "reports": "Rapports",
       "calendar": "Calendrier",
+      "clients": {
+        "main": "Clients",
+        "list": "Liste des Clients",
+        "verification": "Vérification Données (DATA)",
+        "history": "Historique Vérifications"
+      },
       "home": "Accueil",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {

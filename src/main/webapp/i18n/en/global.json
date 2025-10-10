@@ -9,6 +9,12 @@
       "deals": "Deals",
       "reports": "Reports",
       "calendar": "Calendar",
+      "clients": {
+        "main": "Clients",
+        "list": "Client List",
+        "verification": "Data Verification",
+        "history": "Verification History"
+      },
       "analytics": "Analytics",
       "expand": "Expand sidebar",
       "collapse": "Collapse sidebar",
