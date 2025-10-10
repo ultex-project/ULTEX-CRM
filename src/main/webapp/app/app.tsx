@@ -38,16 +38,18 @@ const AppContent = () => {
 
   // 👇 Check if current route is dashboard (or starts with /dashboard)
   const isDashboardRoute = location.pathname.startsWith('/dashboard');
+  const isLoginRoute = location.pathname.startsWith('/login');
+  const hideChrome = isDashboardRoute || isLoginRoute;
 
   // 👇 Adjust padding: no header = no top padding
-  const paddingTop = isDashboardRoute ? '0' : '60px';
+  const paddingTop = hideChrome ? '0' : '60px';
 
   return (
     <div className="app-container" style={{ paddingTop }}>
       <ToastContainer position="top-left" className="toastify-container" toastClassName="toastify-toast" />
       <ErrorBoundary>
         {/* 👇 Only render Header if NOT on dashboard */}
-        {!isDashboardRoute && (
+        {!hideChrome && (
           <Header
             isAuthenticated={isAuthenticated}
             isAdmin={isAdmin}
@@ -63,7 +65,7 @@ const AppContent = () => {
           <AppRoutes />
         </ErrorBoundary>
         {/* 👇 Only render Footer if NOT on dashboard */}
-        {!isDashboardRoute && <Footer />}
+        {!hideChrome && <Footer />}
       </div>
     </div>
   );

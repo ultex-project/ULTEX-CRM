@@ -1,0 +1,112 @@
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0b1f40 0%, #0f2c62 50%, #1d4a8c 100%);
+  color: #1c1c1c;
+}
+
+.login-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 55%),
+    radial-gradient(circle at bottom left, rgba(0, 123, 255, 0.35), transparent 60%);
+  opacity: 0.9;
+}
+
+.login-content {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-illustration {
+  flex: 1;
+  min-height: 360px;
+  background: linear-gradient(160deg, rgba(13, 45, 86, 0.95) 0%, rgba(0, 123, 255, 0.85) 100%);
+  position: relative;
+  padding: 3rem;
+  color: #ffffff;
+}
+
+.login-illustration::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.25), transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.18), transparent 60%);
+  opacity: 0.6;
+}
+
+.login-illustration .illustration-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 280px;
+}
+
+.login-illustration h2 {
+  font-weight: 600;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.login-illustration p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0;
+  opacity: 0.85;
+}
+
+.login-form-wrapper {
+  flex: 1;
+  padding: 2.5rem 2.25rem;
+  width: 100%;
+}
+
+.login-logo {
+  width: 72px;
+  height: auto;
+}
+
+.forgot-link {
+  font-size: 0.875rem;
+  color: #0f2c62;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  color: #007bff;
+}
+
+@media (min-width: 768px) {
+  .login-card {
+    flex-direction: row;
+  }
+
+  .login-form-wrapper {
+    padding: 3rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .login-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .login-card {
+    border-radius: 1.25rem;
+  }
+}
