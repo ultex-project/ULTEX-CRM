@@ -1,7 +1,9 @@
 package com.ultex.crm.web.rest;
 
 import com.ultex.crm.repository.ProspectRepository;
+import com.ultex.crm.service.ProspectQueryService;
 import com.ultex.crm.service.ProspectService;
+import com.ultex.crm.service.criteria.ProspectCriteria;
 import com.ultex.crm.service.dto.ProspectDTO;
 import com.ultex.crm.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,9 +44,16 @@ public class ProspectResource {
 
     private final ProspectRepository prospectRepository;
 
-    public ProspectResource(ProspectService prospectService, ProspectRepository prospectRepository) {
+    private final ProspectQueryService prospectQueryService;
+
+    public ProspectResource(
+        ProspectService prospectService,
+        ProspectRepository prospectRepository,
+        ProspectQueryService prospectQueryService
+    ) {
         this.prospectService = prospectService;
         this.prospectRepository = prospectRepository;
+        this.prospectQueryService = prospectQueryService;
     }
 
     /**
@@ -142,11 +151,26 @@ public class ProspectResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of prospects in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<ProspectDTO>> getAllProspects(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Prospects");
-        Page<ProspectDTO> page = prospectService.findAll(pageable);
+    public ResponseEntity<List<ProspectDTO>> getAllProspects(
+        ProspectCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get Prospects by criteria: {}", criteria);
+        Page<ProspectDTO> page = prospectQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /prospects/count} : count all the prospects that match the criteria.
+     *
+     * @param criteria the filtering criteria.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countProspects(ProspectCriteria criteria) {
+        LOG.debug("REST request to count Prospects by criteria: {}", criteria);
+        return ResponseEntity.ok().body(prospectQueryService.countByCriteria(criteria));
     }
 
     /**

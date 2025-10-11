@@ -258,7 +258,17 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
       }
 
       if (fieldOption?.type === 'date') {
-        return <Input type="date" value={rule.value} onChange={event => handleRuleValueChange(rule.id, event.target.value)} />;
+        const displayValue = rule.value ? rule.value.slice(0, 10) : '';
+        return (
+          <Input
+            type="date"
+            value={displayValue}
+            onChange={event => {
+              const nextValue = event.target.value ? `${event.target.value}T00:00:00Z` : '';
+              handleRuleValueChange(rule.id, nextValue);
+            }}
+          />
+        );
       }
 
       return (
@@ -383,7 +393,14 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
       }
 
       if (fieldOption?.type === 'date') {
-        return <Input type="date" value={globalRule.value} onChange={event => handleGlobalRuleValueChange(event.target.value)} />;
+        const displayValue = globalRule.value ? globalRule.value.slice(0, 10) : '';
+        return (
+          <Input
+            type="date"
+            value={displayValue}
+            onChange={event => handleGlobalRuleValueChange(event.target.value ? `${event.target.value}T00:00:00Z` : '')}
+          />
+        );
       }
 
       return (

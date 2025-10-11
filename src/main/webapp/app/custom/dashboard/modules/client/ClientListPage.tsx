@@ -49,6 +49,7 @@ import './ClientListPage.scss';
 import { IClient } from 'app/shared/model/client.model';
 
 import AdvancedFilterBuilder, { AdvancedFilterPayload } from 'app/custom/dashboard/filters/AdvancedFilterBuilder';
+import { buildQueryStringFromAdvancedFilters } from 'app/custom/dashboard/filters/advanced-filter-query';
 import { deleteEntity, getEntities, reset } from 'app/entities/client/client.reducer';
 
 const ClientListPage = () => {
@@ -64,10 +65,13 @@ const ClientListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [currentQuery, setCurrentQuery] = useState('');
+  const [hasUnsupportedConditions, setHasUnsupportedConditions] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [clientToDelete, setClientToDelete] = useState<IClient | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('[ClientListPage] Fetching with query:', currentQuery || '(none)');
     dispatch(getEntities({ page, size, sort, query: currentQuery }));
     return () => {
       dispatch(reset());
@@ -129,23 +133,28 @@ const ClientListPage = () => {
 
   // 🔹 ADVANCED FILTER LOGIC
   const handleAdvancedSearch = (payload: AdvancedFilterPayload) => {
-    const params: string[] = [];
+    const { query, hasOrCondition } = buildQueryStringFromAdvancedFilters(payload);
 
-    // Simple: loop through rules to build ?field.equals=value queries
-    const traverse = (group: any) => {
-      group.rules.forEach((rule: any) => {
-        if (rule.field && rule.value) {
-          params.push(`${rule.field}.contains=${encodeURIComponent(rule.value)}`);
-        }
-      });
-    };
-    traverse(payload.rootGroup);
+    setHasUnsupportedConditions(hasOrCondition);
 
-    const query = params.join('&');
-    setCurrentQuery(query);
+    const nextPage = 0;
+    setPage(nextPage);
+
+    // eslint-disable-next-line no-console
+    console.log('[ClientListPage] Applying advanced filter query:', query || '(none)');
+
+    if (query === currentQuery) {
+      dispatch(getEntities({ page: nextPage, size, sort, query }));
+    } else {
+      setCurrentQuery(query);
+    }
   };
 
   const handleAdvancedReset = () => {
+    setHasUnsupportedConditions(false);
+    setPage(0);
+    // eslint-disable-next-line no-console
+    console.log('[ClientListPage] Resetting advanced filters');
     setCurrentQuery('');
   };
 
@@ -215,6 +224,12 @@ const ClientListPage = () => {
             <Alert color="info" fade={false} className="mb-3">
               Combinez plusieurs conditions pour cibler précisément vos clients.
             </Alert>
+            {hasUnsupportedConditions ? (
+              <Alert color="warning" fade={false} className="mb-3">
+                Certaines combinaisons (par exemple avec des OR) peuvent ne pas être supportées par l&apos;API actuelle. Les filtres sont
+                appliqués comme des clauses AND.
+              </Alert>
+            ) : null}
             <AdvancedFilterBuilder
               title="Filtres Clients"
               fields={[
@@ -247,7 +262,7 @@ const ClientListPage = () => {
         <CardHeader className="bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
           <div>
             <h5 className="mb-1">Liste des clients</h5>
-            <span className="text-muted small">{filteredClients.length} clients trouvés</span>
+            <span className="text-muted small">{totalItems || filteredClients.length} clients trouvés</span>
           </div>
           <span className="text-muted small">
             Trié par {sort.split(',')[0]} ({sort.endsWith('asc') ? 'asc' : 'desc'})

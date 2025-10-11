@@ -2,32 +2,14 @@ import React, { useMemo, useState } from 'react';
 import { Button, Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup, faPlus, faRotateLeft, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
-
-export interface FieldOption {
-  value: string;
-  label: string;
-  type: 'text' | 'select' | 'date';
-  options?: Array<{ value: string; label: string }>;
-}
-
-export type GroupCondition = 'AND' | 'OR' | 'AND NOT';
-
-export interface RuleNode {
-  id: string;
-  field: string;
-  operator: string;
-  value: string;
-}
-
-export interface GroupNode {
-  id: string;
-  condition: GroupCondition;
-  rules: Array<RuleNode | GroupNode>;
-}
-
-export interface AdvancedFilterPayload {
-  rootGroup: GroupNode;
-}
+import {
+  AdvancedFilterPayload,
+  FieldOption,
+  GroupCondition,
+  GroupNode,
+  RuleNode,
+  isGroupNode,
+} from 'app/custom/dashboard/modules/advanced-filter.types';
 
 export interface AdvancedFilterBuilderProps {
   title?: string;
@@ -53,7 +35,6 @@ const CONDITIONS: Array<{ value: GroupCondition; label: string }> = [
 ];
 
 const createId = () => Math.random().toString(36).slice(2, 10);
-const isGroupNode = (node: RuleNode | GroupNode): node is GroupNode => (node as GroupNode).rules !== undefined;
 
 const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({
   title = 'Filtres avancés',
@@ -151,7 +132,16 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({
                     ))}
                   </Input>
                 ) : fieldDef?.type === 'date' ? (
-                  <Input type="date" value={rule.value} onChange={e => updateRule(rule.id, r => ({ ...r, value: e.target.value }))} />
+                  <Input
+                    type="date"
+                    value={rule.value ? rule.value.slice(0, 10) : ''}
+                    onChange={e =>
+                      updateRule(rule.id, r => ({
+                        ...r,
+                        value: e.target.value ? `${e.target.value}T00:00:00Z` : '',
+                      }))
+                    }
+                  />
                 ) : (
                   <Input type="text" value={rule.value} onChange={e => updateRule(rule.id, r => ({ ...r, value: e.target.value }))} />
                 )}
@@ -239,3 +229,5 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({
 };
 
 export default AdvancedFilterBuilder;
+
+export type { AdvancedFilterPayload, FieldOption, GroupNode, RuleNode } from 'app/custom/dashboard/modules/advanced-filter.types';
