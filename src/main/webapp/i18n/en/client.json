@@ -39,7 +39,95 @@
       "company": "Company",
       "convertedFromProspect": "Converted From Prospect",
       "contacts": "Contacts",
-      "kycClient": "Kyc Client"
+      "kycClient": "Kyc Client",
+      "dashboard": {
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive",
+          "archived": "Archived",
+          "unassigned": "Unassigned",
+          "badge": "Accounts"
+        },
+        "hero": {
+          "title": "Client workspace",
+          "subtitle": "Grow long-term relationships, keep segments healthy, and act on customer signals in real time.",
+          "stats": {
+            "total": "Clients tracked",
+            "active": "Active clients",
+            "updated": "Updated in the last 30 days"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Save segment",
+          "newClient": "New Client"
+        },
+        "metrics": {
+          "activeShare": "Retention health",
+          "activeShareHint": "{{value}}% of clients are active",
+          "inactive": "Inactive clients",
+          "inactiveHint": "{{value}}% require attention",
+          "newThisWeek": "New this week",
+          "newThisWeekHint": "Created during the last 7 days",
+          "archived": "Archived clients",
+          "archivedHint": "Review or re-engage soon"
+        },
+        "searchPlaceholder": "Search name, email, phone, or company...",
+        "filters": {
+          "fields": {
+            "status": "Status"
+          },
+          "all": "All ({{count}})",
+          "active": "{{label}} ({{count}})",
+          "inactive": "{{label}} ({{count}})",
+          "archived": "{{label}} ({{count}})",
+          "label": "Advanced filters",
+          "unsupported": "Heads up: mixed OR conditions are not fully supported by the current API. Filters are applied as AND clauses."
+        },
+        "languages": {
+          "fr": "French",
+          "en": "English",
+          "ar": "Arabic"
+        },
+        "table": {
+          "title": "Client pipeline",
+          "summary": "Showing {{current}} of {{total}} filtered clients",
+          "sortedBy": "Sorted by {{field}} ({{direction}})",
+          "loading": "Loading clients...",
+          "empty": "No clients match the current filters.",
+          "unnamed": "Unnamed client",
+          "noEmail": "No email on file",
+          "noPhone": "No phone on file",
+          "pendingSync": "Pending sync"
+        },
+        "columns": {
+          "client": "Client",
+          "company": "Company",
+          "status": "Status",
+          "nationality": "Nationality",
+          "language": "Preferred language",
+          "created": "Created",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "View",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "pagination": {
+          "page": "Page {{page}} of {{total}}"
+        },
+        "modal": {
+          "title": "Confirm delete operation",
+          "messagePrefix": "Are you sure you want to delete the client",
+          "cancel": "Cancel",
+          "confirm": "Delete",
+          "unknown": "this record"
+        }
+      }
     }
   }
 }

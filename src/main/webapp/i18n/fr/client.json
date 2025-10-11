@@ -4,15 +4,15 @@
       "home": {
         "title": "Clients",
         "refreshListLabel": "Actualiser la liste",
-        "createLabel": "Créer un nouveau Client",
-        "createOrEditLabel": "Créer ou éditer un Client",
-        "notFound": "Aucun Client trouvé"
+        "createLabel": "Cr\u00e9er un nouveau Client",
+        "createOrEditLabel": "Cr\u00e9er ou \u00e9diter un Client",
+        "notFound": "Aucun Client trouv\u00e9"
       },
-      "created": "Un nouveau Client a été créé avec l'identifiant {{ param }}",
-      "updated": "Le Client avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "Le Client avec l'identifiant {{ param }} a été supprimé",
+      "created": "Un nouveau Client a \u00e9t\u00e9 cr\u00e9\u00e9 avec l'identifiant {{ param }}",
+      "updated": "Le Client avec l'identifiant {{ param }} a \u00e9t\u00e9 mis \u00e0 jour",
+      "deleted": "Le Client avec l'identifiant {{ param }} a \u00e9t\u00e9 supprim\u00e9",
       "delete": {
-        "question": "Êtes-vous certain de vouloir supprimer le Client {{ id }} ?"
+        "question": "\u00cates-vous certain de vouloir supprimer le Client {{ id }} ?"
       },
       "detail": {
         "title": "Client"
@@ -39,7 +39,95 @@
       "company": "Company",
       "convertedFromProspect": "Converted From Prospect",
       "contacts": "Contacts",
-      "kycClient": "Kyc Client"
+      "kycClient": "Kyc Client",
+      "dashboard": {
+        "status": {
+          "active": "Actif",
+          "inactive": "Inactif",
+          "archived": "Archiv\u00e9",
+          "unassigned": "Non assign\u00e9",
+          "badge": "Comptes"
+        },
+        "hero": {
+          "title": "Espace clients",
+          "subtitle": "D\u00e9veloppez des relations durables, gardez vos segments en forme et exploitez les signaux clients en temps r\u00e9el.",
+          "stats": {
+            "total": "Clients suivis",
+            "active": "Clients actifs",
+            "updated": "Mis \u00e0 jour ces 30 derniers jours"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Enregistrer le segment",
+          "newClient": "Nouveau client"
+        },
+        "metrics": {
+          "activeShare": "Sant\u00e9 de la relation",
+          "activeShareHint": "{{value}}% des clients sont actifs",
+          "inactive": "Clients inactifs",
+          "inactiveHint": "{{value}}% n\u00e9cessitent une attention",
+          "newThisWeek": "Nouveaux cette semaine",
+          "newThisWeekHint": "Cr\u00e9\u00e9s au cours des 7 derniers jours",
+          "archived": "Clients archiv\u00e9s",
+          "archivedHint": "\u00c0 revoir ou relancer bient\u00f4t"
+        },
+        "searchPlaceholder": "Rechercher par nom, email, t\u00e9l\u00e9phone ou entreprise...",
+        "filters": {
+          "fields": {
+            "status": "Statut"
+          },
+          "all": "Tous ({{count}})",
+          "active": "{{label}} ({{count}})",
+          "inactive": "{{label}} ({{count}})",
+          "archived": "{{label}} ({{count}})",
+          "label": "Filtres avanc\u00e9s",
+          "unsupported": "Attention : les conditions OR combin\u00e9es ne sont pas enti\u00e8rement prises en charge par l'API actuelle. Les filtres sont appliqu\u00e9s comme des clauses AND."
+        },
+        "languages": {
+          "fr": "Fran\u00e7ais",
+          "en": "Anglais",
+          "ar": "Arabe"
+        },
+        "table": {
+          "title": "Pipeline client",
+          "summary": "Affichage de {{current}} sur {{total}} clients filtr\u00e9s",
+          "sortedBy": "Tri\u00e9 par {{field}} ({{direction}})",
+          "loading": "Chargement des clients...",
+          "empty": "Aucun client ne correspond aux filtres actuels.",
+          "unnamed": "Client sans nom",
+          "noEmail": "Aucun email disponible",
+          "noPhone": "Aucun t\u00e9l\u00e9phone disponible",
+          "pendingSync": "Synchronisation en attente"
+        },
+        "columns": {
+          "client": "Client",
+          "company": "Entreprise",
+          "status": "Statut",
+          "nationality": "Nationalit\u00e9",
+          "language": "Langue pr\u00e9f\u00e9r\u00e9e",
+          "created": "Cr\u00e9\u00e9 le",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "Voir",
+          "edit": "Modifier",
+          "delete": "Supprimer"
+        },
+        "pagination": {
+          "page": "Page {{page}} sur {{total}}"
+        },
+        "modal": {
+          "title": "Confirmer la suppression",
+          "messagePrefix": "Voulez-vous vraiment supprimer le client",
+          "cancel": "Annuler",
+          "confirm": "Supprimer",
+          "unknown": "cet enregistrement"
+        }
+      }
     }
   }
 }

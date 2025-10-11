@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faLayerGroup, faPlus, faRotateLeft, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -6,12 +6,13 @@ import { faGlobe, faLayerGroup, faPlus, faRotateLeft, faSearch, faTrash } from '
 import { AdvancedFilterPayload, FieldOption, GroupCondition, GroupNode, RuleNode, isGroupNode } from '../advanced-filter.types';
 
 interface AdvancedFilterBuilderProps {
+  fields?: FieldOption[];
   isSearching?: boolean;
   onSearch: (payload: AdvancedFilterPayload) => void;
   onReset?: () => void;
 }
 
-const FIELD_OPTIONS: FieldOption[] = [
+const DEFAULT_FIELD_OPTIONS: FieldOption[] = [
   {
     value: 'status',
     label: 'Status',
@@ -49,10 +50,10 @@ const CONDITION_OPTIONS: Array<{ value: GroupCondition; label: string }> = [
 
 const createId = () => Math.random().toString(36).slice(2, 10);
 
-const getFieldOption = (value: string) => FIELD_OPTIONS.find(option => option.value === value);
+const getFieldOption = (value: string, fieldOptions: FieldOption[]) => fieldOptions.find(option => option.value === value);
 
-const createEmptyRule = (): RuleNode => {
-  const defaultField = FIELD_OPTIONS[0];
+const createEmptyRule = (fieldOptions: FieldOption[]): RuleNode => {
+  const defaultField = fieldOptions[0];
   const defaultValue = defaultField?.type === 'select' && defaultField.options?.length ? defaultField.options[0].value : '';
 
   return {
@@ -64,10 +65,10 @@ const createEmptyRule = (): RuleNode => {
   };
 };
 
-const createEmptyGroup = (): GroupNode => ({
+const createEmptyGroup = (fieldOptions: FieldOption[]): GroupNode => ({
   id: createId(),
   condition: 'AND',
-  rules: [createEmptyRule()],
+  rules: [createEmptyRule(fieldOptions)],
 });
 
 const addNodeToGroup = (group: GroupNode, groupId: string, node: RuleNode | GroupNode): GroupNode => {
@@ -116,22 +117,29 @@ const removeNodeFromTree = (group: GroupNode, nodeId: string): GroupNode => ({
     .map(child => (isGroupNode(child) ? removeNodeFromTree(child, nodeId) : child)),
 });
 
-const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearching = false, onReset, onSearch }) => {
-  const [advancedFilters, setAdvancedFilters] = useState<GroupNode>(() => createEmptyGroup());
+const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ fields, isSearching = false, onReset, onSearch }) => {
+  const fieldOptions = useMemo(() => (fields && fields.length > 0 ? fields : DEFAULT_FIELD_OPTIONS), [fields]);
+
+  const [advancedFilters, setAdvancedFilters] = useState<GroupNode>(() => createEmptyGroup(fieldOptions));
   const [globalRule, setGlobalRule] = useState<RuleNode | null>(null);
 
   const hasGlobalRule = useMemo(() => !!globalRule, [globalRule]);
 
+  useEffect(() => {
+    setAdvancedFilters(createEmptyGroup(fieldOptions));
+    setGlobalRule(null);
+  }, [fieldOptions]);
+
   const handleAddRule = (groupId: string) => {
-    setAdvancedFilters(prev => addNodeToGroup(prev, groupId, createEmptyRule()));
+    setAdvancedFilters(prev => addNodeToGroup(prev, groupId, createEmptyRule(fieldOptions)));
   };
 
   const handleAddGroup = (groupId: string) => {
-    setAdvancedFilters(prev => addNodeToGroup(prev, groupId, createEmptyGroup()));
+    setAdvancedFilters(prev => addNodeToGroup(prev, groupId, createEmptyGroup(fieldOptions)));
   };
 
   const handleRuleFieldChange = (ruleId: string, field: string) => {
-    const fieldOption = getFieldOption(field);
+    const fieldOption = getFieldOption(field, fieldOptions);
     const defaultValue = fieldOption?.type === 'select' && fieldOption.options?.length ? fieldOption.options[0].value : '';
 
     setAdvancedFilters(prev =>
@@ -179,7 +187,7 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
   };
 
   const handleGlobalRuleFieldChange = (field: string) => {
-    const fieldOption = getFieldOption(field);
+    const fieldOption = getFieldOption(field, fieldOptions);
     const defaultValue = fieldOption?.type === 'select' && fieldOption.options?.length ? fieldOption.options[0].value : '';
 
     setGlobalRule(prev =>
@@ -215,7 +223,7 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
 
   const handleCreateGlobalRule = () => {
     if (!globalRule) {
-      setGlobalRule(createEmptyRule());
+      setGlobalRule(createEmptyRule(fieldOptions));
     }
   };
 
@@ -231,13 +239,13 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
   };
 
   const handleResetClick = () => {
-    setAdvancedFilters(createEmptyGroup());
+    setAdvancedFilters(createEmptyGroup(fieldOptions));
     setGlobalRule(null);
     onReset?.();
   };
 
   const renderRule = (rule: RuleNode, parentGroup: GroupNode, index: number) => {
-    const fieldOption = getFieldOption(rule.field);
+    const fieldOption = getFieldOption(rule.field, fieldOptions);
     const skipValueInput = rule.operator === 'specified' || rule.operator === 'notSpecified';
 
     const renderValueInput = () => {
@@ -288,7 +296,7 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
           <Col md="3">
             <Label className="form-label text-muted">Field</Label>
             <Input type="select" value={rule.field} onChange={event => handleRuleFieldChange(rule.id, event.target.value)}>
-              {FIELD_OPTIONS.map(option => (
+              {fieldOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -372,7 +380,7 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
       return null;
     }
 
-    const fieldOption = getFieldOption(globalRule.field);
+    const fieldOption = getFieldOption(globalRule.field, fieldOptions);
     const skipValueInput = globalRule.operator === 'specified' || globalRule.operator === 'notSpecified';
 
     const renderValueInput = () => {
@@ -425,7 +433,7 @@ const AdvancedFilterBuilder: React.FC<AdvancedFilterBuilderProps> = ({ isSearchi
           <Col md="3">
             <Label className="form-label text-muted">Field</Label>
             <Input type="select" value={globalRule.field} onChange={event => handleGlobalRuleFieldChange(event.target.value)}>
-              {FIELD_OPTIONS.map(option => (
+              {fieldOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
