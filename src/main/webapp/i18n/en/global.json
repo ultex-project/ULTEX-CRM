@@ -15,6 +15,7 @@
         "verification": "Data Verification",
         "history": "Verification History"
       },
+      "data": "Data",
       "analytics": "Analytics",
       "expand": "Expand sidebar",
       "collapse": "Collapse sidebar",

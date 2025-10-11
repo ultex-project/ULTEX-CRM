@@ -1,0 +1,28 @@
+{
+  "crmApp": {
+    "data": {
+      "title": "Espace de vérification des données",
+      "subtitle": "Analysez et validez les soumissions clients afin de garantir la fiabilité des informations.",
+      "empty": {
+        "title": "Aucune vérification en attente",
+        "subtitle": "Dès qu'il y aura des dossiers à traiter, ils apparaîtront ici pour que vous puissiez les valider, rejeter ou commenter."
+      },
+      "history": {
+        "title": "Historique des vérifications de données",
+        "subtitle": "Suivez chaque action de validation ainsi que les décisions appliquées aux fiches clients.",
+        "empty": {
+          "title": "Aucune entrée historique",
+          "subtitle": "Les vérifications terminées seront listées ici pour assurer la traçabilité des actions."
+        },
+        "columns": {
+          "id": "ID",
+          "entity": "Entité",
+          "status": "Statut",
+          "performedBy": "Effectué par",
+          "performedAt": "Effectué le",
+          "note": "Note"
+        }
+      }
+    }
+  }
+}

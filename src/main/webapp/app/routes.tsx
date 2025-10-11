@@ -20,9 +20,9 @@ import AdminDashboard from 'app/custom/dashboard/AdminDashboard';
 import ProspectListPage from 'app/custom/dashboard/modules/contact/ProspectListPage';
 import ProspectCreatePage from 'app/custom/dashboard/modules/contact/ProspectCreatePage';
 import ProspectViewPage from 'app/custom/dashboard/modules/contact/ProspectViewPage';
-import ClientCreatePage from 'app/custom/dashboard/modules/client/ClientCreatePage';
+import DataDashboardPage from 'app/custom/dashboard/pages/data/DataDashboardPage';
+import DataHistoryPage from 'app/custom/dashboard/pages/data/DataHistoryPage';
 import ClientListPage from 'app/custom/dashboard/modules/client/ClientListPage';
-import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
 
 const loading = <div>loading ...</div>;
 
@@ -69,7 +69,7 @@ const AppRoutes = () => {
         <Route
           path="dashboard/*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER, AUTHORITIES.ADMIN, AUTHORITIES.DATA]}>
               <DashboardLayout />
             </PrivateRoute>
           }
@@ -78,9 +78,23 @@ const AppRoutes = () => {
           <Route path="contact/new" element={<ProspectCreatePage />} />
           <Route path="contact" element={<ProspectListPage />} />
           <Route path="prospect/:id/view" element={<ProspectViewPage />} />
-          <Route path="clients/new" element={<ClientCreatePage />} />
+          <Route
+            path="data"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.DATA, AUTHORITIES.ADMIN]}>
+                <DataDashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="data/history"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.DATA, AUTHORITIES.ADMIN]}>
+                <DataHistoryPage />
+              </PrivateRoute>
+            }
+          />
           <Route path="clients" element={<ClientListPage />} />
-          <Route path="clients/:id/view" element={<ClientViewPage />} />
         </Route>
         <Route
           path="*"

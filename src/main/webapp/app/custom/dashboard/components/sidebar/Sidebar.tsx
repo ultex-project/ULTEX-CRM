@@ -13,9 +13,9 @@ import {
   faChevronLeft,
   faUsers,
   faFileAlt,
-  faSearch,
   faClock,
   faChevronDown,
+  faDatabase,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from 'app/config/store';
 import './sidebar.scss';
@@ -98,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
       id: 'clients',
       label: 'global.menu.clients.main',
       icon: faUsers,
-      roles: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_DATA'],
+      roles: ['ROLE_ADMIN', 'ROLE_USER'],
       children: [
         {
           id: 'clients-list',
@@ -108,13 +108,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
           roles: ['ROLE_ADMIN', 'ROLE_USER'],
         },
         {
-          id: 'clients-verification',
-          label: 'global.menu.clients.verification',
-          icon: faSearch,
-          path: '/dashboard/data-verification',
-          roles: ['ROLE_ADMIN', 'ROLE_DATA'],
-        },
-        {
           id: 'clients-history',
           label: 'global.menu.clients.history',
           icon: faClock,
@@ -122,6 +115,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
           roles: ['ROLE_ADMIN'],
         },
       ],
+    },
+    {
+      id: 'data',
+      label: 'global.menu.data',
+      icon: faDatabase,
+      path: '/dashboard/data',
+      roles: ['ROLE_ADMIN', 'ROLE_DATA'],
     },
     {
       id: 'deals',

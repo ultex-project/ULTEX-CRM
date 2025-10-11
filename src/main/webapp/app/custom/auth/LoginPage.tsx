@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Form, FormGroup, Input, Label, Spinner } from 'reactstrap';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { AUTHORITIES } from 'app/config/constants';
 import { login } from 'app/shared/reducers/authentication';
 
 import './login-page.scss';
@@ -14,6 +15,7 @@ const LoginPage = () => {
 
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const sessionHasBeenFetched = useAppSelector(state => state.authentication.sessionHasBeenFetched);
+  const account = useAppSelector(state => state.authentication.account);
   const loginError = useAppSelector(state => state.authentication.loginError);
   const errorMessage = useAppSelector(state => state.authentication.errorMessage);
   const loading = useAppSelector(state => state.authentication.loading);
@@ -25,9 +27,12 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (sessionHasBeenFetched && isAuthenticated) {
-      navigate('/dashboard', { replace: true });
+      const authorities = account?.authorities ?? [];
+      const hasDataOnly = authorities.includes(AUTHORITIES.DATA) && !authorities.includes(AUTHORITIES.USER);
+      const target = hasDataOnly ? '/dashboard/data' : '/dashboard';
+      navigate(target, { replace: true });
     }
-  }, [isAuthenticated, sessionHasBeenFetched, navigate]);
+  }, [account?.authorities, isAuthenticated, sessionHasBeenFetched, navigate]);
 
   useEffect(() => {
     if (location.pathname === '/login') {
