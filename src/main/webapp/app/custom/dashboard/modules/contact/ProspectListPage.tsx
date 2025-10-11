@@ -1,4 +1,4 @@
-﻿// src/main/webapp/app/entities/prospect/ProspectListPage.tsx
+﻿// src/main/webapp/app/entities/prospect/ClientListPage.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -55,7 +55,7 @@ import { IProspect } from 'app/shared/model/prospect.model';
 import { ProspectStatus } from 'app/shared/model/enumerations/prospect-status.model';
 import { deleteEntity, getEntities, reset } from 'app/entities/prospect/prospect.reducer';
 import AdvancedFilterBuilder from './AdvancedFilterBuilder';
-import { AdvancedFilterPayload, GroupNode, RuleNode, isGroupNode } from './advanced-filter.types';
+import { AdvancedFilterPayload, GroupNode, RuleNode, isGroupNode } from '../advanced-filter.types';
 
 type ProspectStatusKey = keyof typeof ProspectStatus;
 type StatusFilterOption = 'ALL' | ProspectStatusKey;

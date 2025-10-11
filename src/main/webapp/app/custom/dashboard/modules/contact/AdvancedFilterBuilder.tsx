@@ -3,7 +3,7 @@ import { Button, Card, CardBody, CardHeader, Col, FormGroup, Input, Label, Row, 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faLayerGroup, faPlus, faRotateLeft, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { AdvancedFilterPayload, FieldOption, GroupCondition, GroupNode, RuleNode, isGroupNode } from './advanced-filter.types';
+import { AdvancedFilterPayload, FieldOption, GroupCondition, GroupNode, RuleNode, isGroupNode } from '../advanced-filter.types';
 
 interface AdvancedFilterBuilderProps {
   isSearching?: boolean;
