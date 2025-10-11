@@ -4,15 +4,15 @@
       "home": {
         "title": "Clients",
         "refreshListLabel": "Actualiser la liste",
-        "createLabel": "Cr\u00e9er un nouveau Client",
-        "createOrEditLabel": "Cr\u00e9er ou \u00e9diter un Client",
-        "notFound": "Aucun Client trouv\u00e9"
+        "createLabel": "Créer un nouveau Client",
+        "createOrEditLabel": "Créer ou éditer un Client",
+        "notFound": "Aucun Client trouvé"
       },
-      "created": "Un nouveau Client a \u00e9t\u00e9 cr\u00e9\u00e9 avec l'identifiant {{ param }}",
-      "updated": "Le Client avec l'identifiant {{ param }} a \u00e9t\u00e9 mis \u00e0 jour",
-      "deleted": "Le Client avec l'identifiant {{ param }} a \u00e9t\u00e9 supprim\u00e9",
+      "created": "Un nouveau Client a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Client avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Client avec l'identifiant {{ param }} a été supprimé",
       "delete": {
-        "question": "\u00cates-vous certain de vouloir supprimer le Client {{ id }} ?"
+        "question": "Êtes-vous certain de vouloir supprimer le Client {{ id }} ?"
       },
       "detail": {
         "title": "Client"
@@ -44,17 +44,17 @@
         "status": {
           "active": "Actif",
           "inactive": "Inactif",
-          "archived": "Archiv\u00e9",
-          "unassigned": "Non assign\u00e9",
+          "archived": "Archivé",
+          "unassigned": "Non assigné",
           "badge": "Comptes"
         },
         "hero": {
           "title": "Espace clients",
-          "subtitle": "D\u00e9veloppez des relations durables, gardez vos segments en forme et exploitez les signaux clients en temps r\u00e9el.",
+          "subtitle": "Développez des relations durables, gardez vos segments en forme et exploitez les signaux clients en temps réel.",
           "stats": {
             "total": "Clients suivis",
             "active": "Clients actifs",
-            "updated": "Mis \u00e0 jour ces 30 derniers jours"
+            "updated": "Mis à jour ces 30 derniers jours"
           }
         },
         "buttons": {
@@ -62,16 +62,16 @@
           "newClient": "Nouveau client"
         },
         "metrics": {
-          "activeShare": "Sant\u00e9 de la relation",
+          "activeShare": "Santé de la relation",
           "activeShareHint": "{{value}}% des clients sont actifs",
           "inactive": "Clients inactifs",
-          "inactiveHint": "{{value}}% n\u00e9cessitent une attention",
+          "inactiveHint": "{{value}}% nécessitent une attention",
           "newThisWeek": "Nouveaux cette semaine",
-          "newThisWeekHint": "Cr\u00e9\u00e9s au cours des 7 derniers jours",
-          "archived": "Clients archiv\u00e9s",
-          "archivedHint": "\u00c0 revoir ou relancer bient\u00f4t"
+          "newThisWeekHint": "Créés au cours des 7 derniers jours",
+          "archived": "Clients archivés",
+          "archivedHint": "À revoir ou relancer bientôt"
         },
-        "searchPlaceholder": "Rechercher par nom, email, t\u00e9l\u00e9phone ou entreprise...",
+        "searchPlaceholder": "Rechercher par nom, email, téléphone ou entreprise...",
         "filters": {
           "fields": {
             "status": "Statut"
@@ -80,32 +80,32 @@
           "active": "{{label}} ({{count}})",
           "inactive": "{{label}} ({{count}})",
           "archived": "{{label}} ({{count}})",
-          "label": "Filtres avanc\u00e9s",
-          "unsupported": "Attention : les conditions OR combin\u00e9es ne sont pas enti\u00e8rement prises en charge par l'API actuelle. Les filtres sont appliqu\u00e9s comme des clauses AND."
+          "label": "Filtres avancés",
+          "unsupported": "Attention : les conditions OR combinées ne sont pas entièrement prises en charge par l'API actuelle. Les filtres sont appliqués comme des clauses AND."
         },
         "languages": {
-          "fr": "Fran\u00e7ais",
+          "fr": "Français",
           "en": "Anglais",
           "ar": "Arabe"
         },
         "table": {
           "title": "Pipeline client",
-          "summary": "Affichage de {{current}} sur {{total}} clients filtr\u00e9s",
-          "sortedBy": "Tri\u00e9 par {{field}} ({{direction}})",
+          "summary": "Affichage de {{current}} sur {{total}} clients filtrés",
+          "sortedBy": "Trié par {{field}} ({{direction}})",
           "loading": "Chargement des clients...",
           "empty": "Aucun client ne correspond aux filtres actuels.",
           "unnamed": "Client sans nom",
           "noEmail": "Aucun email disponible",
-          "noPhone": "Aucun t\u00e9l\u00e9phone disponible",
+          "noPhone": "Aucun téléphone disponible",
           "pendingSync": "Synchronisation en attente"
         },
         "columns": {
           "client": "Client",
           "company": "Entreprise",
           "status": "Statut",
-          "nationality": "Nationalit\u00e9",
-          "language": "Langue pr\u00e9f\u00e9r\u00e9e",
-          "created": "Cr\u00e9\u00e9 le",
+          "nationality": "Nationalité",
+          "language": "Langue préférée",
+          "created": "Créé le",
           "actions": "Actions"
         },
         "direction": {
@@ -126,6 +126,68 @@
           "cancel": "Annuler",
           "confirm": "Supprimer",
           "unknown": "cet enregistrement"
+        }
+      },
+      "view": {
+        "back": "Retour aux clients",
+        "edit": "Modifier",
+        "error": "Impossible de charger les détails du client pour le moment.",
+        "empty": "Aucune donnée disponible",
+        "header": {
+          "created": "Créé le {{date}}",
+          "updated": "Mis à jour le {{date}}"
+        },
+        "sections": {
+          "general": "Informations générales",
+          "contacts": "Contacts associés",
+          "companies": "Sociétés liées",
+          "documents": "Documents",
+          "kyc": "KYC client",
+          "requests": "Demandes",
+          "opportunities": "Opportunités",
+          "history": "Historique CRM"
+        },
+        "documents": {
+          "actions": "Actions",
+          "download": "Télécharger"
+        },
+        "kyc": {
+          "completude": "Complétude KYC",
+          "score": "Score staff",
+          "behaviors": "Comportements",
+          "responsable": "Responsable",
+          "notes": "Remarques"
+        },
+        "company": {
+          "representant": "Représentant légal : {{value}}"
+        }
+      },
+      "form": {
+        "createTitle": "Ajouter un nouveau client",
+        "editTitle": "Modifier le Client",
+        "createSubtitle": "Renseignez les informations ci-dessous pour créer le client.",
+        "editSubtitle": "Mettez à jour les informations du client puis enregistrez.",
+        "cancelCreate": "Retour à la liste",
+        "cancelEdit": "Annuler",
+        "save": "Enregistrer",
+        "select": "Sélectionnez",
+        "assignedUser": "Responsable",
+        "genericError": "Une erreur est survenue lors de l'enregistrement du client.",
+        "errors": {
+          "nomComplet": "Le nom complet est requis",
+          "nationalite": "La nationalité est requise",
+          "telephonePrincipalRequired": "Le téléphone principal est requis",
+          "telephonePrincipalFormat": "Format invalide (+XXXXXXXX)"
+        }
+      },
+      "edit": {
+        "loadError": "Impossible de charger les informations du client.",
+        "success": "Client mis à jour avec succès",
+        "notFound": "Aucune donnée disponible.",
+        "breadcrumb": {
+          "dashboard": "Tableau de bord",
+          "clients": "Clients",
+          "current": "Modifier"
         }
       }
     }

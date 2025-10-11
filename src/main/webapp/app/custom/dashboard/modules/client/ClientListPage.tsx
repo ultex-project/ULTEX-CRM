@@ -649,11 +649,11 @@ const ClientListPage = () => {
                                 <FontAwesomeIcon icon={faEllipsisV} />
                               </DropdownToggle>
                               <DropdownMenu end className="rounded-3 shadow">
-                                <DropdownItem tag={Link} to={`/dashboard/client/${client.id}/view`}>
+                                <DropdownItem tag={Link} to={`/dashboard/clients/${client.id}/view`}>
                                   <FontAwesomeIcon icon={faEye} className="me-2" />
                                   <Translate contentKey="crmApp.client.dashboard.actions.view" />
                                 </DropdownItem>
-                                <DropdownItem tag={Link} to={`/client/${client.id}/edit`}>
+                                <DropdownItem tag={Link} to={`/dashboard/clients/${client.id}/edit`}>
                                   <FontAwesomeIcon icon={faEdit} className="me-2" />
                                   <Translate contentKey="crmApp.client.dashboard.actions.edit" />
                                 </DropdownItem>

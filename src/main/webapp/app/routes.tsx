@@ -23,6 +23,9 @@ import ProspectViewPage from 'app/custom/dashboard/modules/contact/ProspectViewP
 import DataDashboardPage from 'app/custom/dashboard/pages/data/DataDashboardPage';
 import DataHistoryPage from 'app/custom/dashboard/pages/data/DataHistoryPage';
 import ClientListPage from 'app/custom/dashboard/modules/client/ClientListPage';
+import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
+import ClientCreatePage from 'app/custom/dashboard/modules/client/ClientCreatePage';
+import ClientEditPage from 'app/custom/dashboard/modules/client/ClientEditPage';
 
 const loading = <div>loading ...</div>;
 
@@ -95,6 +98,9 @@ const AppRoutes = () => {
             }
           />
           <Route path="clients" element={<ClientListPage />} />
+          <Route path="clients/new" element={<ClientCreatePage />} />
+          <Route path="clients/:id/view" element={<ClientViewPage />} />
+          <Route path="clients/:id/edit" element={<ClientEditPage />} />
         </Route>
         <Route
           path="*"
