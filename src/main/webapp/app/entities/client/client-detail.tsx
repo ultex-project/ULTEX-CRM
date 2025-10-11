@@ -139,6 +139,10 @@ export const ClientDetail = () => {
           </dt>
           <dd>{clientEntity.updatedAt ? <TextFormat value={clientEntity.updatedAt} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
           <dt>
+            <Translate contentKey="crmApp.client.pays">Pays</Translate>
+          </dt>
+          <dd>{clientEntity.pays ? clientEntity.pays.id : ''}</dd>
+          <dt>
             <Translate contentKey="crmApp.client.company">Company</Translate>
           </dt>
           <dd>{clientEntity.company ? clientEntity.company.id : ''}</dd>

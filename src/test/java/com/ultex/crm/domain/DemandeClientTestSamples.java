@@ -18,8 +18,6 @@ public class DemandeClientTestSamples {
             .servicePrincipal("servicePrincipal1")
             .sousServices("sousServices1")
             .provenance("provenance1")
-            .incoterm("incoterm1")
-            .devise("devise1")
             .nombreProduits(1)
             .remarqueGenerale("remarqueGenerale1");
     }
@@ -31,8 +29,6 @@ public class DemandeClientTestSamples {
             .servicePrincipal("servicePrincipal2")
             .sousServices("sousServices2")
             .provenance("provenance2")
-            .incoterm("incoterm2")
-            .devise("devise2")
             .nombreProduits(2)
             .remarqueGenerale("remarqueGenerale2");
     }
@@ -44,8 +40,6 @@ public class DemandeClientTestSamples {
             .servicePrincipal(UUID.randomUUID().toString())
             .sousServices(UUID.randomUUID().toString())
             .provenance(UUID.randomUUID().toString())
-            .incoterm(UUID.randomUUID().toString())
-            .devise(UUID.randomUUID().toString())
             .nombreProduits(intCount.incrementAndGet())
             .remarqueGenerale(UUID.randomUUID().toString());
     }

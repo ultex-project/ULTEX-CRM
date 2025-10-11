@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { IPays } from 'app/shared/model/pays.model';
 import { ICompany } from 'app/shared/model/company.model';
 import { ClientStatus } from 'app/shared/model/enumerations/client-status.model';
 
@@ -22,6 +23,7 @@ export interface IClient {
   status?: ClientStatus | null;
   createdAt?: dayjs.Dayjs | null;
   updatedAt?: dayjs.Dayjs | null;
+  pays?: IPays | null;
   company?: ICompany | null;
 }
 

@@ -51,12 +51,6 @@ class DemandeClientResourceIT {
     private static final String DEFAULT_PROVENANCE = "AAAAAAAAAA";
     private static final String UPDATED_PROVENANCE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_INCOTERM = "AAAAAAAAAA";
-    private static final String UPDATED_INCOTERM = "BBBBBBBBBB";
-
-    private static final String DEFAULT_DEVISE = "AAAAAAAAAA";
-    private static final String UPDATED_DEVISE = "BBBBBBBBBB";
-
     private static final Integer DEFAULT_NOMBRE_PRODUITS = 1;
     private static final Integer UPDATED_NOMBRE_PRODUITS = 2;
 
@@ -101,8 +95,6 @@ class DemandeClientResourceIT {
             .servicePrincipal(DEFAULT_SERVICE_PRINCIPAL)
             .sousServices(DEFAULT_SOUS_SERVICES)
             .provenance(DEFAULT_PROVENANCE)
-            .incoterm(DEFAULT_INCOTERM)
-            .devise(DEFAULT_DEVISE)
             .nombreProduits(DEFAULT_NOMBRE_PRODUITS)
             .remarqueGenerale(DEFAULT_REMARQUE_GENERALE);
     }
@@ -120,8 +112,6 @@ class DemandeClientResourceIT {
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
             .sousServices(UPDATED_SOUS_SERVICES)
             .provenance(UPDATED_PROVENANCE)
-            .incoterm(UPDATED_INCOTERM)
-            .devise(UPDATED_DEVISE)
             .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
     }
@@ -232,8 +222,6 @@ class DemandeClientResourceIT {
             .andExpect(jsonPath("$.[*].servicePrincipal").value(hasItem(DEFAULT_SERVICE_PRINCIPAL)))
             .andExpect(jsonPath("$.[*].sousServices").value(hasItem(DEFAULT_SOUS_SERVICES)))
             .andExpect(jsonPath("$.[*].provenance").value(hasItem(DEFAULT_PROVENANCE)))
-            .andExpect(jsonPath("$.[*].incoterm").value(hasItem(DEFAULT_INCOTERM)))
-            .andExpect(jsonPath("$.[*].devise").value(hasItem(DEFAULT_DEVISE)))
             .andExpect(jsonPath("$.[*].nombreProduits").value(hasItem(DEFAULT_NOMBRE_PRODUITS)))
             .andExpect(jsonPath("$.[*].remarqueGenerale").value(hasItem(DEFAULT_REMARQUE_GENERALE)));
     }
@@ -255,8 +243,6 @@ class DemandeClientResourceIT {
             .andExpect(jsonPath("$.servicePrincipal").value(DEFAULT_SERVICE_PRINCIPAL))
             .andExpect(jsonPath("$.sousServices").value(DEFAULT_SOUS_SERVICES))
             .andExpect(jsonPath("$.provenance").value(DEFAULT_PROVENANCE))
-            .andExpect(jsonPath("$.incoterm").value(DEFAULT_INCOTERM))
-            .andExpect(jsonPath("$.devise").value(DEFAULT_DEVISE))
             .andExpect(jsonPath("$.nombreProduits").value(DEFAULT_NOMBRE_PRODUITS))
             .andExpect(jsonPath("$.remarqueGenerale").value(DEFAULT_REMARQUE_GENERALE));
     }
@@ -286,8 +272,6 @@ class DemandeClientResourceIT {
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
             .sousServices(UPDATED_SOUS_SERVICES)
             .provenance(UPDATED_PROVENANCE)
-            .incoterm(UPDATED_INCOTERM)
-            .devise(UPDATED_DEVISE)
             .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
         DemandeClientDTO demandeClientDTO = demandeClientMapper.toDto(updatedDemandeClient);
@@ -384,7 +368,7 @@ class DemandeClientResourceIT {
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
             .provenance(UPDATED_PROVENANCE)
-            .incoterm(UPDATED_INCOTERM);
+            .nombreProduits(UPDATED_NOMBRE_PRODUITS);
 
         restDemandeClientMockMvc
             .perform(
@@ -421,8 +405,6 @@ class DemandeClientResourceIT {
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
             .sousServices(UPDATED_SOUS_SERVICES)
             .provenance(UPDATED_PROVENANCE)
-            .incoterm(UPDATED_INCOTERM)
-            .devise(UPDATED_DEVISE)
             .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
 

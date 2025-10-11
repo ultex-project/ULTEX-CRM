@@ -22,21 +22,24 @@ import { faPlus, faSave, faTrash, faTimes } from '@fortawesome/free-solid-svg-ic
 
 import { IDemandeClient } from 'app/shared/model/demande-client.model';
 import { IProduitDemande } from 'app/shared/model/produit-demande.model';
+import { IDevise } from 'app/shared/model/devise.model';
+import { IIncoterm } from 'app/shared/model/incoterm.model';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 
-type DemandeField =
-  | 'reference'
-  | 'dateDemande'
-  | 'servicePrincipal'
-  | 'sousServices'
-  | 'provenance'
-  | 'incoterm'
-  | 'devise'
-  | 'nombreProduits'
-  | 'remarqueGenerale';
+interface FormState {
+  reference: string;
+  dateDemande: string;
+  servicePrincipal: string;
+  sousServices: string;
+  provenance: string;
+  deviseId: string;
+  incotermId: string;
+  nombreProduits: string;
+  remarqueGenerale: string;
+}
 
-type FormState = Record<DemandeField, string>;
+type DemandeField = keyof FormState;
 type FormErrors = Partial<Record<DemandeField, string>>;
 
 type ProduitField = Exclude<keyof IProduitDemande, 'id' | 'demande'>;
@@ -98,8 +101,8 @@ const buildInitialFormState = (overrides?: Partial<IDemandeClient>): FormState =
     servicePrincipal: '',
     sousServices: '',
     provenance: '',
-    incoterm: '',
-    devise: '',
+    deviseId: '',
+    incotermId: '',
     nombreProduits: '0',
     remarqueGenerale: '',
   };
@@ -114,8 +117,8 @@ const buildInitialFormState = (overrides?: Partial<IDemandeClient>): FormState =
     servicePrincipal: overrides.servicePrincipal ?? base.servicePrincipal,
     sousServices: overrides.sousServices ?? base.sousServices,
     provenance: overrides.provenance ?? base.provenance,
-    incoterm: overrides.incoterm ?? base.incoterm,
-    devise: overrides.devise ?? base.devise,
+    deviseId: overrides.devise?.id !== undefined && overrides.devise?.id !== null ? String(overrides.devise.id) : base.deviseId,
+    incotermId: overrides.incoterm?.id !== undefined && overrides.incoterm?.id !== null ? String(overrides.incoterm.id) : base.incotermId,
     nombreProduits: overrides.nombreProduits !== undefined ? String(overrides.nombreProduits) : base.nombreProduits,
     remarqueGenerale: overrides.remarqueGenerale ?? base.remarqueGenerale,
   };
@@ -134,6 +137,9 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
   const [currentDemande, setCurrentDemande] = useState<Partial<IDemandeClient> | null>(() =>
     initialDemande ? { ...initialDemande } : null,
   );
+  const [devises, setDevises] = useState<IDevise[]>([]);
+  const [incoterms, setIncoterms] = useState<IIncoterm[]>([]);
+  const [optionsLoading, setOptionsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (initialDemande) {
@@ -141,6 +147,39 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
       setFormValues(buildInitialFormState(initialDemande));
     }
   }, [initialDemande]);
+
+  useEffect(() => {
+    let ignore = false;
+    const fetchReferenceData = async () => {
+      setOptionsLoading(true);
+      try {
+        const [deviseResponse, incotermResponse] = await Promise.all([
+          axios.get<IDevise[]>(`api/devises`, { params: { size: 1000, cacheBuster: Date.now() } }),
+          axios.get<IIncoterm[]>(`api/incoterms`, { params: { size: 1000, cacheBuster: Date.now() } }),
+        ]);
+
+        if (ignore) {
+          return;
+        }
+
+        setDevises(deviseResponse.data ?? []);
+        setIncoterms(incotermResponse.data ?? []);
+      } catch (error) {
+        if (!ignore) {
+          setSubmissionError(prev => prev ?? 'Impossible de charger les données de référence. Veuillez réessayer.');
+        }
+      } finally {
+        if (!ignore) {
+          setOptionsLoading(false);
+        }
+      }
+    };
+
+    fetchReferenceData();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!isEditMode) {
@@ -197,17 +236,18 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
     });
   }, [produits]);
 
-  const handleFieldChange = (field: DemandeField) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = event.target.value;
-    setFormValues(prev => ({ ...prev, [field]: value }));
-    if (formErrors[field]) {
-      setFormErrors(prevErrors => {
-        const next = { ...prevErrors };
-        delete next[field];
-        return next;
-      });
-    }
-  };
+  const handleFieldChange =
+    (field: DemandeField) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const value = event.target.value;
+      setFormValues(prev => ({ ...prev, [field]: value }));
+      if (formErrors[field]) {
+        setFormErrors(prevErrors => {
+          const next = { ...prevErrors };
+          delete next[field];
+          return next;
+        });
+      }
+    };
 
   const updateProduitValue = useCallback(
     <K extends ProduitField>(produit: IProduitDemande, field: K, val: IProduitDemande[K]): IProduitDemande => ({
@@ -263,11 +303,11 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
     if (!formValues.provenance.trim()) {
       errors.provenance = 'La provenance est obligatoire.';
     }
-    if (!formValues.incoterm.trim()) {
-      errors.incoterm = "L'incoterm est obligatoire.";
+    if (!formValues.incotermId) {
+      errors.incotermId = "L'incoterm est obligatoire.";
     }
-    if (!formValues.devise.trim()) {
-      errors.devise = 'La devise est obligatoire.';
+    if (!formValues.deviseId) {
+      errors.deviseId = 'La devise est obligatoire.';
     }
 
     setFormErrors(errors);
@@ -277,6 +317,8 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
   const parseDemandePayload = useCallback((): IDemandeClient => {
     const nombreProduits = produits.length;
     const client = currentDemande?.client;
+    const devise = formValues.deviseId ? { id: Number(formValues.deviseId) } : undefined;
+    const incoterm = formValues.incotermId ? { id: Number(formValues.incotermId) } : undefined;
     return {
       id: currentDemande?.id ?? demandeId,
       reference: formValues.reference.trim(),
@@ -284,8 +326,8 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
       servicePrincipal: formValues.servicePrincipal.trim() || undefined,
       sousServices: formValues.sousServices.trim() || undefined,
       provenance: formValues.provenance.trim(),
-      incoterm: formValues.incoterm.trim(),
-      devise: formValues.devise.trim(),
+      incoterm,
+      devise,
       nombreProduits,
       remarqueGenerale: formValues.remarqueGenerale.trim() || undefined,
       client,
@@ -367,7 +409,7 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
               <FontAwesomeIcon icon={faTimes} className="me-2" />
               Annuler
             </Button>
-            <Button color="primary" type="submit" form="demande-form" disabled={loading || initialLoading}>
+            <Button color="primary" type="submit" form="demande-form" disabled={loading || initialLoading || optionsLoading}>
               {loading ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faSave} className="me-2" />}
               Sauvegarder
             </Button>
@@ -457,12 +499,23 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
                   <Label for="demande-incoterm">Incoterm</Label>
                   <Input
                     id="demande-incoterm"
-                    type="text"
-                    value={formValues.incoterm}
-                    onChange={handleFieldChange('incoterm')}
-                    invalid={Boolean(formErrors.incoterm)}
-                  />
-                  {renderError('incoterm')}
+                    type="select"
+                    value={formValues.incotermId}
+                    onChange={handleFieldChange('incotermId')}
+                    invalid={Boolean(formErrors.incotermId)}
+                    disabled={optionsLoading}
+                  >
+                    <option value="">Sélectionnez un incoterm</option>
+                    {incoterms.map(option => {
+                      const label = [option.code, option.description].filter(Boolean).join(' • ') || option.code || option.description;
+                      return (
+                        <option key={option.id} value={option.id ?? ''}>
+                          {label}
+                        </option>
+                      );
+                    })}
+                  </Input>
+                  {renderError('incotermId')}
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -470,12 +523,24 @@ const DemandeForm = ({ demandeId, initialDemande, initialProduits, onSaved, onCa
                   <Label for="demande-devise">Devise</Label>
                   <Input
                     id="demande-devise"
-                    type="text"
-                    value={formValues.devise}
-                    onChange={handleFieldChange('devise')}
-                    invalid={Boolean(formErrors.devise)}
-                  />
-                  {renderError('devise')}
+                    type="select"
+                    value={formValues.deviseId}
+                    onChange={handleFieldChange('deviseId')}
+                    invalid={Boolean(formErrors.deviseId)}
+                    disabled={optionsLoading}
+                  >
+                    <option value="">Sélectionnez une devise</option>
+                    {devises.map(option => {
+                      const label =
+                        [option.code, option.symbole].filter(Boolean).join(' ') || option.nomComplet || option.code || option.symbole;
+                      return (
+                        <option key={option.id} value={option.id ?? ''}>
+                          {label}
+                        </option>
+                      );
+                    })}
+                  </Input>
+                  {renderError('deviseId')}
                 </FormGroup>
               </Col>
               <Col md="3">

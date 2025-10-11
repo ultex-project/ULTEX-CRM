@@ -79,7 +79,7 @@ public class ProduitDemande implements Serializable {
     private String piecesJointesUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "client" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "client", "devise", "incoterm" }, allowSetters = true)
     private DemandeClient demande;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

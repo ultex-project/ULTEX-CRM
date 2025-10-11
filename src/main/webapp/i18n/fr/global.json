@@ -25,7 +25,19 @@
         "prospect": "Prospect",
         "opportunity": "Opportunity",
         "internalUser": "Internal User",
-        "history": "History"
+        "company": "Company",
+        "contact": "Contact",
+        "societeLiee": "Societe Liee",
+        "contactAssocie": "Contact Associe",
+        "documentClient": "Document Client",
+        "demandeClient": "Demande Client",
+        "produitDemande": "Produit Demande",
+        "historiqueCrm": "Historique CRM",
+        "kycClient": "Kyc Client",
+        "history": "History",
+        "devise": "Devise",
+        "incoterm": "Incoterm",
+        "pays": "Pays"
       },
       "account": {
         "main": "Compte",

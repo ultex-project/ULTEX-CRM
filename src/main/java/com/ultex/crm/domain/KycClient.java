@@ -38,7 +38,10 @@ public class KycClient implements Serializable {
     @Column(name = "responsable")
     private String responsable;
 
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        allowSetters = true
+    )
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private Client client;

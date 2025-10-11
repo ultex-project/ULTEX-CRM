@@ -54,6 +54,8 @@ public class ClientDTO implements Serializable {
 
     private Instant updatedAt;
 
+    private PaysDTO pays;
+
     private CompanyDTO company;
 
     public Long getId() {
@@ -200,6 +202,14 @@ public class ClientDTO implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public PaysDTO getPays() {
+        return pays;
+    }
+
+    public void setPays(PaysDTO pays) {
+        this.pays = pays;
+    }
+
     public CompanyDTO getCompany() {
         return company;
     }
@@ -251,6 +261,7 @@ public class ClientDTO implements Serializable {
             ", reseauxSociaux='" + getReseauxSociaux() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
+            ", pays=" + getPays() +
             ", company=" + getCompany() +
             "}";
     }

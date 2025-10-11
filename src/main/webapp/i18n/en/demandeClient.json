@@ -23,8 +23,6 @@
       "servicePrincipal": "Service Principal",
       "sousServices": "Sous Services",
       "provenance": "Provenance",
-      "incoterm": "Incoterm",
-      "devise": "Devise",
       "nombreProduits": "Nombre Produits",
       "remarqueGenerale": "Remarque Generale",
       "client": "Client",

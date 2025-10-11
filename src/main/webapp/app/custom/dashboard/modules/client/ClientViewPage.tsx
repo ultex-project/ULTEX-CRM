@@ -30,6 +30,34 @@ const formatDate = (value?: dayjs.Dayjs | string | null, format = 'DD MMM YYYY')
 const renderValue = (value: React.ReactNode) =>
   value !== undefined && value !== null && value !== '' ? value : <span className="text-muted">--</span>;
 
+const formatDeviseDisplay = (devise?: IDemandeClient['devise']) => {
+  if (!devise) {
+    return null;
+  }
+  const code = devise.code ?? '';
+  const symbol = devise.symbole ?? '';
+  const fullName = devise.nomComplet ?? '';
+  if (code && symbol) {
+    return `${code} (${symbol})`;
+  }
+  if (code) {
+    return code;
+  }
+  return fullName || null;
+};
+
+const formatIncotermDisplay = (incoterm?: IDemandeClient['incoterm']) => {
+  if (!incoterm) {
+    return null;
+  }
+  const code = incoterm.code ?? '';
+  const description = incoterm.description ?? '';
+  if (code && description) {
+    return `${code} • ${description}`;
+  }
+  return code || description || null;
+};
+
 const renderClientStatusBadge = (status?: string | null) => {
   if (!status || !isClientStatus(status)) {
     return <span className={outlineBadgeClass('secondary')}>{translate('crmApp.client.dashboard.status.unassigned')}</span>;
@@ -274,6 +302,12 @@ const ClientViewPage = () => {
                 <div className="d-flex flex-wrap gap-2 align-items-center text-muted">
                   {client?.fonction ? <span>{client.fonction}</span> : null}
                   {client?.nationalite ? <span>• {client.nationalite}</span> : null}
+                  {client?.pays?.nom ? (
+                    <span>
+                      • {client.pays.nom}
+                      {client.pays.code ? ` (${client.pays.code})` : ''}
+                    </span>
+                  ) : null}
                 </div>
                 {headerDates}
               </div>
@@ -333,6 +367,17 @@ const ClientViewPage = () => {
                       <Translate contentKey="crmApp.client.languePreferee" />
                     </span>
                     <span className="fw-semibold">{renderValue(client?.languePreferee)}</span>
+                  </div>
+                </Col>
+                <Col md="4">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.client.pays" />
+                    </span>
+                    <span className="fw-semibold">{renderValue(client?.pays?.nom)}</span>
+                    {client?.pays?.code || client?.pays?.indicatif ? (
+                      <span className="text-muted small">{[client?.pays?.code, client?.pays?.indicatif].filter(Boolean).join(' • ')}</span>
+                    ) : null}
                   </div>
                 </Col>
                 <Col md="4">
@@ -596,7 +641,8 @@ const ClientViewPage = () => {
                               <div>
                                 <Translate contentKey="crmApp.demandeClient.nombreProduits" />: {renderValue(request.nombreProduits)}
                               </div>
-                              <div>{renderValue(request.devise)}</div>
+                              <div>{renderValue(formatDeviseDisplay(request.devise))}</div>
+                              <div>{renderValue(formatIncotermDisplay(request.incoterm))}</div>
                             </div>
                           </div>
                           {produits.length > 0 ? (

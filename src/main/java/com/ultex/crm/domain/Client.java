@@ -91,6 +91,9 @@ public class Client implements Serializable {
     private Set<Opportunity> opportunities = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    private Pays pays;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "clients", "prospects", "contacts" }, allowSetters = true)
     private Company company;
 
@@ -371,6 +374,19 @@ public class Client implements Serializable {
     public Client removeOpportunities(Opportunity opportunity) {
         this.opportunities.remove(opportunity);
         opportunity.setClient(null);
+        return this;
+    }
+
+    public Pays getPays() {
+        return this.pays;
+    }
+
+    public void setPays(Pays pays) {
+        this.pays = pays;
+    }
+
+    public Client pays(Pays pays) {
+        this.setPays(pays);
         return this;
     }
 

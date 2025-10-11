@@ -5,6 +5,7 @@ import static com.ultex.crm.domain.CompanyTestSamples.*;
 import static com.ultex.crm.domain.ContactTestSamples.*;
 import static com.ultex.crm.domain.KycClientTestSamples.*;
 import static com.ultex.crm.domain.OpportunityTestSamples.*;
+import static com.ultex.crm.domain.PaysTestSamples.*;
 import static com.ultex.crm.domain.ProspectTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,6 +50,18 @@ class ClientTest {
         client.setOpportunities(new HashSet<>());
         assertThat(client.getOpportunities()).doesNotContain(opportunityBack);
         assertThat(opportunityBack.getClient()).isNull();
+    }
+
+    @Test
+    void paysTest() {
+        Client client = getClientRandomSampleGenerator();
+        Pays paysBack = getPaysRandomSampleGenerator();
+
+        client.setPays(paysBack);
+        assertThat(client.getPays()).isEqualTo(paysBack);
+
+        client.pays(null);
+        assertThat(client.getPays()).isNull();
     }
 
     @Test

@@ -67,18 +67,6 @@ export const DemandeClientDetail = () => {
           </dt>
           <dd>{demandeClientEntity.provenance}</dd>
           <dt>
-            <span id="incoterm">
-              <Translate contentKey="crmApp.demandeClient.incoterm">Incoterm</Translate>
-            </span>
-          </dt>
-          <dd>{demandeClientEntity.incoterm}</dd>
-          <dt>
-            <span id="devise">
-              <Translate contentKey="crmApp.demandeClient.devise">Devise</Translate>
-            </span>
-          </dt>
-          <dd>{demandeClientEntity.devise}</dd>
-          <dt>
             <span id="nombreProduits">
               <Translate contentKey="crmApp.demandeClient.nombreProduits">Nombre Produits</Translate>
             </span>
@@ -94,6 +82,14 @@ export const DemandeClientDetail = () => {
             <Translate contentKey="crmApp.demandeClient.client">Client</Translate>
           </dt>
           <dd>{demandeClientEntity.client ? demandeClientEntity.client.id : ''}</dd>
+          <dt>
+            <Translate contentKey="crmApp.demandeClient.devise">Devise</Translate>
+          </dt>
+          <dd>{demandeClientEntity.devise ? demandeClientEntity.devise.id : ''}</dd>
+          <dt>
+            <Translate contentKey="crmApp.demandeClient.incoterm">Incoterm</Translate>
+          </dt>
+          <dd>{demandeClientEntity.incoterm ? demandeClientEntity.incoterm.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/demande-client" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -72,6 +72,9 @@ public class CacheConfiguration {
             createCache(cm, com.ultex.crm.domain.HistoriqueCRM.class.getName());
             createCache(cm, com.ultex.crm.domain.KycClient.class.getName());
             createCache(cm, com.ultex.crm.domain.History.class.getName());
+            createCache(cm, com.ultex.crm.domain.Devise.class.getName());
+            createCache(cm, com.ultex.crm.domain.Incoterm.class.getName());
+            createCache(cm, com.ultex.crm.domain.Pays.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -28,14 +28,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "incoterm",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "devise",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "nombreProduits",
       "fieldType": "Integer"
     },
@@ -50,6 +42,18 @@
     {
       "otherEntityName": "client",
       "relationshipName": "client",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "devise",
+      "relationshipName": "devise",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "incoterm",
+      "relationshipName": "incoterm",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     }

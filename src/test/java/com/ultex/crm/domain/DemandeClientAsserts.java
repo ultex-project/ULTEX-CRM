@@ -52,8 +52,6 @@ public class DemandeClientAsserts {
             .satisfies(a -> assertThat(a.getServicePrincipal()).as("check servicePrincipal").isEqualTo(expected.getServicePrincipal()))
             .satisfies(a -> assertThat(a.getSousServices()).as("check sousServices").isEqualTo(expected.getSousServices()))
             .satisfies(a -> assertThat(a.getProvenance()).as("check provenance").isEqualTo(expected.getProvenance()))
-            .satisfies(a -> assertThat(a.getIncoterm()).as("check incoterm").isEqualTo(expected.getIncoterm()))
-            .satisfies(a -> assertThat(a.getDevise()).as("check devise").isEqualTo(expected.getDevise()))
             .satisfies(a -> assertThat(a.getNombreProduits()).as("check nombreProduits").isEqualTo(expected.getNombreProduits()))
             .satisfies(a -> assertThat(a.getRemarqueGenerale()).as("check remarqueGenerale").isEqualTo(expected.getRemarqueGenerale()));
     }
@@ -67,6 +65,8 @@ public class DemandeClientAsserts {
     public static void assertDemandeClientUpdatableRelationshipsEquals(DemandeClient expected, DemandeClient actual) {
         assertThat(actual)
             .as("Verify DemandeClient relationships")
-            .satisfies(a -> assertThat(a.getClient()).as("check client").isEqualTo(expected.getClient()));
+            .satisfies(a -> assertThat(a.getClient()).as("check client").isEqualTo(expected.getClient()))
+            .satisfies(a -> assertThat(a.getDevise()).as("check devise").isEqualTo(expected.getDevise()))
+            .satisfies(a -> assertThat(a.getIncoterm()).as("check incoterm").isEqualTo(expected.getIncoterm()));
     }
 }

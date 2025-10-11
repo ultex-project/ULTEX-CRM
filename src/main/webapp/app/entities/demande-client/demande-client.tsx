@@ -133,14 +133,6 @@ export const DemandeClient = () => {
                   <Translate contentKey="crmApp.demandeClient.provenance">Provenance</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('provenance')} />
                 </th>
-                <th className="hand" onClick={sort('incoterm')}>
-                  <Translate contentKey="crmApp.demandeClient.incoterm">Incoterm</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('incoterm')} />
-                </th>
-                <th className="hand" onClick={sort('devise')}>
-                  <Translate contentKey="crmApp.demandeClient.devise">Devise</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('devise')} />
-                </th>
                 <th className="hand" onClick={sort('nombreProduits')}>
                   <Translate contentKey="crmApp.demandeClient.nombreProduits">Nombre Produits</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('nombreProduits')} />
@@ -151,6 +143,12 @@ export const DemandeClient = () => {
                 </th>
                 <th>
                   <Translate contentKey="crmApp.demandeClient.client">Client</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.demandeClient.devise">Devise</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.demandeClient.incoterm">Incoterm</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -172,11 +170,13 @@ export const DemandeClient = () => {
                   <td>{demandeClient.servicePrincipal}</td>
                   <td>{demandeClient.sousServices}</td>
                   <td>{demandeClient.provenance}</td>
-                  <td>{demandeClient.incoterm}</td>
-                  <td>{demandeClient.devise}</td>
                   <td>{demandeClient.nombreProduits}</td>
                   <td>{demandeClient.remarqueGenerale}</td>
                   <td>{demandeClient.client ? <Link to={`/client/${demandeClient.client.id}`}>{demandeClient.client.id}</Link> : ''}</td>
+                  <td>{demandeClient.devise ? <Link to={`/devise/${demandeClient.devise.id}`}>{demandeClient.devise.id}</Link> : ''}</td>
+                  <td>
+                    {demandeClient.incoterm ? <Link to={`/incoterm/${demandeClient.incoterm.id}`}>{demandeClient.incoterm.id}</Link> : ''}
+                  </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/demande-client/${demandeClient.id}`} color="info" size="sm" data-cy="entityDetailsButton">

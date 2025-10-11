@@ -42,12 +42,6 @@ public class DemandeClient implements Serializable {
     @Column(name = "provenance")
     private String provenance;
 
-    @Column(name = "incoterm")
-    private String incoterm;
-
-    @Column(name = "devise")
-    private String devise;
-
     @Column(name = "nombre_produits")
     private Integer nombreProduits;
 
@@ -55,8 +49,17 @@ public class DemandeClient implements Serializable {
     private String remarqueGenerale;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        allowSetters = true
+    )
     private Client client;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Devise devise;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Incoterm incoterm;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -138,32 +141,6 @@ public class DemandeClient implements Serializable {
         this.provenance = provenance;
     }
 
-    public String getIncoterm() {
-        return this.incoterm;
-    }
-
-    public DemandeClient incoterm(String incoterm) {
-        this.setIncoterm(incoterm);
-        return this;
-    }
-
-    public void setIncoterm(String incoterm) {
-        this.incoterm = incoterm;
-    }
-
-    public String getDevise() {
-        return this.devise;
-    }
-
-    public DemandeClient devise(String devise) {
-        this.setDevise(devise);
-        return this;
-    }
-
-    public void setDevise(String devise) {
-        this.devise = devise;
-    }
-
     public Integer getNombreProduits() {
         return this.nombreProduits;
     }
@@ -203,6 +180,32 @@ public class DemandeClient implements Serializable {
         return this;
     }
 
+    public Devise getDevise() {
+        return this.devise;
+    }
+
+    public void setDevise(Devise devise) {
+        this.devise = devise;
+    }
+
+    public DemandeClient devise(Devise devise) {
+        this.setDevise(devise);
+        return this;
+    }
+
+    public Incoterm getIncoterm() {
+        return this.incoterm;
+    }
+
+    public void setIncoterm(Incoterm incoterm) {
+        this.incoterm = incoterm;
+    }
+
+    public DemandeClient incoterm(Incoterm incoterm) {
+        this.setIncoterm(incoterm);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -232,8 +235,6 @@ public class DemandeClient implements Serializable {
             ", servicePrincipal='" + getServicePrincipal() + "'" +
             ", sousServices='" + getSousServices() + "'" +
             ", provenance='" + getProvenance() + "'" +
-            ", incoterm='" + getIncoterm() + "'" +
-            ", devise='" + getDevise() + "'" +
             ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +
             "}";

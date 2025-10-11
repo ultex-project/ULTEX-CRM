@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+import { getEntities as getPays } from 'app/entities/pays/pays.reducer';
 import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
 import { createEntity, getEntity, reset, updateEntity } from './client.reducer';
 
@@ -18,6 +19,7 @@ export const ClientUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const pays = useAppSelector(state => state.pays.entities);
   const companies = useAppSelector(state => state.company.entities);
   const clientEntity = useAppSelector(state => state.client.entity);
   const loading = useAppSelector(state => state.client.loading);
@@ -35,6 +37,7 @@ export const ClientUpdate = () => {
       dispatch(getEntity(id));
     }
 
+    dispatch(getPays({}));
     dispatch(getCompanies({}));
   }, []);
 
@@ -54,6 +57,7 @@ export const ClientUpdate = () => {
     const entity = {
       ...clientEntity,
       ...values,
+      pays: pays.find(it => it.id.toString() === values.pays?.toString()),
       company: companies.find(it => it.id.toString() === values.company?.toString()),
     };
 
@@ -74,6 +78,7 @@ export const ClientUpdate = () => {
           ...clientEntity,
           createdAt: convertDateTimeFromServer(clientEntity.createdAt),
           updatedAt: convertDateTimeFromServer(clientEntity.updatedAt),
+          pays: clientEntity?.pays?.id,
           company: clientEntity?.company?.id,
         };
 
@@ -225,6 +230,16 @@ export const ClientUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
+              <ValidatedField id="client-pays" name="pays" data-cy="pays" label={translate('crmApp.client.pays')} type="select">
+                <option value="" key="0" />
+                {pays
+                  ? pays.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
               <ValidatedField id="client-company" name="company" data-cy="company" label={translate('crmApp.client.company')} type="select">
                 <option value="" key="0" />
                 {companies

@@ -25,15 +25,15 @@ public class DemandeClientDTO implements Serializable {
 
     private String provenance;
 
-    private String incoterm;
-
-    private String devise;
-
     private Integer nombreProduits;
 
     private String remarqueGenerale;
 
     private ClientDTO client;
+
+    private DeviseDTO devise;
+
+    private IncotermDTO incoterm;
 
     public Long getId() {
         return id;
@@ -83,22 +83,6 @@ public class DemandeClientDTO implements Serializable {
         this.provenance = provenance;
     }
 
-    public String getIncoterm() {
-        return incoterm;
-    }
-
-    public void setIncoterm(String incoterm) {
-        this.incoterm = incoterm;
-    }
-
-    public String getDevise() {
-        return devise;
-    }
-
-    public void setDevise(String devise) {
-        this.devise = devise;
-    }
-
     public Integer getNombreProduits() {
         return nombreProduits;
     }
@@ -121,6 +105,22 @@ public class DemandeClientDTO implements Serializable {
 
     public void setClient(ClientDTO client) {
         this.client = client;
+    }
+
+    public DeviseDTO getDevise() {
+        return devise;
+    }
+
+    public void setDevise(DeviseDTO devise) {
+        this.devise = devise;
+    }
+
+    public IncotermDTO getIncoterm() {
+        return incoterm;
+    }
+
+    public void setIncoterm(IncotermDTO incoterm) {
+        this.incoterm = incoterm;
     }
 
     @Override
@@ -154,11 +154,11 @@ public class DemandeClientDTO implements Serializable {
             ", servicePrincipal='" + getServicePrincipal() + "'" +
             ", sousServices='" + getSousServices() + "'" +
             ", provenance='" + getProvenance() + "'" +
-            ", incoterm='" + getIncoterm() + "'" +
-            ", devise='" + getDevise() + "'" +
             ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +
             ", client=" + getClient() +
+            ", devise=" + getDevise() +
+            ", incoterm=" + getIncoterm() +
             "}";
     }
 }

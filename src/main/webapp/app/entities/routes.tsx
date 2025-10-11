@@ -17,6 +17,9 @@ import ProduitDemande from './produit-demande';
 import HistoriqueCRM from './historique-crm';
 import KycClient from './kyc-client';
 import History from './history';
+import Devise from './devise';
+import Incoterm from './incoterm';
+import Pays from './pays';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -38,6 +41,9 @@ export default () => {
         <Route path="historique-crm/*" element={<HistoriqueCRM />} />
         <Route path="kyc-client/*" element={<KycClient />} />
         <Route path="history/*" element={<History />} />
+        <Route path="devise/*" element={<Devise />} />
+        <Route path="incoterm/*" element={<Incoterm />} />
+        <Route path="pays/*" element={<Pays />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

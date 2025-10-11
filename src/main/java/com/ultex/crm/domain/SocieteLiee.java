@@ -53,7 +53,10 @@ public class SocieteLiee implements Serializable {
     private String representantLegal;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        allowSetters = true
+    )
     private Client client;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
