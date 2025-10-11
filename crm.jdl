@@ -98,20 +98,23 @@ entity DocumentClient {
   numeroDocument String,
   fichierUrl String
 }
-
+entity SousService {
+  code String required unique,
+  libelle String required
+}
 entity DemandeClient {
   reference String required,
   dateDemande Instant required,
-  servicePrincipal String,
-  sousServices String,
+  servicePrincipal ServicePrincipal required,
   provenance String,
   nombreProduits Integer,
   remarqueGenerale String
 }
+
 entity ProduitDemande {
-  typeProduit String,
-  typeDemande String, // Proforma, Sourcing, Négociation...
-  nomProduit String,
+  typeProduit String, // e.g. "Véhicule", "Machine", "Matière première"
+  typeDemande TypeDemande required,
+  nomProduit String required,
   description TextBlob,
   quantite Double,
   unite String,
@@ -124,6 +127,10 @@ entity ProduitDemande {
   piecesParCarton Integer,
   hsCode String,
   prixCible Double,
+  origine String, // for sourcing
+  contactFournisseur String, // for négociation
+  adresseChargement String, // for export
+  adresseDechargement String, // for export
   ficheTechniqueUrl String,
   photosUrl String,
   piecesJointesUrl String
@@ -226,12 +233,25 @@ enum OpportunityStage {
 enum UserRole {
   ADMIN, MANAGER, COMMERCIAL
 }
+enum TypeDemande {
+  PROFORMA,
+  SOURCING,
+  NEGOCIATION,
+  AUTRE
+}
 
+enum ServicePrincipal {
+  IMPORT,
+  EXPORT
+}
 /* RELATIONSHIPS */
 
 // --- Core Business Logic Relationships ---
 
 // Client has many Opportunities
+relationship ManyToMany {
+  DemandeClient{sousServices} to SousService{demandes}
+}
 relationship OneToMany {
   Client{opportunities} to Opportunity{client required}
 }
