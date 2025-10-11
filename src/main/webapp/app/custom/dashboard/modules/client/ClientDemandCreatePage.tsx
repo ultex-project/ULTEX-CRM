@@ -1,16 +1,38 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import dayjs from 'dayjs';
-import { Alert, Breadcrumb, BreadcrumbItem, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
+import {
+  Alert,
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  Spinner,
+  Table,
+} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPen, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { createEntity, reset as resetDemande } from 'app/entities/demande-client/demande-client.reducer';
+import { reset as resetDemande } from 'app/entities/demande-client/demande-client.reducer';
 import { IDemandeClient } from 'app/shared/model/demande-client.model';
+import { IProduitDemande } from 'app/shared/model/produit-demande.model';
 import { getEntities as getDevises } from 'app/entities/devise/devise.reducer';
 import { getEntities as getIncoterms } from 'app/entities/incoterm/incoterm.reducer';
+import { cleanEntity } from 'app/shared/util/entity-utils';
 
 interface FormState {
   reference: string;
@@ -26,17 +48,26 @@ interface FormState {
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
+interface ProductFormState {
+  nomProduit: string;
+  description: string;
+  quantite: string;
+  unite: string;
+  prix: string;
+  hsCode: string;
+}
+
+type ProductFormErrors = Partial<Record<keyof ProductFormState, string>>;
+
 const SERVICE_OPTIONS = ['Import', 'Export'] as const;
 const SOUS_SERVICE_OPTIONS = ['Transport', 'Douane', 'Stockage', 'Assurance'] as const;
+const UNITE_OPTIONS = ['pcs', 'kg', 'm3'] as const;
 
 const ClientDemandCreatePage = () => {
   const { clientId } = useParams<'clientId'>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const updating = useAppSelector(state => state.demandeClient.updating);
-  const updateSuccess = useAppSelector(state => state.demandeClient.updateSuccess);
-  const errorMessage = useAppSelector(state => state.demandeClient.errorMessage);
   const devises = useAppSelector(state => state.devise.entities);
   const devisesLoading = useAppSelector(state => state.devise.loading);
   const incoterms = useAppSelector(state => state.incoterm.entities);
@@ -54,6 +85,20 @@ const ClientDemandCreatePage = () => {
     remarqueGenerale: '',
   }));
   const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [produits, setProduits] = useState<IProduitDemande[]>([]);
+  const [productModalOpen, setProductModalOpen] = useState(false);
+  const [productFormValues, setProductFormValues] = useState<ProductFormState>(() => ({
+    nomProduit: '',
+    description: '',
+    quantite: '',
+    unite: UNITE_OPTIONS[0],
+    prix: '',
+    hsCode: '',
+  }));
+  const [productFormErrors, setProductFormErrors] = useState<ProductFormErrors>({});
+  const [editingProductIndex, setEditingProductIndex] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const clientIdNumber = useMemo(() => (clientId ? Number(clientId) : null), [clientId]);
 
@@ -70,13 +115,8 @@ const ClientDemandCreatePage = () => {
   }, [clientIdNumber, navigate]);
 
   useEffect(() => {
-    if (updateSuccess && clientIdNumber) {
-      navigate(`/dashboard/clients/${clientIdNumber}/view`, {
-        replace: true,
-        state: { successMessage: translate('crmApp.demandeClient.create.success') },
-      });
-    }
-  }, [updateSuccess, clientIdNumber, navigate]);
+    setFormValues(prev => ({ ...prev, nombreProduits: String(produits.length) }));
+  }, [produits]);
 
   const handleChange =
     (field: keyof FormState) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -110,15 +150,115 @@ const ClientDemandCreatePage = () => {
     if (!formValues.deviseId) {
       nextErrors.deviseId = translate('crmApp.demandeClient.create.errors.devise');
     }
-    if (!formValues.nombreProduits.trim()) {
+    if (produits.length === 0) {
       nextErrors.nombreProduits = translate('crmApp.demandeClient.create.errors.nombreProduits');
-    } else if (Number(formValues.nombreProduits) <= 0) {
-      nextErrors.nombreProduits = translate('crmApp.demandeClient.create.errors.nombreProduitsPositive');
     }
 
     setFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
+
+  const resetProductForm = () => {
+    setProductFormValues({
+      nomProduit: '',
+      description: '',
+      quantite: '',
+      unite: UNITE_OPTIONS[0],
+      prix: '',
+      hsCode: '',
+    });
+    setProductFormErrors({});
+    setEditingProductIndex(null);
+  };
+
+  const toggleProductModal = () => {
+    setProductModalOpen(prev => !prev);
+  };
+
+  const handleOpenCreateProduct = () => {
+    resetProductForm();
+    setProductModalOpen(true);
+  };
+
+  const handleOpenEditProduct = (index: number) => {
+    const produit = produits[index];
+    setProductFormValues({
+      nomProduit: produit.nomProduit ?? '',
+      description: produit.description ?? '',
+      quantite: produit.quantite !== undefined && produit.quantite !== null ? String(produit.quantite) : '',
+      unite: produit.unite ?? UNITE_OPTIONS[0],
+      prix: produit.prix !== undefined && produit.prix !== null ? String(produit.prix) : '',
+      hsCode: produit.hsCode ?? '',
+    });
+    setProductFormErrors({});
+    setEditingProductIndex(index);
+    setProductModalOpen(true);
+  };
+
+  const handleProductFieldChange =
+    (field: keyof ProductFormState) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const value = event.target.value;
+      setProductFormValues(prev => ({ ...prev, [field]: value }));
+      if (productFormErrors[field]) {
+        setProductFormErrors(prev => {
+          const next = { ...prev };
+          delete next[field];
+          return next;
+        });
+      }
+    };
+
+  const validateProductForm = () => {
+    const nextErrors: ProductFormErrors = {};
+    if (!productFormValues.nomProduit.trim()) {
+      nextErrors.nomProduit = 'Le nom du produit est obligatoire.';
+    }
+    if (!productFormValues.quantite.trim()) {
+      nextErrors.quantite = 'La quantité est obligatoire.';
+    } else if (Number(productFormValues.quantite) <= 0) {
+      nextErrors.quantite = 'La quantité doit être supérieure à 0.';
+    }
+    if (!productFormValues.prix.trim()) {
+      nextErrors.prix = 'Le prix est obligatoire.';
+    } else if (Number(productFormValues.prix) < 0) {
+      nextErrors.prix = 'Le prix doit être positif ou nul.';
+    }
+    setProductFormErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleSaveProduct = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!validateProductForm()) {
+      return;
+    }
+
+    const produit: IProduitDemande = {
+      nomProduit: productFormValues.nomProduit.trim(),
+      description: productFormValues.description.trim() || undefined,
+      quantite: Number(productFormValues.quantite),
+      unite: productFormValues.unite,
+      prix: Number(productFormValues.prix),
+      hsCode: productFormValues.hsCode.trim() || undefined,
+    };
+
+    setProduits(prev => {
+      if (editingProductIndex !== null) {
+        return prev.map((item, idx) => (idx === editingProductIndex ? { ...item, ...produit } : item));
+      }
+      return [...prev, produit];
+    });
+
+    resetProductForm();
+    setProductModalOpen(false);
+  };
+
+  const handleDeleteProduct = (index: number) => {
+    setProduits(prev => prev.filter((_, idx) => idx !== index));
+  };
+
+  const renderProductError = (field: keyof ProductFormState) =>
+    productFormErrors[field] ? <div className="text-danger small mt-1">{productFormErrors[field]}</div> : null;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -129,6 +269,9 @@ const ClientDemandCreatePage = () => {
       return;
     }
 
+    setSubmitting(true);
+    setSubmitError(null);
+
     const payload: IDemandeClient = {
       reference: formValues.reference,
       dateDemande: dayjs(formValues.dateDemande),
@@ -137,12 +280,34 @@ const ClientDemandCreatePage = () => {
       provenance: formValues.provenance.trim(),
       incoterm: formValues.incotermId ? { id: Number(formValues.incotermId) } : undefined,
       devise: formValues.deviseId ? { id: Number(formValues.deviseId) } : undefined,
-      nombreProduits: Number(formValues.nombreProduits),
+      nombreProduits: produits.length,
       remarqueGenerale: formValues.remarqueGenerale.trim() || undefined,
       client: { id: clientIdNumber },
     };
 
-    dispatch(createEntity(payload));
+    const produitsPayload = produits.map(produit => ({
+      nomProduit: produit.nomProduit,
+      description: produit.description,
+      quantite: produit.quantite,
+      unite: produit.unite,
+      prix: produit.prix,
+      hsCode: produit.hsCode,
+    }));
+
+    axios
+      .post('api/demande-clients', cleanEntity({ ...payload, produits: produitsPayload }))
+      .then(() => {
+        navigate(`/dashboard/clients/${clientIdNumber}/view`, {
+          replace: true,
+          state: { successMessage: translate('crmApp.demandeClient.create.success') },
+        });
+      })
+      .catch(() => {
+        setSubmitError(translate('crmApp.demandeClient.create.errorSubmit'));
+      })
+      .finally(() => {
+        setSubmitting(false);
+      });
   };
 
   const renderError = (field: keyof FormState) =>
@@ -194,16 +359,16 @@ const ClientDemandCreatePage = () => {
                 <FontAwesomeIcon icon={faArrowLeft} className="me-2" />
                 <Translate contentKey="crmApp.demandeClient.create.back" />
               </Button>
-              <Button color="primary" form="client-demand-form" type="submit" disabled={updating}>
-                {updating ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faSave} className="me-2" />}
+              <Button color="primary" form="client-demand-form" type="submit" disabled={submitting}>
+                {submitting ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faSave} className="me-2" />}
                 <Translate contentKey="crmApp.demandeClient.create.save" />
               </Button>
             </div>
           </div>
 
-          {errorMessage ? (
+          {submitError ? (
             <Alert color="danger" className="mb-4">
-              {errorMessage}
+              {submitError}
             </Alert>
           ) : null}
 
@@ -338,13 +503,7 @@ const ClientDemandCreatePage = () => {
                   <Label for="demande-nombreProduits">
                     <Translate contentKey="crmApp.demandeClient.nombreProduits" /> *
                   </Label>
-                  <Input
-                    id="demande-nombreProduits"
-                    type="number"
-                    min="1"
-                    value={formValues.nombreProduits}
-                    onChange={handleChange('nombreProduits')}
-                  />
+                  <Input id="demande-nombreProduits" type="number" value={formValues.nombreProduits} readOnly />
                   {renderError('nombreProduits')}
                 </FormGroup>
               </Col>
@@ -364,9 +523,160 @@ const ClientDemandCreatePage = () => {
                 </FormGroup>
               </Col>
             </Row>
+
+            <hr className="my-5" />
+
+            <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <h5 className="mb-0">📦 Produits demandés</h5>
+              <Button color="success" size="sm" type="button" onClick={handleOpenCreateProduct}>
+                <FontAwesomeIcon icon={faPlus} className="me-2" />
+                Ajouter un produit
+              </Button>
+            </div>
+
+            {produits.length === 0 ? (
+              <Alert color="info" className="mb-0">
+                Aucun produit ajouté pour le moment.
+              </Alert>
+            ) : (
+              <div className="table-responsive">
+                <Table bordered hover className="align-middle">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Nom du produit</th>
+                      <th>Description</th>
+                      <th className="text-end" style={{ width: 120 }}>
+                        Quantité
+                      </th>
+                      <th style={{ width: 110 }}>Unité</th>
+                      <th className="text-end" style={{ width: 130 }}>
+                        Prix
+                      </th>
+                      <th style={{ width: 150 }}>HS Code</th>
+                      <th className="text-center" style={{ width: 140 }}>
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {produits.map((produit, index) => (
+                      <tr key={`${produit.nomProduit ?? 'produit'}-${index}`}>
+                        <td>{produit.nomProduit || '--'}</td>
+                        <td className="text-muted small">{produit.description || '--'}</td>
+                        <td className="text-end">{produit.quantite ?? '--'}</td>
+                        <td>{produit.unite ? (produit.unite === 'm3' ? 'm³' : produit.unite) : '--'}</td>
+                        <td className="text-end">{produit.prix ?? '--'}</td>
+                        <td>{produit.hsCode || '--'}</td>
+                        <td className="text-center">
+                          <Button color="link" size="sm" className="text-decoration-none me-2" onClick={() => handleOpenEditProduct(index)}>
+                            <FontAwesomeIcon icon={faPen} className="me-1" />
+                            Éditer
+                          </Button>
+                          <Button
+                            color="link"
+                            size="sm"
+                            className="text-danger text-decoration-none"
+                            onClick={() => handleDeleteProduct(index)}
+                          >
+                            <FontAwesomeIcon icon={faTrash} className="me-1" />
+                            Supprimer
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            )}
           </Form>
         </CardBody>
       </Card>
+
+      <Modal isOpen={productModalOpen} toggle={toggleProductModal} centered>
+        <Form onSubmit={handleSaveProduct}>
+          <ModalHeader toggle={toggleProductModal}>
+            {editingProductIndex !== null ? 'Modifier le produit' : 'Ajouter un produit'}
+          </ModalHeader>
+          <ModalBody>
+            <Row className="gy-3">
+              <Col md="12">
+                <FormGroup>
+                  <Label for="produit-nom">Nom du produit</Label>
+                  <Input id="produit-nom" value={productFormValues.nomProduit} onChange={handleProductFieldChange('nomProduit')} />
+                  {renderProductError('nomProduit')}
+                </FormGroup>
+              </Col>
+              <Col md="12">
+                <FormGroup>
+                  <Label for="produit-description">Description</Label>
+                  <Input
+                    id="produit-description"
+                    type="textarea"
+                    rows={3}
+                    value={productFormValues.description}
+                    onChange={handleProductFieldChange('description')}
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="6">
+                <FormGroup>
+                  <Label for="produit-quantite">Quantité</Label>
+                  <Input
+                    id="produit-quantite"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={productFormValues.quantite}
+                    onChange={handleProductFieldChange('quantite')}
+                  />
+                  {renderProductError('quantite')}
+                </FormGroup>
+              </Col>
+              <Col md="6">
+                <FormGroup>
+                  <Label for="produit-unite">Unité</Label>
+                  <Input id="produit-unite" type="select" value={productFormValues.unite} onChange={handleProductFieldChange('unite')}>
+                    {UNITE_OPTIONS.map(option => (
+                      <option key={option} value={option}>
+                        {option === 'm3' ? 'm³' : option}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col md="6">
+                <FormGroup>
+                  <Label for="produit-prix">Prix</Label>
+                  <Input
+                    id="produit-prix"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={productFormValues.prix}
+                    onChange={handleProductFieldChange('prix')}
+                  />
+                  {renderProductError('prix')}
+                </FormGroup>
+              </Col>
+              <Col md="6">
+                <FormGroup>
+                  <Label for="produit-hscode">HS Code</Label>
+                  <Input id="produit-hscode" value={productFormValues.hsCode} onChange={handleProductFieldChange('hsCode')} />
+                </FormGroup>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" outline type="button" onClick={toggleProductModal}>
+              Annuler
+            </Button>
+            <Button color="primary" type="submit">
+              <FontAwesomeIcon icon={faSave} className="me-2" />
+              {editingProductIndex !== null ? 'Enregistrer' : 'Ajouter'}
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     </div>
   );
 };
