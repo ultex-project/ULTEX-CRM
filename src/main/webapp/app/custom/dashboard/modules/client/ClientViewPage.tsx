@@ -4,7 +4,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { Alert, Button, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, Progress, Row, Spinner, Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEdit, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faEdit, faFileArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 
 import { IClient } from 'app/shared/model/client.model';
@@ -562,10 +562,16 @@ const ClientViewPage = () => {
           </Card>
 
           <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom">
+            <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center gap-2">
               <h5 className="mb-0">
                 <Translate contentKey="crmApp.client.view.sections.requests" />
               </h5>
+              {client?.id ? (
+                <Button color="primary" size="sm" tag={Link} to={`/dashboard/clients/${client.id}/demands/new`} className="shadow-sm">
+                  <FontAwesomeIcon icon={faPlus} className="me-2" />
+                  <Translate contentKey="crmApp.demandeClient.create.newButton" />
+                </Button>
+              ) : null}
             </CardHeader>
             <CardBody>
               {requests.length === 0 ? (

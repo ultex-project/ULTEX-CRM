@@ -24,6 +24,7 @@ import DataDashboardPage from 'app/custom/dashboard/pages/data/DataDashboardPage
 import DataHistoryPage from 'app/custom/dashboard/pages/data/DataHistoryPage';
 import ClientListPage from 'app/custom/dashboard/modules/client/ClientListPage';
 import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
+import ClientDemandCreatePage from 'app/entities/demande-client/ClientDemandCreatePage';
 import ClientCreatePage from 'app/custom/dashboard/modules/client/ClientCreatePage';
 import ClientEditPage from 'app/custom/dashboard/modules/client/ClientEditPage';
 
@@ -101,6 +102,7 @@ const AppRoutes = () => {
           <Route path="clients/new" element={<ClientCreatePage />} />
           <Route path="clients/:id/view" element={<ClientViewPage />} />
           <Route path="clients/:id/edit" element={<ClientEditPage />} />
+          <Route path="clients/:clientId/demands/new" element={<ClientDemandCreatePage />} />
         </Route>
         <Route
           path="*"
