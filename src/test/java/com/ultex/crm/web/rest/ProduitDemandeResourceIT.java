@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultex.crm.IntegrationTest;
 import com.ultex.crm.domain.ProduitDemande;
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import com.ultex.crm.repository.ProduitDemandeRepository;
 import com.ultex.crm.service.dto.ProduitDemandeDTO;
 import com.ultex.crm.service.mapper.ProduitDemandeMapper;
@@ -37,8 +38,8 @@ class ProduitDemandeResourceIT {
     private static final String DEFAULT_TYPE_PRODUIT = "AAAAAAAAAA";
     private static final String UPDATED_TYPE_PRODUIT = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TYPE_DEMANDE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE_DEMANDE = "BBBBBBBBBB";
+    private static final TypeDemande DEFAULT_TYPE_DEMANDE = TypeDemande.PROFORMA;
+    private static final TypeDemande UPDATED_TYPE_DEMANDE = TypeDemande.SOURCING;
 
     private static final String DEFAULT_NOM_PRODUIT = "AAAAAAAAAA";
     private static final String UPDATED_NOM_PRODUIT = "BBBBBBBBBB";
@@ -78,6 +79,18 @@ class ProduitDemandeResourceIT {
 
     private static final Double DEFAULT_PRIX_CIBLE = 1D;
     private static final Double UPDATED_PRIX_CIBLE = 2D;
+
+    private static final String DEFAULT_ORIGINE = "AAAAAAAAAA";
+    private static final String UPDATED_ORIGINE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CONTACT_FOURNISSEUR = "AAAAAAAAAA";
+    private static final String UPDATED_CONTACT_FOURNISSEUR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADRESSE_CHARGEMENT = "AAAAAAAAAA";
+    private static final String UPDATED_ADRESSE_CHARGEMENT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADRESSE_DECHARGEMENT = "AAAAAAAAAA";
+    private static final String UPDATED_ADRESSE_DECHARGEMENT = "BBBBBBBBBB";
 
     private static final String DEFAULT_FICHE_TECHNIQUE_URL = "AAAAAAAAAA";
     private static final String UPDATED_FICHE_TECHNIQUE_URL = "BBBBBBBBBB";
@@ -136,6 +149,10 @@ class ProduitDemandeResourceIT {
             .piecesParCarton(DEFAULT_PIECES_PAR_CARTON)
             .hsCode(DEFAULT_HS_CODE)
             .prixCible(DEFAULT_PRIX_CIBLE)
+            .origine(DEFAULT_ORIGINE)
+            .contactFournisseur(DEFAULT_CONTACT_FOURNISSEUR)
+            .adresseChargement(DEFAULT_ADRESSE_CHARGEMENT)
+            .adresseDechargement(DEFAULT_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(DEFAULT_FICHE_TECHNIQUE_URL)
             .photosUrl(DEFAULT_PHOTOS_URL)
             .piecesJointesUrl(DEFAULT_PIECES_JOINTES_URL);
@@ -164,6 +181,10 @@ class ProduitDemandeResourceIT {
             .piecesParCarton(UPDATED_PIECES_PAR_CARTON)
             .hsCode(UPDATED_HS_CODE)
             .prixCible(UPDATED_PRIX_CIBLE)
+            .origine(UPDATED_ORIGINE)
+            .contactFournisseur(UPDATED_CONTACT_FOURNISSEUR)
+            .adresseChargement(UPDATED_ADRESSE_CHARGEMENT)
+            .adresseDechargement(UPDATED_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
             .photosUrl(UPDATED_PHOTOS_URL)
             .piecesJointesUrl(UPDATED_PIECES_JOINTES_URL);
@@ -226,6 +247,40 @@ class ProduitDemandeResourceIT {
 
     @Test
     @Transactional
+    void checkTypeDemandeIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        produitDemande.setTypeDemande(null);
+
+        // Create the ProduitDemande, which fails.
+        ProduitDemandeDTO produitDemandeDTO = produitDemandeMapper.toDto(produitDemande);
+
+        restProduitDemandeMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(produitDemandeDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkNomProduitIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        produitDemande.setNomProduit(null);
+
+        // Create the ProduitDemande, which fails.
+        ProduitDemandeDTO produitDemandeDTO = produitDemandeMapper.toDto(produitDemande);
+
+        restProduitDemandeMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(produitDemandeDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllProduitDemandes() throws Exception {
         // Initialize the database
         insertedProduitDemande = produitDemandeRepository.saveAndFlush(produitDemande);
@@ -237,7 +292,7 @@ class ProduitDemandeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(produitDemande.getId().intValue())))
             .andExpect(jsonPath("$.[*].typeProduit").value(hasItem(DEFAULT_TYPE_PRODUIT)))
-            .andExpect(jsonPath("$.[*].typeDemande").value(hasItem(DEFAULT_TYPE_DEMANDE)))
+            .andExpect(jsonPath("$.[*].typeDemande").value(hasItem(DEFAULT_TYPE_DEMANDE.toString())))
             .andExpect(jsonPath("$.[*].nomProduit").value(hasItem(DEFAULT_NOM_PRODUIT)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].quantite").value(hasItem(DEFAULT_QUANTITE)))
@@ -251,6 +306,10 @@ class ProduitDemandeResourceIT {
             .andExpect(jsonPath("$.[*].piecesParCarton").value(hasItem(DEFAULT_PIECES_PAR_CARTON)))
             .andExpect(jsonPath("$.[*].hsCode").value(hasItem(DEFAULT_HS_CODE)))
             .andExpect(jsonPath("$.[*].prixCible").value(hasItem(DEFAULT_PRIX_CIBLE)))
+            .andExpect(jsonPath("$.[*].origine").value(hasItem(DEFAULT_ORIGINE)))
+            .andExpect(jsonPath("$.[*].contactFournisseur").value(hasItem(DEFAULT_CONTACT_FOURNISSEUR)))
+            .andExpect(jsonPath("$.[*].adresseChargement").value(hasItem(DEFAULT_ADRESSE_CHARGEMENT)))
+            .andExpect(jsonPath("$.[*].adresseDechargement").value(hasItem(DEFAULT_ADRESSE_DECHARGEMENT)))
             .andExpect(jsonPath("$.[*].ficheTechniqueUrl").value(hasItem(DEFAULT_FICHE_TECHNIQUE_URL)))
             .andExpect(jsonPath("$.[*].photosUrl").value(hasItem(DEFAULT_PHOTOS_URL)))
             .andExpect(jsonPath("$.[*].piecesJointesUrl").value(hasItem(DEFAULT_PIECES_JOINTES_URL)));
@@ -269,7 +328,7 @@ class ProduitDemandeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(produitDemande.getId().intValue()))
             .andExpect(jsonPath("$.typeProduit").value(DEFAULT_TYPE_PRODUIT))
-            .andExpect(jsonPath("$.typeDemande").value(DEFAULT_TYPE_DEMANDE))
+            .andExpect(jsonPath("$.typeDemande").value(DEFAULT_TYPE_DEMANDE.toString()))
             .andExpect(jsonPath("$.nomProduit").value(DEFAULT_NOM_PRODUIT))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.quantite").value(DEFAULT_QUANTITE))
@@ -283,6 +342,10 @@ class ProduitDemandeResourceIT {
             .andExpect(jsonPath("$.piecesParCarton").value(DEFAULT_PIECES_PAR_CARTON))
             .andExpect(jsonPath("$.hsCode").value(DEFAULT_HS_CODE))
             .andExpect(jsonPath("$.prixCible").value(DEFAULT_PRIX_CIBLE))
+            .andExpect(jsonPath("$.origine").value(DEFAULT_ORIGINE))
+            .andExpect(jsonPath("$.contactFournisseur").value(DEFAULT_CONTACT_FOURNISSEUR))
+            .andExpect(jsonPath("$.adresseChargement").value(DEFAULT_ADRESSE_CHARGEMENT))
+            .andExpect(jsonPath("$.adresseDechargement").value(DEFAULT_ADRESSE_DECHARGEMENT))
             .andExpect(jsonPath("$.ficheTechniqueUrl").value(DEFAULT_FICHE_TECHNIQUE_URL))
             .andExpect(jsonPath("$.photosUrl").value(DEFAULT_PHOTOS_URL))
             .andExpect(jsonPath("$.piecesJointesUrl").value(DEFAULT_PIECES_JOINTES_URL));
@@ -323,6 +386,10 @@ class ProduitDemandeResourceIT {
             .piecesParCarton(UPDATED_PIECES_PAR_CARTON)
             .hsCode(UPDATED_HS_CODE)
             .prixCible(UPDATED_PRIX_CIBLE)
+            .origine(UPDATED_ORIGINE)
+            .contactFournisseur(UPDATED_CONTACT_FOURNISSEUR)
+            .adresseChargement(UPDATED_ADRESSE_CHARGEMENT)
+            .adresseDechargement(UPDATED_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
             .photosUrl(UPDATED_PHOTOS_URL)
             .piecesJointesUrl(UPDATED_PIECES_JOINTES_URL);
@@ -425,8 +492,8 @@ class ProduitDemandeResourceIT {
             .nombreCartons(UPDATED_NOMBRE_CARTONS)
             .hsCode(UPDATED_HS_CODE)
             .prixCible(UPDATED_PRIX_CIBLE)
-            .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
-            .photosUrl(UPDATED_PHOTOS_URL);
+            .origine(UPDATED_ORIGINE)
+            .contactFournisseur(UPDATED_CONTACT_FOURNISSEUR);
 
         restProduitDemandeMockMvc
             .perform(
@@ -473,6 +540,10 @@ class ProduitDemandeResourceIT {
             .piecesParCarton(UPDATED_PIECES_PAR_CARTON)
             .hsCode(UPDATED_HS_CODE)
             .prixCible(UPDATED_PRIX_CIBLE)
+            .origine(UPDATED_ORIGINE)
+            .contactFournisseur(UPDATED_CONTACT_FOURNISSEUR)
+            .adresseChargement(UPDATED_ADRESSE_CHARGEMENT)
+            .adresseDechargement(UPDATED_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
             .photosUrl(UPDATED_PHOTOS_URL)
             .piecesJointesUrl(UPDATED_PIECES_JOINTES_URL);

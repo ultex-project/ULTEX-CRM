@@ -4,25 +4,34 @@ import static com.ultex.crm.domain.DemandeClientAsserts.*;
 import static com.ultex.crm.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultex.crm.IntegrationTest;
 import com.ultex.crm.domain.DemandeClient;
+import com.ultex.crm.domain.enumeration.ServicePrincipal;
 import com.ultex.crm.repository.DemandeClientRepository;
+import com.ultex.crm.service.DemandeClientService;
 import com.ultex.crm.service.dto.DemandeClientDTO;
 import com.ultex.crm.service.mapper.DemandeClientMapper;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link DemandeClientResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class DemandeClientResourceIT {
@@ -42,11 +52,8 @@ class DemandeClientResourceIT {
     private static final Instant DEFAULT_DATE_DEMANDE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATE_DEMANDE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_SERVICE_PRINCIPAL = "AAAAAAAAAA";
-    private static final String UPDATED_SERVICE_PRINCIPAL = "BBBBBBBBBB";
-
-    private static final String DEFAULT_SOUS_SERVICES = "AAAAAAAAAA";
-    private static final String UPDATED_SOUS_SERVICES = "BBBBBBBBBB";
+    private static final ServicePrincipal DEFAULT_SERVICE_PRINCIPAL = ServicePrincipal.IMPORT;
+    private static final ServicePrincipal UPDATED_SERVICE_PRINCIPAL = ServicePrincipal.EXPORT;
 
     private static final String DEFAULT_PROVENANCE = "AAAAAAAAAA";
     private static final String UPDATED_PROVENANCE = "BBBBBBBBBB";
@@ -69,8 +76,14 @@ class DemandeClientResourceIT {
     @Autowired
     private DemandeClientRepository demandeClientRepository;
 
+    @Mock
+    private DemandeClientRepository demandeClientRepositoryMock;
+
     @Autowired
     private DemandeClientMapper demandeClientMapper;
+
+    @Mock
+    private DemandeClientService demandeClientServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -93,7 +106,6 @@ class DemandeClientResourceIT {
             .reference(DEFAULT_REFERENCE)
             .dateDemande(DEFAULT_DATE_DEMANDE)
             .servicePrincipal(DEFAULT_SERVICE_PRINCIPAL)
-            .sousServices(DEFAULT_SOUS_SERVICES)
             .provenance(DEFAULT_PROVENANCE)
             .nombreProduits(DEFAULT_NOMBRE_PRODUITS)
             .remarqueGenerale(DEFAULT_REMARQUE_GENERALE);
@@ -110,7 +122,6 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
-            .sousServices(UPDATED_SOUS_SERVICES)
             .provenance(UPDATED_PROVENANCE)
             .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
@@ -207,6 +218,23 @@ class DemandeClientResourceIT {
 
     @Test
     @Transactional
+    void checkServicePrincipalIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        demandeClient.setServicePrincipal(null);
+
+        // Create the DemandeClient, which fails.
+        DemandeClientDTO demandeClientDTO = demandeClientMapper.toDto(demandeClient);
+
+        restDemandeClientMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(demandeClientDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDemandeClients() throws Exception {
         // Initialize the database
         insertedDemandeClient = demandeClientRepository.saveAndFlush(demandeClient);
@@ -219,11 +247,27 @@ class DemandeClientResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(demandeClient.getId().intValue())))
             .andExpect(jsonPath("$.[*].reference").value(hasItem(DEFAULT_REFERENCE)))
             .andExpect(jsonPath("$.[*].dateDemande").value(hasItem(DEFAULT_DATE_DEMANDE.toString())))
-            .andExpect(jsonPath("$.[*].servicePrincipal").value(hasItem(DEFAULT_SERVICE_PRINCIPAL)))
-            .andExpect(jsonPath("$.[*].sousServices").value(hasItem(DEFAULT_SOUS_SERVICES)))
+            .andExpect(jsonPath("$.[*].servicePrincipal").value(hasItem(DEFAULT_SERVICE_PRINCIPAL.toString())))
             .andExpect(jsonPath("$.[*].provenance").value(hasItem(DEFAULT_PROVENANCE)))
             .andExpect(jsonPath("$.[*].nombreProduits").value(hasItem(DEFAULT_NOMBRE_PRODUITS)))
             .andExpect(jsonPath("$.[*].remarqueGenerale").value(hasItem(DEFAULT_REMARQUE_GENERALE)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllDemandeClientsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(demandeClientServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restDemandeClientMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(demandeClientServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllDemandeClientsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(demandeClientServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restDemandeClientMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(demandeClientRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
@@ -240,8 +284,7 @@ class DemandeClientResourceIT {
             .andExpect(jsonPath("$.id").value(demandeClient.getId().intValue()))
             .andExpect(jsonPath("$.reference").value(DEFAULT_REFERENCE))
             .andExpect(jsonPath("$.dateDemande").value(DEFAULT_DATE_DEMANDE.toString()))
-            .andExpect(jsonPath("$.servicePrincipal").value(DEFAULT_SERVICE_PRINCIPAL))
-            .andExpect(jsonPath("$.sousServices").value(DEFAULT_SOUS_SERVICES))
+            .andExpect(jsonPath("$.servicePrincipal").value(DEFAULT_SERVICE_PRINCIPAL.toString()))
             .andExpect(jsonPath("$.provenance").value(DEFAULT_PROVENANCE))
             .andExpect(jsonPath("$.nombreProduits").value(DEFAULT_NOMBRE_PRODUITS))
             .andExpect(jsonPath("$.remarqueGenerale").value(DEFAULT_REMARQUE_GENERALE));
@@ -270,7 +313,6 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
-            .sousServices(UPDATED_SOUS_SERVICES)
             .provenance(UPDATED_PROVENANCE)
             .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
@@ -367,8 +409,8 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
-            .provenance(UPDATED_PROVENANCE)
-            .nombreProduits(UPDATED_NOMBRE_PRODUITS);
+            .nombreProduits(UPDATED_NOMBRE_PRODUITS)
+            .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
 
         restDemandeClientMockMvc
             .perform(
@@ -403,7 +445,6 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
-            .sousServices(UPDATED_SOUS_SERVICES)
             .provenance(UPDATED_PROVENANCE)
             .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);

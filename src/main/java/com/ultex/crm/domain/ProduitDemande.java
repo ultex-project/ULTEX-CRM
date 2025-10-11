@@ -1,7 +1,9 @@
 package com.ultex.crm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -26,10 +28,13 @@ public class ProduitDemande implements Serializable {
     @Column(name = "type_produit")
     private String typeProduit;
 
-    @Column(name = "type_demande")
-    private String typeDemande;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_demande", nullable = false)
+    private TypeDemande typeDemande;
 
-    @Column(name = "nom_produit")
+    @NotNull
+    @Column(name = "nom_produit", nullable = false)
     private String nomProduit;
 
     @Lob
@@ -69,6 +74,18 @@ public class ProduitDemande implements Serializable {
     @Column(name = "prix_cible")
     private Double prixCible;
 
+    @Column(name = "origine")
+    private String origine;
+
+    @Column(name = "contact_fournisseur")
+    private String contactFournisseur;
+
+    @Column(name = "adresse_chargement")
+    private String adresseChargement;
+
+    @Column(name = "adresse_dechargement")
+    private String adresseDechargement;
+
     @Column(name = "fiche_technique_url")
     private String ficheTechniqueUrl;
 
@@ -79,7 +96,7 @@ public class ProduitDemande implements Serializable {
     private String piecesJointesUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "client", "devise", "incoterm" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "client", "devise", "incoterm", "sousServices" }, allowSetters = true)
     private DemandeClient demande;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -110,16 +127,16 @@ public class ProduitDemande implements Serializable {
         this.typeProduit = typeProduit;
     }
 
-    public String getTypeDemande() {
+    public TypeDemande getTypeDemande() {
         return this.typeDemande;
     }
 
-    public ProduitDemande typeDemande(String typeDemande) {
+    public ProduitDemande typeDemande(TypeDemande typeDemande) {
         this.setTypeDemande(typeDemande);
         return this;
     }
 
-    public void setTypeDemande(String typeDemande) {
+    public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
     }
 
@@ -292,6 +309,58 @@ public class ProduitDemande implements Serializable {
         this.prixCible = prixCible;
     }
 
+    public String getOrigine() {
+        return this.origine;
+    }
+
+    public ProduitDemande origine(String origine) {
+        this.setOrigine(origine);
+        return this;
+    }
+
+    public void setOrigine(String origine) {
+        this.origine = origine;
+    }
+
+    public String getContactFournisseur() {
+        return this.contactFournisseur;
+    }
+
+    public ProduitDemande contactFournisseur(String contactFournisseur) {
+        this.setContactFournisseur(contactFournisseur);
+        return this;
+    }
+
+    public void setContactFournisseur(String contactFournisseur) {
+        this.contactFournisseur = contactFournisseur;
+    }
+
+    public String getAdresseChargement() {
+        return this.adresseChargement;
+    }
+
+    public ProduitDemande adresseChargement(String adresseChargement) {
+        this.setAdresseChargement(adresseChargement);
+        return this;
+    }
+
+    public void setAdresseChargement(String adresseChargement) {
+        this.adresseChargement = adresseChargement;
+    }
+
+    public String getAdresseDechargement() {
+        return this.adresseDechargement;
+    }
+
+    public ProduitDemande adresseDechargement(String adresseDechargement) {
+        this.setAdresseDechargement(adresseDechargement);
+        return this;
+    }
+
+    public void setAdresseDechargement(String adresseDechargement) {
+        this.adresseDechargement = adresseDechargement;
+    }
+
     public String getFicheTechniqueUrl() {
         return this.ficheTechniqueUrl;
     }
@@ -383,6 +452,10 @@ public class ProduitDemande implements Serializable {
             ", piecesParCarton=" + getPiecesParCarton() +
             ", hsCode='" + getHsCode() + "'" +
             ", prixCible=" + getPrixCible() +
+            ", origine='" + getOrigine() + "'" +
+            ", contactFournisseur='" + getContactFournisseur() + "'" +
+            ", adresseChargement='" + getAdresseChargement() + "'" +
+            ", adresseDechargement='" + getAdresseDechargement() + "'" +
             ", ficheTechniqueUrl='" + getFicheTechniqueUrl() + "'" +
             ", photosUrl='" + getPhotosUrl() + "'" +
             ", piecesJointesUrl='" + getPiecesJointesUrl() + "'" +

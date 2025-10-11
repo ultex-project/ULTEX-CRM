@@ -29,6 +29,7 @@
     <include file="config/liquibase/changelog/20251011215529_added_entity_Devise.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251011215530_added_entity_Incoterm.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251011215531_added_entity_Pays.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251011233014_added_entity_SousService.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250922204540_added_entity_constraints_Client.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250922204640_added_entity_constraints_Prospect.xml" relativeToChangelogFile="false"/>

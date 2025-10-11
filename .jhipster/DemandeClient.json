@@ -17,11 +17,9 @@
     },
     {
       "fieldName": "servicePrincipal",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "sousServices",
-      "fieldType": "String"
+      "fieldType": "ServicePrincipal",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "IMPORT,EXPORT"
     },
     {
       "fieldName": "provenance",
@@ -56,6 +54,13 @@
       "relationshipName": "incoterm",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "sousService",
+      "otherEntityRelationshipName": "demandes",
+      "relationshipName": "sousServices",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
     }
   ],
   "searchEngine": "no",

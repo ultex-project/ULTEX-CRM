@@ -1,6 +1,8 @@
 package com.ultex.crm.service.dto;
 
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import jakarta.persistence.Lob;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,8 +16,10 @@ public class ProduitDemandeDTO implements Serializable {
 
     private String typeProduit;
 
-    private String typeDemande;
+    @NotNull
+    private TypeDemande typeDemande;
 
+    @NotNull
     private String nomProduit;
 
     @Lob
@@ -43,6 +47,14 @@ public class ProduitDemandeDTO implements Serializable {
 
     private Double prixCible;
 
+    private String origine;
+
+    private String contactFournisseur;
+
+    private String adresseChargement;
+
+    private String adresseDechargement;
+
     private String ficheTechniqueUrl;
 
     private String photosUrl;
@@ -67,11 +79,11 @@ public class ProduitDemandeDTO implements Serializable {
         this.typeProduit = typeProduit;
     }
 
-    public String getTypeDemande() {
+    public TypeDemande getTypeDemande() {
         return typeDemande;
     }
 
-    public void setTypeDemande(String typeDemande) {
+    public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
     }
 
@@ -179,6 +191,38 @@ public class ProduitDemandeDTO implements Serializable {
         this.prixCible = prixCible;
     }
 
+    public String getOrigine() {
+        return origine;
+    }
+
+    public void setOrigine(String origine) {
+        this.origine = origine;
+    }
+
+    public String getContactFournisseur() {
+        return contactFournisseur;
+    }
+
+    public void setContactFournisseur(String contactFournisseur) {
+        this.contactFournisseur = contactFournisseur;
+    }
+
+    public String getAdresseChargement() {
+        return adresseChargement;
+    }
+
+    public void setAdresseChargement(String adresseChargement) {
+        this.adresseChargement = adresseChargement;
+    }
+
+    public String getAdresseDechargement() {
+        return adresseDechargement;
+    }
+
+    public void setAdresseDechargement(String adresseDechargement) {
+        this.adresseDechargement = adresseDechargement;
+    }
+
     public String getFicheTechniqueUrl() {
         return ficheTechniqueUrl;
     }
@@ -252,6 +296,10 @@ public class ProduitDemandeDTO implements Serializable {
             ", piecesParCarton=" + getPiecesParCarton() +
             ", hsCode='" + getHsCode() + "'" +
             ", prixCible=" + getPrixCible() +
+            ", origine='" + getOrigine() + "'" +
+            ", contactFournisseur='" + getContactFournisseur() + "'" +
+            ", adresseChargement='" + getAdresseChargement() + "'" +
+            ", adresseDechargement='" + getAdresseDechargement() + "'" +
             ", ficheTechniqueUrl='" + getFicheTechniqueUrl() + "'" +
             ", photosUrl='" + getPhotosUrl() + "'" +
             ", piecesJointesUrl='" + getPiecesJointesUrl() + "'" +

@@ -21,10 +21,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="service_principal" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="sous_services" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="provenance" type="varchar(255)">
                 <constraints nullable="true" />
@@ -49,6 +46,20 @@
         <dropDefaultValue tableName="demande_client" columnName="date_demande" columnDataType="${datetimeType}"/>
     </changeSet>
 
+    <changeSet id="20251005212211-1-relations" author="jhipster">
+
+        <createTable tableName="rel_demande_client__sous_services">
+            <column name="sous_services_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="demande_client_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="demande_client_id, sous_services_id" tableName="rel_demande_client__sous_services"/>
+    </changeSet>
+
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--
@@ -69,7 +80,6 @@
             <column name="reference" type="string"/>
             <column name="date_demande" type="date"/>
             <column name="service_principal" type="string"/>
-            <column name="sous_services" type="string"/>
             <column name="provenance" type="string"/>
             <column name="nombre_produits" type="numeric"/>
             <column name="remarque_generale" type="string"/>

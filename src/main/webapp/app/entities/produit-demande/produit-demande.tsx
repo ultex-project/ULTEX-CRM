@@ -172,6 +172,22 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.prixCible">Prix Cible</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('prixCible')} />
                 </th>
+                <th className="hand" onClick={sort('origine')}>
+                  <Translate contentKey="crmApp.produitDemande.origine">Origine</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('origine')} />
+                </th>
+                <th className="hand" onClick={sort('contactFournisseur')}>
+                  <Translate contentKey="crmApp.produitDemande.contactFournisseur">Contact Fournisseur</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('contactFournisseur')} />
+                </th>
+                <th className="hand" onClick={sort('adresseChargement')}>
+                  <Translate contentKey="crmApp.produitDemande.adresseChargement">Adresse Chargement</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('adresseChargement')} />
+                </th>
+                <th className="hand" onClick={sort('adresseDechargement')}>
+                  <Translate contentKey="crmApp.produitDemande.adresseDechargement">Adresse Dechargement</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('adresseDechargement')} />
+                </th>
                 <th className="hand" onClick={sort('ficheTechniqueUrl')}>
                   <Translate contentKey="crmApp.produitDemande.ficheTechniqueUrl">Fiche Technique Url</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('ficheTechniqueUrl')} />
@@ -199,7 +215,9 @@ export const ProduitDemande = () => {
                     </Button>
                   </td>
                   <td>{produitDemande.typeProduit}</td>
-                  <td>{produitDemande.typeDemande}</td>
+                  <td>
+                    <Translate contentKey={`crmApp.TypeDemande.${produitDemande.typeDemande}`} />
+                  </td>
                   <td>{produitDemande.nomProduit}</td>
                   <td>{produitDemande.description}</td>
                   <td>{produitDemande.quantite}</td>
@@ -213,6 +231,10 @@ export const ProduitDemande = () => {
                   <td>{produitDemande.piecesParCarton}</td>
                   <td>{produitDemande.hsCode}</td>
                   <td>{produitDemande.prixCible}</td>
+                  <td>{produitDemande.origine}</td>
+                  <td>{produitDemande.contactFournisseur}</td>
+                  <td>{produitDemande.adresseChargement}</td>
+                  <td>{produitDemande.adresseDechargement}</td>
                   <td>{produitDemande.ficheTechniqueUrl}</td>
                   <td>{produitDemande.photosUrl}</td>
                   <td>{produitDemande.piecesJointesUrl}</td>

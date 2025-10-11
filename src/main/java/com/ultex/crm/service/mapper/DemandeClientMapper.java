@@ -4,10 +4,14 @@ import com.ultex.crm.domain.Client;
 import com.ultex.crm.domain.DemandeClient;
 import com.ultex.crm.domain.Devise;
 import com.ultex.crm.domain.Incoterm;
+import com.ultex.crm.domain.SousService;
 import com.ultex.crm.service.dto.ClientDTO;
 import com.ultex.crm.service.dto.DemandeClientDTO;
 import com.ultex.crm.service.dto.DeviseDTO;
 import com.ultex.crm.service.dto.IncotermDTO;
+import com.ultex.crm.service.dto.SousServiceDTO;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.*;
 
 /**
@@ -18,7 +22,11 @@ public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, Dema
     @Mapping(target = "client", source = "client", qualifiedByName = "clientId")
     @Mapping(target = "devise", source = "devise", qualifiedByName = "deviseId")
     @Mapping(target = "incoterm", source = "incoterm", qualifiedByName = "incotermId")
+    @Mapping(target = "sousServices", source = "sousServices", qualifiedByName = "sousServiceIdSet")
     DemandeClientDTO toDto(DemandeClient s);
+
+    @Mapping(target = "removeSousServices", ignore = true)
+    DemandeClient toEntity(DemandeClientDTO demandeClientDTO);
 
     @Named("clientId")
     @BeanMapping(ignoreByDefault = true)
@@ -34,4 +42,14 @@ public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, Dema
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     IncotermDTO toDtoIncotermId(Incoterm incoterm);
+
+    @Named("sousServiceId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    SousServiceDTO toDtoSousServiceId(SousService sousService);
+
+    @Named("sousServiceIdSet")
+    default Set<SousServiceDTO> toDtoSousServiceIdSet(Set<SousService> sousService) {
+        return sousService.stream().map(this::toDtoSousServiceId).collect(Collectors.toSet());
+    }
 }

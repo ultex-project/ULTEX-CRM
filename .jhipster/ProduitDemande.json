@@ -11,11 +11,14 @@
     },
     {
       "fieldName": "typeDemande",
-      "fieldType": "String"
+      "fieldType": "TypeDemande",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PROFORMA,SOURCING,NEGOCIATION,AUTRE"
     },
     {
       "fieldName": "nomProduit",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "description",
@@ -64,6 +67,22 @@
     {
       "fieldName": "prixCible",
       "fieldType": "Double"
+    },
+    {
+      "fieldName": "origine",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contactFournisseur",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adresseChargement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adresseDechargement",
+      "fieldType": "String"
     },
     {
       "fieldName": "ficheTechniqueUrl",

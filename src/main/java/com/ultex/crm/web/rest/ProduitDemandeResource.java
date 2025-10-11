@@ -4,6 +4,8 @@ import com.ultex.crm.repository.ProduitDemandeRepository;
 import com.ultex.crm.service.ProduitDemandeService;
 import com.ultex.crm.service.dto.ProduitDemandeDTO;
 import com.ultex.crm.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -53,7 +55,7 @@ public class ProduitDemandeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<ProduitDemandeDTO> createProduitDemande(@RequestBody ProduitDemandeDTO produitDemandeDTO)
+    public ResponseEntity<ProduitDemandeDTO> createProduitDemande(@Valid @RequestBody ProduitDemandeDTO produitDemandeDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save ProduitDemande : {}", produitDemandeDTO);
         if (produitDemandeDTO.getId() != null) {
@@ -78,7 +80,7 @@ public class ProduitDemandeResource {
     @PutMapping("/{id}")
     public ResponseEntity<ProduitDemandeDTO> updateProduitDemande(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ProduitDemandeDTO produitDemandeDTO
+        @Valid @RequestBody ProduitDemandeDTO produitDemandeDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to update ProduitDemande : {}, {}", id, produitDemandeDTO);
         if (produitDemandeDTO.getId() == null) {
@@ -112,7 +114,7 @@ public class ProduitDemandeResource {
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ProduitDemandeDTO> partialUpdateProduitDemande(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ProduitDemandeDTO produitDemandeDTO
+        @NotNull @RequestBody ProduitDemandeDTO produitDemandeDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to partial update ProduitDemande partially : {}, {}", id, produitDemandeDTO);
         if (produitDemandeDTO.getId() == null) {

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getDemandeClients } from 'app/entities/demande-client/demande-client.reducer';
+import { TypeDemande } from 'app/shared/model/enumerations/type-demande.model';
 import { createEntity, getEntity, reset, updateEntity } from './produit-demande.reducer';
 
 export const ProduitDemandeUpdate = () => {
@@ -22,6 +23,7 @@ export const ProduitDemandeUpdate = () => {
   const loading = useAppSelector(state => state.produitDemande.loading);
   const updating = useAppSelector(state => state.produitDemande.updating);
   const updateSuccess = useAppSelector(state => state.produitDemande.updateSuccess);
+  const typeDemandeValues = Object.keys(TypeDemande);
 
   const handleClose = () => {
     navigate(`/produit-demande${location.search}`);
@@ -89,6 +91,7 @@ export const ProduitDemandeUpdate = () => {
     isNew
       ? {}
       : {
+          typeDemande: 'PROFORMA',
           ...produitDemandeEntity,
           demande: produitDemandeEntity?.demande?.id,
         };
@@ -130,14 +133,23 @@ export const ProduitDemandeUpdate = () => {
                 id="produit-demande-typeDemande"
                 name="typeDemande"
                 data-cy="typeDemande"
-                type="text"
-              />
+                type="select"
+              >
+                {typeDemandeValues.map(typeDemande => (
+                  <option value={typeDemande} key={typeDemande}>
+                    {translate(`crmApp.TypeDemande.${typeDemande}`)}
+                  </option>
+                ))}
+              </ValidatedField>
               <ValidatedField
                 label={translate('crmApp.produitDemande.nomProduit')}
                 id="produit-demande-nomProduit"
                 name="nomProduit"
                 data-cy="nomProduit"
                 type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
               />
               <ValidatedField
                 label={translate('crmApp.produitDemande.description')}
@@ -221,6 +233,34 @@ export const ProduitDemandeUpdate = () => {
                 id="produit-demande-prixCible"
                 name="prixCible"
                 data-cy="prixCible"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.origine')}
+                id="produit-demande-origine"
+                name="origine"
+                data-cy="origine"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.contactFournisseur')}
+                id="produit-demande-contactFournisseur"
+                name="contactFournisseur"
+                data-cy="contactFournisseur"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.adresseChargement')}
+                id="produit-demande-adresseChargement"
+                name="adresseChargement"
+                data-cy="adresseChargement"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.adresseDechargement')}
+                id="produit-demande-adresseDechargement"
+                name="adresseDechargement"
+                data-cy="adresseDechargement"
                 type="text"
               />
               <ValidatedField

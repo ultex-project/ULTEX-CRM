@@ -20,6 +20,7 @@ import History from './history';
 import Devise from './devise';
 import Incoterm from './incoterm';
 import Pays from './pays';
+import SousService from './sous-service';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -44,6 +45,7 @@ export default () => {
         <Route path="devise/*" element={<Devise />} />
         <Route path="incoterm/*" element={<Incoterm />} />
         <Route path="pays/*" element={<Pays />} />
+        <Route path="sous-service/*" element={<SousService />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

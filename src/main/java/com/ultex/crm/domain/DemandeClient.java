@@ -1,10 +1,13 @@
 package com.ultex.crm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ultex.crm.domain.enumeration.ServicePrincipal;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,11 +36,10 @@ public class DemandeClient implements Serializable {
     @Column(name = "date_demande", nullable = false)
     private Instant dateDemande;
 
-    @Column(name = "service_principal")
-    private String servicePrincipal;
-
-    @Column(name = "sous_services")
-    private String sousServices;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "service_principal", nullable = false)
+    private ServicePrincipal servicePrincipal;
 
     @Column(name = "provenance")
     private String provenance;
@@ -60,6 +62,16 @@ public class DemandeClient implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Incoterm incoterm;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "rel_demande_client__sous_services",
+        joinColumns = @JoinColumn(name = "demande_client_id"),
+        inverseJoinColumns = @JoinColumn(name = "sous_services_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "demandes" }, allowSetters = true)
+    private Set<SousService> sousServices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -102,30 +114,17 @@ public class DemandeClient implements Serializable {
         this.dateDemande = dateDemande;
     }
 
-    public String getServicePrincipal() {
+    public ServicePrincipal getServicePrincipal() {
         return this.servicePrincipal;
     }
 
-    public DemandeClient servicePrincipal(String servicePrincipal) {
+    public DemandeClient servicePrincipal(ServicePrincipal servicePrincipal) {
         this.setServicePrincipal(servicePrincipal);
         return this;
     }
 
-    public void setServicePrincipal(String servicePrincipal) {
+    public void setServicePrincipal(ServicePrincipal servicePrincipal) {
         this.servicePrincipal = servicePrincipal;
-    }
-
-    public String getSousServices() {
-        return this.sousServices;
-    }
-
-    public DemandeClient sousServices(String sousServices) {
-        this.setSousServices(sousServices);
-        return this;
-    }
-
-    public void setSousServices(String sousServices) {
-        this.sousServices = sousServices;
     }
 
     public String getProvenance() {
@@ -206,6 +205,29 @@ public class DemandeClient implements Serializable {
         return this;
     }
 
+    public Set<SousService> getSousServices() {
+        return this.sousServices;
+    }
+
+    public void setSousServices(Set<SousService> sousServices) {
+        this.sousServices = sousServices;
+    }
+
+    public DemandeClient sousServices(Set<SousService> sousServices) {
+        this.setSousServices(sousServices);
+        return this;
+    }
+
+    public DemandeClient addSousServices(SousService sousService) {
+        this.sousServices.add(sousService);
+        return this;
+    }
+
+    public DemandeClient removeSousServices(SousService sousService) {
+        this.sousServices.remove(sousService);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -233,7 +255,6 @@ public class DemandeClient implements Serializable {
             ", reference='" + getReference() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", servicePrincipal='" + getServicePrincipal() + "'" +
-            ", sousServices='" + getSousServices() + "'" +
             ", provenance='" + getProvenance() + "'" +
             ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +

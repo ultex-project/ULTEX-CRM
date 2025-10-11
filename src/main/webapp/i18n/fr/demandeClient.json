@@ -21,32 +21,13 @@
       "reference": "Reference",
       "dateDemande": "Date Demande",
       "servicePrincipal": "Service Principal",
-      "sousServices": "Sous Services",
       "provenance": "Provenance",
       "nombreProduits": "Nombre Produits",
       "remarqueGenerale": "Remarque Generale",
       "client": "Client",
-      "create": {
-        "title": "Nouvelle demande",
-        "subtitle": "Renseignez les informations pour créer une nouvelle demande pour ce client.",
-        "back": "Retour au client",
-        "save": "Enregistrer la demande",
-        "selectPlaceholder": "Sélectionnez...",
-        "success": "Client mis à jour avec succès",
-        "newButton": "Nouvelle demande",
-        "breadcrumb": {
-          "client": "Client",
-          "current": "Nouvelle demande"
-        },
-        "errors": {
-          "servicePrincipal": "Veuillez sélectionner un service principal.",
-          "provenance": "La provenance est requise.",
-          "incoterm": "Veuillez sélectionner un incoterm.",
-          "devise": "Veuillez sélectionner une devise.",
-          "nombreProduits": "Veuillez indiquer le nombre de produits.",
-          "nombreProduitsPositive": "La quantité doit être supérieure à zéro."
-        }
-      }
+      "devise": "Devise",
+      "incoterm": "Incoterm",
+      "sousServices": "Sous Services"
     }
   }
 }

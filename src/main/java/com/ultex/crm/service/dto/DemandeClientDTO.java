@@ -1,9 +1,12 @@
 package com.ultex.crm.service.dto;
 
+import com.ultex.crm.domain.enumeration.ServicePrincipal;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.ultex.crm.domain.DemandeClient} entity.
@@ -19,9 +22,8 @@ public class DemandeClientDTO implements Serializable {
     @NotNull
     private Instant dateDemande;
 
-    private String servicePrincipal;
-
-    private String sousServices;
+    @NotNull
+    private ServicePrincipal servicePrincipal;
 
     private String provenance;
 
@@ -34,6 +36,8 @@ public class DemandeClientDTO implements Serializable {
     private DeviseDTO devise;
 
     private IncotermDTO incoterm;
+
+    private Set<SousServiceDTO> sousServices = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -59,20 +63,12 @@ public class DemandeClientDTO implements Serializable {
         this.dateDemande = dateDemande;
     }
 
-    public String getServicePrincipal() {
+    public ServicePrincipal getServicePrincipal() {
         return servicePrincipal;
     }
 
-    public void setServicePrincipal(String servicePrincipal) {
+    public void setServicePrincipal(ServicePrincipal servicePrincipal) {
         this.servicePrincipal = servicePrincipal;
-    }
-
-    public String getSousServices() {
-        return sousServices;
-    }
-
-    public void setSousServices(String sousServices) {
-        this.sousServices = sousServices;
     }
 
     public String getProvenance() {
@@ -123,6 +119,14 @@ public class DemandeClientDTO implements Serializable {
         this.incoterm = incoterm;
     }
 
+    public Set<SousServiceDTO> getSousServices() {
+        return sousServices;
+    }
+
+    public void setSousServices(Set<SousServiceDTO> sousServices) {
+        this.sousServices = sousServices;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -152,13 +156,13 @@ public class DemandeClientDTO implements Serializable {
             ", reference='" + getReference() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", servicePrincipal='" + getServicePrincipal() + "'" +
-            ", sousServices='" + getSousServices() + "'" +
             ", provenance='" + getProvenance() + "'" +
             ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +
             ", client=" + getClient() +
             ", devise=" + getDevise() +
             ", incoterm=" + getIncoterm() +
+            ", sousServices=" + getSousServices() +
             "}";
     }
 }

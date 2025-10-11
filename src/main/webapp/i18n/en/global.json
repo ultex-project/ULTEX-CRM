@@ -24,7 +24,8 @@
         "history": "History",
         "devise": "Devise",
         "incoterm": "Incoterm",
-        "pays": "Pays"
+        "pays": "Pays",
+        "sousService": "Sous Service"
       },
       "account": {
         "main": "Account",

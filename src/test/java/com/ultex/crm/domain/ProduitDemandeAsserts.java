@@ -62,6 +62,13 @@ public class ProduitDemandeAsserts {
             .satisfies(a -> assertThat(a.getPiecesParCarton()).as("check piecesParCarton").isEqualTo(expected.getPiecesParCarton()))
             .satisfies(a -> assertThat(a.getHsCode()).as("check hsCode").isEqualTo(expected.getHsCode()))
             .satisfies(a -> assertThat(a.getPrixCible()).as("check prixCible").isEqualTo(expected.getPrixCible()))
+            .satisfies(a -> assertThat(a.getOrigine()).as("check origine").isEqualTo(expected.getOrigine()))
+            .satisfies(a -> assertThat(a.getContactFournisseur()).as("check contactFournisseur").isEqualTo(expected.getContactFournisseur())
+            )
+            .satisfies(a -> assertThat(a.getAdresseChargement()).as("check adresseChargement").isEqualTo(expected.getAdresseChargement()))
+            .satisfies(a ->
+                assertThat(a.getAdresseDechargement()).as("check adresseDechargement").isEqualTo(expected.getAdresseDechargement())
+            )
             .satisfies(a -> assertThat(a.getFicheTechniqueUrl()).as("check ficheTechniqueUrl").isEqualTo(expected.getFicheTechniqueUrl()))
             .satisfies(a -> assertThat(a.getPhotosUrl()).as("check photosUrl").isEqualTo(expected.getPhotosUrl()))
             .satisfies(a -> assertThat(a.getPiecesJointesUrl()).as("check piecesJointesUrl").isEqualTo(expected.getPiecesJointesUrl()));

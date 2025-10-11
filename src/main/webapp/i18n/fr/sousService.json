@@ -1,0 +1,26 @@
+{
+  "crmApp": {
+    "sousService": {
+      "home": {
+        "title": "SousServices",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Sous Service",
+        "createOrEditLabel": "Créer ou éditer un Sous Service",
+        "notFound": "Aucun Sous Service trouvé"
+      },
+      "created": "Un nouveau Sous Service a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Sous Service avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Sous Service avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Sous Service {{ id }} ?"
+      },
+      "detail": {
+        "title": "Sous Service"
+      },
+      "id": "ID",
+      "code": "Code",
+      "libelle": "Libelle",
+      "demandes": "Demandes"
+    }
+  }
+}

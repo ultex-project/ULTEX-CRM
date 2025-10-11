@@ -122,6 +122,30 @@ export const ProduitDemandeDetail = () => {
           </dt>
           <dd>{produitDemandeEntity.prixCible}</dd>
           <dt>
+            <span id="origine">
+              <Translate contentKey="crmApp.produitDemande.origine">Origine</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.origine}</dd>
+          <dt>
+            <span id="contactFournisseur">
+              <Translate contentKey="crmApp.produitDemande.contactFournisseur">Contact Fournisseur</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.contactFournisseur}</dd>
+          <dt>
+            <span id="adresseChargement">
+              <Translate contentKey="crmApp.produitDemande.adresseChargement">Adresse Chargement</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.adresseChargement}</dd>
+          <dt>
+            <span id="adresseDechargement">
+              <Translate contentKey="crmApp.produitDemande.adresseDechargement">Adresse Dechargement</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.adresseDechargement}</dd>
+          <dt>
             <span id="ficheTechniqueUrl">
               <Translate contentKey="crmApp.produitDemande.ficheTechniqueUrl">Fiche Technique Url</Translate>
             </span>

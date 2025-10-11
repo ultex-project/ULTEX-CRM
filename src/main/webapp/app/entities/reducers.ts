@@ -15,6 +15,7 @@ import history from 'app/entities/history/history.reducer';
 import devise from 'app/entities/devise/devise.reducer';
 import incoterm from 'app/entities/incoterm/incoterm.reducer';
 import pays from 'app/entities/pays/pays.reducer';
+import sousService from 'app/entities/sous-service/sous-service.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const entitiesReducers = {
@@ -35,6 +36,7 @@ const entitiesReducers = {
   devise,
   incoterm,
   pays,
+  sousService,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

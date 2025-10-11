@@ -30,5 +30,19 @@
                                  referencedColumnNames="id"
                                  referencedTableName="incoterm"
                                  />
+
+        <addForeignKeyConstraint baseColumnNames="demande_client_id"
+                                 baseTableName="rel_demande_client__sous_services"
+                                 constraintName="fk_rel_demande_client__sous_services__demande_client_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="demande_client"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="sous_services_id"
+                                 baseTableName="rel_demande_client__sous_services"
+                                 constraintName="fk_rel_demande_client__sous_services__sous_services_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sous_service"
+                                 />
     </changeSet>
 </databaseChangeLog>

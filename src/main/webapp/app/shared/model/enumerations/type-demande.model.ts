@@ -1,0 +1,9 @@
+export enum TypeDemande {
+  PROFORMA = 'PROFORMA',
+
+  SOURCING = 'SOURCING',
+
+  NEGOCIATION = 'NEGOCIATION',
+
+  AUTRE = 'AUTRE',
+}

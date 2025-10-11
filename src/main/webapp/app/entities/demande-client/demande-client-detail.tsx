@@ -55,12 +55,6 @@ export const DemandeClientDetail = () => {
           </dt>
           <dd>{demandeClientEntity.servicePrincipal}</dd>
           <dt>
-            <span id="sousServices">
-              <Translate contentKey="crmApp.demandeClient.sousServices">Sous Services</Translate>
-            </span>
-          </dt>
-          <dd>{demandeClientEntity.sousServices}</dd>
-          <dt>
             <span id="provenance">
               <Translate contentKey="crmApp.demandeClient.provenance">Provenance</Translate>
             </span>
@@ -90,6 +84,19 @@ export const DemandeClientDetail = () => {
             <Translate contentKey="crmApp.demandeClient.incoterm">Incoterm</Translate>
           </dt>
           <dd>{demandeClientEntity.incoterm ? demandeClientEntity.incoterm.id : ''}</dd>
+          <dt>
+            <Translate contentKey="crmApp.demandeClient.sousServices">Sous Services</Translate>
+          </dt>
+          <dd>
+            {demandeClientEntity.sousServices
+              ? demandeClientEntity.sousServices.map((val, i) => (
+                  <span key={val.id}>
+                    <a>{val.id}</a>
+                    {demandeClientEntity.sousServices && i === demandeClientEntity.sousServices.length - 1 ? '' : ', '}
+                  </span>
+                ))
+              : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/demande-client" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

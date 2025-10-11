@@ -18,10 +18,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="type_demande" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="nom_produit" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="description" type="${clobType}">
                 <constraints nullable="true" />
@@ -57,6 +57,18 @@
                 <constraints nullable="true" />
             </column>
             <column name="prix_cible" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="origine" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="contact_fournisseur" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="adresse_chargement" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="adresse_dechargement" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="fiche_technique_url" type="varchar(255)">
@@ -107,6 +119,10 @@
             <column name="pieces_par_carton" type="numeric"/>
             <column name="hs_code" type="string"/>
             <column name="prix_cible" type="numeric"/>
+            <column name="origine" type="string"/>
+            <column name="contact_fournisseur" type="string"/>
+            <column name="adresse_chargement" type="string"/>
+            <column name="adresse_dechargement" type="string"/>
             <column name="fiche_technique_url" type="string"/>
             <column name="photos_url" type="string"/>
             <column name="pieces_jointes_url" type="string"/>

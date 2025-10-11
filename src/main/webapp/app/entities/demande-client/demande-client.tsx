@@ -125,10 +125,6 @@ export const DemandeClient = () => {
                   <Translate contentKey="crmApp.demandeClient.servicePrincipal">Service Principal</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('servicePrincipal')} />
                 </th>
-                <th className="hand" onClick={sort('sousServices')}>
-                  <Translate contentKey="crmApp.demandeClient.sousServices">Sous Services</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('sousServices')} />
-                </th>
                 <th className="hand" onClick={sort('provenance')}>
                   <Translate contentKey="crmApp.demandeClient.provenance">Provenance</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('provenance')} />
@@ -167,8 +163,9 @@ export const DemandeClient = () => {
                       <TextFormat type="date" value={demandeClient.dateDemande} format={APP_DATE_FORMAT} />
                     ) : null}
                   </td>
-                  <td>{demandeClient.servicePrincipal}</td>
-                  <td>{demandeClient.sousServices}</td>
+                  <td>
+                    <Translate contentKey={`crmApp.ServicePrincipal.${demandeClient.servicePrincipal}`} />
+                  </td>
                   <td>{demandeClient.provenance}</td>
                   <td>{demandeClient.nombreProduits}</td>
                   <td>{demandeClient.remarqueGenerale}</td>
