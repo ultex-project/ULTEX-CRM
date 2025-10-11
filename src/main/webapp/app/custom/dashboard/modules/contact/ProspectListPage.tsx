@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Alert,
-  Badge,
   Button,
   ButtonGroup,
   Card,
@@ -57,6 +56,7 @@ import { deleteEntity, getEntities, reset } from 'app/entities/prospect/prospect
 import AdvancedFilterBuilder from './AdvancedFilterBuilder';
 import { AdvancedFilterPayload, GroupNode, RuleNode, isGroupNode } from '../advanced-filter.types';
 import { buildQueryStringFromAdvancedFilters } from 'app/custom/dashboard/filters/advanced-filter-query';
+import StatusBadge, { StatusBadgeVariant } from 'app/custom/dashboard/components/status-badge/StatusBadge';
 
 type ProspectStatusKey = keyof typeof ProspectStatus;
 type StatusFilterOption = 'ALL' | ProspectStatusKey;
@@ -71,6 +71,13 @@ const STATUS_META: Record<ProspectStatusKey, { label: string; color: string; bac
 const QUICK_FILTERS: StatusFilterOption[] = ['ALL', 'NEW', 'CONTACTED', 'QUALIFIED', 'LOST'];
 
 const isProspectStatusKey = (value: unknown): value is ProspectStatusKey => typeof value === 'string' && value in STATUS_META;
+
+const STATUS_BADGE_VARIANT: Record<ProspectStatusKey, StatusBadgeVariant> = {
+  NEW: 'pipeline',
+  CONTACTED: 'active',
+  QUALIFIED: 'completed',
+  LOST: 'failed',
+};
 
 const renderAvatar = (firstName: string, lastName: string) => {
   if (!firstName || !lastName) return <div className="avatar-placeholder">?</div>;
@@ -270,18 +277,12 @@ const ProspectListPage = () => {
 
   const renderStatusBadge = (status?: ProspectStatusKey | null) => {
     if (!status) {
-      return (
-        <Badge pill color="light" className="prospect-status-badge text-muted">
-          Unassigned
-        </Badge>
-      );
+      return <StatusBadge status="pending" label="Unassigned" />;
     }
+
     const meta = STATUS_META[status];
-    return (
-      <Badge pill className="prospect-status-badge" style={{ backgroundColor: meta.background, color: meta.color }}>
-        {meta.label}
-      </Badge>
-    );
+    const variant = STATUS_BADGE_VARIANT[status] ?? 'pending';
+    return <StatusBadge status={variant} label={meta.label} />;
   };
 
   return (
@@ -290,9 +291,7 @@ const ProspectListPage = () => {
         <CardBody>
           <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
             <div>
-              <Badge pill className="prospect-hero__badge text-uppercase fw-semibold mb-3">
-                Pipeline
-              </Badge>
+              <StatusBadge status="pipeline" label="Pipeline" className="prospect-hero__badge mb-3" />
               <h2 className="prospect-hero__title mb-2">Prospect workspace</h2>
               <p className="text-muted mb-3">
                 Monitor the quality of your funnel, keep conversations warm, and convert leads without leaving the dashboard.
