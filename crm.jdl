@@ -35,6 +35,28 @@ entity Client {
   createdAt Instant,
   updatedAt Instant
 }
+// =========================
+// REFERENCE ENTITIES
+// =========================
+
+entity Devise {
+  code String required unique, // e.g., "USD"
+  nomComplet String required,  // e.g., "US Dollar"
+  symbole String,              // e.g., "$"
+  pays String                  // optional, e.g., "United States"
+}
+
+entity Incoterm {
+  code String required unique, // e.g., "FOB"
+  description String required  // e.g., "Free On Board"
+}
+
+entity Pays {
+  code String required unique, // e.g., "MA"
+  nom String required,         // e.g., "Maroc"
+  indicatif String             // e.g., "+212"
+}
+
 entity History {
   entityName String required,
   entityId Long required,
@@ -80,15 +102,12 @@ entity DocumentClient {
 entity DemandeClient {
   reference String required,
   dateDemande Instant required,
-  servicePrincipal String, // Import / Export
-  sousServices String, // multi-sélection
+  servicePrincipal String,
+  sousServices String,
   provenance String,
-  incoterm String,
-  devise String,
   nombreProduits Integer,
   remarqueGenerale String
 }
-
 entity ProduitDemande {
   typeProduit String,
   typeDemande String, // Proforma, Sourcing, Négociation...
@@ -237,6 +256,16 @@ relationship ManyToOne {
 }
 relationship OneToOne {
   KycClient{client} to Client
+}
+// Each DemandeClient uses a Devise and an Incoterm
+relationship ManyToOne {
+  DemandeClient{devise} to Devise,
+  DemandeClient{incoterm} to Incoterm
+}
+
+// Each Client is associated with a country
+relationship ManyToOne {
+  Client{pays} to Pays
 }
 
 // --- Conversion Flow ---
