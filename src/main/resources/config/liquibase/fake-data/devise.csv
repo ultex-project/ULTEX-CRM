@@ -1,11 +1,50 @@
 id;code;nom_complet;symbole;pays
-1;assurément hypocrite groin groin;détacher;psitt;de crainte que
-2;tant que restreindre sédentaire;grâce à là-haut;bè;en gigantesque
-3;extra même;zzzz;trop;serviable
-4;au point que dans rectangulaire;boum;charitable;pff corps enseignant regagner
-5;guide tandis que à la merci;même si hi;réchauffer;en decà de
-6;hors de glouglou;par suite de à l'égard de;parce que;rectorat entre tant
-7;à défaut de à partir de;cocorico bang svelte;vivace parlementaire croâ;vroum
-8;oh;soit;lors apte étant donné que;maigre étant donné que
-9;admettre bè;comme responsable atchoum;grrr orange rejeter;puis concurrence autrefois
-10;oh fourbe;à l'entour de y;plic bof;porte-parole équipe de recherche délégation
+1;MAD;Dirham marocain;DH;Maroc
+2;USD;Dollar américain;$;États-Unis
+3;EUR;Euro;€;Union européenne
+4;GBP;Livre sterling;£;Royaume-Uni
+5;CAD;Dollar canadien;$;Canada
+6;AUD;Dollar australien;$;Australie
+7;CHF;Franc suisse;CHF;Suisse
+8;JPY;Yen japonais;¥;Japon
+9;CNY;Yuan renminbi chinois;¥;Chine
+10;INR;Roupie indienne;₹;Inde
+11;SAR;Riyal saoudien;ر.س;Arabie saoudite
+12;AED;Dirham des Émirats arabes unis;د.إ;Émirats arabes unis
+13;QAR;Riyal qatari;ر.ق;Qatar
+14;KWD;Dinar koweïtien;د.ك;Koweït
+15;BHD;Dinar bahreïni;ب.د;Bahreïn
+16;EGP;Livre égyptienne;£E;Égypte
+17;TND;Dinar tunisien;د.ت;Tunisie
+18;DZD;Dinar algérien;د.ج;Algérie
+19;NGN;Naira;₦;Nigeria
+20;ZAR;Rand;R;Afrique du Sud
+21;GHS;Cedi;₵;Ghana
+22;KES;Shilling kényan;Sh;Kenya
+23;CFA;Franc CFA;CFA;Afrique de l’Ouest
+24;TRY;Livre turque;₺;Turquie
+25;RUB;Rouble russe;₽;Russie
+26;BRL;Réal brésilien;R$;Brésil
+27;MXN;Peso mexicain;$;Mexique
+28;ARS;Peso argentin;$;Argentine
+29;SGD;Dollar de Singapour;$;Singapour
+30;HKD;Dollar de Hong Kong;$;Hong Kong
+31;KRW;Won sud-coréen;₩;Corée du Sud
+32;THB;Baht;฿;Thaïlande
+33;IDR;Roupie indonésienne;Rp;Indonésie
+34;MYR;Ringgit malaisien;RM;Malaisie
+35;VND;Dong;₫;Vietnam
+36;PKR;Roupie pakistanaise;Rs;Pakistan
+37;BDT;Taka;৳;Bangladesh
+38;ILS;Nouveau shekel;₪;Israël
+39;PLN;Zloty;zł;Pologne
+40;SEK;Couronne suédoise;kr;Suède
+41;NOK;Couronne norvégienne;kr;Norvège
+42;DKK;Couronne danoise;kr;Danemark
+43;CZK;Couronne tchèque;Kč;Tchéquie
+44;HUF;Forint;Ft;Hongrie
+45;RON;Leu;lei;Roumanie
+46;BGN;Lev;лв;Bulgarie
+47;HRK;Kuna;kn;Croatie
+48;UAH;Hryvnia;₴;Ukraine
+49;NZD;Dollar néo-zélandais;$;Nouvelle-Zélande

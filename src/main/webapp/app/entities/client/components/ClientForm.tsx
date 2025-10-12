@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 import { IClient } from 'app/shared/model/client.model';
+import ClientImagePicker from 'app/custom/dashboard/modules/client/components/ClientImagePicker';
 
 export interface TelephoneInputComponentProps {
   id: string;
@@ -146,6 +147,10 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
     }
   };
 
+  const handlePhotoChange = (url: string | null) => {
+    setFormValues(prev => ({ ...prev, photoUrl: url ?? '' }));
+  };
+
   const validate = () => {
     const errors: FormErrors = {};
     if (!formValues.nomComplet.trim()) {
@@ -273,12 +278,17 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
               </FormGroup>
             </Col>
 
-            <Col md="6">
-              <FormGroup>
-                <Label for="client-photoUrl">
+            <Col md="4">
+              <FormGroup className="d-flex flex-column align-items-center align-items-md-start">
+                <Label className="form-label">
                   <Translate contentKey="crmApp.client.photoUrl" />
                 </Label>
-                <Input id="client-photoUrl" value={formValues.photoUrl} onChange={handleChange('photoUrl')} />
+                <ClientImagePicker
+                  name={formValues.nomComplet || translate('crmApp.client.dashboard.table.unnamed')}
+                  photoUrl={formValues.photoUrl || undefined}
+                  size={140}
+                  onChange={handlePhotoChange}
+                />
               </FormGroup>
             </Col>
 

@@ -1,11 +1,101 @@
 id;code;nom;indicatif
-1;splendide;rôder hé;débile incalculable personnel
-2;à force de feindre;durant membre titulaire;puisque glouglou
-3;adversaire;fade patientèle;suffisamment au dépens de
-4;population du Québec ha;dessus tant que;au cas où
-5;lectorat;pas mal;de peur que collègue
-6;membre titulaire pff membre à vie;analyser;grâce à
-7;bâtir afin que;de façon à ce que espiègle meuh;patientèle bon peu
-8;priver;près de;élever virer énorme
-9;nonobstant afin que au-dessus;admirablement fade;magenta svelte
-10;badaboum rose;deçà police;contre atchoum
+1;MA;Maroc;+212
+2;DZ;Algérie;+213
+3;TN;Tunisie;+216
+4;EG;Égypte;+20
+5;FR;France;+33
+6;BE;Belgique;+32
+7;CH;Suisse;+41
+8;DE;Allemagne;+49
+9;IT;Italie;+39
+10;ES;Espagne;+34
+11;PT;Portugal;+351
+12;GB;Royaume-Uni;+44
+13;US;États-Unis;+1
+14;CA;Canada;+1
+15;MX;Mexique;+52
+16;BR;Brésil;+55
+17;AR;Argentine;+54
+18;CN;Chine;+86
+19;JP;Japon;+81
+20;KR;Corée du Sud;+82
+21;IN;Inde;+91
+22;TR;Turquie;+90
+23;RU;Russie;+7
+24;SA;Arabie Saoudite;+966
+25;AE;Émirats Arabes Unis;+971
+26;QA;Qatar;+974
+27;OM;Oman;+968
+28;KW;Koweït;+965
+29;BH;Bahreïn;+973
+30;JO;Jordanie;+962
+31;LB;Liban;+961
+32;SN;Sénégal;+221
+33;CI;Côte d’Ivoire;+225
+34;NG;Nigeria;+234
+35;GH;Ghana;+233
+36;ZA;Afrique du Sud;+27
+37;KE;Kenya;+254
+38;ET;Éthiopie;+251
+39;SD;Soudan;+249
+40;TZ;Tanzanie;+255
+41;UG;Ouganda;+256
+42;CM;Cameroun;+237
+43;ML;Mali;+223
+44;NE;Niger;+227
+45;BF;Burkina Faso;+226
+46;MR;Mauritanie;+222
+47;LY;Libye;+218
+48;PS;Palestine;+970
+49;IR;Iran;+98
+50;PK;Pakistan;+92
+51;BD;Bangladesh;+880
+52;ID;Indonésie;+62
+53;MY;Malaisie;+60
+54;TH;Thaïlande;+66
+55;VN;Vietnam;+84
+56;PH;Philippines;+63
+57;SG;Singapour;+65
+58;AU;Australie;+61
+59;NZ;Nouvelle-Zélande;+64
+60;HK;Hong Kong;+852
+61;TW;Taïwan;+886
+62;SE;Suède;+46
+63;NO;Norvège;+47
+64;DK;Danemark;+45
+65;FI;Finlande;+358
+66;NL;Pays-Bas;+31
+67;IE;Irlande;+353
+68;PL;Pologne;+48
+69;CZ;Tchéquie;+420
+70;AT;Autriche;+43
+71;HU;Hongrie;+36
+72;RO;Roumanie;+40
+73;GR;Grèce;+30
+74;BG;Bulgarie;+359
+75;HR;Croatie;+385
+76;RS;Serbie;+381
+77;UA;Ukraine;+380
+78;BY;Biélorussie;+375
+79;IS;Islande;+354
+80;LU;Luxembourg;+352
+81;MC;Monaco;+377
+82;AD;Andorre;+376
+83;SM;Saint-Marin;+378
+84;VA;Vatican;+379
+85;IL;Israël;+972
+86;SY;Syrie;+963
+87;YE;Yémen;+967
+88;IQ;Irak;+964
+89;AF;Afghanistan;+93
+90;NP;Népal;+977
+91;LK;Sri Lanka;+94
+92;MM;Myanmar;+95
+93;KH;Cambodge;+855
+94;LA;Laos;+856
+95;MN;Mongolie;+976
+96;UZ;Ouzbékistan;+998
+97;KZ;Kazakhstan;+7
+98;AZ;Azerbaïdjan;+994
+99;GE;Géorgie;+995
+100;MAF;Saint-Martin;+590
