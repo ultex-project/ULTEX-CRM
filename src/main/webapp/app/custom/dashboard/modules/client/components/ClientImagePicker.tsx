@@ -13,6 +13,7 @@ interface ClientImagePickerProps {
   photoUrl?: string;
   onChange: (url: string | null) => void;
   size?: number;
+  clientId?: number | string;
 }
 
 interface UploadResponse {
@@ -21,7 +22,7 @@ interface UploadResponse {
 
 const ACCEPT_TYPES = ['jpg', 'jpeg', 'png', 'webp'];
 
-const ClientImagePicker: React.FC<ClientImagePickerProps> = ({ name, photoUrl, onChange, size = 120 }) => {
+const ClientImagePicker: React.FC<ClientImagePickerProps> = ({ name, photoUrl, onChange, size = 120, clientId }) => {
   const safeSize = Number.isFinite(size) && size > 0 ? size : 120;
   const [images, setImages] = useState<ImageListType>([]);
   const [preview, setPreview] = useState<string | null>(photoUrl ?? null);
@@ -42,6 +43,9 @@ const ClientImagePicker: React.FC<ClientImagePickerProps> = ({ name, photoUrl, o
 
   const uploadImage = async (file: File) => {
     const formData = new FormData();
+    if (clientId !== undefined && clientId !== null && clientId !== '') {
+      formData.append('clientId', String(clientId));
+    }
     formData.append('file', file);
     const response = await axios.post<UploadResponse>('/api/files/upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

@@ -287,6 +287,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
                   name={formValues.nomComplet || translate('crmApp.client.dashboard.table.unnamed')}
                   photoUrl={formValues.photoUrl || undefined}
                   size={140}
+                  clientId={initialData?.id}
                   onChange={handlePhotoChange}
                 />
               </FormGroup>

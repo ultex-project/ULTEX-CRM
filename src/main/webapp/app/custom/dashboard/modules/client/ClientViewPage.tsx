@@ -731,7 +731,7 @@ const ClientViewPage = () => {
           <Translate contentKey="crmApp.client.view.back" />
         </Button>
         {client?.id ? (
-          <Button color="primary" tag={Link} to={`/client/${client.id}/edit`} className="shadow-sm">
+          <Button color="primary" tag={Link} to={`/dashboard/clients/${client.id}/edit`} className="shadow-sm">
             <FontAwesomeIcon icon={faEdit} className="me-2" />
             <Translate contentKey="crmApp.client.view.edit" />
           </Button>
