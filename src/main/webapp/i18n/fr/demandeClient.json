@@ -49,6 +49,21 @@
           "nombreProduits": "Ajoutez au moins un produit à la demande."
         }
       }
+    },
+    "dashboard": {
+      "actions": {
+        "view": "Voir"
+      },
+      "messages": {
+        "deleteSuccess": "Demande supprimée avec succès.",
+        "deleteError": "Impossible de supprimer cette demande."
+      },
+      "viewTitle": "Détails de la demande",
+      "products": {
+        "title": "Produits demandés",
+        "empty": "Aucun produit n'est enregistré pour cette demande."
+      },
+      "deleteQuestion": "Voulez-vous vraiment supprimer {{ reference }} ?"
     }
   }
 }

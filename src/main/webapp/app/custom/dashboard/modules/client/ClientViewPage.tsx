@@ -2,10 +2,28 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { Alert, Button, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, Progress, Row, Spinner, Table } from 'reactstrap';
+import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  ListGroup,
+  ListGroupItem,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Progress,
+  Row,
+  Spinner,
+  Table,
+} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faEdit, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
 
 import { IClient } from 'app/shared/model/client.model';
 import { ClientStatus } from 'app/shared/model/enumerations/client-status.model';
@@ -545,75 +563,294 @@ type RequestsCardProps = {
   produitsParDemande: Map<number, IProduitDemande[]>;
 };
 
-const RequestsCard: React.FC<RequestsCardProps> = ({ clientId, requests, produitsParDemande }) => (
-  <Card className="shadow-sm border-0 mb-4">
-    <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center gap-2">
-      <h5 className="mb-0">
-        <Translate contentKey="crmApp.client.view.sections.requests" />
-      </h5>
-      {clientId ? (
-        <Button color="primary" size="sm" tag={Link} to={`/dashboard/clients/${clientId}/demands/new`} className="shadow-sm">
-          <FontAwesomeIcon icon={faPlus} className="me-2" />
-          <Translate contentKey="crmApp.admin.dashboard.createDemandeClient" />
-        </Button>
-      ) : null}
-    </CardHeader>
-    <CardBody>
-      {requests.length === 0 ? (
-        <div className="text-muted">
-          <Translate contentKey="crmApp.client.view.empty" />
-        </div>
-      ) : (
-        <div className="d-flex flex-column gap-3">
-          {requests.map(request => {
-            const produits = request.id ? (produitsParDemande.get(request.id) ?? []) : [];
-            const servicePrincipalBadge = renderServicePrincipalBadge(request.servicePrincipal);
-            const sousServiceChips = renderSousServiceChips(request.sousServices);
-            return (
-              <Card key={request.id} className="border-0 shadow-sm">
-                <CardBody>
-                  <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                    <div>
-                      <h6 className="mb-1">{request.reference}</h6>
-                      <div className="text-muted small">
-                        {formatDate(request.dateDemande)} · {renderValue(request.provenance)}
-                      </div>
-                      {(servicePrincipalBadge || sousServiceChips) && (
-                        <div className="d-flex flex-wrap gap-2 mt-2">
-                          {servicePrincipalBadge}
-                          {sousServiceChips}
+const RequestsCard: React.FC<RequestsCardProps> = ({ clientId, requests, produitsParDemande }) => {
+  const [items, setItems] = useState<IDemandeClient[]>(requests);
+  const [productMap, setProductMap] = useState<Map<number, IProduitDemande[]>>(produitsParDemande);
+  const [viewTarget, setViewTarget] = useState<IDemandeClient | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<IDemandeClient | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    setItems(requests);
+  }, [requests]);
+
+  useEffect(() => {
+    setProductMap(produitsParDemande);
+  }, [produitsParDemande]);
+
+  const resolveProducts = (demandeId?: number | null) => {
+    if (!demandeId) {
+      return [] as IProduitDemande[];
+    }
+    return productMap.get(demandeId) ?? [];
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget?.id) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      await axios.delete(`/api/demande-clients/${deleteTarget.id}`);
+      setItems(prev => prev.filter(item => item.id !== deleteTarget.id));
+      setProductMap(prev => {
+        const next = new Map(prev);
+        next.delete(deleteTarget.id);
+        return next;
+      });
+      toast.success(translate('crmApp.demandeClient.dashboard.messages.deleteSuccess'));
+    } catch (error) {
+      toast.error(translate('crmApp.demandeClient.dashboard.messages.deleteError'));
+    } finally {
+      setDeleting(false);
+      setDeleteTarget(null);
+    }
+  };
+
+  const renderProductsList = (demandeId?: number | null) => {
+    const produits = resolveProducts(demandeId);
+    if (produits.length === 0) {
+      return null;
+    }
+    return (
+      <ListGroup flush className="mt-3">
+        {produits.map(produit => (
+          <ListGroupItem key={produit.id ?? produit.nomProduit} className="px-0 border-0">
+            <div className="d-flex flex-column flex-md-row justify-content-between gap-2">
+              <div className="fw-semibold">{renderValue(produit.nomProduit)}</div>
+              <div className="text-muted small">
+                {renderValue(produit.quantite)} {renderValue(produit.unite)} · {renderValue(produit.typeProduit)}
+              </div>
+            </div>
+            {produit.description ? <div className="text-muted small mt-1">{produit.description}</div> : null}
+          </ListGroupItem>
+        ))}
+      </ListGroup>
+    );
+  };
+
+  const renderSousServiceList = (sousServices?: IDemandeClient['sousServices']) => {
+    const chips = renderSousServiceChips(sousServices);
+    if (!chips) {
+      return <span className="text-muted">--</span>;
+    }
+    return <div className="d-flex flex-wrap gap-2">{chips}</div>;
+  };
+
+  return (
+    <Card className="shadow-sm border-0 mb-4">
+      <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center gap-2">
+        <h5 className="mb-0">
+          <Translate contentKey="crmApp.client.view.sections.requests" />
+        </h5>
+        {clientId ? (
+          <Button color="primary" size="sm" tag={Link} to={`/dashboard/clients/${clientId}/demands/new`} className="shadow-sm">
+            <FontAwesomeIcon icon={faPlus} className="me-2" />
+            <Translate contentKey="crmApp.admin.dashboard.createDemandeClient" />
+          </Button>
+        ) : null}
+      </CardHeader>
+      <CardBody>
+        {items.length === 0 ? (
+          <div className="text-muted">
+            <Translate contentKey="crmApp.client.view.empty" />
+          </div>
+        ) : (
+          <div className="d-flex flex-column gap-3">
+            {items.map(request => {
+              const servicePrincipalBadge = renderServicePrincipalBadge(request.servicePrincipal);
+              return (
+                <Card key={request.id ?? request.reference} className="border-0 shadow-sm">
+                  <CardBody>
+                    <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                      <div>
+                        <h6 className="mb-1">{renderValue(request.reference)}</h6>
+                        <div className="text-muted small">
+                          {formatDate(request.dateDemande)} · {renderValue(request.provenance)}
                         </div>
-                      )}
-                    </div>
-                    <div className="text-md-end text-muted small">
-                      <div>{renderValue(formatDeviseDisplay(request.devise))}</div>
-                      <div>{renderValue(formatIncotermDisplay(request.incoterm))}</div>
-                    </div>
-                  </div>
-                  {produits.length > 0 ? (
-                    <ListGroup flush className="mt-3">
-                      {produits.map(produit => (
-                        <ListGroupItem key={produit.id} className="px-0 border-0">
-                          <div className="d-flex flex-column flex-md-row justify-content-between gap-2">
-                            <div className="fw-semibold">{renderValue(produit.nomProduit)}</div>
-                            <div className="text-muted small">
-                              {renderValue(produit.quantite)} {renderValue(produit.unite)} · {renderValue(produit.typeProduit)}
-                            </div>
+                        {(servicePrincipalBadge || request.sousServices?.length) && (
+                          <div className="d-flex flex-wrap gap-2 mt-2">
+                            {servicePrincipalBadge}
+                            {renderSousServiceChips(request.sousServices)}
                           </div>
-                          {produit.description ? <div className="text-muted small mt-1">{produit.description}</div> : null}
-                        </ListGroupItem>
-                      ))}
-                    </ListGroup>
-                  ) : null}
-                </CardBody>
-              </Card>
-            );
-          })}
-        </div>
-      )}
-    </CardBody>
-  </Card>
-);
+                        )}
+                      </div>
+                      <div className="text-md-end text-muted small">
+                        <div>{renderValue(formatDeviseDisplay(request.devise))}</div>
+                        <div>{renderValue(formatIncotermDisplay(request.incoterm))}</div>
+                      </div>
+                    </div>
+
+                    {renderProductsList(request.id)}
+
+                    <div className="d-flex flex-wrap gap-2 justify-content-md-end mt-3">
+                      <Button color="light" size="sm" onClick={() => setViewTarget(request)}>
+                        <FontAwesomeIcon icon={faEye} className="me-1" />
+                        <Translate contentKey="crmApp.demandeClient.dashboard.actions.view" />
+                      </Button>
+                      {clientId && request.id ? (
+                        <Button
+                          color="light"
+                          size="sm"
+                          tag={Link}
+                          to={`/dashboard/clients/${clientId}/demands/new?demandeId=${request.id}`}
+                        >
+                          <FontAwesomeIcon icon={faEdit} className="me-1" />
+                          <Translate contentKey="entity.action.edit" />
+                        </Button>
+                      ) : null}
+                      {request.id ? (
+                        <Button color="light" size="sm" className="text-danger" onClick={() => setDeleteTarget(request)}>
+                          <FontAwesomeIcon icon={faTrash} className="me-1" />
+                          <Translate contentKey="entity.action.delete" />
+                        </Button>
+                      ) : null}
+                    </div>
+                  </CardBody>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </CardBody>
+
+      <Modal isOpen={Boolean(viewTarget)} toggle={() => setViewTarget(null)} centered size="lg">
+        <ModalHeader toggle={() => setViewTarget(null)}>
+          <Translate contentKey="crmApp.demandeClient.dashboard.viewTitle" />
+        </ModalHeader>
+        <ModalBody>
+          {viewTarget ? (
+            <>
+              <Row className="gy-3">
+                <Col md="6">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.reference" />
+                    </span>
+                    <span className="fw-semibold">{renderValue(viewTarget.reference)}</span>
+                  </div>
+                </Col>
+                <Col md="6">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.dateDemande" />
+                    </span>
+                    <span className="fw-semibold">{formatDate(viewTarget.dateDemande)}</span>
+                  </div>
+                </Col>
+                <Col md="6">
+                  <div className="d-flex flex-column gap-1">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.servicePrincipal" />
+                    </span>
+                    {renderServicePrincipalBadge(viewTarget.servicePrincipal) ?? <span className="text-muted">--</span>}
+                  </div>
+                </Col>
+                <Col md="6">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.typeDemande" />
+                    </span>
+                    <span className="fw-semibold">
+                      {viewTarget.typeDemande ? translate(`crmApp.TypeDemande.${viewTarget.typeDemande}`) : '--'}
+                    </span>
+                  </div>
+                </Col>
+                <Col md="12">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.sousServices" />
+                    </span>
+                    {renderSousServiceList(viewTarget.sousServices)}
+                  </div>
+                </Col>
+                <Col md="6">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.provenance" />
+                    </span>
+                    <span className="fw-semibold">{renderValue(viewTarget.provenance)}</span>
+                  </div>
+                </Col>
+                <Col md="6">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.incoterm" />
+                    </span>
+                    <span className="fw-semibold">{renderValue(formatIncotermDisplay(viewTarget.incoterm))}</span>
+                  </div>
+                </Col>
+                <Col md="6">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.devise" />
+                    </span>
+                    <span className="fw-semibold">{renderValue(formatDeviseDisplay(viewTarget.devise))}</span>
+                  </div>
+                </Col>
+                <Col md="12">
+                  <div className="d-flex flex-column">
+                    <span className="text-uppercase text-muted small">
+                      <Translate contentKey="crmApp.demandeClient.remarqueGenerale" />
+                    </span>
+                    <span>{renderValue(viewTarget.remarqueGenerale)}</span>
+                  </div>
+                </Col>
+              </Row>
+              <hr className="my-4" />
+              <h6 className="mb-3">
+                <Translate contentKey="crmApp.demandeClient.dashboard.products.title" />
+              </h6>
+              {resolveProducts(viewTarget.id).length === 0 ? (
+                <p className="text-muted small mb-0">
+                  <Translate contentKey="crmApp.demandeClient.dashboard.products.empty" />
+                </p>
+              ) : (
+                <ListGroup flush>
+                  {resolveProducts(viewTarget.id).map(produit => (
+                    <ListGroupItem key={produit.id ?? produit.nomProduit} className="border-0 px-0">
+                      <div className="fw-semibold">{renderValue(produit.nomProduit)}</div>
+                      <div className="text-muted small">
+                        {renderValue(produit.quantite)} {renderValue(produit.unite)} · {renderValue(produit.typeProduit)}
+                      </div>
+                      {produit.description ? <div className="text-muted small mt-1">{produit.description}</div> : null}
+                    </ListGroupItem>
+                  ))}
+                </ListGroup>
+              )}
+            </>
+          ) : null}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={() => setViewTarget(null)}>
+            <Translate contentKey="entity.action.close" />
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={Boolean(deleteTarget)} toggle={() => (deleting ? undefined : setDeleteTarget(null))} centered>
+        <ModalHeader toggle={() => (deleting ? undefined : setDeleteTarget(null))}>
+          <Translate contentKey="entity.delete.title" />
+        </ModalHeader>
+        <ModalBody>
+          <Translate
+            contentKey="crmApp.demandeClient.dashboard.deleteQuestion"
+            interpolate={{ reference: deleteTarget?.reference ?? `#${deleteTarget?.id ?? ''}` }}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={() => setDeleteTarget(null)} disabled={deleting}>
+            <Translate contentKey="entity.action.cancel" />
+          </Button>
+          <Button color="danger" onClick={handleDelete} disabled={deleting}>
+            {deleting ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faTrash} className="me-2" />}
+            <Translate contentKey="entity.action.delete" />
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </Card>
+  );
+};
 
 const OpportunitiesCard: React.FC<{ opportunities: IOpportunity[] }> = ({ opportunities }) => (
   <Card className="shadow-sm border-0 mb-4">
