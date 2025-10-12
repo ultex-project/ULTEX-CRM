@@ -10,10 +10,18 @@ import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 import { IClient } from 'app/shared/model/client.model';
 
+export interface TelephoneInputComponentProps {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}
+
 export interface ClientFormProps {
   initialData?: IClient;
   onSubmit: (data: IClient) => Promise<unknown> | void;
   mode: 'create' | 'edit';
+  telephoneInputComponent?: React.ComponentType<TelephoneInputComponentProps>;
 }
 
 type ClientFormState = {
@@ -80,7 +88,11 @@ const buildClientPayload = (values: ClientFormState, initial?: IClient): IClient
   company: values.companyId ? { id: Number(values.companyId) } : undefined,
 });
 
-const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode }) => {
+const DefaultTelephoneInput: React.FC<TelephoneInputComponentProps> = ({ id, value, onChange, disabled }) => (
+  <Input id={id} value={value} onChange={event => onChange(event.target.value)} disabled={disabled} />
+);
+
+const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, telephoneInputComponent }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -179,6 +191,19 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode }) 
 
   const renderError = (field: keyof ClientFormState) =>
     formErrors[field] ? <div className="text-danger small mt-1">{formErrors[field]}</div> : null;
+
+  const TelephoneInputComponent = telephoneInputComponent ?? DefaultTelephoneInput;
+
+  const updateTelephonePrincipal = (value: string) => {
+    setFormValues(prev => ({ ...prev, telephonePrincipal: value }));
+    if (formErrors.telephonePrincipal) {
+      setFormErrors(prev => {
+        const next = { ...prev };
+        delete next.telephonePrincipal;
+        return next;
+      });
+    }
+  };
 
   const title = useMemo(
     () => (mode === 'create' ? translate('crmApp.client.form.createTitle') : translate('crmApp.client.form.editTitle')),
@@ -327,7 +352,12 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode }) 
                 <Label for="client-telephonePrincipal">
                   <Translate contentKey="crmApp.client.telephonePrincipal" /> *
                 </Label>
-                <Input id="client-telephonePrincipal" value={formValues.telephonePrincipal} onChange={handleChange('telephonePrincipal')} />
+                <TelephoneInputComponent
+                  id="client-telephonePrincipal"
+                  value={formValues.telephonePrincipal}
+                  onChange={updateTelephonePrincipal}
+                  disabled={submitting}
+                />
                 {renderError('telephonePrincipal')}
               </FormGroup>
             </Col>

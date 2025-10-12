@@ -6,6 +6,7 @@ import { Translate, translate } from 'react-jhipster';
 
 import ClientForm from 'app/entities/client/components/ClientForm';
 import { IClient } from 'app/shared/model/client.model';
+import DashboardPhoneInput from './components/DashboardPhoneInput';
 
 const ClientEditPage = () => {
   const { id } = useParams<'id'>();
@@ -83,7 +84,7 @@ const ClientEditPage = () => {
           </CardBody>
         </Card>
       ) : client ? (
-        <ClientForm mode="edit" initialData={client} onSubmit={handleSubmit} />
+        <ClientForm mode="edit" initialData={client} onSubmit={handleSubmit} telephoneInputComponent={DashboardPhoneInput} />
       ) : (
         <Card className="shadow-sm border-0">
           <CardBody className="text-muted">

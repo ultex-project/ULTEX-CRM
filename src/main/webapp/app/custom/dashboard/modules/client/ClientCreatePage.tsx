@@ -6,6 +6,7 @@ import ClientForm from 'app/entities/client/components/ClientForm';
 import { IClient } from 'app/shared/model/client.model';
 
 import './ClientCreatePage.scss';
+import DashboardPhoneInput from './components/DashboardPhoneInput';
 
 const ClientCreatePage = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +24,7 @@ const ClientCreatePage = () => {
 
   return (
     <div className="client-create-page">
-      <ClientForm mode="create" onSubmit={handleSubmit} />
+      <ClientForm mode="create" onSubmit={handleSubmit} telephoneInputComponent={DashboardPhoneInput} />
     </div>
   );
 };
