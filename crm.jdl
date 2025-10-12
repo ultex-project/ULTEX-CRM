@@ -112,35 +112,33 @@ entity DemandeClient {
   reference String required,
   dateDemande Instant required,
   servicePrincipal ServicePrincipal required,
+  typeDemande TypeDemande required,
   provenance String,
-  nombreProduits Integer,
   remarqueGenerale String
 }
 
 entity ProduitDemande {
   typeProduit TypeProduit required,
-  typeDemande TypeDemande required,
   nomProduit String required,
   description TextBlob,
   quantite Double,
-  unite String,
+  unite String, // kg, pcs, etc.
   prix Double,
-  fraisExpedition Double,
   poidsKg Double,
   volumeTotalCbm Double,
   dimensions String,
-  nombreCartons Integer,
-  piecesParCarton Integer,
   hsCode String,
   prixCible Double,
-  origine String, // for sourcing
-  contactFournisseur String, // for négociation
+  fraisExpedition Double,
+  origine String,
+  fournisseur String,
   adresseChargement String, // for export
   adresseDechargement String, // for export
   ficheTechniqueUrl String,
   photosUrl String,
   piecesJointesUrl String
 }
+
 
 entity HistoriqueCRM {
   dateInteraction Instant required,
