@@ -20,6 +20,7 @@ import { OpportunityStage } from 'app/shared/model/enumerations/opportunity-stag
 import { IHistoriqueCRM } from 'app/shared/model/historique-crm.model';
 import ClientAvatar from 'app/custom/dashboard/modules/client/components/ClientAvatar';
 import ClientDocumentsPanel from 'app/custom/dashboard/modules/client/components/ClientDocumentsPanel';
+import ClientContactsPanel from 'app/custom/dashboard/modules/client/components/ClientContactsPanel';
 
 const outlineBadgeClass = (tone: 'success' | 'secondary' | 'danger' | 'info' | 'warning' | 'primary') =>
   `badge rounded-pill fw-semibold px-3 py-1 bg-white border border-${tone} text-${tone}`;
@@ -757,6 +758,7 @@ const ClientViewPage = () => {
           <GeneralInfoCard client={client} />
           <ContactsCard contacts={contacts} />
           <LinkedCompaniesCard companies={linkedCompanies} />
+          {client?.id ? <ClientContactsPanel clientId={client.id} /> : null}
           {client?.id ? <ClientDocumentsPanel clientId={client.id} /> : null}
           <KycCard kyc={kyc} />
           <RequestsCard clientId={client?.id ?? null} requests={requests} produitsParDemande={produitsParDemande} />

@@ -20,8 +20,10 @@ const apiUrl = 'api/contact-associes';
 
 export const getEntities = createAsyncThunk(
   'contactAssocie/fetch_entity_list',
-  async ({ page, size, sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ page, size, sort, query }: IQueryParams = {}) => {
+    const paginationQuery = sort ? `page=${page ?? 0}&size=${size ?? 20}&sort=${sort}&` : '';
+    const filterQuery = query ? `${query}&` : '';
+    const requestUrl = `${apiUrl}?${paginationQuery}${filterQuery}cacheBuster=${new Date().getTime()}`;
     return axios.get<IContactAssocie[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
