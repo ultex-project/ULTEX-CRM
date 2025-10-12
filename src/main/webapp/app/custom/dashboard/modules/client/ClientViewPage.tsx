@@ -127,54 +127,44 @@ const createCollectionFetcher = <T,>(endpoint: string) =>
     .then(response => response.data ?? [])
     .catch(() => []);
 
-const ClientViewPage = () => {
-  const { id } = useParams<'id'>();
-  const location = useLocation();
-  const clientId = id ? Number(id) : null;
+type ClientDashboardData = {
+  client: IClient | null;
+  contacts: IContactAssocie[];
+  linkedCompanies: ISocieteLiee[];
+  documents: IDocumentClient[];
+  kyc: IKycClient | null;
+  requests: IDemandeClient[];
+  requestProducts: IProduitDemande[];
+  opportunities: IOpportunity[];
+  history: IHistoriqueCRM[];
+};
 
+const createEmptyClientData = (): ClientDashboardData => ({
+  client: null,
+  contacts: [],
+  linkedCompanies: [],
+  documents: [],
+  kyc: null,
+  requests: [],
+  requestProducts: [],
+  opportunities: [],
+  history: [],
+});
+
+const useClientDashboardData = (clientId: number | null) => {
+  const [data, setData] = useState<ClientDashboardData>(() => createEmptyClientData());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [client, setClient] = useState<IClient | null>(null);
-  const [contacts, setContacts] = useState<IContactAssocie[]>([]);
-  const [linkedCompanies, setLinkedCompanies] = useState<ISocieteLiee[]>([]);
-  const [documents, setDocuments] = useState<IDocumentClient[]>([]);
-  const [kyc, setKyc] = useState<IKycClient | null>(null);
-  const [requests, setRequests] = useState<IDemandeClient[]>([]);
-  const [requestProducts, setRequestProducts] = useState<IProduitDemande[]>([]);
-  const [opportunities, setOpportunities] = useState<IOpportunity[]>([]);
-  const [history, setHistory] = useState<IHistoriqueCRM[]>([]);
-
-  const successMessage = useMemo(() => {
-    const state = location.state as { successMessage?: string } | null;
-    return state?.successMessage;
-  }, [location.state]);
-
-  useEffect(() => {
-    if (!successMessage) {
-      return;
-    }
-    const state = location.state as Record<string, unknown> | null;
-    if (state && 'successMessage' in state) {
-      const { successMessage: _removed, ...rest } = state;
-      window.history.replaceState(rest, document.title, location.pathname + location.search);
-    }
-  }, [successMessage, location.pathname, location.search, location.state]);
-
   useEffect(() => {
     if (!clientId) {
-      setClient(null);
-      setContacts([]);
-      setLinkedCompanies([]);
-      setDocuments([]);
-      setKyc(null);
-      setRequests([]);
-      setRequestProducts([]);
-      setOpportunities([]);
-      setHistory([]);
+      setData(createEmptyClientData());
+      setError(null);
       setLoading(false);
       return;
     }
+
+    let mounted = true;
 
     const fetchData = async () => {
       setLoading(true);
@@ -203,77 +193,125 @@ const ClientViewPage = () => {
           createCollectionFetcher<IHistoriqueCRM>('api/historique-crms'),
         ]);
 
-        setClient(clientResponse.data ?? null);
-        setContacts(contactsData.filter(item => item.client?.id === clientId));
-        setLinkedCompanies(companiesData.filter(item => item.client?.id === clientId));
-        setDocuments(documentsData.filter(item => item.client?.id === clientId));
-        setKyc(kycData.find(item => item.client?.id === clientId) ?? null);
-        const clientRequests = demandesData.filter(item => item.client?.id === clientId);
-        setRequests(clientRequests);
-        setRequestProducts(
-          produitsData.filter(item => {
-            const demandeId = item.demande?.id;
-            return demandeId !== undefined && clientRequests.some(req => req.id === demandeId);
-          }),
+        if (!mounted) {
+          return;
+        }
+
+        const clientValue = clientResponse.data ?? null;
+        const contactsForClient = contactsData.filter(item => item.client?.id === clientId);
+        const linkedCompaniesForClient = companiesData.filter(item => item.client?.id === clientId);
+        const documentsForClient = documentsData.filter(item => item.client?.id === clientId);
+        const kycForClient = kycData.find(item => item.client?.id === clientId) ?? null;
+        const requestsForClient = demandesData.filter(item => item.client?.id === clientId);
+        const requestIds = new Set(
+          requestsForClient.map(request => request.id).filter((value): value is number => value !== undefined && value !== null),
         );
-        setOpportunities(opportunitiesData.filter(item => item.client?.id === clientId));
-        setHistory(historyData.filter(item => item.client?.id === clientId));
+        const requestProductsForClient = produitsData.filter(item => {
+          const demandeId = item.demande?.id;
+          return demandeId !== undefined && demandeId !== null && requestIds.has(demandeId);
+        });
+        const opportunitiesForClient = opportunitiesData.filter(item => item.client?.id === clientId);
+        const historyForClient = historyData.filter(item => item.client?.id === clientId);
+
+        setData({
+          client: clientValue,
+          contacts: contactsForClient,
+          linkedCompanies: linkedCompaniesForClient,
+          documents: documentsForClient,
+          kyc: kycForClient,
+          requests: requestsForClient,
+          requestProducts: requestProductsForClient,
+          opportunities: opportunitiesForClient,
+          history: historyForClient,
+        });
       } catch (requestError) {
-        setError(translate('crmApp.client.view.error'));
+        if (mounted) {
+          setError(translate('crmApp.client.view.error'));
+        }
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchData();
+
+    return () => {
+      mounted = false;
+    };
   }, [clientId]);
 
-  const produitsParDemande = useMemo(() => {
-    const map = new Map<number, IProduitDemande[]>();
-    requestProducts.forEach(produit => {
-      const demandeId = produit.demande?.id;
-      if (demandeId === undefined || demandeId === null) {
-        return;
-      }
-      const existing = map.get(demandeId);
-      if (existing) {
-        existing.push(produit);
-      } else {
-        map.set(demandeId, [produit]);
-      }
-    });
-    return map;
-  }, [requestProducts]);
+  return { ...data, loading, error };
+};
 
-  const renderAvatar = () => {
-    if (client?.photoUrl) {
-      return (
-        <img
-          src={client.photoUrl}
-          alt={client.nomComplet ?? ''}
-          className="rounded-circle border"
-          style={{ width: 72, height: 72, objectFit: 'cover' }}
-        />
-      );
+const useSuccessMessage = (location: ReturnType<typeof useLocation>) => {
+  const successMessage = useMemo(() => {
+    const state = location.state as { successMessage?: string } | null;
+    return state?.successMessage;
+  }, [location.state]);
+
+  useEffect(() => {
+    if (!successMessage) {
+      return;
     }
+    const state = location.state as Record<string, unknown> | null;
+    if (state && 'successMessage' in state) {
+      const { successMessage: _removed, ...rest } = state;
+      window.history.replaceState(rest, document.title, location.pathname + location.search);
+    }
+  }, [successMessage, location.pathname, location.search, location.state]);
 
-    const initials = (client?.nomComplet ?? '')
-      .split(' ')
-      .filter(Boolean)
-      .map(part => part[0]?.toUpperCase() ?? '')
-      .join('')
-      .slice(0, 2);
+  return successMessage;
+};
 
+const buildProductsByRequest = (products: IProduitDemande[]) => {
+  const map = new Map<number, IProduitDemande[]>();
+  products.forEach(product => {
+    const requestId = product.demande?.id;
+    if (requestId === undefined || requestId === null) {
+      return;
+    }
+    const existing = map.get(requestId);
+    if (existing) {
+      existing.push(product);
+    } else {
+      map.set(requestId, [product]);
+    }
+  });
+  return map;
+};
+
+const ClientAvatar: React.FC<{ client: IClient | null }> = ({ client }) => {
+  if (client?.photoUrl) {
     return (
-      <div
-        className="d-inline-flex align-items-center justify-content-center rounded-circle border bg-light text-primary fw-bold"
-        style={{ width: 72, height: 72 }}
-      >
-        {initials || '?'}
-      </div>
+      <img
+        src={client.photoUrl}
+        alt={client.nomComplet ?? ''}
+        className="rounded-circle border"
+        style={{ width: 72, height: 72, objectFit: 'cover' }}
+      />
     );
-  };
+  }
 
+  const initials = (client?.nomComplet ?? '')
+    .split(' ')
+    .filter(Boolean)
+    .map(part => part[0]?.toUpperCase() ?? '')
+    .join('')
+    .slice(0, 2);
+
+  return (
+    <div
+      className="d-inline-flex align-items-center justify-content-center rounded-circle border bg-light text-primary fw-bold"
+      style={{ width: 72, height: 72 }}
+    >
+      {initials || '?'}
+    </div>
+  );
+};
+
+const ClientHeaderCard: React.FC<{ client: IClient | null }> = ({ client }) => {
   const headerDates = useMemo(() => {
     if (!client) {
       return null;
@@ -297,12 +335,504 @@ const ClientViewPage = () => {
   }, [client]);
 
   return (
+    <Card className="shadow-sm border-0 mb-4">
+      <CardBody>
+        <div className="d-flex flex-column flex-lg-row gap-4 align-items-lg-center">
+          <div className="d-flex align-items-center gap-3">
+            <ClientAvatar client={client} />
+            <div>
+              <h2 className="mb-1">{client?.nomComplet ?? '--'}</h2>
+              <div className="d-flex flex-wrap gap-2 align-items-center text-muted">
+                {client?.fonction ? <span>{client.fonction}</span> : null}
+                {client?.nationalite ? <span>• {client.nationalite}</span> : null}
+                {client?.pays?.nom ? (
+                  <span>
+                    • {client.pays.nom}
+                    {client.pays.code ? ` (${client.pays.code})` : ''}
+                  </span>
+                ) : null}
+              </div>
+              {headerDates}
+            </div>
+          </div>
+          <div className="ms-lg-auto">{renderClientStatusBadge(client?.status ?? null)}</div>
+        </div>
+      </CardBody>
+    </Card>
+  );
+};
+
+const GeneralInfoCard: React.FC<{ client: IClient | null }> = ({ client }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <CardHeader className="bg-white border-bottom">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.general" />
+      </h5>
+    </CardHeader>
+    <CardBody>
+      <Row className="gy-4">
+        <Col md="4">
+          <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">
+              <Translate contentKey="crmApp.client.telephonePrincipal" />
+            </span>
+            <span className="fw-semibold">{renderValue(client?.telephonePrincipal)}</span>
+          </div>
+        </Col>
+        <Col md="4">
+          <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">WhatsApp</span>
+            <span className="fw-semibold">{renderValue(client?.whatsapp)}</span>
+          </div>
+        </Col>
+        <Col md="4">
+          <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">
+              <Translate contentKey="crmApp.client.email" />
+            </span>
+            <span className="fw-semibold">{renderValue(client?.email)}</span>
+          </div>
+        </Col>
+        <Col md="4">
+          <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">
+              <Translate contentKey="crmApp.client.languePreferee" />
+            </span>
+            <span className="fw-semibold">{renderValue(client?.languePreferee)}</span>
+          </div>
+        </Col>
+        <Col md="4">
+          <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">
+              <Translate contentKey="crmApp.client.pays" />
+            </span>
+            <span className="fw-semibold">{renderValue(client?.pays?.nom)}</span>
+            {client?.pays?.code || client?.pays?.indicatif ? (
+              <span className="text-muted small">{[client?.pays?.code, client?.pays?.indicatif].filter(Boolean).join(' • ')}</span>
+            ) : null}
+          </div>
+        </Col>
+        <Col md="4">
+          <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">
+              <Translate contentKey="crmApp.client.adressePersonnelle" />
+            </span>
+            <span className="fw-semibold">{renderValue(client?.adressePersonnelle)}</span>
+          </div>
+        </Col>
+        <Col md="4">
+          <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">
+              <Translate contentKey="crmApp.client.company" />
+            </span>
+            <span className="fw-semibold">{renderValue(client?.company?.name)}</span>
+            {client?.company?.country ? <span className="text-muted small">{client.company.country}</span> : null}
+          </div>
+        </Col>
+      </Row>
+    </CardBody>
+  </Card>
+);
+
+const ContactsCard: React.FC<{ contacts: IContactAssocie[] }> = ({ contacts }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <CardHeader className="bg-white border-bottom">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.contacts" />
+      </h5>
+    </CardHeader>
+    <CardBody>
+      {contacts.length === 0 ? (
+        <div className="text-muted">
+          <Translate contentKey="crmApp.client.view.empty" />
+        </div>
+      ) : (
+        <ListGroup flush>
+          {contacts.map(contact => (
+            <ListGroupItem key={contact.id} className="py-3">
+              <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                <div>
+                  <h6 className="mb-1">
+                    {contact.prenom} {contact.nom}
+                  </h6>
+                  <div className="text-muted small">{contact.relation ? `${contact.relation}` : translate('crmApp.client.view.empty')}</div>
+                </div>
+                <div className="text-md-end">
+                  <div>{renderValue(contact.telephone)}</div>
+                  <div className="text-muted">{renderValue(contact.email)}</div>
+                  <div className="text-muted">{renderValue(contact.whatsapp)}</div>
+                </div>
+              </div>
+              {contact.remarques ? <div className="text-muted small mt-2">{contact.remarques}</div> : null}
+            </ListGroupItem>
+          ))}
+        </ListGroup>
+      )}
+    </CardBody>
+  </Card>
+);
+
+const LinkedCompaniesCard: React.FC<{ companies: ISocieteLiee[] }> = ({ companies }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <CardHeader className="bg-white border-bottom">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.companies" />
+      </h5>
+    </CardHeader>
+    <CardBody>
+      {companies.length === 0 ? (
+        <div className="text-muted">
+          <Translate contentKey="crmApp.client.view.empty" />
+        </div>
+      ) : (
+        <ListGroup flush>
+          {companies.map(company => (
+            <ListGroupItem key={company.id} className="py-3">
+              <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                <div>
+                  <h6 className="mb-1">{company.raisonSociale}</h6>
+                  <div className="text-muted small">
+                    {renderValue(company.formeJuridique)} · {renderValue(company.secteurActivite)}
+                  </div>
+                </div>
+                <div className="text-md-end text-muted small">
+                  <div>{renderValue(company.ice)}</div>
+                  <div>{renderValue(company.rc)}</div>
+                  <div>{renderValue(company.nif)}</div>
+                </div>
+              </div>
+              {company.adresseSiege ? <div className="text-muted small mt-2">{company.adresseSiege}</div> : null}
+              {company.representantLegal ? (
+                <div className="text-muted small">
+                  <Translate contentKey="crmApp.client.view.company.representant" interpolate={{ value: company.representantLegal }} />
+                </div>
+              ) : null}
+            </ListGroupItem>
+          ))}
+        </ListGroup>
+      )}
+    </CardBody>
+  </Card>
+);
+
+const DocumentsCard: React.FC<{ documents: IDocumentClient[] }> = ({ documents }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <CardHeader className="bg-white border-bottom">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.documents" />
+      </h5>
+    </CardHeader>
+    <CardBody className="p-0">
+      {documents.length === 0 ? (
+        <div className="text-muted p-4">
+          <Translate contentKey="crmApp.client.view.empty" />
+        </div>
+      ) : (
+        <div className="table-responsive">
+          <Table hover className="mb-0 align-middle">
+            <thead className="text-muted small">
+              <tr>
+                <th className="ps-4">
+                  <Translate contentKey="crmApp.documentClient.typeDocument" />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.documentClient.numeroDocument" />
+                </th>
+                <th className="pe-4 text-end">
+                  <Translate contentKey="crmApp.client.view.documents.actions" />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {documents.map(document => (
+                <tr key={document.id}>
+                  <td className="ps-4">{renderValue(document.typeDocument)}</td>
+                  <td>{renderValue(document.numeroDocument)}</td>
+                  <td className="pe-4 text-end">
+                    {document.fichierUrl ? (
+                      <Button
+                        color="link"
+                        size="sm"
+                        className="text-decoration-none"
+                        href={document.fichierUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FontAwesomeIcon icon={faFileArrowDown} className="me-2" />
+                        <Translate contentKey="crmApp.client.view.documents.download" />
+                      </Button>
+                    ) : (
+                      <span className="text-muted">
+                        <Translate contentKey="crmApp.client.view.empty" />
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      )}
+    </CardBody>
+  </Card>
+);
+
+const KycCard: React.FC<{ kyc: IKycClient | null }> = ({ kyc }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <CardHeader className="bg-white border-bottom">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.kyc" />
+      </h5>
+    </CardHeader>
+    <CardBody>
+      {kyc ? (
+        <Row className="gy-3">
+          <Col md="6">
+            <div className="d-flex flex-column">
+              <span className="text-uppercase text-muted small">
+                <Translate contentKey="crmApp.client.view.kyc.completude" />
+              </span>
+              <div className="d-flex align-items-center gap-3">
+                <div className="flex-grow-1">
+                  <Progress value={kyc.completudeKyc ?? 0} color="success" />
+                </div>
+                <span className="fw-semibold">{kyc.completudeKyc ?? 0}%</span>
+              </div>
+            </div>
+          </Col>
+          <Col md="6">
+            <div className="d-flex flex-column">
+              <span className="text-uppercase text-muted small">
+                <Translate contentKey="crmApp.client.view.kyc.score" />
+              </span>
+              <span className="fw-semibold">{renderValue(kyc.scoreStaff)}</span>
+            </div>
+          </Col>
+          <Col md="6">
+            <div className="d-flex flex-column">
+              <span className="text-uppercase text-muted small">
+                <Translate contentKey="crmApp.client.view.kyc.behaviors" />
+              </span>
+              <span className="fw-semibold">{renderValue(kyc.comportements)}</span>
+            </div>
+          </Col>
+          <Col md="6">
+            <div className="d-flex flex-column">
+              <span className="text-uppercase text-muted small">
+                <Translate contentKey="crmApp.client.view.kyc.responsable" />
+              </span>
+              <span className="fw-semibold">{renderValue(kyc.responsable)}</span>
+            </div>
+          </Col>
+          <Col md="12">
+            <div className="d-flex flex-column">
+              <span className="text-uppercase text-muted small">
+                <Translate contentKey="crmApp.client.view.kyc.notes" />
+              </span>
+              <span>{renderValue(kyc.remarques)}</span>
+            </div>
+          </Col>
+        </Row>
+      ) : (
+        <div className="text-muted">
+          <Translate contentKey="crmApp.client.view.empty" />
+        </div>
+      )}
+    </CardBody>
+  </Card>
+);
+
+type RequestsCardProps = {
+  clientId: number | null;
+  requests: IDemandeClient[];
+  produitsParDemande: Map<number, IProduitDemande[]>;
+};
+
+const RequestsCard: React.FC<RequestsCardProps> = ({ clientId, requests, produitsParDemande }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center gap-2">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.requests" />
+      </h5>
+      {clientId ? (
+        <Button color="primary" size="sm" tag={Link} to={`/dashboard/clients/${clientId}/demands/new`} className="shadow-sm">
+          <FontAwesomeIcon icon={faPlus} className="me-2" />
+          <Translate contentKey="crmApp.demandeClient.create.newButton" />
+        </Button>
+      ) : null}
+    </CardHeader>
+    <CardBody>
+      {requests.length === 0 ? (
+        <div className="text-muted">
+          <Translate contentKey="crmApp.client.view.empty" />
+        </div>
+      ) : (
+        <div className="d-flex flex-column gap-3">
+          {requests.map(request => {
+            const produits = request.id ? (produitsParDemande.get(request.id) ?? []) : [];
+            const servicePrincipalBadge = renderServicePrincipalBadge(request.servicePrincipal);
+            const sousServiceChips = renderSousServiceChips(request.sousServices);
+            return (
+              <Card key={request.id} className="border-0 shadow-sm">
+                <CardBody>
+                  <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                    <div>
+                      <h6 className="mb-1">{request.reference}</h6>
+                      <div className="text-muted small">
+                        {formatDate(request.dateDemande)} · {renderValue(request.provenance)}
+                      </div>
+                      {(servicePrincipalBadge || sousServiceChips) && (
+                        <div className="d-flex flex-wrap gap-2 mt-2">
+                          {servicePrincipalBadge}
+                          {sousServiceChips}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-md-end text-muted small">
+                      <div>
+                        <Translate contentKey="crmApp.demandeClient.nombreProduits" />: {renderValue(request.nombreProduits)}
+                      </div>
+                      <div>{renderValue(formatDeviseDisplay(request.devise))}</div>
+                      <div>{renderValue(formatIncotermDisplay(request.incoterm))}</div>
+                    </div>
+                  </div>
+                  {produits.length > 0 ? (
+                    <ListGroup flush className="mt-3">
+                      {produits.map(produit => (
+                        <ListGroupItem key={produit.id} className="px-0 border-0">
+                          <div className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                            <div className="fw-semibold">{renderValue(produit.nomProduit)}</div>
+                            <div className="text-muted small">
+                              {renderValue(produit.quantite)} {renderValue(produit.unite)} · {renderValue(produit.typeProduit)}
+                              {produit.typeDemande ? ' · ' + translate(`crmApp.TypeDemande.${produit.typeDemande}`) : null}
+                            </div>
+                          </div>
+                          {produit.description ? <div className="text-muted small mt-1">{produit.description}</div> : null}
+                        </ListGroupItem>
+                      ))}
+                    </ListGroup>
+                  ) : null}
+                </CardBody>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </CardBody>
+  </Card>
+);
+
+const OpportunitiesCard: React.FC<{ opportunities: IOpportunity[] }> = ({ opportunities }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <CardHeader className="bg-white border-bottom">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.opportunities" />
+      </h5>
+    </CardHeader>
+    <CardBody>
+      {opportunities.length === 0 ? (
+        <div className="text-muted">
+          <Translate contentKey="crmApp.client.view.empty" />
+        </div>
+      ) : (
+        <ListGroup flush>
+          {opportunities.map(opportunity => (
+            <ListGroupItem key={opportunity.id} className="py-3">
+              <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                <div>
+                  <h6 className="mb-1">{renderValue(opportunity.title)}</h6>
+                  <div className="text-muted small">
+                    {renderValue(opportunity.assignedTo?.fullName)} · {formatDate(opportunity.closeDate)}
+                  </div>
+                </div>
+                <div className="text-md-end">
+                  <div className="fw-semibold">
+                    {renderValue(
+                      opportunity.amount !== undefined && opportunity.amount !== null ? opportunity.amount.toLocaleString() : null,
+                    )}
+                  </div>
+                  <div>{renderOpportunityStageBadge(opportunity.stage)}</div>
+                </div>
+              </div>
+            </ListGroupItem>
+          ))}
+        </ListGroup>
+      )}
+    </CardBody>
+  </Card>
+);
+
+const HistoryCard: React.FC<{ history: IHistoriqueCRM[] }> = ({ history }) => (
+  <Card className="shadow-sm border-0">
+    <CardHeader className="bg-white border-bottom">
+      <h5 className="mb-0">
+        <Translate contentKey="crmApp.client.view.sections.history" />
+      </h5>
+    </CardHeader>
+    <CardBody className="p-0">
+      {history.length === 0 ? (
+        <div className="text-muted p-4">
+          <Translate contentKey="crmApp.client.view.empty" />
+        </div>
+      ) : (
+        <div className="table-responsive">
+          <Table hover className="mb-0 align-middle">
+            <thead className="text-muted small">
+              <tr>
+                <th className="ps-4">
+                  <Translate contentKey="crmApp.historiqueCRM.dateInteraction" />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.historiqueCRM.canal" />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.historiqueCRM.resume" />
+                </th>
+                <th className="pe-4 text-end">
+                  <Translate contentKey="crmApp.historiqueCRM.etat" />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {history
+                .slice()
+                .sort((a, b) => dayjs(b.dateInteraction).valueOf() - dayjs(a.dateInteraction).valueOf())
+                .map(item => (
+                  <tr key={item.id}>
+                    <td className="ps-4">{formatDate(item.dateInteraction, 'DD MMM YYYY HH:mm')}</td>
+                    <td>{renderValue(item.canal)}</td>
+                    <td>{renderValue(item.resume)}</td>
+                    <td className="pe-4 text-end">{renderValue(item.etat)}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        </div>
+      )}
+    </CardBody>
+  </Card>
+);
+
+const ClientViewPage = () => {
+  const { id } = useParams<'id'>();
+  const location = useLocation();
+  const clientId = id ? Number(id) : null;
+
+  const { client, contacts, linkedCompanies, documents, kyc, requests, requestProducts, opportunities, history, loading, error } =
+    useClientDashboardData(clientId);
+
+  const successMessage = useSuccessMessage(location);
+
+  const produitsParDemande = useMemo(() => buildProductsByRequest(requestProducts), [requestProducts]);
+
+  return (
     <div className="client-view-page py-4">
       {successMessage ? (
         <Alert color="success" className="border-0 shadow-sm mb-4">
           {successMessage}
         </Alert>
       ) : null}
+
       <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <Button color="link" tag={Link} to="/dashboard/clients" className="px-0 text-decoration-none">
           <FontAwesomeIcon icon={faArrowLeft} className="me-2" />
@@ -316,30 +846,7 @@ const ClientViewPage = () => {
         ) : null}
       </div>
 
-      <Card className="shadow-sm border-0 mb-4">
-        <CardBody>
-          <div className="d-flex flex-column flex-lg-row gap-4 align-items-lg-center">
-            <div className="d-flex align-items-center gap-3">
-              {renderAvatar()}
-              <div>
-                <h2 className="mb-1">{client?.nomComplet ?? '--'}</h2>
-                <div className="d-flex flex-wrap gap-2 align-items-center text-muted">
-                  {client?.fonction ? <span>{client.fonction}</span> : null}
-                  {client?.nationalite ? <span>• {client.nationalite}</span> : null}
-                  {client?.pays?.nom ? (
-                    <span>
-                      • {client.pays.nom}
-                      {client.pays.code ? ` (${client.pays.code})` : ''}
-                    </span>
-                  ) : null}
-                </div>
-                {headerDates}
-              </div>
-            </div>
-            <div className="ms-lg-auto">{renderClientStatusBadge(client?.status ?? null)}</div>
-          </div>
-        </CardBody>
-      </Card>
+      <ClientHeaderCard client={client} />
 
       {error ? (
         <Alert color="danger" className="border-0 shadow-sm mb-4">
@@ -355,439 +862,14 @@ const ClientViewPage = () => {
         </Card>
       ) : (
         <>
-          <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.general" />
-              </h5>
-            </CardHeader>
-            <CardBody>
-              <Row className="gy-4">
-                <Col md="4">
-                  <div className="d-flex flex-column">
-                    <span className="text-uppercase text-muted small">
-                      <Translate contentKey="crmApp.client.telephonePrincipal" />
-                    </span>
-                    <span className="fw-semibold">{renderValue(client?.telephonePrincipal)}</span>
-                  </div>
-                </Col>
-                <Col md="4">
-                  <div className="d-flex flex-column">
-                    <span className="text-uppercase text-muted small">WhatsApp</span>
-                    <span className="fw-semibold">{renderValue(client?.whatsapp)}</span>
-                  </div>
-                </Col>
-                <Col md="4">
-                  <div className="d-flex flex-column">
-                    <span className="text-uppercase text-muted small">
-                      <Translate contentKey="crmApp.client.email" />
-                    </span>
-                    <span className="fw-semibold">{renderValue(client?.email)}</span>
-                  </div>
-                </Col>
-                <Col md="4">
-                  <div className="d-flex flex-column">
-                    <span className="text-uppercase text-muted small">
-                      <Translate contentKey="crmApp.client.languePreferee" />
-                    </span>
-                    <span className="fw-semibold">{renderValue(client?.languePreferee)}</span>
-                  </div>
-                </Col>
-                <Col md="4">
-                  <div className="d-flex flex-column">
-                    <span className="text-uppercase text-muted small">
-                      <Translate contentKey="crmApp.client.pays" />
-                    </span>
-                    <span className="fw-semibold">{renderValue(client?.pays?.nom)}</span>
-                    {client?.pays?.code || client?.pays?.indicatif ? (
-                      <span className="text-muted small">{[client?.pays?.code, client?.pays?.indicatif].filter(Boolean).join(' • ')}</span>
-                    ) : null}
-                  </div>
-                </Col>
-                <Col md="4">
-                  <div className="d-flex flex-column">
-                    <span className="text-uppercase text-muted small">
-                      <Translate contentKey="crmApp.client.adressePersonnelle" />
-                    </span>
-                    <span className="fw-semibold">{renderValue(client?.adressePersonnelle)}</span>
-                  </div>
-                </Col>
-                <Col md="4">
-                  <div className="d-flex flex-column">
-                    <span className="text-uppercase text-muted small">
-                      <Translate contentKey="crmApp.client.company" />
-                    </span>
-                    <span className="fw-semibold">{renderValue(client?.company?.name)}</span>
-                    {client?.company?.country ? <span className="text-muted small">{client.company.country}</span> : null}
-                  </div>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
-
-          <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.contacts" />
-              </h5>
-            </CardHeader>
-            <CardBody>
-              {contacts.length === 0 ? (
-                <div className="text-muted">
-                  <Translate contentKey="crmApp.client.view.empty" />
-                </div>
-              ) : (
-                <ListGroup flush>
-                  {contacts.map(contact => (
-                    <ListGroupItem key={contact.id} className="py-3">
-                      <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                        <div>
-                          <h6 className="mb-1">
-                            {contact.prenom} {contact.nom}
-                          </h6>
-                          <div className="text-muted small">
-                            {contact.relation ? `${contact.relation}` : translate('crmApp.client.view.empty')}
-                          </div>
-                        </div>
-                        <div className="text-md-end">
-                          <div>{renderValue(contact.telephone)}</div>
-                          <div className="text-muted">{renderValue(contact.email)}</div>
-                          <div className="text-muted">{renderValue(contact.whatsapp)}</div>
-                        </div>
-                      </div>
-                      {contact.remarques ? <div className="text-muted small mt-2">{contact.remarques}</div> : null}
-                    </ListGroupItem>
-                  ))}
-                </ListGroup>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.companies" />
-              </h5>
-            </CardHeader>
-            <CardBody>
-              {linkedCompanies.length === 0 ? (
-                <div className="text-muted">
-                  <Translate contentKey="crmApp.client.view.empty" />
-                </div>
-              ) : (
-                <ListGroup flush>
-                  {linkedCompanies.map(company => (
-                    <ListGroupItem key={company.id} className="py-3">
-                      <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                        <div>
-                          <h6 className="mb-1">{company.raisonSociale}</h6>
-                          <div className="text-muted small">
-                            {renderValue(company.formeJuridique)} · {renderValue(company.secteurActivite)}
-                          </div>
-                        </div>
-                        <div className="text-md-end text-muted small">
-                          <div>{renderValue(company.ice)}</div>
-                          <div>{renderValue(company.rc)}</div>
-                          <div>{renderValue(company.nif)}</div>
-                        </div>
-                      </div>
-                      {company.adresseSiege ? <div className="text-muted small mt-2">{company.adresseSiege}</div> : null}
-                      {company.representantLegal ? (
-                        <div className="text-muted small">
-                          <Translate
-                            contentKey="crmApp.client.view.company.representant"
-                            interpolate={{ value: company.representantLegal }}
-                          />
-                        </div>
-                      ) : null}
-                    </ListGroupItem>
-                  ))}
-                </ListGroup>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.documents" />
-              </h5>
-            </CardHeader>
-            <CardBody className="p-0">
-              {documents.length === 0 ? (
-                <div className="text-muted p-4">
-                  <Translate contentKey="crmApp.client.view.empty" />
-                </div>
-              ) : (
-                <div className="table-responsive">
-                  <Table hover className="mb-0 align-middle">
-                    <thead className="text-muted small">
-                      <tr>
-                        <th className="ps-4">
-                          <Translate contentKey="crmApp.documentClient.typeDocument" />
-                        </th>
-                        <th>
-                          <Translate contentKey="crmApp.documentClient.numeroDocument" />
-                        </th>
-                        <th className="pe-4 text-end">
-                          <Translate contentKey="crmApp.client.view.documents.actions" />
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {documents.map(document => (
-                        <tr key={document.id}>
-                          <td className="ps-4">{renderValue(document.typeDocument)}</td>
-                          <td>{renderValue(document.numeroDocument)}</td>
-                          <td className="pe-4 text-end">
-                            {document.fichierUrl ? (
-                              <Button
-                                color="link"
-                                size="sm"
-                                className="text-decoration-none"
-                                href={document.fichierUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <FontAwesomeIcon icon={faFileArrowDown} className="me-2" />
-                                <Translate contentKey="crmApp.client.view.documents.download" />
-                              </Button>
-                            ) : (
-                              <span className="text-muted">
-                                <Translate contentKey="crmApp.client.view.empty" />
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.kyc" />
-              </h5>
-            </CardHeader>
-            <CardBody>
-              {kyc ? (
-                <Row className="gy-3">
-                  <Col md="6">
-                    <div className="d-flex flex-column">
-                      <span className="text-uppercase text-muted small">
-                        <Translate contentKey="crmApp.client.view.kyc.completude" />
-                      </span>
-                      <div className="d-flex align-items-center gap-3">
-                        <div className="flex-grow-1">
-                          <Progress value={kyc.completudeKyc ?? 0} color="success" />
-                        </div>
-                        <span className="fw-semibold">{kyc.completudeKyc ?? 0}%</span>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    <div className="d-flex flex-column">
-                      <span className="text-uppercase text-muted small">
-                        <Translate contentKey="crmApp.client.view.kyc.score" />
-                      </span>
-                      <span className="fw-semibold">{renderValue(kyc.scoreStaff)}</span>
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    <div className="d-flex flex-column">
-                      <span className="text-uppercase text-muted small">
-                        <Translate contentKey="crmApp.client.view.kyc.behaviors" />
-                      </span>
-                      <span className="fw-semibold">{renderValue(kyc.comportements)}</span>
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    <div className="d-flex flex-column">
-                      <span className="text-uppercase text-muted small">
-                        <Translate contentKey="crmApp.client.view.kyc.responsable" />
-                      </span>
-                      <span className="fw-semibold">{renderValue(kyc.responsable)}</span>
-                    </div>
-                  </Col>
-                  <Col md="12">
-                    <div className="d-flex flex-column">
-                      <span className="text-uppercase text-muted small">
-                        <Translate contentKey="crmApp.client.view.kyc.notes" />
-                      </span>
-                      <span>{renderValue(kyc.remarques)}</span>
-                    </div>
-                  </Col>
-                </Row>
-              ) : (
-                <div className="text-muted">
-                  <Translate contentKey="crmApp.client.view.empty" />
-                </div>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center gap-2">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.requests" />
-              </h5>
-              {client?.id ? (
-                <Button color="primary" size="sm" tag={Link} to={`/dashboard/clients/${client.id}/demands/new`} className="shadow-sm">
-                  <FontAwesomeIcon icon={faPlus} className="me-2" />
-                  <Translate contentKey="crmApp.demandeClient.create.newButton" />
-                </Button>
-              ) : null}
-            </CardHeader>
-            <CardBody>
-              {requests.length === 0 ? (
-                <div className="text-muted">
-                  <Translate contentKey="crmApp.client.view.empty" />
-                </div>
-              ) : (
-                <div className="d-flex flex-column gap-3">
-                  {requests.map(request => {
-                    const produits = request.id ? (produitsParDemande.get(request.id) ?? []) : [];
-                    const servicePrincipalBadge = renderServicePrincipalBadge(request.servicePrincipal);
-                    const sousServiceChips = renderSousServiceChips(request.sousServices);
-                    return (
-                      <Card key={request.id} className="border-0 shadow-sm">
-                        <CardBody>
-                          <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                            <div>
-                              <h6 className="mb-1">{request.reference}</h6>
-                              <div className="text-muted small">
-                                {formatDate(request.dateDemande)} · {renderValue(request.provenance)}
-                              </div>
-                              {(servicePrincipalBadge || sousServiceChips) && (
-                                <div className="d-flex flex-wrap gap-2 mt-2">
-                                  {servicePrincipalBadge}
-                                  {sousServiceChips}
-                                </div>
-                              )}
-                            </div>
-                            <div className="text-md-end text-muted small">
-                              <div>
-                                <Translate contentKey="crmApp.demandeClient.nombreProduits" />: {renderValue(request.nombreProduits)}
-                              </div>
-                              <div>{renderValue(formatDeviseDisplay(request.devise))}</div>
-                              <div>{renderValue(formatIncotermDisplay(request.incoterm))}</div>
-                            </div>
-                          </div>
-                          {produits.length > 0 ? (
-                            <ListGroup flush className="mt-3">
-                              {produits.map(produit => (
-                                <ListGroupItem key={produit.id} className="px-0 border-0">
-                                  <div className="d-flex flex-column flex-md-row justify-content-between gap-2">
-                                    <div className="fw-semibold">{renderValue(produit.nomProduit)}</div>
-                                    <div className="text-muted small">
-                                      {renderValue(produit.quantite)} {renderValue(produit.unite)} · {renderValue(produit.typeProduit)}
-                                      {produit.typeDemande ? ' · ' + translate(`crmApp.TypeDemande.${produit.typeDemande}`) : null}
-                                    </div>
-                                  </div>
-                                  {produit.description ? <div className="text-muted small mt-1">{produit.description}</div> : null}
-                                </ListGroupItem>
-                              ))}
-                            </ListGroup>
-                          ) : null}
-                        </CardBody>
-                      </Card>
-                    );
-                  })}
-                </div>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card className="shadow-sm border-0 mb-4">
-            <CardHeader className="bg-white border-bottom">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.opportunities" />
-              </h5>
-            </CardHeader>
-            <CardBody>
-              {opportunities.length === 0 ? (
-                <div className="text-muted">
-                  <Translate contentKey="crmApp.client.view.empty" />
-                </div>
-              ) : (
-                <ListGroup flush>
-                  {opportunities.map(opportunity => (
-                    <ListGroupItem key={opportunity.id} className="py-3">
-                      <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                        <div>
-                          <h6 className="mb-1">{renderValue(opportunity.title)}</h6>
-                          <div className="text-muted small">
-                            {renderValue(opportunity.assignedTo?.fullName)} · {formatDate(opportunity.closeDate)}
-                          </div>
-                        </div>
-                        <div className="text-md-end">
-                          <div className="fw-semibold">
-                            {renderValue(
-                              opportunity.amount !== undefined && opportunity.amount !== null ? opportunity.amount.toLocaleString() : null,
-                            )}
-                          </div>
-                          <div>{renderOpportunityStageBadge(opportunity.stage)}</div>
-                        </div>
-                      </div>
-                    </ListGroupItem>
-                  ))}
-                </ListGroup>
-              )}
-            </CardBody>
-          </Card>
-
-          <Card className="shadow-sm border-0">
-            <CardHeader className="bg-white border-bottom">
-              <h5 className="mb-0">
-                <Translate contentKey="crmApp.client.view.sections.history" />
-              </h5>
-            </CardHeader>
-            <CardBody className="p-0">
-              {history.length === 0 ? (
-                <div className="text-muted p-4">
-                  <Translate contentKey="crmApp.client.view.empty" />
-                </div>
-              ) : (
-                <div className="table-responsive">
-                  <Table hover className="mb-0 align-middle">
-                    <thead className="text-muted small">
-                      <tr>
-                        <th className="ps-4">
-                          <Translate contentKey="crmApp.historiqueCRM.dateInteraction" />
-                        </th>
-                        <th>
-                          <Translate contentKey="crmApp.historiqueCRM.canal" />
-                        </th>
-                        <th>
-                          <Translate contentKey="crmApp.historiqueCRM.resume" />
-                        </th>
-                        <th className="pe-4 text-end">
-                          <Translate contentKey="crmApp.historiqueCRM.etat" />
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {history
-                        .slice()
-                        .sort((a, b) => dayjs(b.dateInteraction).valueOf() - dayjs(a.dateInteraction).valueOf())
-                        .map(item => (
-                          <tr key={item.id}>
-                            <td className="ps-4">{formatDate(item.dateInteraction, 'DD MMM YYYY HH:mm')}</td>
-                            <td>{renderValue(item.canal)}</td>
-                            <td>{renderValue(item.resume)}</td>
-                            <td className="pe-4 text-end">{renderValue(item.etat)}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </Table>
-                </div>
-              )}
-            </CardBody>
-          </Card>
+          <GeneralInfoCard client={client} />
+          <ContactsCard contacts={contacts} />
+          <LinkedCompaniesCard companies={linkedCompanies} />
+          <DocumentsCard documents={documents} />
+          <KycCard kyc={kyc} />
+          <RequestsCard clientId={client?.id ?? null} requests={requests} produitsParDemande={produitsParDemande} />
+          <OpportunitiesCard opportunities={opportunities} />
+          <HistoryCard history={history} />
         </>
       )}
     </div>
