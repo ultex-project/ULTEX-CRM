@@ -27,6 +27,7 @@ import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
 import ClientDemandCreatePage from 'app/custom/dashboard/modules/client/ClientDemandCreatePage';
 import ClientCreatePage from 'app/custom/dashboard/modules/client/ClientCreatePage';
 import ClientEditPage from 'app/custom/dashboard/modules/client/ClientEditPage';
+import SousServiceListPage from 'app/custom/dashboard/modules/sous-service/SousServiceListPage';
 
 const loading = <div>loading ...</div>;
 
@@ -103,6 +104,14 @@ const AppRoutes = () => {
           <Route path="clients/:id/view" element={<ClientViewPage />} />
           <Route path="clients/:id/edit" element={<ClientEditPage />} />
           <Route path="clients/:clientId/demands/new" element={<ClientDemandCreatePage />} />
+          <Route
+            path="sous-services"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.DATA, AUTHORITIES.ADMIN]}>
+                <SousServiceListPage />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route
           path="*"

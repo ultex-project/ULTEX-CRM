@@ -32,7 +32,10 @@ import { IDemandeClient } from 'app/shared/model/demande-client.model';
 import { IProduitDemande } from 'app/shared/model/produit-demande.model';
 import { getEntities as getDevises } from 'app/entities/devise/devise.reducer';
 import { getEntities as getIncoterms } from 'app/entities/incoterm/incoterm.reducer';
+import { getEntities as getSousServices } from 'app/entities/sous-service/sous-service.reducer';
 import { cleanEntity } from 'app/shared/util/entity-utils';
+import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
+import { TypeDemande } from 'app/shared/model/enumerations/type-demande.model';
 
 interface FormState {
   reference: string;
@@ -55,12 +58,11 @@ interface ProductFormState {
   unite: string;
   prix: string;
   hsCode: string;
+  typeDemande: string;
 }
 
 type ProductFormErrors = Partial<Record<keyof ProductFormState, string>>;
 
-const SERVICE_OPTIONS = ['Import', 'Export'] as const;
-const SOUS_SERVICE_OPTIONS = ['Transport', 'Douane', 'Stockage', 'Assurance'] as const;
 const UNITE_OPTIONS = ['pcs', 'kg', 'm3'] as const;
 
 const ClientDemandCreatePage = () => {
@@ -72,16 +74,21 @@ const ClientDemandCreatePage = () => {
   const devisesLoading = useAppSelector(state => state.devise.loading);
   const incoterms = useAppSelector(state => state.incoterm.entities);
   const incotermsLoading = useAppSelector(state => state.incoterm.loading);
+  const sousServices = useAppSelector(state => state.sousService.entities);
+  const sousServicesLoading = useAppSelector(state => state.sousService.loading);
+
+  const servicePrincipalOptions = Object.keys(ServicePrincipal);
+  const typeDemandeOptions = Object.keys(TypeDemande);
 
   const [formValues, setFormValues] = useState<FormState>(() => ({
     reference: `DEM-${Date.now()}`,
     dateDemande: dayjs().format('YYYY-MM-DD'),
-    servicePrincipal: '',
+    servicePrincipal: servicePrincipalOptions[0] ?? '',
     sousServices: [],
     provenance: '',
     incotermId: '',
     deviseId: '',
-    nombreProduits: '',
+    nombreProduits: '0',
     remarqueGenerale: '',
   }));
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -94,6 +101,7 @@ const ClientDemandCreatePage = () => {
     unite: UNITE_OPTIONS[0],
     prix: '',
     hsCode: '',
+    typeDemande: typeDemandeOptions[0] ?? '',
   }));
   const [productFormErrors, setProductFormErrors] = useState<ProductFormErrors>({});
   const [editingProductIndex, setEditingProductIndex] = useState<number | null>(null);
@@ -106,6 +114,7 @@ const ClientDemandCreatePage = () => {
     dispatch(resetDemande());
     dispatch(getDevises({}));
     dispatch(getIncoterms({}));
+    dispatch(getSousServices({}));
   }, [dispatch]);
 
   useEffect(() => {
@@ -166,6 +175,7 @@ const ClientDemandCreatePage = () => {
       unite: UNITE_OPTIONS[0],
       prix: '',
       hsCode: '',
+      typeDemande: typeDemandeOptions[0] ?? '',
     });
     setProductFormErrors({});
     setEditingProductIndex(null);
@@ -189,6 +199,7 @@ const ClientDemandCreatePage = () => {
       unite: produit.unite ?? UNITE_OPTIONS[0],
       prix: produit.prix !== undefined && produit.prix !== null ? String(produit.prix) : '',
       hsCode: produit.hsCode ?? '',
+      typeDemande: produit.typeDemande ?? typeDemandeOptions[0] ?? '',
     });
     setProductFormErrors({});
     setEditingProductIndex(index);
@@ -240,6 +251,7 @@ const ClientDemandCreatePage = () => {
       unite: productFormValues.unite,
       prix: Number(productFormValues.prix),
       hsCode: productFormValues.hsCode.trim() || undefined,
+      typeDemande: productFormValues.typeDemande as keyof typeof TypeDemande,
     };
 
     setProduits(prev => {
@@ -272,11 +284,13 @@ const ClientDemandCreatePage = () => {
     setSubmitting(true);
     setSubmitError(null);
 
+    const sousServicesPayload = formValues.sousServices.filter(id => id !== '').map(id => ({ id: Number(id) }));
+
     const payload: IDemandeClient = {
       reference: formValues.reference,
       dateDemande: dayjs(formValues.dateDemande),
-      servicePrincipal: formValues.servicePrincipal,
-      sousServices: formValues.sousServices.length ? formValues.sousServices.join(', ') : null,
+      servicePrincipal: formValues.servicePrincipal as keyof typeof ServicePrincipal,
+      sousServices: sousServicesPayload,
       provenance: formValues.provenance.trim(),
       incoterm: formValues.incotermId ? { id: Number(formValues.incotermId) } : undefined,
       devise: formValues.deviseId ? { id: Number(formValues.deviseId) } : undefined,
@@ -292,6 +306,7 @@ const ClientDemandCreatePage = () => {
       unite: produit.unite,
       prix: produit.prix,
       hsCode: produit.hsCode,
+      typeDemande: produit.typeDemande,
     }));
 
     axios
@@ -403,10 +418,9 @@ const ClientDemandCreatePage = () => {
                     value={formValues.servicePrincipal}
                     onChange={handleChange('servicePrincipal')}
                   >
-                    <option value="">{translate('crmApp.demandeClient.create.selectPlaceholder')}</option>
-                    {SERVICE_OPTIONS.map(option => (
+                    {servicePrincipalOptions.map(option => (
                       <option key={option} value={option}>
-                        {option}
+                        {translate(`crmApp.ServicePrincipal.${option}`)}
                       </option>
                     ))}
                   </Input>
@@ -424,13 +438,21 @@ const ClientDemandCreatePage = () => {
                     type="select"
                     multiple
                     value={formValues.sousServices}
-                    onChange={(event: any) => handleMultiSelectChange}
+                    onChange={event => handleMultiSelectChange}
+                    disabled={sousServicesLoading}
                   >
-                    {SOUS_SERVICE_OPTIONS.map(option => (
-                      <option key={option} value={option}>
-                        {option}
+                    {sousServicesLoading ? (
+                      <option value="" disabled>
+                        Chargement...
                       </option>
-                    ))}
+                    ) : null}
+                    {sousServices
+                      .filter(ss => ss.id !== undefined && ss.id !== null)
+                      .map(ss => (
+                        <option key={ss.id} value={String(ss.id)}>
+                          {ss.libelle ?? ss.code ?? ss.id}
+                        </option>
+                      ))}
                   </Input>
                 </FormGroup>
               </Col>
@@ -549,6 +571,7 @@ const ClientDemandCreatePage = () => {
                         Quantité
                       </th>
                       <th style={{ width: 110 }}>Unité</th>
+                      <th style={{ width: 160 }}>Type de demande</th>
                       <th className="text-end" style={{ width: 130 }}>
                         Prix
                       </th>
@@ -565,6 +588,15 @@ const ClientDemandCreatePage = () => {
                         <td className="text-muted small">{produit.description || '--'}</td>
                         <td className="text-end">{produit.quantite ?? '--'}</td>
                         <td>{produit.unite ? (produit.unite === 'm3' ? 'm³' : produit.unite) : '--'}</td>
+                        <td>
+                          {produit.typeDemande ? (
+                            <span className="badge bg-light text-primary fw-semibold">
+                              {translate(`crmApp.TypeDemande.${produit.typeDemande}`)}
+                            </span>
+                          ) : (
+                            '--'
+                          )}
+                        </td>
                         <td className="text-end">{produit.prix ?? '--'}</td>
                         <td>{produit.hsCode || '--'}</td>
                         <td className="text-center">
@@ -639,6 +671,23 @@ const ClientDemandCreatePage = () => {
                     {UNITE_OPTIONS.map(option => (
                       <option key={option} value={option}>
                         {option === 'm3' ? 'm³' : option}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col md="6">
+                <FormGroup>
+                  <Label for="produit-typeDemande">Type de demande</Label>
+                  <Input
+                    id="produit-typeDemande"
+                    type="select"
+                    value={productFormValues.typeDemande}
+                    onChange={handleProductFieldChange('typeDemande')}
+                  >
+                    {typeDemandeOptions.map(option => (
+                      <option key={option} value={option}>
+                        {translate(`crmApp.TypeDemande.${option}`)}
                       </option>
                     ))}
                   </Input>

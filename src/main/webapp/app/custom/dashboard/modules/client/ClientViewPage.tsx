@@ -14,6 +14,7 @@ import { ISocieteLiee } from 'app/shared/model/societe-liee.model';
 import { IDocumentClient } from 'app/shared/model/document-client.model';
 import { IKycClient } from 'app/shared/model/kyc-client.model';
 import { IDemandeClient } from 'app/shared/model/demande-client.model';
+import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
 import { IProduitDemande } from 'app/shared/model/produit-demande.model';
 import { IOpportunity } from 'app/shared/model/opportunity.model';
 import { OpportunityStage } from 'app/shared/model/enumerations/opportunity-stage.model';
@@ -29,6 +30,29 @@ const formatDate = (value?: dayjs.Dayjs | string | null, format = 'DD MMM YYYY')
 
 const renderValue = (value: React.ReactNode) =>
   value !== undefined && value !== null && value !== '' ? value : <span className="text-muted">--</span>;
+
+const renderServicePrincipalBadge = (servicePrincipal?: IDemandeClient['servicePrincipal']) => {
+  if (!servicePrincipal) {
+    return null;
+  }
+
+  const tone = servicePrincipal === ServicePrincipal.IMPORT ? 'primary' : 'success';
+  return <span className={outlineBadgeClass(tone)}>{translate(`crmApp.ServicePrincipal.${servicePrincipal}`)}</span>;
+};
+
+const renderSousServiceChips = (sousServices?: IDemandeClient['sousServices']) => {
+  if (!sousServices || sousServices.length === 0) {
+    return null;
+  }
+
+  return sousServices
+    .filter(item => item.id !== undefined && item.id !== null)
+    .map(item => (
+      <span key={item.id} className="badge rounded-pill bg-light text-primary border border-primary">
+        {item.libelle ?? item.code ?? item.id}
+      </span>
+    ));
+};
 
 const formatDeviseDisplay = (devise?: IDemandeClient['devise']) => {
   if (!devise) {
@@ -627,6 +651,8 @@ const ClientViewPage = () => {
                 <div className="d-flex flex-column gap-3">
                   {requests.map(request => {
                     const produits = request.id ? (produitsParDemande.get(request.id) ?? []) : [];
+                    const servicePrincipalBadge = renderServicePrincipalBadge(request.servicePrincipal);
+                    const sousServiceChips = renderSousServiceChips(request.sousServices);
                     return (
                       <Card key={request.id} className="border-0 shadow-sm">
                         <CardBody>
@@ -634,8 +660,14 @@ const ClientViewPage = () => {
                             <div>
                               <h6 className="mb-1">{request.reference}</h6>
                               <div className="text-muted small">
-                                {formatDate(request.dateDemande)} · {renderValue(request.servicePrincipal)}
+                                {formatDate(request.dateDemande)} · {renderValue(request.provenance)}
                               </div>
+                              {(servicePrincipalBadge || sousServiceChips) && (
+                                <div className="d-flex flex-wrap gap-2 mt-2">
+                                  {servicePrincipalBadge}
+                                  {sousServiceChips}
+                                </div>
+                              )}
                             </div>
                             <div className="text-md-end text-muted small">
                               <div>
@@ -653,6 +685,7 @@ const ClientViewPage = () => {
                                     <div className="fw-semibold">{renderValue(produit.nomProduit)}</div>
                                     <div className="text-muted small">
                                       {renderValue(produit.quantite)} {renderValue(produit.unite)} · {renderValue(produit.typeProduit)}
+                                      {produit.typeDemande ? ' · ' + translate(`crmApp.TypeDemande.${produit.typeDemande}`) : null}
                                     </div>
                                   </div>
                                   {produit.description ? <div className="text-muted small mt-1">{produit.description}</div> : null}

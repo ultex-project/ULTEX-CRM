@@ -16,6 +16,7 @@ import {
   faClock,
   faChevronDown,
   faDatabase,
+  faList,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from 'app/config/store';
 import './sidebar.scss';
@@ -121,6 +122,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
       label: 'global.menu.data',
       icon: faDatabase,
       path: '/dashboard/data',
+      roles: ['ROLE_ADMIN', 'ROLE_DATA'],
+    },
+    {
+      id: 'sous-services',
+      label: 'global.menu.sousServices',
+      icon: faList,
+      path: '/dashboard/sous-services',
       roles: ['ROLE_ADMIN', 'ROLE_DATA'],
     },
     {

@@ -27,7 +27,27 @@
       "client": "Client",
       "devise": "Devise",
       "incoterm": "Incoterm",
-      "sousServices": "Sous Services"
+      "sousServices": "Sous Services",
+      "create": {
+        "title": "Créer une nouvelle demande",
+        "subtitle": "Renseignez les informations principales et ajoutez les produits demandés.",
+        "back": "Retour au client",
+        "save": "Enregistrer la demande",
+        "selectPlaceholder": "Sélectionnez une option",
+        "success": "Demande créée avec succès.",
+        "errorSubmit": "Impossible d'enregistrer la demande. Veuillez réessayer.",
+        "breadcrumb": {
+          "client": "Client",
+          "current": "Nouvelle demande"
+        },
+        "errors": {
+          "servicePrincipal": "Veuillez choisir le service principal.",
+          "provenance": "La provenance est obligatoire.",
+          "incoterm": "Sélectionnez un incoterm.",
+          "devise": "Sélectionnez une devise.",
+          "nombreProduits": "Ajoutez au moins un produit à la demande."
+        }
+      }
     }
   }
 }

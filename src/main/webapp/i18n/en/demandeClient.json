@@ -27,7 +27,27 @@
       "client": "Client",
       "devise": "Devise",
       "incoterm": "Incoterm",
-      "sousServices": "Sous Services"
+      "sousServices": "Sous Services",
+      "create": {
+        "title": "Create a demand",
+        "subtitle": "Fill in the main request details and add the requested products.",
+        "back": "Back to client",
+        "save": "Save demand",
+        "selectPlaceholder": "Select an option",
+        "success": "Request created successfully.",
+        "errorSubmit": "Unable to save the request. Please try again.",
+        "breadcrumb": {
+          "client": "Client",
+          "current": "New demand"
+        },
+        "errors": {
+          "servicePrincipal": "Please choose the main service.",
+          "provenance": "Provenance is required.",
+          "incoterm": "Select an incoterm.",
+          "devise": "Select a currency.",
+          "nombreProduits": "Add at least one product to the request."
+        }
+      }
     }
   }
 }
