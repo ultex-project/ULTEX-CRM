@@ -45,7 +45,13 @@ entity Devise {
   symbole String,              // e.g., "$"
   pays String                  // optional, e.g., "United States"
 }
-
+enum TypeProduit {
+  VEHICULE,
+  MACHINE,
+  PRODUIT_FINAL,
+  MATIERE_PREMIERE,
+  AUTRE
+}
 entity Incoterm {
   code String required unique, // e.g., "FOB"
   description String required  // e.g., "Free On Board"
@@ -112,7 +118,7 @@ entity DemandeClient {
 }
 
 entity ProduitDemande {
-  typeProduit String, // e.g. "Véhicule", "Machine", "Matière première"
+  typeProduit TypeProduit required,
   typeDemande TypeDemande required,
   nomProduit String required,
   description TextBlob,
