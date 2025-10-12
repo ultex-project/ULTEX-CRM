@@ -19,6 +19,7 @@ import { IProduitDemande } from 'app/shared/model/produit-demande.model';
 import { IOpportunity } from 'app/shared/model/opportunity.model';
 import { OpportunityStage } from 'app/shared/model/enumerations/opportunity-stage.model';
 import { IHistoriqueCRM } from 'app/shared/model/historique-crm.model';
+import ClientAvatar from 'app/custom/dashboard/modules/client/components/ClientAvatar';
 
 const outlineBadgeClass = (tone: 'success' | 'secondary' | 'danger' | 'info' | 'warning' | 'primary') =>
   `badge rounded-pill fw-semibold px-3 py-1 bg-white border border-${tone} text-${tone}`;
@@ -282,35 +283,6 @@ const buildProductsByRequest = (products: IProduitDemande[]) => {
   return map;
 };
 
-const ClientAvatar: React.FC<{ client: IClient | null }> = ({ client }) => {
-  if (client?.photoUrl) {
-    return (
-      <img
-        src={client.photoUrl}
-        alt={client.nomComplet ?? ''}
-        className="rounded-circle border"
-        style={{ width: 72, height: 72, objectFit: 'cover' }}
-      />
-    );
-  }
-
-  const initials = (client?.nomComplet ?? '')
-    .split(' ')
-    .filter(Boolean)
-    .map(part => part[0]?.toUpperCase() ?? '')
-    .join('')
-    .slice(0, 2);
-
-  return (
-    <div
-      className="d-inline-flex align-items-center justify-content-center rounded-circle border bg-light text-primary fw-bold"
-      style={{ width: 72, height: 72 }}
-    >
-      {initials || '?'}
-    </div>
-  );
-};
-
 const ClientHeaderCard: React.FC<{ client: IClient | null }> = ({ client }) => {
   const headerDates = useMemo(() => {
     if (!client) {
@@ -339,7 +311,7 @@ const ClientHeaderCard: React.FC<{ client: IClient | null }> = ({ client }) => {
       <CardBody>
         <div className="d-flex flex-column flex-lg-row gap-4 align-items-lg-center">
           <div className="d-flex align-items-center gap-3">
-            <ClientAvatar client={client} />
+            <ClientAvatar name={client?.nomComplet} photoUrl={client?.photoUrl} />
             <div>
               <h2 className="mb-1">{client?.nomComplet ?? '--'}</h2>
               <div className="d-flex flex-wrap gap-2 align-items-center text-muted">
@@ -657,7 +629,7 @@ const RequestsCard: React.FC<RequestsCardProps> = ({ clientId, requests, produit
       {clientId ? (
         <Button color="primary" size="sm" tag={Link} to={`/dashboard/clients/${clientId}/demands/new`} className="shadow-sm">
           <FontAwesomeIcon icon={faPlus} className="me-2" />
-          <Translate contentKey="crmApp.demandeClient.create.newButton" />
+          <Translate contentKey="crmApp.admin.dashboard.createDemandeClient" />
         </Button>
       ) : null}
     </CardHeader>

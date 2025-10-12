@@ -58,6 +58,7 @@ import { buildQueryStringFromAdvancedFilters } from 'app/custom/dashboard/filter
 import { AdvancedFilterPayload, FieldOption } from '../advanced-filter.types';
 import AdvancedFilterBuilder from '../contact/AdvancedFilterBuilder';
 import StatusBadge, { StatusBadgeVariant } from 'app/custom/dashboard/components/status-badge/StatusBadge';
+import ClientAvatar from './components/ClientAvatar';
 
 import './ClientListPage.scss';
 
@@ -90,16 +91,6 @@ const resolveClientStatus = (client: IClient): ClientStatusKey | null => {
 
   if (!isClientStatusKey(candidate)) return null;
   return candidate;
-};
-
-const renderClientAvatar = (fullName?: string | null) => {
-  if (!fullName) {
-    return <div className="avatar-placeholder">?</div>;
-  }
-
-  const parts = fullName.split(' ').filter(Boolean);
-  const initials = `${parts[0]?.[0] ?? ''}${parts[1]?.[0] ?? ''}`.toUpperCase() || fullName.slice(0, 2).toUpperCase();
-  return <div className="avatar-circle">{initials}</div>;
 };
 
 const getClientLabel = (client?: IClient | null) => {
@@ -620,7 +611,7 @@ const ClientListPage = () => {
                       <tr key={rowId}>
                         <td>
                           <div className="d-flex align-items-center gap-3">
-                            {renderClientAvatar(client.nomComplet)}
+                            <ClientAvatar name={client.nomComplet ?? ''} photoUrl={client.photoUrl ?? undefined} size={42} />
                             <div>
                               <div className="fw-semibold text-capitalize">
                                 {client.nomComplet ?? translate('crmApp.client.dashboard.table.unnamed')}

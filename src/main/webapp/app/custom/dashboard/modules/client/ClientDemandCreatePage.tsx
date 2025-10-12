@@ -130,10 +130,6 @@ const ClientDemandCreatePage = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const clientIdNumber = useMemo(() => (clientId ? Number(clientId) : null), [clientId]);
-  const activeProductFields = useMemo(
-    () => getActiveProductFields(formValues.servicePrincipal, formValues.typeDemande),
-    [formValues.servicePrincipal, formValues.typeDemande],
-  );
 
   const getActiveProductFields = (servicePrincipalValue: string, typeDemandeValue: string): Array<keyof ProductFormState> => {
     const service = servicePrincipalValue as keyof typeof ServicePrincipal;
@@ -158,6 +154,11 @@ const ClientDemandCreatePage = () => {
 
     return ['quantite', 'prix'];
   };
+
+  const activeProductFields = useMemo(
+    () => getActiveProductFields(formValues.servicePrincipal, formValues.typeDemande),
+    [formValues.servicePrincipal, formValues.typeDemande],
+  );
 
   useEffect(() => {
     dispatch(resetDemande());
@@ -748,17 +749,6 @@ const ClientDemandCreatePage = () => {
                   {renderError('deviseId')}
                 </FormGroup>
               </Col>
-
-              <Col md="4">
-                <FormGroup>
-                  <Label for="demande-nombreProduits">
-                    <Translate contentKey="crmApp.demandeClient.nombreProduits" /> *
-                  </Label>
-                  <Input id="demande-nombreProduits" type="number" value={formValues.nombreProduits} readOnly />
-                  {renderError('nombreProduits')}
-                </FormGroup>
-              </Col>
-
               <Col md="12">
                 <FormGroup>
                   <Label for="demande-remarqueGenerale">
