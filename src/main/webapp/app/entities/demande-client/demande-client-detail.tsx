@@ -55,17 +55,17 @@ export const DemandeClientDetail = () => {
           </dt>
           <dd>{demandeClientEntity.servicePrincipal}</dd>
           <dt>
+            <span id="typeDemande">
+              <Translate contentKey="crmApp.demandeClient.typeDemande">Type Demande</Translate>
+            </span>
+          </dt>
+          <dd>{demandeClientEntity.typeDemande}</dd>
+          <dt>
             <span id="provenance">
               <Translate contentKey="crmApp.demandeClient.provenance">Provenance</Translate>
             </span>
           </dt>
           <dd>{demandeClientEntity.provenance}</dd>
-          <dt>
-            <span id="nombreProduits">
-              <Translate contentKey="crmApp.demandeClient.nombreProduits">Nombre Produits</Translate>
-            </span>
-          </dt>
-          <dd>{demandeClientEntity.nombreProduits}</dd>
           <dt>
             <span id="remarqueGenerale">
               <Translate contentKey="crmApp.demandeClient.remarqueGenerale">Remarque Generale</Translate>

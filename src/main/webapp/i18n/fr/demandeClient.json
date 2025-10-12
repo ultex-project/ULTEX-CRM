@@ -21,8 +21,8 @@
       "reference": "Reference",
       "dateDemande": "Date Demande",
       "servicePrincipal": "Service Principal",
+      "typeDemande": "Type Demande",
       "provenance": "Provenance",
-      "nombreProduits": "Nombre Produits",
       "remarqueGenerale": "Remarque Generale",
       "client": "Client",
       "devise": "Devise",
@@ -42,6 +42,7 @@
         },
         "errors": {
           "servicePrincipal": "Veuillez choisir le service principal.",
+          "typeDemande": "Choisissez le type de demande.",
           "provenance": "La provenance est obligatoire.",
           "incoterm": "Sélectionnez un incoterm.",
           "devise": "Sélectionnez une devise.",

@@ -22,12 +22,14 @@
       "fieldValues": "IMPORT,EXPORT"
     },
     {
-      "fieldName": "provenance",
-      "fieldType": "String"
+      "fieldName": "typeDemande",
+      "fieldType": "TypeDemande",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PROFORMA,SOURCING,NEGOCIATION,AUTRE"
     },
     {
-      "fieldName": "nombreProduits",
-      "fieldType": "Integer"
+      "fieldName": "provenance",
+      "fieldType": "String"
     },
     {
       "fieldName": "remarqueGenerale",

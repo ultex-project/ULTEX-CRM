@@ -36,11 +36,13 @@ import { getEntities as getSousServices } from 'app/entities/sous-service/sous-s
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
 import { TypeDemande } from 'app/shared/model/enumerations/type-demande.model';
+import { TypeProduit } from 'app/shared/model/enumerations/type-produit.model';
 
 interface FormState {
   reference: string;
   dateDemande: string;
   servicePrincipal: string;
+  typeDemande: string;
   sousServices: string[];
   provenance: string;
   incotermId: string;
@@ -52,18 +54,27 @@ interface FormState {
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
 interface ProductFormState {
+  typeProduit: string;
   nomProduit: string;
   description: string;
   quantite: string;
   unite: string;
   prix: string;
+  poidsKg: string;
+  volumeTotalCbm: string;
   hsCode: string;
-  typeDemande: string;
+  prixCible: string;
+  origine: string;
+  fournisseur: string;
+  contact: string;
+  adresseChargement: string;
+  adresseDechargement: string;
 }
 
 type ProductFormErrors = Partial<Record<keyof ProductFormState, string>>;
 
 const UNITE_OPTIONS = ['pcs', 'kg', 'm3'] as const;
+type LocalProduitDemande = IProduitDemande & { contact?: string | null };
 
 const ClientDemandCreatePage = () => {
   const { clientId } = useParams<'clientId'>();
@@ -79,11 +90,13 @@ const ClientDemandCreatePage = () => {
 
   const servicePrincipalOptions = Object.keys(ServicePrincipal);
   const typeDemandeOptions = Object.keys(TypeDemande);
+  const typeProduitOptions = useMemo(() => Object.keys(TypeProduit), []);
 
   const [formValues, setFormValues] = useState<FormState>(() => ({
     reference: `DEM-${Date.now()}`,
     dateDemande: dayjs().format('YYYY-MM-DD'),
     servicePrincipal: servicePrincipalOptions[0] ?? '',
+    typeDemande: typeDemandeOptions[0] ?? '',
     sousServices: [],
     provenance: '',
     incotermId: '',
@@ -92,16 +105,24 @@ const ClientDemandCreatePage = () => {
     remarqueGenerale: '',
   }));
   const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const [produits, setProduits] = useState<IProduitDemande[]>([]);
+  const [produits, setProduits] = useState<LocalProduitDemande[]>([]);
   const [productModalOpen, setProductModalOpen] = useState(false);
   const [productFormValues, setProductFormValues] = useState<ProductFormState>(() => ({
+    typeProduit: typeProduitOptions[0] ?? '',
     nomProduit: '',
     description: '',
     quantite: '',
     unite: UNITE_OPTIONS[0],
     prix: '',
+    poidsKg: '',
+    volumeTotalCbm: '',
     hsCode: '',
-    typeDemande: typeDemandeOptions[0] ?? '',
+    prixCible: '',
+    origine: '',
+    fournisseur: '',
+    contact: '',
+    adresseChargement: '',
+    adresseDechargement: '',
   }));
   const [productFormErrors, setProductFormErrors] = useState<ProductFormErrors>({});
   const [editingProductIndex, setEditingProductIndex] = useState<number | null>(null);
@@ -109,6 +130,34 @@ const ClientDemandCreatePage = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const clientIdNumber = useMemo(() => (clientId ? Number(clientId) : null), [clientId]);
+  const activeProductFields = useMemo(
+    () => getActiveProductFields(formValues.servicePrincipal, formValues.typeDemande),
+    [formValues.servicePrincipal, formValues.typeDemande],
+  );
+
+  const getActiveProductFields = (servicePrincipalValue: string, typeDemandeValue: string): Array<keyof ProductFormState> => {
+    const service = servicePrincipalValue as keyof typeof ServicePrincipal;
+    const type = typeDemandeValue as keyof typeof TypeDemande;
+
+    if (service === 'IMPORT') {
+      switch (type) {
+        case 'PROFORMA':
+          return ['quantite', 'unite', 'prix', 'poidsKg', 'volumeTotalCbm', 'hsCode', 'prixCible'];
+        case 'SOURCING':
+          return ['origine', 'fournisseur', 'prixCible'];
+        case 'NEGOCIATION':
+          return ['fournisseur', 'prix', 'contact'];
+        default:
+          return ['quantite', 'prix', 'hsCode'];
+      }
+    }
+
+    if (service === 'EXPORT') {
+      return ['quantite', 'unite', 'adresseChargement', 'adresseDechargement', 'poidsKg', 'volumeTotalCbm'];
+    }
+
+    return ['quantite', 'prix'];
+  };
 
   useEffect(() => {
     dispatch(resetDemande());
@@ -150,6 +199,9 @@ const ClientDemandCreatePage = () => {
     if (!formValues.servicePrincipal) {
       nextErrors.servicePrincipal = translate('crmApp.demandeClient.create.errors.servicePrincipal');
     }
+    if (!formValues.typeDemande) {
+      nextErrors.typeDemande = translate('crmApp.demandeClient.create.errors.typeDemande');
+    }
     if (!formValues.provenance.trim()) {
       nextErrors.provenance = translate('crmApp.demandeClient.create.errors.provenance');
     }
@@ -169,13 +221,21 @@ const ClientDemandCreatePage = () => {
 
   const resetProductForm = () => {
     setProductFormValues({
+      typeProduit: typeProduitOptions[0] ?? '',
       nomProduit: '',
       description: '',
       quantite: '',
       unite: UNITE_OPTIONS[0],
       prix: '',
+      poidsKg: '',
+      volumeTotalCbm: '',
       hsCode: '',
-      typeDemande: typeDemandeOptions[0] ?? '',
+      prixCible: '',
+      origine: '',
+      fournisseur: '',
+      contact: '',
+      adresseChargement: '',
+      adresseDechargement: '',
     });
     setProductFormErrors({});
     setEditingProductIndex(null);
@@ -193,13 +253,21 @@ const ClientDemandCreatePage = () => {
   const handleOpenEditProduct = (index: number) => {
     const produit = produits[index];
     setProductFormValues({
+      typeProduit: produit.typeProduit ?? typeProduitOptions[0] ?? '',
       nomProduit: produit.nomProduit ?? '',
       description: produit.description ?? '',
       quantite: produit.quantite !== undefined && produit.quantite !== null ? String(produit.quantite) : '',
       unite: produit.unite ?? UNITE_OPTIONS[0],
       prix: produit.prix !== undefined && produit.prix !== null ? String(produit.prix) : '',
+      poidsKg: produit.poidsKg !== undefined && produit.poidsKg !== null ? String(produit.poidsKg) : '',
+      volumeTotalCbm: produit.volumeTotalCbm !== undefined && produit.volumeTotalCbm !== null ? String(produit.volumeTotalCbm) : '',
       hsCode: produit.hsCode ?? '',
-      typeDemande: produit.typeDemande ?? typeDemandeOptions[0] ?? '',
+      prixCible: produit.prixCible !== undefined && produit.prixCible !== null ? String(produit.prixCible) : '',
+      origine: produit.origine ?? '',
+      fournisseur: produit.fournisseur ?? '',
+      contact: produit.contact ?? '',
+      adresseChargement: produit.adresseChargement ?? '',
+      adresseDechargement: produit.adresseDechargement ?? '',
     });
     setProductFormErrors({});
     setEditingProductIndex(index);
@@ -219,21 +287,55 @@ const ClientDemandCreatePage = () => {
       }
     };
 
+  const productFieldLabels: Record<keyof ProductFormState, string> = {
+    typeProduit: 'Type de produit',
+    nomProduit: 'Nom du produit',
+    description: 'Description',
+    quantite: 'Quantité',
+    unite: 'Unité',
+    prix: 'Prix',
+    poidsKg: 'Poids (kg)',
+    volumeTotalCbm: 'Volume total (CBM)',
+    hsCode: 'HS Code',
+    prixCible: 'Prix cible',
+    origine: 'Origine',
+    fournisseur: 'Fournisseur',
+    contact: 'Contact',
+    adresseChargement: 'Adresse de chargement',
+    adresseDechargement: 'Adresse de déchargement',
+  };
+
+  const numericFields: Array<keyof ProductFormState> = ['quantite', 'prix', 'poidsKg', 'volumeTotalCbm', 'prixCible'];
+  const strictlyPositiveFields: Array<keyof ProductFormState> = ['quantite', 'poidsKg', 'volumeTotalCbm'];
+  const nonNegativeFields: Array<keyof ProductFormState> = ['prix', 'prixCible'];
+
   const validateProductForm = () => {
     const nextErrors: ProductFormErrors = {};
-    if (!productFormValues.nomProduit.trim()) {
-      nextErrors.nomProduit = 'Le nom du produit est obligatoire.';
-    }
-    if (!productFormValues.quantite.trim()) {
-      nextErrors.quantite = 'La quantité est obligatoire.';
-    } else if (Number(productFormValues.quantite) <= 0) {
-      nextErrors.quantite = 'La quantité doit être supérieure à 0.';
-    }
-    if (!productFormValues.prix.trim()) {
-      nextErrors.prix = 'Le prix est obligatoire.';
-    } else if (Number(productFormValues.prix) < 0) {
-      nextErrors.prix = 'Le prix doit être positif ou nul.';
-    }
+    const mandatoryFields: Array<keyof ProductFormState> = ['typeProduit', 'nomProduit', ...activeProductFields];
+
+    mandatoryFields.forEach(field => {
+      const rawValue = productFormValues[field];
+      const value = typeof rawValue === 'string' ? rawValue.trim() : '';
+      if (!value) {
+        nextErrors[field] = `${productFieldLabels[field]} est obligatoire.`;
+        return;
+      }
+
+      if (numericFields.includes(field)) {
+        const parsed = Number(value);
+        if (Number.isNaN(parsed)) {
+          nextErrors[field] = `${productFieldLabels[field]} doit être un nombre valide.`;
+          return;
+        }
+        if (strictlyPositiveFields.includes(field) && parsed <= 0) {
+          nextErrors[field] = `${productFieldLabels[field]} doit être supérieur à 0.`;
+        }
+        if (nonNegativeFields.includes(field) && parsed < 0) {
+          nextErrors[field] = `${productFieldLabels[field]} ne peut pas être négatif.`;
+        }
+      }
+    });
+
     setProductFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -244,14 +346,40 @@ const ClientDemandCreatePage = () => {
       return;
     }
 
-    const produit: IProduitDemande = {
+    const activeFieldSet = new Set(activeProductFields);
+    const toNumberOrUndefined = (value: string) => {
+      const trimmed = value.trim();
+      if (!trimmed) {
+        return undefined;
+      }
+      const parsed = Number(trimmed);
+      return Number.isNaN(parsed) ? undefined : parsed;
+    };
+    const getStringValue = (field: keyof ProductFormState) => {
+      const raw = productFormValues[field];
+      if (typeof raw !== 'string') {
+        return undefined;
+      }
+      const trimmed = raw.trim();
+      return trimmed || undefined;
+    };
+
+    const produit: LocalProduitDemande = {
+      typeProduit: productFormValues.typeProduit as keyof typeof TypeProduit,
       nomProduit: productFormValues.nomProduit.trim(),
       description: productFormValues.description.trim() || undefined,
-      quantite: Number(productFormValues.quantite),
-      unite: productFormValues.unite,
-      prix: Number(productFormValues.prix),
-      hsCode: productFormValues.hsCode.trim() || undefined,
-      typeDemande: productFormValues.typeDemande as keyof typeof TypeDemande,
+      quantite: activeFieldSet.has('quantite') ? toNumberOrUndefined(productFormValues.quantite) : undefined,
+      unite: activeFieldSet.has('unite') ? getStringValue('unite') : undefined,
+      prix: activeFieldSet.has('prix') ? toNumberOrUndefined(productFormValues.prix) : undefined,
+      poidsKg: activeFieldSet.has('poidsKg') ? toNumberOrUndefined(productFormValues.poidsKg) : undefined,
+      volumeTotalCbm: activeFieldSet.has('volumeTotalCbm') ? toNumberOrUndefined(productFormValues.volumeTotalCbm) : undefined,
+      hsCode: activeFieldSet.has('hsCode') ? getStringValue('hsCode') : undefined,
+      prixCible: activeFieldSet.has('prixCible') ? toNumberOrUndefined(productFormValues.prixCible) : undefined,
+      origine: activeFieldSet.has('origine') ? getStringValue('origine') : undefined,
+      fournisseur: activeFieldSet.has('fournisseur') ? getStringValue('fournisseur') : undefined,
+      contact: activeFieldSet.has('contact') ? getStringValue('contact') : undefined,
+      adresseChargement: activeFieldSet.has('adresseChargement') ? getStringValue('adresseChargement') : undefined,
+      adresseDechargement: activeFieldSet.has('adresseDechargement') ? getStringValue('adresseDechargement') : undefined,
     };
 
     setProduits(prev => {
@@ -272,6 +400,81 @@ const ClientDemandCreatePage = () => {
   const renderProductError = (field: keyof ProductFormState) =>
     productFormErrors[field] ? <div className="text-danger small mt-1">{productFormErrors[field]}</div> : null;
 
+  const renderProductField = (field: keyof ProductFormState) => {
+    const colSize = field === 'description' ? 12 : 6;
+    const id = `produit-${field}`;
+    const commonProps = {
+      id,
+      value: productFormValues[field],
+      onChange: handleProductFieldChange(field),
+    };
+    const isRequired = field === 'typeProduit' || field === 'nomProduit' || activeProductFields.includes(field);
+
+    let inputNode: React.ReactNode;
+
+    switch (field) {
+      case 'typeProduit':
+        inputNode = (
+          <Input {...commonProps} type="select">
+            {typeProduitOptions.map(option => (
+              <option key={option} value={option}>
+                {translate(`crmApp.TypeProduit.${option}`)}
+              </option>
+            ))}
+          </Input>
+        );
+        break;
+      case 'unite':
+        inputNode = (
+          <Input {...commonProps} type="select">
+            {UNITE_OPTIONS.map(option => (
+              <option key={option} value={option}>
+                {option === 'm3' ? 'm³' : option}
+              </option>
+            ))}
+          </Input>
+        );
+        break;
+      case 'description':
+        inputNode = <Input {...commonProps} type="textarea" rows={3} />;
+        break;
+      case 'adresseChargement':
+      case 'adresseDechargement':
+        inputNode = <Input {...commonProps} type="textarea" rows={2} />;
+        break;
+      case 'quantite':
+      case 'prix':
+      case 'poidsKg':
+      case 'volumeTotalCbm':
+      case 'prixCible':
+        inputNode = <Input {...commonProps} type="number" step="0.01" min={field === 'prix' || field === 'prixCible' ? '0' : '0.01'} />;
+        break;
+      default:
+        inputNode = <Input {...commonProps} />;
+        break;
+    }
+
+    return (
+      <Col md={colSize} key={field}>
+        <FormGroup>
+          <Label for={id}>
+            {productFieldLabels[field]}
+            {isRequired ? ' *' : ''}
+          </Label>
+          {inputNode}
+          {renderProductError(field)}
+        </FormGroup>
+      </Col>
+    );
+  };
+
+  const formatNumber = (value?: number | null) => {
+    if (value === undefined || value === null) {
+      return undefined;
+    }
+    return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(value);
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!clientIdNumber) {
@@ -290,24 +493,34 @@ const ClientDemandCreatePage = () => {
       reference: formValues.reference,
       dateDemande: dayjs(formValues.dateDemande),
       servicePrincipal: formValues.servicePrincipal as keyof typeof ServicePrincipal,
+      typeDemande: formValues.typeDemande as keyof typeof TypeDemande,
       sousServices: sousServicesPayload,
       provenance: formValues.provenance.trim(),
       incoterm: formValues.incotermId ? { id: Number(formValues.incotermId) } : undefined,
       devise: formValues.deviseId ? { id: Number(formValues.deviseId) } : undefined,
-      nombreProduits: produits.length,
       remarqueGenerale: formValues.remarqueGenerale.trim() || undefined,
       client: { id: clientIdNumber },
     };
 
-    const produitsPayload = produits.map(produit => ({
-      nomProduit: produit.nomProduit,
-      description: produit.description,
-      quantite: produit.quantite,
-      unite: produit.unite,
-      prix: produit.prix,
-      hsCode: produit.hsCode,
-      typeDemande: produit.typeDemande,
-    }));
+    const produitsPayload = produits.map(produit =>
+      cleanEntity({
+        typeProduit: produit.typeProduit,
+        nomProduit: produit.nomProduit,
+        description: produit.description,
+        quantite: produit.quantite,
+        unite: produit.unite,
+        prix: produit.prix,
+        poidsKg: produit.poidsKg,
+        volumeTotalCbm: produit.volumeTotalCbm,
+        hsCode: produit.hsCode,
+        prixCible: produit.prixCible,
+        origine: produit.origine,
+        fournisseur: produit.fournisseur,
+        contact: produit.contact,
+        adresseChargement: produit.adresseChargement,
+        adresseDechargement: produit.adresseDechargement,
+      }),
+    );
 
     axios
       .post('api/demande-clients', cleanEntity({ ...payload, produits: produitsPayload }))
@@ -425,6 +638,22 @@ const ClientDemandCreatePage = () => {
                     ))}
                   </Input>
                   {renderError('servicePrincipal')}
+                </FormGroup>
+              </Col>
+
+              <Col md="4">
+                <FormGroup>
+                  <Label for="demande-typeDemande">
+                    <Translate contentKey="crmApp.demandeClient.typeDemande" /> *
+                  </Label>
+                  <Input id="demande-typeDemande" type="select" value={formValues.typeDemande} onChange={handleChange('typeDemande')}>
+                    {typeDemandeOptions.map(option => (
+                      <option key={option} value={option}>
+                        {translate(`crmApp.TypeDemande.${option}`)}
+                      </option>
+                    ))}
+                  </Input>
+                  {renderError('typeDemande')}
                 </FormGroup>
               </Col>
 
@@ -565,18 +794,9 @@ const ClientDemandCreatePage = () => {
                 <Table bordered hover className="align-middle">
                   <thead className="table-light">
                     <tr>
-                      <th>Nom du produit</th>
-                      <th>Description</th>
-                      <th className="text-end" style={{ width: 120 }}>
-                        Quantité
-                      </th>
-                      <th style={{ width: 110 }}>Unité</th>
-                      <th style={{ width: 160 }}>Type de demande</th>
-                      <th className="text-end" style={{ width: 130 }}>
-                        Prix
-                      </th>
-                      <th style={{ width: 150 }}>HS Code</th>
-                      <th className="text-center" style={{ width: 140 }}>
+                      <th>Produit</th>
+                      <th>Détails</th>
+                      <th className="text-center" style={{ width: 160 }}>
                         Actions
                       </th>
                     </tr>
@@ -584,21 +804,106 @@ const ClientDemandCreatePage = () => {
                   <tbody>
                     {produits.map((produit, index) => (
                       <tr key={`${produit.nomProduit ?? 'produit'}-${index}`}>
-                        <td>{produit.nomProduit || '--'}</td>
-                        <td className="text-muted small">{produit.description || '--'}</td>
-                        <td className="text-end">{produit.quantite ?? '--'}</td>
-                        <td>{produit.unite ? (produit.unite === 'm3' ? 'm³' : produit.unite) : '--'}</td>
-                        <td>
-                          {produit.typeDemande ? (
-                            <span className="badge bg-light text-primary fw-semibold">
-                              {translate(`crmApp.TypeDemande.${produit.typeDemande}`)}
-                            </span>
-                          ) : (
-                            '--'
-                          )}
+                        <td style={{ width: '32%' }}>
+                          <div className="fw-semibold">{produit.nomProduit || '--'}</div>
+                          <div className="text-muted small">
+                            {produit.typeProduit ? translate(`crmApp.TypeProduit.${produit.typeProduit}`) : '--'}
+                          </div>
+                          {produit.description ? <div className="text-muted small mt-2">{produit.description}</div> : null}
                         </td>
-                        <td className="text-end">{produit.prix ?? '--'}</td>
-                        <td>{produit.hsCode || '--'}</td>
+                        <td>
+                          {(() => {
+                            const chips: React.ReactNode[] = [];
+                            if (produit.quantite !== undefined && produit.quantite !== null) {
+                              chips.push(
+                                <span key={`quantite-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Quantité:</span>
+                                  <span className="fw-semibold">
+                                    {formatNumber(produit.quantite)}
+                                    {produit.unite ? ` ${produit.unite === 'm3' ? 'm³' : produit.unite}` : ''}
+                                  </span>
+                                </span>,
+                              );
+                            }
+                            if (produit.prix !== undefined && produit.prix !== null) {
+                              chips.push(
+                                <span key={`prix-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Prix:</span>
+                                  <span className="fw-semibold">{formatNumber(produit.prix)}</span>
+                                </span>,
+                              );
+                            }
+                            if (produit.prixCible !== undefined && produit.prixCible !== null) {
+                              chips.push(
+                                <span key={`prixCible-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Prix cible:</span>
+                                  <span className="fw-semibold">{formatNumber(produit.prixCible)}</span>
+                                </span>,
+                              );
+                            }
+                            if (produit.poidsKg !== undefined && produit.poidsKg !== null) {
+                              chips.push(
+                                <span key={`poids-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Poids:</span>
+                                  <span className="fw-semibold">{formatNumber(produit.poidsKg)} kg</span>
+                                </span>,
+                              );
+                            }
+                            if (produit.volumeTotalCbm !== undefined && produit.volumeTotalCbm !== null) {
+                              chips.push(
+                                <span key={`volume-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Volume:</span>
+                                  <span className="fw-semibold">{formatNumber(produit.volumeTotalCbm)} CBM</span>
+                                </span>,
+                              );
+                            }
+                            if (produit.hsCode) {
+                              chips.push(
+                                <span key={`hs-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">HS Code:</span>
+                                  <span className="fw-semibold">{produit.hsCode}</span>
+                                </span>,
+                              );
+                            }
+                            if (produit.origine) {
+                              chips.push(
+                                <span key={`origine-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Origine:</span>
+                                  <span className="fw-semibold">{produit.origine}</span>
+                                </span>,
+                              );
+                            }
+                            if (produit.fournisseur) {
+                              chips.push(
+                                <span key={`fournisseur-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Fournisseur:</span>
+                                  <span className="fw-semibold">{produit.fournisseur}</span>
+                                </span>,
+                              );
+                            }
+                            if (produit.contact) {
+                              chips.push(
+                                <span key={`contact-${index}`} className="badge bg-light text-dark border fw-normal">
+                                  <span className="text-muted me-1">Contact:</span>
+                                  <span className="fw-semibold">{produit.contact}</span>
+                                </span>,
+                              );
+                            }
+
+                            return chips.length > 0 ? (
+                              <div className="d-flex flex-wrap gap-2">{chips}</div>
+                            ) : (
+                              <span className="text-muted small">--</span>
+                            );
+                          })()}
+
+                          {produit.adresseChargement || produit.adresseDechargement ? (
+                            <div className="small text-muted mt-3">
+                              {produit.adresseChargement ? <div>Chargement: {produit.adresseChargement}</div> : null}
+                              {produit.adresseDechargement ? <div>Déchargement: {produit.adresseDechargement}</div> : null}
+                            </div>
+                          ) : null}
+                        </td>
                         <td className="text-center">
                           <Button color="link" size="sm" className="text-decoration-none me-2" onClick={() => handleOpenEditProduct(index)}>
                             <FontAwesomeIcon icon={faPen} className="me-1" />
@@ -631,88 +936,10 @@ const ClientDemandCreatePage = () => {
           </ModalHeader>
           <ModalBody>
             <Row className="gy-3">
-              <Col md="12">
-                <FormGroup>
-                  <Label for="produit-nom">Nom du produit</Label>
-                  <Input id="produit-nom" value={productFormValues.nomProduit} onChange={handleProductFieldChange('nomProduit')} />
-                  {renderProductError('nomProduit')}
-                </FormGroup>
-              </Col>
-              <Col md="12">
-                <FormGroup>
-                  <Label for="produit-description">Description</Label>
-                  <Input
-                    id="produit-description"
-                    type="textarea"
-                    rows={3}
-                    value={productFormValues.description}
-                    onChange={handleProductFieldChange('description')}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="6">
-                <FormGroup>
-                  <Label for="produit-quantite">Quantité</Label>
-                  <Input
-                    id="produit-quantite"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={productFormValues.quantite}
-                    onChange={handleProductFieldChange('quantite')}
-                  />
-                  {renderProductError('quantite')}
-                </FormGroup>
-              </Col>
-              <Col md="6">
-                <FormGroup>
-                  <Label for="produit-unite">Unité</Label>
-                  <Input id="produit-unite" type="select" value={productFormValues.unite} onChange={handleProductFieldChange('unite')}>
-                    {UNITE_OPTIONS.map(option => (
-                      <option key={option} value={option}>
-                        {option === 'm3' ? 'm³' : option}
-                      </option>
-                    ))}
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="6">
-                <FormGroup>
-                  <Label for="produit-typeDemande">Type de demande</Label>
-                  <Input
-                    id="produit-typeDemande"
-                    type="select"
-                    value={productFormValues.typeDemande}
-                    onChange={handleProductFieldChange('typeDemande')}
-                  >
-                    {typeDemandeOptions.map(option => (
-                      <option key={option} value={option}>
-                        {translate(`crmApp.TypeDemande.${option}`)}
-                      </option>
-                    ))}
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="6">
-                <FormGroup>
-                  <Label for="produit-prix">Prix</Label>
-                  <Input
-                    id="produit-prix"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={productFormValues.prix}
-                    onChange={handleProductFieldChange('prix')}
-                  />
-                  {renderProductError('prix')}
-                </FormGroup>
-              </Col>
-              <Col md="6">
-                <FormGroup>
-                  <Label for="produit-hscode">HS Code</Label>
-                  <Input id="produit-hscode" value={productFormValues.hsCode} onChange={handleProductFieldChange('hsCode')} />
-                </FormGroup>
-              </Col>
+              {renderProductField('typeProduit')}
+              {renderProductField('nomProduit')}
+              {renderProductField('description')}
+              {activeProductFields.map(field => renderProductField(field))}
             </Row>
           </ModalBody>
           <ModalFooter>

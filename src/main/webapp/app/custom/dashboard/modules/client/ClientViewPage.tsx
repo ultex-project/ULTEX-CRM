@@ -689,9 +689,6 @@ const RequestsCard: React.FC<RequestsCardProps> = ({ clientId, requests, produit
                       )}
                     </div>
                     <div className="text-md-end text-muted small">
-                      <div>
-                        <Translate contentKey="crmApp.demandeClient.nombreProduits" />: {renderValue(request.nombreProduits)}
-                      </div>
                       <div>{renderValue(formatDeviseDisplay(request.devise))}</div>
                       <div>{renderValue(formatIncotermDisplay(request.incoterm))}</div>
                     </div>
@@ -704,7 +701,6 @@ const RequestsCard: React.FC<RequestsCardProps> = ({ clientId, requests, produit
                             <div className="fw-semibold">{renderValue(produit.nomProduit)}</div>
                             <div className="text-muted small">
                               {renderValue(produit.quantite)} {renderValue(produit.unite)} · {renderValue(produit.typeProduit)}
-                              {produit.typeDemande ? ' · ' + translate(`crmApp.TypeDemande.${produit.typeDemande}`) : null}
                             </div>
                           </div>
                           {produit.description ? <div className="text-muted small mt-1">{produit.description}</div> : null}

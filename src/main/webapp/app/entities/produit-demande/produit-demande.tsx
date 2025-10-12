@@ -116,10 +116,6 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.typeProduit">Type Produit</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('typeProduit')} />
                 </th>
-                <th className="hand" onClick={sort('typeDemande')}>
-                  <Translate contentKey="crmApp.produitDemande.typeDemande">Type Demande</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('typeDemande')} />
-                </th>
                 <th className="hand" onClick={sort('nomProduit')}>
                   <Translate contentKey="crmApp.produitDemande.nomProduit">Nom Produit</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('nomProduit')} />
@@ -140,10 +136,6 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.prix">Prix</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('prix')} />
                 </th>
-                <th className="hand" onClick={sort('fraisExpedition')}>
-                  <Translate contentKey="crmApp.produitDemande.fraisExpedition">Frais Expedition</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('fraisExpedition')} />
-                </th>
                 <th className="hand" onClick={sort('poidsKg')}>
                   <Translate contentKey="crmApp.produitDemande.poidsKg">Poids Kg</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('poidsKg')} />
@@ -156,14 +148,6 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.dimensions">Dimensions</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('dimensions')} />
                 </th>
-                <th className="hand" onClick={sort('nombreCartons')}>
-                  <Translate contentKey="crmApp.produitDemande.nombreCartons">Nombre Cartons</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('nombreCartons')} />
-                </th>
-                <th className="hand" onClick={sort('piecesParCarton')}>
-                  <Translate contentKey="crmApp.produitDemande.piecesParCarton">Pieces Par Carton</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('piecesParCarton')} />
-                </th>
                 <th className="hand" onClick={sort('hsCode')}>
                   <Translate contentKey="crmApp.produitDemande.hsCode">Hs Code</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('hsCode')} />
@@ -172,13 +156,17 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.prixCible">Prix Cible</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('prixCible')} />
                 </th>
+                <th className="hand" onClick={sort('fraisExpedition')}>
+                  <Translate contentKey="crmApp.produitDemande.fraisExpedition">Frais Expedition</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('fraisExpedition')} />
+                </th>
                 <th className="hand" onClick={sort('origine')}>
                   <Translate contentKey="crmApp.produitDemande.origine">Origine</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('origine')} />
                 </th>
-                <th className="hand" onClick={sort('contactFournisseur')}>
-                  <Translate contentKey="crmApp.produitDemande.contactFournisseur">Contact Fournisseur</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('contactFournisseur')} />
+                <th className="hand" onClick={sort('fournisseur')}>
+                  <Translate contentKey="crmApp.produitDemande.fournisseur">Fournisseur</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('fournisseur')} />
                 </th>
                 <th className="hand" onClick={sort('adresseChargement')}>
                   <Translate contentKey="crmApp.produitDemande.adresseChargement">Adresse Chargement</Translate>{' '}
@@ -214,25 +202,22 @@ export const ProduitDemande = () => {
                       {produitDemande.id}
                     </Button>
                   </td>
-                  <td>{produitDemande.typeProduit}</td>
                   <td>
-                    <Translate contentKey={`crmApp.TypeDemande.${produitDemande.typeDemande}`} />
+                    <Translate contentKey={`crmApp.TypeProduit.${produitDemande.typeProduit}`} />
                   </td>
                   <td>{produitDemande.nomProduit}</td>
                   <td>{produitDemande.description}</td>
                   <td>{produitDemande.quantite}</td>
                   <td>{produitDemande.unite}</td>
                   <td>{produitDemande.prix}</td>
-                  <td>{produitDemande.fraisExpedition}</td>
                   <td>{produitDemande.poidsKg}</td>
                   <td>{produitDemande.volumeTotalCbm}</td>
                   <td>{produitDemande.dimensions}</td>
-                  <td>{produitDemande.nombreCartons}</td>
-                  <td>{produitDemande.piecesParCarton}</td>
                   <td>{produitDemande.hsCode}</td>
                   <td>{produitDemande.prixCible}</td>
+                  <td>{produitDemande.fraisExpedition}</td>
                   <td>{produitDemande.origine}</td>
-                  <td>{produitDemande.contactFournisseur}</td>
+                  <td>{produitDemande.fournisseur}</td>
                   <td>{produitDemande.adresseChargement}</td>
                   <td>{produitDemande.adresseDechargement}</td>
                   <td>{produitDemande.ficheTechniqueUrl}</td>

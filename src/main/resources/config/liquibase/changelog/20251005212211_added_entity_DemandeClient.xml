@@ -23,10 +23,10 @@
             <column name="service_principal" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="provenance" type="varchar(255)">
-                <constraints nullable="true" />
+            <column name="type_demande" type="varchar(255)">
+                <constraints nullable="false" />
             </column>
-            <column name="nombre_produits" type="integer">
+            <column name="provenance" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="remarque_generale" type="varchar(255)">
@@ -80,8 +80,8 @@
             <column name="reference" type="string"/>
             <column name="date_demande" type="date"/>
             <column name="service_principal" type="string"/>
+            <column name="type_demande" type="string"/>
             <column name="provenance" type="string"/>
-            <column name="nombre_produits" type="numeric"/>
             <column name="remarque_generale" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

@@ -1,0 +1,11 @@
+export enum TypeProduit {
+  VEHICULE = 'VEHICULE',
+
+  MACHINE = 'MACHINE',
+
+  PRODUIT_FINAL = 'PRODUIT_FINAL',
+
+  MATIERE_PREMIERE = 'MATIERE_PREMIERE',
+
+  AUTRE = 'AUTRE',
+}

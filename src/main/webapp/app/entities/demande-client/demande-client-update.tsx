@@ -13,6 +13,7 @@ import { getEntities as getDevises } from 'app/entities/devise/devise.reducer';
 import { getEntities as getIncoterms } from 'app/entities/incoterm/incoterm.reducer';
 import { getEntities as getSousServices } from 'app/entities/sous-service/sous-service.reducer';
 import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
+import { TypeDemande } from 'app/shared/model/enumerations/type-demande.model';
 import { createEntity, getEntity, reset, updateEntity } from './demande-client.reducer';
 
 export const DemandeClientUpdate = () => {
@@ -32,6 +33,7 @@ export const DemandeClientUpdate = () => {
   const updating = useAppSelector(state => state.demandeClient.updating);
   const updateSuccess = useAppSelector(state => state.demandeClient.updateSuccess);
   const servicePrincipalValues = Object.keys(ServicePrincipal);
+  const typeDemandeValues = Object.keys(TypeDemande);
 
   const handleClose = () => {
     navigate(`/demande-client${location.search}`);
@@ -61,9 +63,6 @@ export const DemandeClientUpdate = () => {
       values.id = Number(values.id);
     }
     values.dateDemande = convertDateTimeToServer(values.dateDemande);
-    if (values.nombreProduits !== undefined && typeof values.nombreProduits !== 'number') {
-      values.nombreProduits = Number(values.nombreProduits);
-    }
 
     const entity = {
       ...demandeClientEntity,
@@ -88,6 +87,7 @@ export const DemandeClientUpdate = () => {
         }
       : {
           servicePrincipal: 'IMPORT',
+          typeDemande: 'PROFORMA',
           ...demandeClientEntity,
           dateDemande: convertDateTimeFromServer(demandeClientEntity.dateDemande),
           client: demandeClientEntity?.client?.id,
@@ -156,17 +156,23 @@ export const DemandeClientUpdate = () => {
                 ))}
               </ValidatedField>
               <ValidatedField
+                label={translate('crmApp.demandeClient.typeDemande')}
+                id="demande-client-typeDemande"
+                name="typeDemande"
+                data-cy="typeDemande"
+                type="select"
+              >
+                {typeDemandeValues.map(typeDemande => (
+                  <option value={typeDemande} key={typeDemande}>
+                    {translate(`crmApp.TypeDemande.${typeDemande}`)}
+                  </option>
+                ))}
+              </ValidatedField>
+              <ValidatedField
                 label={translate('crmApp.demandeClient.provenance')}
                 id="demande-client-provenance"
                 name="provenance"
                 data-cy="provenance"
-                type="text"
-              />
-              <ValidatedField
-                label={translate('crmApp.demandeClient.nombreProduits')}
-                id="demande-client-nombreProduits"
-                name="nombreProduits"
-                data-cy="nombreProduits"
                 type="text"
               />
               <ValidatedField

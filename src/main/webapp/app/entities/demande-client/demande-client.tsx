@@ -125,13 +125,13 @@ export const DemandeClient = () => {
                   <Translate contentKey="crmApp.demandeClient.servicePrincipal">Service Principal</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('servicePrincipal')} />
                 </th>
+                <th className="hand" onClick={sort('typeDemande')}>
+                  <Translate contentKey="crmApp.demandeClient.typeDemande">Type Demande</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('typeDemande')} />
+                </th>
                 <th className="hand" onClick={sort('provenance')}>
                   <Translate contentKey="crmApp.demandeClient.provenance">Provenance</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('provenance')} />
-                </th>
-                <th className="hand" onClick={sort('nombreProduits')}>
-                  <Translate contentKey="crmApp.demandeClient.nombreProduits">Nombre Produits</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('nombreProduits')} />
                 </th>
                 <th className="hand" onClick={sort('remarqueGenerale')}>
                   <Translate contentKey="crmApp.demandeClient.remarqueGenerale">Remarque Generale</Translate>{' '}
@@ -166,8 +166,10 @@ export const DemandeClient = () => {
                   <td>
                     <Translate contentKey={`crmApp.ServicePrincipal.${demandeClient.servicePrincipal}`} />
                   </td>
+                  <td>
+                    <Translate contentKey={`crmApp.TypeDemande.${demandeClient.typeDemande}`} />
+                  </td>
                   <td>{demandeClient.provenance}</td>
-                  <td>{demandeClient.nombreProduits}</td>
                   <td>{demandeClient.remarqueGenerale}</td>
                   <td>{demandeClient.client ? <Link to={`/client/${demandeClient.client.id}`}>{demandeClient.client.id}</Link> : ''}</td>
                   <td>{demandeClient.devise ? <Link to={`/devise/${demandeClient.devise.id}`}>{demandeClient.devise.id}</Link> : ''}</td>

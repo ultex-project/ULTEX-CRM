@@ -1,6 +1,7 @@
 package com.ultex.crm.service.dto;
 
 import com.ultex.crm.domain.enumeration.ServicePrincipal;
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -25,9 +26,10 @@ public class DemandeClientDTO implements Serializable {
     @NotNull
     private ServicePrincipal servicePrincipal;
 
-    private String provenance;
+    @NotNull
+    private TypeDemande typeDemande;
 
-    private Integer nombreProduits;
+    private String provenance;
 
     private String remarqueGenerale;
 
@@ -71,20 +73,20 @@ public class DemandeClientDTO implements Serializable {
         this.servicePrincipal = servicePrincipal;
     }
 
+    public TypeDemande getTypeDemande() {
+        return typeDemande;
+    }
+
+    public void setTypeDemande(TypeDemande typeDemande) {
+        this.typeDemande = typeDemande;
+    }
+
     public String getProvenance() {
         return provenance;
     }
 
     public void setProvenance(String provenance) {
         this.provenance = provenance;
-    }
-
-    public Integer getNombreProduits() {
-        return nombreProduits;
-    }
-
-    public void setNombreProduits(Integer nombreProduits) {
-        this.nombreProduits = nombreProduits;
     }
 
     public String getRemarqueGenerale() {
@@ -156,8 +158,8 @@ public class DemandeClientDTO implements Serializable {
             ", reference='" + getReference() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", servicePrincipal='" + getServicePrincipal() + "'" +
+            ", typeDemande='" + getTypeDemande() + "'" +
             ", provenance='" + getProvenance() + "'" +
-            ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +
             ", client=" + getClient() +
             ", devise=" + getDevise() +

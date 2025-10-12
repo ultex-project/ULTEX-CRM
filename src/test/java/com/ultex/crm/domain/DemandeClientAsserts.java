@@ -50,8 +50,8 @@ public class DemandeClientAsserts {
             .satisfies(a -> assertThat(a.getReference()).as("check reference").isEqualTo(expected.getReference()))
             .satisfies(a -> assertThat(a.getDateDemande()).as("check dateDemande").isEqualTo(expected.getDateDemande()))
             .satisfies(a -> assertThat(a.getServicePrincipal()).as("check servicePrincipal").isEqualTo(expected.getServicePrincipal()))
+            .satisfies(a -> assertThat(a.getTypeDemande()).as("check typeDemande").isEqualTo(expected.getTypeDemande()))
             .satisfies(a -> assertThat(a.getProvenance()).as("check provenance").isEqualTo(expected.getProvenance()))
-            .satisfies(a -> assertThat(a.getNombreProduits()).as("check nombreProduits").isEqualTo(expected.getNombreProduits()))
             .satisfies(a -> assertThat(a.getRemarqueGenerale()).as("check remarqueGenerale").isEqualTo(expected.getRemarqueGenerale()));
     }
 

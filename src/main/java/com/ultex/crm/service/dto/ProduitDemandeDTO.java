@@ -1,6 +1,6 @@
 package com.ultex.crm.service.dto;
 
-import com.ultex.crm.domain.enumeration.TypeDemande;
+import com.ultex.crm.domain.enumeration.TypeProduit;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -14,10 +14,8 @@ public class ProduitDemandeDTO implements Serializable {
 
     private Long id;
 
-    private String typeProduit;
-
     @NotNull
-    private TypeDemande typeDemande;
+    private TypeProduit typeProduit;
 
     @NotNull
     private String nomProduit;
@@ -31,25 +29,21 @@ public class ProduitDemandeDTO implements Serializable {
 
     private Double prix;
 
-    private Double fraisExpedition;
-
     private Double poidsKg;
 
     private Double volumeTotalCbm;
 
     private String dimensions;
 
-    private Integer nombreCartons;
-
-    private Integer piecesParCarton;
-
     private String hsCode;
 
     private Double prixCible;
 
+    private Double fraisExpedition;
+
     private String origine;
 
-    private String contactFournisseur;
+    private String fournisseur;
 
     private String adresseChargement;
 
@@ -71,20 +65,12 @@ public class ProduitDemandeDTO implements Serializable {
         this.id = id;
     }
 
-    public String getTypeProduit() {
+    public TypeProduit getTypeProduit() {
         return typeProduit;
     }
 
-    public void setTypeProduit(String typeProduit) {
+    public void setTypeProduit(TypeProduit typeProduit) {
         this.typeProduit = typeProduit;
-    }
-
-    public TypeDemande getTypeDemande() {
-        return typeDemande;
-    }
-
-    public void setTypeDemande(TypeDemande typeDemande) {
-        this.typeDemande = typeDemande;
     }
 
     public String getNomProduit() {
@@ -127,14 +113,6 @@ public class ProduitDemandeDTO implements Serializable {
         this.prix = prix;
     }
 
-    public Double getFraisExpedition() {
-        return fraisExpedition;
-    }
-
-    public void setFraisExpedition(Double fraisExpedition) {
-        this.fraisExpedition = fraisExpedition;
-    }
-
     public Double getPoidsKg() {
         return poidsKg;
     }
@@ -159,22 +137,6 @@ public class ProduitDemandeDTO implements Serializable {
         this.dimensions = dimensions;
     }
 
-    public Integer getNombreCartons() {
-        return nombreCartons;
-    }
-
-    public void setNombreCartons(Integer nombreCartons) {
-        this.nombreCartons = nombreCartons;
-    }
-
-    public Integer getPiecesParCarton() {
-        return piecesParCarton;
-    }
-
-    public void setPiecesParCarton(Integer piecesParCarton) {
-        this.piecesParCarton = piecesParCarton;
-    }
-
     public String getHsCode() {
         return hsCode;
     }
@@ -191,6 +153,14 @@ public class ProduitDemandeDTO implements Serializable {
         this.prixCible = prixCible;
     }
 
+    public Double getFraisExpedition() {
+        return fraisExpedition;
+    }
+
+    public void setFraisExpedition(Double fraisExpedition) {
+        this.fraisExpedition = fraisExpedition;
+    }
+
     public String getOrigine() {
         return origine;
     }
@@ -199,12 +169,12 @@ public class ProduitDemandeDTO implements Serializable {
         this.origine = origine;
     }
 
-    public String getContactFournisseur() {
-        return contactFournisseur;
+    public String getFournisseur() {
+        return fournisseur;
     }
 
-    public void setContactFournisseur(String contactFournisseur) {
-        this.contactFournisseur = contactFournisseur;
+    public void setFournisseur(String fournisseur) {
+        this.fournisseur = fournisseur;
     }
 
     public String getAdresseChargement() {
@@ -282,22 +252,19 @@ public class ProduitDemandeDTO implements Serializable {
         return "ProduitDemandeDTO{" +
             "id=" + getId() +
             ", typeProduit='" + getTypeProduit() + "'" +
-            ", typeDemande='" + getTypeDemande() + "'" +
             ", nomProduit='" + getNomProduit() + "'" +
             ", description='" + getDescription() + "'" +
             ", quantite=" + getQuantite() +
             ", unite='" + getUnite() + "'" +
             ", prix=" + getPrix() +
-            ", fraisExpedition=" + getFraisExpedition() +
             ", poidsKg=" + getPoidsKg() +
             ", volumeTotalCbm=" + getVolumeTotalCbm() +
             ", dimensions='" + getDimensions() + "'" +
-            ", nombreCartons=" + getNombreCartons() +
-            ", piecesParCarton=" + getPiecesParCarton() +
             ", hsCode='" + getHsCode() + "'" +
             ", prixCible=" + getPrixCible() +
+            ", fraisExpedition=" + getFraisExpedition() +
             ", origine='" + getOrigine() + "'" +
-            ", contactFournisseur='" + getContactFournisseur() + "'" +
+            ", fournisseur='" + getFournisseur() + "'" +
             ", adresseChargement='" + getAdresseChargement() + "'" +
             ", adresseDechargement='" + getAdresseDechargement() + "'" +
             ", ficheTechniqueUrl='" + getFicheTechniqueUrl() + "'" +

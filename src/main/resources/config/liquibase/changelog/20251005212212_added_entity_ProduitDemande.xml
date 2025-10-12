@@ -15,9 +15,6 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="type_produit" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="type_demande" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
             <column name="nom_produit" type="varchar(255)">
@@ -35,9 +32,6 @@
             <column name="prix" type="double">
                 <constraints nullable="true" />
             </column>
-            <column name="frais_expedition" type="double">
-                <constraints nullable="true" />
-            </column>
             <column name="poids_kg" type="double">
                 <constraints nullable="true" />
             </column>
@@ -47,22 +41,19 @@
             <column name="dimensions" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="nombre_cartons" type="integer">
-                <constraints nullable="true" />
-            </column>
-            <column name="pieces_par_carton" type="integer">
-                <constraints nullable="true" />
-            </column>
             <column name="hs_code" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="prix_cible" type="double">
                 <constraints nullable="true" />
             </column>
+            <column name="frais_expedition" type="double">
+                <constraints nullable="true" />
+            </column>
             <column name="origine" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="contact_fournisseur" type="varchar(255)">
+            <column name="fournisseur" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="adresse_chargement" type="varchar(255)">
@@ -105,22 +96,19 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="type_produit" type="string"/>
-            <column name="type_demande" type="string"/>
             <column name="nom_produit" type="string"/>
             <column name="description" type="clob"/>
             <column name="quantite" type="numeric"/>
             <column name="unite" type="string"/>
             <column name="prix" type="numeric"/>
-            <column name="frais_expedition" type="numeric"/>
             <column name="poids_kg" type="numeric"/>
             <column name="volume_total_cbm" type="numeric"/>
             <column name="dimensions" type="string"/>
-            <column name="nombre_cartons" type="numeric"/>
-            <column name="pieces_par_carton" type="numeric"/>
             <column name="hs_code" type="string"/>
             <column name="prix_cible" type="numeric"/>
+            <column name="frais_expedition" type="numeric"/>
             <column name="origine" type="string"/>
-            <column name="contact_fournisseur" type="string"/>
+            <column name="fournisseur" type="string"/>
             <column name="adresse_chargement" type="string"/>
             <column name="adresse_dechargement" type="string"/>
             <column name="fiche_technique_url" type="string"/>

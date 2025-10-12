@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultex.crm.IntegrationTest;
 import com.ultex.crm.domain.DemandeClient;
 import com.ultex.crm.domain.enumeration.ServicePrincipal;
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import com.ultex.crm.repository.DemandeClientRepository;
 import com.ultex.crm.service.DemandeClientService;
 import com.ultex.crm.service.dto.DemandeClientDTO;
@@ -55,11 +56,11 @@ class DemandeClientResourceIT {
     private static final ServicePrincipal DEFAULT_SERVICE_PRINCIPAL = ServicePrincipal.IMPORT;
     private static final ServicePrincipal UPDATED_SERVICE_PRINCIPAL = ServicePrincipal.EXPORT;
 
+    private static final TypeDemande DEFAULT_TYPE_DEMANDE = TypeDemande.PROFORMA;
+    private static final TypeDemande UPDATED_TYPE_DEMANDE = TypeDemande.SOURCING;
+
     private static final String DEFAULT_PROVENANCE = "AAAAAAAAAA";
     private static final String UPDATED_PROVENANCE = "BBBBBBBBBB";
-
-    private static final Integer DEFAULT_NOMBRE_PRODUITS = 1;
-    private static final Integer UPDATED_NOMBRE_PRODUITS = 2;
 
     private static final String DEFAULT_REMARQUE_GENERALE = "AAAAAAAAAA";
     private static final String UPDATED_REMARQUE_GENERALE = "BBBBBBBBBB";
@@ -106,8 +107,8 @@ class DemandeClientResourceIT {
             .reference(DEFAULT_REFERENCE)
             .dateDemande(DEFAULT_DATE_DEMANDE)
             .servicePrincipal(DEFAULT_SERVICE_PRINCIPAL)
+            .typeDemande(DEFAULT_TYPE_DEMANDE)
             .provenance(DEFAULT_PROVENANCE)
-            .nombreProduits(DEFAULT_NOMBRE_PRODUITS)
             .remarqueGenerale(DEFAULT_REMARQUE_GENERALE);
     }
 
@@ -122,8 +123,8 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
+            .typeDemande(UPDATED_TYPE_DEMANDE)
             .provenance(UPDATED_PROVENANCE)
-            .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
     }
 
@@ -235,6 +236,23 @@ class DemandeClientResourceIT {
 
     @Test
     @Transactional
+    void checkTypeDemandeIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        demandeClient.setTypeDemande(null);
+
+        // Create the DemandeClient, which fails.
+        DemandeClientDTO demandeClientDTO = demandeClientMapper.toDto(demandeClient);
+
+        restDemandeClientMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(demandeClientDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDemandeClients() throws Exception {
         // Initialize the database
         insertedDemandeClient = demandeClientRepository.saveAndFlush(demandeClient);
@@ -248,8 +266,8 @@ class DemandeClientResourceIT {
             .andExpect(jsonPath("$.[*].reference").value(hasItem(DEFAULT_REFERENCE)))
             .andExpect(jsonPath("$.[*].dateDemande").value(hasItem(DEFAULT_DATE_DEMANDE.toString())))
             .andExpect(jsonPath("$.[*].servicePrincipal").value(hasItem(DEFAULT_SERVICE_PRINCIPAL.toString())))
+            .andExpect(jsonPath("$.[*].typeDemande").value(hasItem(DEFAULT_TYPE_DEMANDE.toString())))
             .andExpect(jsonPath("$.[*].provenance").value(hasItem(DEFAULT_PROVENANCE)))
-            .andExpect(jsonPath("$.[*].nombreProduits").value(hasItem(DEFAULT_NOMBRE_PRODUITS)))
             .andExpect(jsonPath("$.[*].remarqueGenerale").value(hasItem(DEFAULT_REMARQUE_GENERALE)));
     }
 
@@ -285,8 +303,8 @@ class DemandeClientResourceIT {
             .andExpect(jsonPath("$.reference").value(DEFAULT_REFERENCE))
             .andExpect(jsonPath("$.dateDemande").value(DEFAULT_DATE_DEMANDE.toString()))
             .andExpect(jsonPath("$.servicePrincipal").value(DEFAULT_SERVICE_PRINCIPAL.toString()))
+            .andExpect(jsonPath("$.typeDemande").value(DEFAULT_TYPE_DEMANDE.toString()))
             .andExpect(jsonPath("$.provenance").value(DEFAULT_PROVENANCE))
-            .andExpect(jsonPath("$.nombreProduits").value(DEFAULT_NOMBRE_PRODUITS))
             .andExpect(jsonPath("$.remarqueGenerale").value(DEFAULT_REMARQUE_GENERALE));
     }
 
@@ -313,8 +331,8 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
+            .typeDemande(UPDATED_TYPE_DEMANDE)
             .provenance(UPDATED_PROVENANCE)
-            .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
         DemandeClientDTO demandeClientDTO = demandeClientMapper.toDto(updatedDemandeClient);
 
@@ -409,7 +427,7 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
-            .nombreProduits(UPDATED_NOMBRE_PRODUITS)
+            .provenance(UPDATED_PROVENANCE)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
 
         restDemandeClientMockMvc
@@ -445,8 +463,8 @@ class DemandeClientResourceIT {
             .reference(UPDATED_REFERENCE)
             .dateDemande(UPDATED_DATE_DEMANDE)
             .servicePrincipal(UPDATED_SERVICE_PRINCIPAL)
+            .typeDemande(UPDATED_TYPE_DEMANDE)
             .provenance(UPDATED_PROVENANCE)
-            .nombreProduits(UPDATED_NOMBRE_PRODUITS)
             .remarqueGenerale(UPDATED_REMARQUE_GENERALE);
 
         restDemandeClientMockMvc

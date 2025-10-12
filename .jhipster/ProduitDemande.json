@@ -7,13 +7,9 @@
   "fields": [
     {
       "fieldName": "typeProduit",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "typeDemande",
-      "fieldType": "TypeDemande",
+      "fieldType": "TypeProduit",
       "fieldValidateRules": ["required"],
-      "fieldValues": "PROFORMA,SOURCING,NEGOCIATION,AUTRE"
+      "fieldValues": "VEHICULE,MACHINE,PRODUIT_FINAL,MATIERE_PREMIERE,AUTRE"
     },
     {
       "fieldName": "nomProduit",
@@ -37,10 +33,6 @@
       "fieldType": "Double"
     },
     {
-      "fieldName": "fraisExpedition",
-      "fieldType": "Double"
-    },
-    {
       "fieldName": "poidsKg",
       "fieldType": "Double"
     },
@@ -53,14 +45,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "nombreCartons",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "piecesParCarton",
-      "fieldType": "Integer"
-    },
-    {
       "fieldName": "hsCode",
       "fieldType": "String"
     },
@@ -69,11 +53,15 @@
       "fieldType": "Double"
     },
     {
+      "fieldName": "fraisExpedition",
+      "fieldType": "Double"
+    },
+    {
       "fieldName": "origine",
       "fieldType": "String"
     },
     {
-      "fieldName": "contactFournisseur",
+      "fieldName": "fournisseur",
       "fieldType": "String"
     },
     {

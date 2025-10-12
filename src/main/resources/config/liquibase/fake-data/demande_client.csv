@@ -1,11 +1,11 @@
-id;reference;date_demande;service_principal;provenance;nombre_produits;remarque_generale
-1;tendre membre à vie blême;2025-10-05T03:32:06;IMPORT;près de;8822;ouin administration
-2;sus;2025-10-05T16:04:55;IMPORT;épanouir;6876;rédaction
-3;vivre surveiller pendant;2025-10-04T22:52:54;IMPORT;ronfler;20016;puis
-4;ha tant dans la mesure où;2025-10-05T01:58:16;EXPORT;au-dessus avant que porte-parole;10884;derrière vers ouch
-5;si bien que peut-être;2025-10-05T18:23:28;IMPORT;pointer;22998;frayer
-6;croître après que communauté étudiante;2025-10-05T18:58:45;EXPORT;en guise de;4943;de zzzz dynamique
-7;touriste;2025-10-05T13:21:43;EXPORT;puisque au-delà;21154;tranquille croâ géométrique
-8;près tellement afin que;2025-10-05T16:33:08;IMPORT;assurément;4645;bon raccrocher jeune enfant
-9;loufoque;2025-10-05T08:17:19;EXPORT;célébrer malgré snob;31414;du moment que zzzz sitôt que
-10;oups ouch;2025-10-05T12:13:52;IMPORT;sans doute;381;atchoum gratis
+id;reference;date_demande;service_principal;type_demande;provenance;remarque_generale
+1;tendre membre à vie blême;2025-10-05T03:32:06;IMPORT;PROFORMA;coin-coin monter;administration conquérir
+2;vlan tout pousser;2025-10-05T09:59:15;IMPORT;NEGOCIATION;hôte;partenaire
+3;ouch;2025-10-05T15:13:59;EXPORT;AUTRE;demander ci;vu que toutefois téméraire
+4;trop peu même si;2025-10-05T15:42:16;EXPORT;SOURCING;du fait que;vers ouch tout à fait
+5;peut-être sauf;2025-10-05T17:51:51;IMPORT;NEGOCIATION;à la merci apparemment pointer;grrr ah
+6;miaou lorsque;2025-10-05T02:31:10;IMPORT;AUTRE;administration;de façon à ce que
+7;jeune à seule fin de;2025-10-05T20:24:15;IMPORT;NEGOCIATION;timide immense;géométrique
+8;près tellement afin que;2025-10-05T16:33:08;IMPORT;PROFORMA;changer énergique aux environs de;jeune enfant au lieu de impromptu
+9;dense;2025-10-05T07:16:27;IMPORT;PROFORMA;vaste ainsi;zzzz
+10;groin groin oups ouch;2025-10-05T12:13:52;IMPORT;PROFORMA;que si bien que;gratis

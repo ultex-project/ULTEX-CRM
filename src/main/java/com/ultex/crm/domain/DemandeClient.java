@@ -2,6 +2,7 @@ package com.ultex.crm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ultex.crm.domain.enumeration.ServicePrincipal;
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -41,11 +42,13 @@ public class DemandeClient implements Serializable {
     @Column(name = "service_principal", nullable = false)
     private ServicePrincipal servicePrincipal;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_demande", nullable = false)
+    private TypeDemande typeDemande;
+
     @Column(name = "provenance")
     private String provenance;
-
-    @Column(name = "nombre_produits")
-    private Integer nombreProduits;
 
     @Column(name = "remarque_generale")
     private String remarqueGenerale;
@@ -127,6 +130,19 @@ public class DemandeClient implements Serializable {
         this.servicePrincipal = servicePrincipal;
     }
 
+    public TypeDemande getTypeDemande() {
+        return this.typeDemande;
+    }
+
+    public DemandeClient typeDemande(TypeDemande typeDemande) {
+        this.setTypeDemande(typeDemande);
+        return this;
+    }
+
+    public void setTypeDemande(TypeDemande typeDemande) {
+        this.typeDemande = typeDemande;
+    }
+
     public String getProvenance() {
         return this.provenance;
     }
@@ -138,19 +154,6 @@ public class DemandeClient implements Serializable {
 
     public void setProvenance(String provenance) {
         this.provenance = provenance;
-    }
-
-    public Integer getNombreProduits() {
-        return this.nombreProduits;
-    }
-
-    public DemandeClient nombreProduits(Integer nombreProduits) {
-        this.setNombreProduits(nombreProduits);
-        return this;
-    }
-
-    public void setNombreProduits(Integer nombreProduits) {
-        this.nombreProduits = nombreProduits;
     }
 
     public String getRemarqueGenerale() {
@@ -255,8 +258,8 @@ public class DemandeClient implements Serializable {
             ", reference='" + getReference() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", servicePrincipal='" + getServicePrincipal() + "'" +
+            ", typeDemande='" + getTypeDemande() + "'" +
             ", provenance='" + getProvenance() + "'" +
-            ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +
             "}";
     }
