@@ -12,7 +12,7 @@
       "updated": "Le Document Client avec l'identifiant {{ param }} a été mis à jour",
       "deleted": "Le Document Client avec l'identifiant {{ param }} a été supprimé",
       "delete": {
-        "question": "Êtes-vous certain de vouloir supprimer le Document Client {{ id }} ?"
+        "question": "Êtes-vous certain de vouloir supprimer le document {{ type }} (ID {{ id }}) ?"
       },
       "detail": {
         "title": "Document Client"
@@ -21,7 +21,58 @@
       "typeDocument": "Type Document",
       "numeroDocument": "Numero Document",
       "fichierUrl": "Fichier Url",
-      "client": "Client"
+      "client": "Client",
+      "dashboard": {
+        "title": "Documents du client",
+        "subtitle": "Consultez, ajoutez et organisez les fichiers partagés avec ce client.",
+        "add": "Ajouter un document",
+        "empty": "Aucun document ajouté pour ce client",
+        "file": "Fichier",
+        "actions": "Actions",
+        "actionsTooltip": {
+          "view": "Voir / Télécharger",
+          "edit": "Modifier",
+          "delete": "Supprimer"
+        },
+        "deleteQuestion": "Êtes-vous certain de vouloir supprimer ce document (#{id}) ?",
+        "types": {
+          "CIN": "CIN",
+          "PASSEPORT": "Passeport",
+          "RC": "RC",
+          "ICE": "ICE",
+          "PERMIS": "Permis",
+          "AUTRE": "Autre"
+        },
+        "modal": {
+          "createTitle": "Ajouter un document",
+          "editTitle": "Modifier le document",
+          "selectPlaceholder": "Sélectionnez un type de document",
+          "numeroPlaceholder": "Numéro du document",
+          "fileLabel": "Fichier joint",
+          "replaceFile": "Remplacer le fichier",
+          "removeFile": "Retirer",
+          "noFile": "Aucun fichier sélectionné",
+          "uploading": "Téléversement en cours..."
+        },
+        "validation": {
+          "typeDocument": "Le type de document est obligatoire.",
+          "fileRequired": "Veuillez ajouter un fichier."
+        },
+        "messages": {
+          "createSuccess": "Document ajouté avec succès.",
+          "updateSuccess": "Document mis à jour avec succès.",
+          "deleteSuccess": "Document supprimé avec succès.",
+          "deleteError": "Impossible de supprimer le document.",
+          "saveError": "Impossible d'enregistrer le document. Veuillez réessayer."
+        },
+        "filters": {
+          "all": "Tous les types",
+          "searchPlaceholder": "Rechercher par numéro",
+          "sort": "Trier par date",
+          "reset": "Réinitialiser"
+        },
+        "emptyFile": "Fichier indisponible"
+      }
     }
   }
 }

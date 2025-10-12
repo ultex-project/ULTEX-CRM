@@ -4,14 +4,13 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { Alert, Button, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, Progress, Row, Spinner, Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEdit, faFileArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 
 import { IClient } from 'app/shared/model/client.model';
 import { ClientStatus } from 'app/shared/model/enumerations/client-status.model';
 import { IContactAssocie } from 'app/shared/model/contact-associe.model';
 import { ISocieteLiee } from 'app/shared/model/societe-liee.model';
-import { IDocumentClient } from 'app/shared/model/document-client.model';
 import { IKycClient } from 'app/shared/model/kyc-client.model';
 import { IDemandeClient } from 'app/shared/model/demande-client.model';
 import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
@@ -20,6 +19,7 @@ import { IOpportunity } from 'app/shared/model/opportunity.model';
 import { OpportunityStage } from 'app/shared/model/enumerations/opportunity-stage.model';
 import { IHistoriqueCRM } from 'app/shared/model/historique-crm.model';
 import ClientAvatar from 'app/custom/dashboard/modules/client/components/ClientAvatar';
+import ClientDocumentsPanel from 'app/custom/dashboard/modules/client/components/ClientDocumentsPanel';
 
 const outlineBadgeClass = (tone: 'success' | 'secondary' | 'danger' | 'info' | 'warning' | 'primary') =>
   `badge rounded-pill fw-semibold px-3 py-1 bg-white border border-${tone} text-${tone}`;
@@ -132,7 +132,6 @@ type ClientDashboardData = {
   client: IClient | null;
   contacts: IContactAssocie[];
   linkedCompanies: ISocieteLiee[];
-  documents: IDocumentClient[];
   kyc: IKycClient | null;
   requests: IDemandeClient[];
   requestProducts: IProduitDemande[];
@@ -144,7 +143,6 @@ const createEmptyClientData = (): ClientDashboardData => ({
   client: null,
   contacts: [],
   linkedCompanies: [],
-  documents: [],
   kyc: null,
   requests: [],
   requestProducts: [],
@@ -172,27 +170,17 @@ const useClientDashboardData = (clientId: number | null) => {
       setError(null);
 
       try {
-        const [
-          clientResponse,
-          contactsData,
-          companiesData,
-          documentsData,
-          kycData,
-          demandesData,
-          produitsData,
-          opportunitiesData,
-          historyData,
-        ] = await Promise.all([
-          axios.get<IClient>(`api/clients/${clientId}`),
-          createCollectionFetcher<IContactAssocie>('api/contact-associes'),
-          createCollectionFetcher<ISocieteLiee>('api/societe-liees'),
-          createCollectionFetcher<IDocumentClient>('api/document-clients'),
-          createCollectionFetcher<IKycClient>('api/kyc-clients'),
-          createCollectionFetcher<IDemandeClient>('api/demande-clients'),
-          createCollectionFetcher<IProduitDemande>('api/produit-demandes'),
-          createCollectionFetcher<IOpportunity>('api/opportunities'),
-          createCollectionFetcher<IHistoriqueCRM>('api/historique-crms'),
-        ]);
+        const [clientResponse, contactsData, companiesData, kycData, demandesData, produitsData, opportunitiesData, historyData] =
+          await Promise.all([
+            axios.get<IClient>(`api/clients/${clientId}`),
+            createCollectionFetcher<IContactAssocie>('api/contact-associes'),
+            createCollectionFetcher<ISocieteLiee>('api/societe-liees'),
+            createCollectionFetcher<IKycClient>('api/kyc-clients'),
+            createCollectionFetcher<IDemandeClient>('api/demande-clients'),
+            createCollectionFetcher<IProduitDemande>('api/produit-demandes'),
+            createCollectionFetcher<IOpportunity>('api/opportunities'),
+            createCollectionFetcher<IHistoriqueCRM>('api/historique-crms'),
+          ]);
 
         if (!mounted) {
           return;
@@ -201,7 +189,6 @@ const useClientDashboardData = (clientId: number | null) => {
         const clientValue = clientResponse.data ?? null;
         const contactsForClient = contactsData.filter(item => item.client?.id === clientId);
         const linkedCompaniesForClient = companiesData.filter(item => item.client?.id === clientId);
-        const documentsForClient = documentsData.filter(item => item.client?.id === clientId);
         const kycForClient = kycData.find(item => item.client?.id === clientId) ?? null;
         const requestsForClient = demandesData.filter(item => item.client?.id === clientId);
         const requestIds = new Set(
@@ -218,7 +205,6 @@ const useClientDashboardData = (clientId: number | null) => {
           client: clientValue,
           contacts: contactsForClient,
           linkedCompanies: linkedCompaniesForClient,
-          documents: documentsForClient,
           kyc: kycForClient,
           requests: requestsForClient,
           requestProducts: requestProductsForClient,
@@ -487,68 +473,6 @@ const LinkedCompaniesCard: React.FC<{ companies: ISocieteLiee[] }> = ({ companie
   </Card>
 );
 
-const DocumentsCard: React.FC<{ documents: IDocumentClient[] }> = ({ documents }) => (
-  <Card className="shadow-sm border-0 mb-4">
-    <CardHeader className="bg-white border-bottom">
-      <h5 className="mb-0">
-        <Translate contentKey="crmApp.client.view.sections.documents" />
-      </h5>
-    </CardHeader>
-    <CardBody className="p-0">
-      {documents.length === 0 ? (
-        <div className="text-muted p-4">
-          <Translate contentKey="crmApp.client.view.empty" />
-        </div>
-      ) : (
-        <div className="table-responsive">
-          <Table hover className="mb-0 align-middle">
-            <thead className="text-muted small">
-              <tr>
-                <th className="ps-4">
-                  <Translate contentKey="crmApp.documentClient.typeDocument" />
-                </th>
-                <th>
-                  <Translate contentKey="crmApp.documentClient.numeroDocument" />
-                </th>
-                <th className="pe-4 text-end">
-                  <Translate contentKey="crmApp.client.view.documents.actions" />
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {documents.map(document => (
-                <tr key={document.id}>
-                  <td className="ps-4">{renderValue(document.typeDocument)}</td>
-                  <td>{renderValue(document.numeroDocument)}</td>
-                  <td className="pe-4 text-end">
-                    {document.fichierUrl ? (
-                      <Button
-                        color="link"
-                        size="sm"
-                        className="text-decoration-none"
-                        href={document.fichierUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <FontAwesomeIcon icon={faFileArrowDown} className="me-2" />
-                        <Translate contentKey="crmApp.client.view.documents.download" />
-                      </Button>
-                    ) : (
-                      <span className="text-muted">
-                        <Translate contentKey="crmApp.client.view.empty" />
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      )}
-    </CardBody>
-  </Card>
-);
-
 const KycCard: React.FC<{ kyc: IKycClient | null }> = ({ kyc }) => (
   <Card className="shadow-sm border-0 mb-4">
     <CardHeader className="bg-white border-bottom">
@@ -786,7 +710,7 @@ const ClientViewPage = () => {
   const location = useLocation();
   const clientId = id ? Number(id) : null;
 
-  const { client, contacts, linkedCompanies, documents, kyc, requests, requestProducts, opportunities, history, loading, error } =
+  const { client, contacts, linkedCompanies, kyc, requests, requestProducts, opportunities, history, loading, error } =
     useClientDashboardData(clientId);
 
   const successMessage = useSuccessMessage(location);
@@ -833,7 +757,7 @@ const ClientViewPage = () => {
           <GeneralInfoCard client={client} />
           <ContactsCard contacts={contacts} />
           <LinkedCompaniesCard companies={linkedCompanies} />
-          <DocumentsCard documents={documents} />
+          {client?.id ? <ClientDocumentsPanel clientId={client.id} /> : null}
           <KycCard kyc={kyc} />
           <RequestsCard clientId={client?.id ?? null} requests={requests} produitsParDemande={produitsParDemande} />
           <OpportunitiesCard opportunities={opportunities} />

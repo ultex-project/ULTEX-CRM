@@ -14,6 +14,11 @@
       "delete": {
         "question": "Êtes-vous certain de vouloir supprimer le Client {{ id }} ?"
       },
+      "documentsTitle": "Documents du client",
+      "addDocument": "Ajouter un document",
+      "editDocument": "Modifier le document",
+      "deleteConfirm": "Confirmer la suppression",
+      "deleteMessage": "Voulez-vous vraiment supprimer ce document ?",
       "detail": {
         "title": "Client"
       },

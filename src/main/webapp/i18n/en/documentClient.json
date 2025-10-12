@@ -12,7 +12,7 @@
       "updated": "A Document Client is updated with identifier {{ param }}",
       "deleted": "A Document Client is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Are you sure you want to delete Document Client {{ id }}?"
+        "question": "Are you sure you want to delete document {{ type }} (ID {{ id }})?"
       },
       "detail": {
         "title": "Document Client"
@@ -21,7 +21,58 @@
       "typeDocument": "Type Document",
       "numeroDocument": "Numero Document",
       "fichierUrl": "Fichier Url",
-      "client": "Client"
+      "client": "Client",
+      "dashboard": {
+        "title": "Client documents",
+        "subtitle": "Review, add, and manage the files shared with this client.",
+        "add": "Add document",
+        "empty": "No document uploaded for this client yet.",
+        "file": "File",
+        "actions": "Actions",
+        "actionsTooltip": {
+          "view": "View / Download",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "deleteQuestion": "Are you sure you want to delete this document (#{id})?",
+        "types": {
+          "CIN": "National ID",
+          "PASSEPORT": "Passport",
+          "RC": "Trade register",
+          "ICE": "ICE",
+          "PERMIS": "Driving licence",
+          "AUTRE": "Other"
+        },
+        "modal": {
+          "createTitle": "Add a document",
+          "editTitle": "Edit document",
+          "selectPlaceholder": "Select a document type",
+          "numeroPlaceholder": "Document number",
+          "fileLabel": "Attachment",
+          "replaceFile": "Replace file",
+          "removeFile": "Remove",
+          "noFile": "No file selected",
+          "uploading": "Uploading..."
+        },
+        "validation": {
+          "typeDocument": "Select the document type.",
+          "fileRequired": "Please add a file."
+        },
+        "messages": {
+          "createSuccess": "Document saved successfully.",
+          "updateSuccess": "Document updated successfully.",
+          "deleteSuccess": "Document deleted successfully.",
+          "deleteError": "Unable to delete the document.",
+          "saveError": "Unable to save the document. Please try again."
+        },
+        "filters": {
+          "all": "All types",
+          "searchPlaceholder": "Search by number",
+          "sort": "Sort by date",
+          "reset": "Reset"
+        },
+        "emptyFile": "File unavailable"
+      }
     }
   }
 }
