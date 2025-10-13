@@ -28,7 +28,6 @@ import { toast } from 'react-toastify';
 import { IClient } from 'app/shared/model/client.model';
 import { ClientStatus } from 'app/shared/model/enumerations/client-status.model';
 import { IContactAssocie } from 'app/shared/model/contact-associe.model';
-import { ISocieteLiee } from 'app/shared/model/societe-liee.model';
 import { IKycClient } from 'app/shared/model/kyc-client.model';
 import { IDemandeClient } from 'app/shared/model/demande-client.model';
 import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
@@ -39,6 +38,7 @@ import { IHistoriqueCRM } from 'app/shared/model/historique-crm.model';
 import ClientAvatar from 'app/custom/dashboard/modules/client/components/ClientAvatar';
 import ClientDocumentsPanel from 'app/custom/dashboard/modules/client/components/ClientDocumentsPanel';
 import ClientContactsPanel from 'app/custom/dashboard/modules/client/components/ClientContactsPanel';
+import ClientSocietesPanel from 'app/custom/dashboard/modules/client/components/ClientSocietesPanel';
 
 const outlineBadgeClass = (tone: 'success' | 'secondary' | 'danger' | 'info' | 'warning' | 'primary') =>
   `badge rounded-pill fw-semibold px-3 py-1 bg-white border border-${tone} text-${tone}`;
@@ -150,7 +150,6 @@ const createCollectionFetcher = <T,>(endpoint: string) =>
 type ClientDashboardData = {
   client: IClient | null;
   contacts: IContactAssocie[];
-  linkedCompanies: ISocieteLiee[];
   kyc: IKycClient | null;
   requests: IDemandeClient[];
   requestProducts: IProduitDemande[];
@@ -161,7 +160,6 @@ type ClientDashboardData = {
 const createEmptyClientData = (): ClientDashboardData => ({
   client: null,
   contacts: [],
-  linkedCompanies: [],
   kyc: null,
   requests: [],
   requestProducts: [],
@@ -189,17 +187,15 @@ const useClientDashboardData = (clientId: number | null) => {
       setError(null);
 
       try {
-        const [clientResponse, contactsData, companiesData, kycData, demandesData, produitsData, opportunitiesData, historyData] =
-          await Promise.all([
-            axios.get<IClient>(`api/clients/${clientId}`),
-            createCollectionFetcher<IContactAssocie>('api/contact-associes'),
-            createCollectionFetcher<ISocieteLiee>('api/societe-liees'),
-            createCollectionFetcher<IKycClient>('api/kyc-clients'),
-            createCollectionFetcher<IDemandeClient>('api/demande-clients'),
-            createCollectionFetcher<IProduitDemande>('api/produit-demandes'),
-            createCollectionFetcher<IOpportunity>('api/opportunities'),
-            createCollectionFetcher<IHistoriqueCRM>('api/historique-crms'),
-          ]);
+        const [clientResponse, contactsData, kycData, demandesData, produitsData, opportunitiesData, historyData] = await Promise.all([
+          axios.get<IClient>(`api/clients/${clientId}`),
+          createCollectionFetcher<IContactAssocie>('api/contact-associes'),
+          createCollectionFetcher<IKycClient>('api/kyc-clients'),
+          createCollectionFetcher<IDemandeClient>('api/demande-clients'),
+          createCollectionFetcher<IProduitDemande>('api/produit-demandes'),
+          createCollectionFetcher<IOpportunity>('api/opportunities'),
+          createCollectionFetcher<IHistoriqueCRM>('api/historique-crms'),
+        ]);
 
         if (!mounted) {
           return;
@@ -207,7 +203,6 @@ const useClientDashboardData = (clientId: number | null) => {
 
         const clientValue = clientResponse.data ?? null;
         const contactsForClient = contactsData.filter(item => item.client?.id === clientId);
-        const linkedCompaniesForClient = companiesData.filter(item => item.client?.id === clientId);
         const kycForClient = kycData.find(item => item.client?.id === clientId) ?? null;
         const requestsForClient = demandesData.filter(item => item.client?.id === clientId);
         const requestIds = new Set(
@@ -223,7 +218,6 @@ const useClientDashboardData = (clientId: number | null) => {
         setData({
           client: clientValue,
           contacts: contactsForClient,
-          linkedCompanies: linkedCompaniesForClient,
           kyc: kycForClient,
           requests: requestsForClient,
           requestProducts: requestProductsForClient,
@@ -407,49 +401,6 @@ const GeneralInfoCard: React.FC<{ client: IClient | null }> = ({ client }) => (
           </div>
         </Col>
       </Row>
-    </CardBody>
-  </Card>
-);
-
-const LinkedCompaniesCard: React.FC<{ companies: ISocieteLiee[] }> = ({ companies }) => (
-  <Card className="shadow-sm border-0 mb-4">
-    <CardHeader className="bg-white border-bottom">
-      <h5 className="mb-0">
-        <Translate contentKey="crmApp.client.view.sections.companies" />
-      </h5>
-    </CardHeader>
-    <CardBody>
-      {companies.length === 0 ? (
-        <div className="text-muted">
-          <Translate contentKey="crmApp.client.view.empty" />
-        </div>
-      ) : (
-        <ListGroup flush>
-          {companies.map(company => (
-            <ListGroupItem key={company.id} className="py-3">
-              <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                <div>
-                  <h6 className="mb-1">{company.raisonSociale}</h6>
-                  <div className="text-muted small">
-                    {renderValue(company.formeJuridique)} · {renderValue(company.secteurActivite)}
-                  </div>
-                </div>
-                <div className="text-md-end text-muted small">
-                  <div>{renderValue(company.ice)}</div>
-                  <div>{renderValue(company.rc)}</div>
-                  <div>{renderValue(company.nif)}</div>
-                </div>
-              </div>
-              {company.adresseSiege ? <div className="text-muted small mt-2">{company.adresseSiege}</div> : null}
-              {company.representantLegal ? (
-                <div className="text-muted small">
-                  <Translate contentKey="crmApp.client.view.company.representant" interpolate={{ value: company.representantLegal }} />
-                </div>
-              ) : null}
-            </ListGroupItem>
-          ))}
-        </ListGroup>
-      )}
     </CardBody>
   </Card>
 );
@@ -910,8 +861,7 @@ const ClientViewPage = () => {
   const location = useLocation();
   const clientId = id ? Number(id) : null;
 
-  const { client, contacts, linkedCompanies, kyc, requests, requestProducts, opportunities, history, loading, error } =
-    useClientDashboardData(clientId);
+  const { client, contacts, kyc, requests, requestProducts, opportunities, history, loading, error } = useClientDashboardData(clientId);
 
   const successMessage = useSuccessMessage(location);
 
@@ -955,9 +905,13 @@ const ClientViewPage = () => {
       ) : (
         <>
           <GeneralInfoCard client={client} />
-          <LinkedCompaniesCard companies={linkedCompanies} />
-          {client?.id ? <ClientContactsPanel clientId={client.id} /> : null}
-          {client?.id ? <ClientDocumentsPanel clientId={client.id} /> : null}
+          {client?.id ? (
+            <>
+              <ClientSocietesPanel clientId={client.id} />
+              <ClientContactsPanel clientId={client.id} />
+              <ClientDocumentsPanel clientId={client.id} />
+            </>
+          ) : null}
           <KycCard kyc={kyc} />
           <RequestsCard clientId={client?.id ?? null} requests={requests} produitsParDemande={produitsParDemande} />
           <OpportunitiesCard opportunities={opportunities} />

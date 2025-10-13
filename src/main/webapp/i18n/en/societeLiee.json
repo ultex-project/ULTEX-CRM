@@ -27,7 +27,42 @@
       "tailleEntreprise": "Taille Entreprise",
       "adresseSiege": "Adresse Siege",
       "representantLegal": "Representant Legal",
-      "client": "Client"
+      "client": "Client",
+      "dashboard": {
+        "title": "Linked Companies",
+        "subtitle": "Manage the companies associated with this client",
+        "add": "Add a company",
+        "empty": "No linked companies for this client.",
+        "columns": {
+          "raisonSociale": "Company name",
+          "formeJuridique": "Legal form",
+          "ice": "ICE",
+          "rc": "RC",
+          "representantLegal": "Legal representative"
+        },
+        "actions": {
+          "label": "Actions",
+          "view": "View"
+        },
+        "modal": {
+          "createTitle": "New linked company",
+          "editTitle": "Edit linked company",
+          "viewTitle": "Linked company details",
+          "viewInfo": "You are viewing this company in read-only mode."
+        },
+        "validation": {
+          "generic": "Please fix the highlighted fields.",
+          "raisonSociale": "Company name is required."
+        },
+        "messages": {
+          "createSuccess": "Linked company created successfully.",
+          "updateSuccess": "Linked company updated successfully.",
+          "saveError": "Unable to save this company. Please try again.",
+          "deleteSuccess": "Linked company deleted successfully.",
+          "deleteError": "Unable to delete this company."
+        },
+        "deleteQuestion": "Do you really want to delete {{ name }} (ID {{ id }})?"
+      }
     }
   }
 }
