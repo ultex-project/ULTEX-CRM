@@ -411,44 +411,6 @@ const GeneralInfoCard: React.FC<{ client: IClient | null }> = ({ client }) => (
   </Card>
 );
 
-const ContactsCard: React.FC<{ contacts: IContactAssocie[] }> = ({ contacts }) => (
-  <Card className="shadow-sm border-0 mb-4">
-    <CardHeader className="bg-white border-bottom">
-      <h5 className="mb-0">
-        <Translate contentKey="crmApp.client.view.sections.contacts" />
-      </h5>
-    </CardHeader>
-    <CardBody>
-      {contacts.length === 0 ? (
-        <div className="text-muted">
-          <Translate contentKey="crmApp.client.view.empty" />
-        </div>
-      ) : (
-        <ListGroup flush>
-          {contacts.map(contact => (
-            <ListGroupItem key={contact.id} className="py-3">
-              <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                <div>
-                  <h6 className="mb-1">
-                    {contact.prenom} {contact.nom}
-                  </h6>
-                  <div className="text-muted small">{contact.relation ? `${contact.relation}` : translate('crmApp.client.view.empty')}</div>
-                </div>
-                <div className="text-md-end">
-                  <div>{renderValue(contact.telephone)}</div>
-                  <div className="text-muted">{renderValue(contact.email)}</div>
-                  <div className="text-muted">{renderValue(contact.whatsapp)}</div>
-                </div>
-              </div>
-              {contact.remarques ? <div className="text-muted small mt-2">{contact.remarques}</div> : null}
-            </ListGroupItem>
-          ))}
-        </ListGroup>
-      )}
-    </CardBody>
-  </Card>
-);
-
 const LinkedCompaniesCard: React.FC<{ companies: ISocieteLiee[] }> = ({ companies }) => (
   <Card className="shadow-sm border-0 mb-4">
     <CardHeader className="bg-white border-bottom">
@@ -993,7 +955,6 @@ const ClientViewPage = () => {
       ) : (
         <>
           <GeneralInfoCard client={client} />
-          <ContactsCard contacts={contacts} />
           <LinkedCompaniesCard companies={linkedCompanies} />
           {client?.id ? <ClientContactsPanel clientId={client.id} /> : null}
           {client?.id ? <ClientDocumentsPanel clientId={client.id} /> : null}
