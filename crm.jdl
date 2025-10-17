@@ -139,6 +139,27 @@ entity ProduitDemande {
   piecesJointesUrl String
 }
 
+// ===============================
+// ENTITY: CycleActivation
+// ===============================
+entity CycleActivation {
+  numeroCycle Integer required, // e.g., 1, 2, 3
+  dateDebut Instant required,
+  dateFin Instant,
+  statutCycle String, // e.g., "En cours", "Terminé"
+  commentaire TextBlob
+}
+
+// ===============================
+// ENTITY: EtatInteraction (historique des états)
+// ===============================
+entity EtatInteraction {
+  etat EtatCRM required, // Enum defined below
+  dateEtat Instant required,
+  agent String, // Nom de l’agent
+  observation TextBlob
+}
+
 
 entity HistoriqueCRM {
   dateInteraction Instant required,
@@ -208,6 +229,19 @@ entity Company {
   createdAt Instant,
   updatedAt Instant
 }
+entity RappelAgent {
+  rappelDate Instant required,
+  rappelMessage String,
+  statutRappel StatutRappel required, // PENDING, DONE, MISSED
+  createdAt Instant,
+  updatedAt Instant
+}
+
+enum StatutRappel {
+  PENDING,
+  DONE,
+  MISSED
+}
 
 entity Contact {
   firstName String required,
@@ -237,6 +271,21 @@ enum OpportunityStage {
 enum UserRole {
   ADMIN, MANAGER, COMMERCIAL
 }
+// ===============================
+// ENUM: EtatCRM
+// ===============================
+enum EtatCRM {
+  TRAITE,
+  EN_COURS,
+  FAIBLE_QUALITE,
+  PAS_PRET,
+  PAS_INTERESSE,
+  ACTIVE,
+  PAS_DE_REPONSE,
+  DOUBLE_CODAGE,
+  NUMERO_ERRONE,
+  AUTRE
+}
 enum TypeDemande {
   PROFORMA,
   SOURCING,
@@ -258,6 +307,16 @@ relationship ManyToMany {
 }
 relationship OneToMany {
   Client{opportunities} to Opportunity{client required}
+}
+// Each reminder is linked to an EtatInteraction and the agent responsible
+relationship ManyToOne {
+  RappelAgent{etat} to EtatInteraction
+}
+relationship ManyToOne {
+  RappelAgent{client} to Client
+}
+relationship ManyToOne {
+  RappelAgent{agent} to InternalUser
 }
 relationship ManyToOne {
   ContactAssocie{client} to Client
@@ -287,6 +346,24 @@ relationship ManyToOne {
   DemandeClient{incoterm} to Incoterm
 }
 
+// ===============================
+// RELATIONS
+// ===============================
+
+// A Client can have multiple activation cycles
+relationship OneToMany {
+  Client{cyclesActivation} to CycleActivation{client required}
+}
+
+// Each cycle belongs to one client and contains multiple états
+relationship OneToMany {
+  CycleActivation{etats} to EtatInteraction{cycle required}
+}
+
+// Optionally, link EtatInteraction to HistoriqueCRM for traceability
+relationship ManyToOne {
+  EtatInteraction{historique} to HistoriqueCRM
+}
 // Each Client is associated with a country
 relationship ManyToOne {
   Client{pays} to Pays
