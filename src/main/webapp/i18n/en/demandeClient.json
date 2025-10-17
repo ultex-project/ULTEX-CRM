@@ -34,6 +34,8 @@
         "back": "Back to client",
         "save": "Save demand",
         "selectPlaceholder": "Select an option",
+        "sousServicesPlaceholder": "Select one or more sub-services",
+        "sousServicesNoOptions": "No sub-services available",
         "success": "Request created successfully.",
         "errorSubmit": "Unable to save the request. Please try again.",
         "breadcrumb": {
@@ -47,6 +49,11 @@
           "incoterm": "Select an incoterm.",
           "devise": "Select a currency.",
           "nombreProduits": "Add at least one product to the request."
+        }
+      },
+      "dashboard": {
+        "actions": {
+          "view": "View"
         }
       }
     },

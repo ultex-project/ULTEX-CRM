@@ -22,6 +22,7 @@ import {
   Spinner,
   Table,
 } from 'reactstrap';
+import Select, { MultiValue } from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPen, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
@@ -75,6 +76,7 @@ type ProductFormErrors = Partial<Record<keyof ProductFormState, string>>;
 
 const UNITE_OPTIONS = ['pcs', 'kg', 'm3'] as const;
 type LocalProduitDemande = IProduitDemande & { contact?: string | null };
+type SousServiceOption = { value: string; label: string };
 
 const ClientDemandCreatePage = () => {
   const { clientId } = useParams<'clientId'>();
@@ -91,6 +93,16 @@ const ClientDemandCreatePage = () => {
   const servicePrincipalOptions = Object.keys(ServicePrincipal);
   const typeDemandeOptions = Object.keys(TypeDemande);
   const typeProduitOptions = useMemo(() => Object.keys(TypeProduit), []);
+  const sousServiceOptions = useMemo<SousServiceOption[]>(
+    () =>
+      sousServices
+        .filter(ss => ss.id !== undefined && ss.id !== null)
+        .map(ss => ({
+          value: String(ss.id),
+          label: ss.libelle ?? ss.code ?? String(ss.id),
+        })),
+    [sousServices],
+  );
 
   const [formValues, setFormValues] = useState<FormState>(() => ({
     reference: `DEM-${Date.now()}`,
@@ -190,8 +202,13 @@ const ClientDemandCreatePage = () => {
       }
     };
 
-  const handleMultiSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
+  const selectedSousServiceOptions = useMemo(
+    () => sousServiceOptions.filter(option => formValues.sousServices.includes(option.value)),
+    [sousServiceOptions, formValues.sousServices],
+  );
+
+  const handleSousServicesChange = (selected: MultiValue<SousServiceOption>) => {
+    const selectedOptions = selected.map(option => option.value);
     setFormValues(prev => ({ ...prev, sousServices: selectedOptions }));
   };
 
@@ -663,27 +680,21 @@ const ClientDemandCreatePage = () => {
                   <Label for="demande-sousServices">
                     <Translate contentKey="crmApp.demandeClient.sousServices" />
                   </Label>
-                  <Input
-                    id="demande-sousServices"
-                    type="select"
-                    multiple
-                    value={formValues.sousServices}
-                    onChange={event => handleMultiSelectChange}
-                    disabled={sousServicesLoading}
-                  >
-                    {sousServicesLoading ? (
-                      <option value="" disabled>
-                        Chargement...
-                      </option>
-                    ) : null}
-                    {sousServices
-                      .filter(ss => ss.id !== undefined && ss.id !== null)
-                      .map(ss => (
-                        <option key={ss.id} value={String(ss.id)}>
-                          {ss.libelle ?? ss.code ?? ss.id}
-                        </option>
-                      ))}
-                  </Input>
+                  <Select
+                    inputId="demande-sousServices"
+                    name="sousServices"
+                    data-cy="sousServices"
+                    classNamePrefix="react-select"
+                    isMulti
+                    isDisabled={sousServicesLoading}
+                    isLoading={sousServicesLoading}
+                    options={sousServiceOptions}
+                    value={selectedSousServiceOptions}
+                    onChange={handleSousServicesChange}
+                    placeholder={translate('crmApp.demandeClient.create.sousServicesPlaceholder')}
+                    noOptionsMessage={() => translate('crmApp.demandeClient.create.sousServicesNoOptions')}
+                    closeMenuOnSelect={false}
+                  />
                 </FormGroup>
               </Col>
 

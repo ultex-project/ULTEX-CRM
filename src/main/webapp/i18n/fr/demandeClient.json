@@ -34,6 +34,8 @@
         "back": "Retour au client",
         "save": "Enregistrer la demande",
         "selectPlaceholder": "Sélectionnez une option",
+        "sousServicesPlaceholder": "Sélectionnez un ou plusieurs sous-services",
+        "sousServicesNoOptions": "Aucun sous-service disponible",
         "success": "Demande créée avec succès.",
         "errorSubmit": "Impossible d'enregistrer la demande. Veuillez réessayer.",
         "breadcrumb": {
