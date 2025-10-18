@@ -16,6 +16,9 @@ import devise from 'app/entities/devise/devise.reducer';
 import incoterm from 'app/entities/incoterm/incoterm.reducer';
 import pays from 'app/entities/pays/pays.reducer';
 import sousService from 'app/entities/sous-service/sous-service.reducer';
+import cycleActivation from 'app/entities/cycle-activation/cycle-activation.reducer';
+import etatInteraction from 'app/entities/etat-interaction/etat-interaction.reducer';
+import rappelAgent from 'app/entities/rappel-agent/rappel-agent.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const entitiesReducers = {
@@ -37,6 +40,9 @@ const entitiesReducers = {
   incoterm,
   pays,
   sousService,
+  cycleActivation,
+  etatInteraction,
+  rappelAgent,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

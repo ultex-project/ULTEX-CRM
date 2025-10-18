@@ -25,7 +25,10 @@
         "devise": "Devise",
         "incoterm": "Incoterm",
         "pays": "Pays",
-        "sousService": "Sous Service"
+        "sousService": "Sous Service",
+        "cycleActivation": "Cycle Activation",
+        "etatInteraction": "Etat Interaction",
+        "rappelAgent": "Rappel Agent"
       },
       "account": {
         "main": "Account",

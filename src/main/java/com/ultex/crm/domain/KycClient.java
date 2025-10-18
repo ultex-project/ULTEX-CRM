@@ -39,7 +39,7 @@ public class KycClient implements Serializable {
     private String responsable;
 
     @JsonIgnoreProperties(
-        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
         allowSetters = true
     )
     @OneToOne(fetch = FetchType.LAZY)

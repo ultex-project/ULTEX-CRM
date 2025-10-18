@@ -60,7 +60,7 @@ public class Opportunity implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
         allowSetters = true
     )
     private Client client;

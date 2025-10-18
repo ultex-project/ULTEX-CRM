@@ -3,6 +3,7 @@ package com.ultex.crm.domain;
 import static com.ultex.crm.domain.ClientTestSamples.*;
 import static com.ultex.crm.domain.CompanyTestSamples.*;
 import static com.ultex.crm.domain.ContactTestSamples.*;
+import static com.ultex.crm.domain.CycleActivationTestSamples.*;
 import static com.ultex.crm.domain.KycClientTestSamples.*;
 import static com.ultex.crm.domain.OpportunityTestSamples.*;
 import static com.ultex.crm.domain.PaysTestSamples.*;
@@ -50,6 +51,28 @@ class ClientTest {
         client.setOpportunities(new HashSet<>());
         assertThat(client.getOpportunities()).doesNotContain(opportunityBack);
         assertThat(opportunityBack.getClient()).isNull();
+    }
+
+    @Test
+    void cyclesActivationTest() {
+        Client client = getClientRandomSampleGenerator();
+        CycleActivation cycleActivationBack = getCycleActivationRandomSampleGenerator();
+
+        client.addCyclesActivation(cycleActivationBack);
+        assertThat(client.getCyclesActivations()).containsOnly(cycleActivationBack);
+        assertThat(cycleActivationBack.getClient()).isEqualTo(client);
+
+        client.removeCyclesActivation(cycleActivationBack);
+        assertThat(client.getCyclesActivations()).doesNotContain(cycleActivationBack);
+        assertThat(cycleActivationBack.getClient()).isNull();
+
+        client.cyclesActivations(new HashSet<>(Set.of(cycleActivationBack)));
+        assertThat(client.getCyclesActivations()).containsOnly(cycleActivationBack);
+        assertThat(cycleActivationBack.getClient()).isEqualTo(client);
+
+        client.setCyclesActivations(new HashSet<>());
+        assertThat(client.getCyclesActivations()).doesNotContain(cycleActivationBack);
+        assertThat(cycleActivationBack.getClient()).isNull();
     }
 
     @Test

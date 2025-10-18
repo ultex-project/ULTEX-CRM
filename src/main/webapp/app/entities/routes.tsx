@@ -21,6 +21,9 @@ import Devise from './devise';
 import Incoterm from './incoterm';
 import Pays from './pays';
 import SousService from './sous-service';
+import CycleActivation from './cycle-activation';
+import EtatInteraction from './etat-interaction';
+import RappelAgent from './rappel-agent';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -46,6 +49,9 @@ export default () => {
         <Route path="incoterm/*" element={<Incoterm />} />
         <Route path="pays/*" element={<Pays />} />
         <Route path="sous-service/*" element={<SousService />} />
+        <Route path="cycle-activation/*" element={<CycleActivation />} />
+        <Route path="etat-interaction/*" element={<EtatInteraction />} />
+        <Route path="rappel-agent/*" element={<RappelAgent />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

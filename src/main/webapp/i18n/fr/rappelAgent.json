@@ -1,0 +1,31 @@
+{
+  "crmApp": {
+    "rappelAgent": {
+      "home": {
+        "title": "RappelAgents",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Rappel Agent",
+        "createOrEditLabel": "Créer ou éditer un Rappel Agent",
+        "notFound": "Aucun Rappel Agent trouvé"
+      },
+      "created": "Un nouveau Rappel Agent a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Rappel Agent avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Rappel Agent avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Rappel Agent {{ id }} ?"
+      },
+      "detail": {
+        "title": "Rappel Agent"
+      },
+      "id": "ID",
+      "rappelDate": "Rappel Date",
+      "rappelMessage": "Rappel Message",
+      "statutRappel": "Statut Rappel",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "etat": "Etat",
+      "client": "Client",
+      "agent": "Agent"
+    }
+  }
+}

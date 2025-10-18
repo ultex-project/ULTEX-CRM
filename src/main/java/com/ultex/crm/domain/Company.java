@@ -61,7 +61,7 @@ public class Company implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
         allowSetters = true
     )
     private Set<Client> clients = new HashSet<>();

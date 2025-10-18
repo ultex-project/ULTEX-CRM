@@ -1,0 +1,10 @@
+{
+  "crmApp": {
+    "StatutRappel": {
+      "null": "",
+      "PENDING": "PENDING",
+      "DONE": "DONE",
+      "MISSED": "MISSED"
+    }
+  }
+}

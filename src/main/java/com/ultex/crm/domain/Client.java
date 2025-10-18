@@ -90,6 +90,11 @@ public class Client implements Serializable {
     @JsonIgnoreProperties(value = { "assignedTo", "client" }, allowSetters = true)
     private Set<Opportunity> opportunities = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "etats", "client" }, allowSetters = true)
+    private Set<CycleActivation> cyclesActivations = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Pays pays;
 
@@ -374,6 +379,37 @@ public class Client implements Serializable {
     public Client removeOpportunities(Opportunity opportunity) {
         this.opportunities.remove(opportunity);
         opportunity.setClient(null);
+        return this;
+    }
+
+    public Set<CycleActivation> getCyclesActivations() {
+        return this.cyclesActivations;
+    }
+
+    public void setCyclesActivations(Set<CycleActivation> cycleActivations) {
+        if (this.cyclesActivations != null) {
+            this.cyclesActivations.forEach(i -> i.setClient(null));
+        }
+        if (cycleActivations != null) {
+            cycleActivations.forEach(i -> i.setClient(this));
+        }
+        this.cyclesActivations = cycleActivations;
+    }
+
+    public Client cyclesActivations(Set<CycleActivation> cycleActivations) {
+        this.setCyclesActivations(cycleActivations);
+        return this;
+    }
+
+    public Client addCyclesActivation(CycleActivation cycleActivation) {
+        this.cyclesActivations.add(cycleActivation);
+        cycleActivation.setClient(this);
+        return this;
+    }
+
+    public Client removeCyclesActivation(CycleActivation cycleActivation) {
+        this.cyclesActivations.remove(cycleActivation);
+        cycleActivation.setClient(null);
         return this;
     }
 

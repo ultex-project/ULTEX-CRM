@@ -1,0 +1,30 @@
+{
+  "crmApp": {
+    "cycleActivation": {
+      "home": {
+        "title": "CycleActivations",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Cycle Activation",
+        "createOrEditLabel": "Créer ou éditer un Cycle Activation",
+        "notFound": "Aucun Cycle Activation trouvé"
+      },
+      "created": "Un nouveau Cycle Activation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Cycle Activation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Cycle Activation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Cycle Activation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Cycle Activation"
+      },
+      "id": "ID",
+      "numeroCycle": "Numero Cycle",
+      "dateDebut": "Date Debut",
+      "dateFin": "Date Fin",
+      "statutCycle": "Statut Cycle",
+      "commentaire": "Commentaire",
+      "etats": "Etats",
+      "client": "Client"
+    }
+  }
+}

@@ -82,7 +82,7 @@ public class Prospect implements Serializable {
     private Instant updatedAt;
 
     @JsonIgnoreProperties(
-        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
         allowSetters = true
     )
     @OneToOne(fetch = FetchType.LAZY)

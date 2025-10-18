@@ -55,7 +55,7 @@ public class DemandeClient implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "opportunities", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
         allowSetters = true
     )
     private Client client;
