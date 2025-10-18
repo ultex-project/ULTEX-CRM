@@ -54,23 +54,18 @@
       "dashboard": {
         "actions": {
           "view": "View"
-        }
+        },
+        "messages": {
+          "deleteSuccess": "Demande deleted successfully.",
+          "deleteError": "Unable to delete this demande."
+        },
+        "viewTitle": "Demande details",
+        "products": {
+          "title": "Requested products",
+          "empty": "No products registered for this demande."
+        },
+        "deleteQuestion": "Are you sure you want to delete {{ reference }}?"
       }
-    },
-    "dashboard": {
-      "actions": {
-        "view": "View"
-      },
-      "messages": {
-        "deleteSuccess": "Demande deleted successfully.",
-        "deleteError": "Unable to delete this demande."
-      },
-      "viewTitle": "Demande details",
-      "products": {
-        "title": "Requested products",
-        "empty": "No products registered for this demande."
-      },
-      "deleteQuestion": "Are you sure you want to delete {{ reference }}?"
     }
   }
 }

@@ -40,6 +40,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
   const [isMobile, setIsMobile] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
   const account = useAppSelector(state => state.authentication.account);
+  const authorities = account?.authorities ?? [];
+
+  const ROLE_DATA = 'ROLE_DATA';
+  const dataRoleMenuIds = new Set(['overview', 'contacts', 'clients', 'data']);
 
   // Use prop if provided, otherwise use local state
   const isCollapsed = propCollapsed !== undefined ? propCollapsed : localCollapsed;
@@ -67,7 +71,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
   };
 
   // Menu structure with i18n keys
-  const hasRoleAccess = (roles?: string[]) => !roles || roles.some(role => account?.authorities?.includes(role));
+  const hasRoleAccess = (roles?: string[]) => !roles || roles.some(role => authorities.includes(role));
+
+  const isDataOnly = authorities.includes(ROLE_DATA) && authorities.every(role => role === ROLE_DATA);
 
   const toggleSubmenu = (id: string) => {
     setExpandedMenus(prev => ({ ...prev, [id]: !prev[id] }));
@@ -79,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
       label: 'global.menu.overview',
       icon: faDashboard,
       path: '/dashboard',
-      roles: ['ROLE_ADMIN', 'ROLE_USER'],
+      roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
     },
     {
       id: 'companies',
@@ -93,20 +99,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
       label: 'global.menu.contacts',
       icon: faUserPlus,
       path: '/dashboard/contact',
-      roles: ['ROLE_ADMIN', 'ROLE_USER'],
+      roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
     },
     {
       id: 'clients',
       label: 'global.menu.clients.main',
       icon: faUsers,
-      roles: ['ROLE_ADMIN', 'ROLE_USER'],
+      roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
       children: [
         {
           id: 'clients-list',
           label: 'global.menu.clients.list',
           icon: faFileAlt,
           path: '/dashboard/clients',
-          roles: ['ROLE_ADMIN', 'ROLE_USER'],
+          roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
         },
         {
           id: 'clients-history',
@@ -162,6 +168,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
   ];
 
   const filteredMenuItems = menuItems
+    .filter(item => !isDataOnly || dataRoleMenuIds.has(item.id))
     .map(item => {
       if (item.children) {
         const visibleChildren = item.children.filter(child => hasRoleAccess(child.roles));
