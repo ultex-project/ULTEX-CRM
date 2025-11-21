@@ -332,7 +332,7 @@ const CompanyListPage = () => {
                 <FontAwesomeIcon icon={faLayerGroup} className="me-2" />
                 <Translate contentKey="crmApp.company.dashboard.buttons.saveSegment" />
               </Button>
-              <Button color="primary" tag={Link} to="/dashboard/companies/new" className="shadow-sm">
+              <Button color="primary" tag={Link} to="/dashboard/company/new" className="shadow-sm">
                 <FontAwesomeIcon icon={faPlus} className="me-2" />
                 <Translate contentKey="crmApp.company.dashboard.buttons.newCompany" />
               </Button>
