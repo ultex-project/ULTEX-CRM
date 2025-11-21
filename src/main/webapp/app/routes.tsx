@@ -22,10 +22,10 @@ import ProspectCreatePage from 'app/custom/dashboard/modules/contact/ProspectCre
 import ProspectViewPage from 'app/custom/dashboard/modules/contact/ProspectViewPage';
 import DataDashboardPage from 'app/custom/dashboard/pages/data/DataDashboardPage';
 import DataHistoryPage from 'app/custom/dashboard/pages/data/DataHistoryPage';
-import CompanyListPage from 'app/custom/dashboard/modules/company/CompanyListPage';
-import CompanyCreatePage from 'app/custom/dashboard/modules/company/CompanyCreatePage';
-import CompanyEditPage from 'app/custom/dashboard/modules/company/CompanyEditPage';
-import CompanyViewPage from 'app/custom/dashboard/modules/company/CompanyViewPage';
+import SocieteLieeListPage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeListPage';
+import SocieteLieeCreatePage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeCreatePage';
+import SocieteLieeEditPage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeEditPage';
+import SocieteLieeViewPage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeViewPage';
 import ClientListPage from 'app/custom/dashboard/modules/client/ClientListPage';
 import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
 import ClientDemandCreatePage from 'app/custom/dashboard/modules/client/ClientDemandCreatePage';
@@ -95,16 +95,16 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
-          <Route path="company">
-            <Route path="list" element={<CompanyListPage />} />
-            <Route path="new" element={<CompanyCreatePage />} />
-            <Route path=":id/edit" element={<CompanyEditPage />} />
-            <Route path=":id/view" element={<CompanyViewPage />} />
+          <Route path="societe-liee">
+            <Route path="list" element={<SocieteLieeListPage />} />
+            <Route path="new" element={<SocieteLieeCreatePage />} />
+            <Route path=":id/edit" element={<SocieteLieeEditPage />} />
+            <Route path=":id/view" element={<SocieteLieeViewPage />} />
           </Route>
-          <Route path="companies">
-            <Route path="new" element={<CompanyCreatePage />} />
-            <Route path=":id/edit" element={<CompanyEditPage />} />
-            <Route path=":id/view" element={<CompanyViewPage />} />
+          <Route path="societes-liees">
+            <Route path="new" element={<SocieteLieeCreatePage />} />
+            <Route path=":id/edit" element={<SocieteLieeEditPage />} />
+            <Route path=":id/view" element={<SocieteLieeViewPage />} />
           </Route>
           <Route
             path="data/history"

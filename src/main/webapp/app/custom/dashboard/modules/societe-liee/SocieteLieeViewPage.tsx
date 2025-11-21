@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 import { Alert, Badge, Button, Card, CardBody, CardHeader, Col, Row, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBuilding, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, reset } from 'app/entities/company/company.reducer';
-import { ICompany } from 'app/shared/model/company.model';
+import { getEntity, reset } from 'app/entities/societe-liee/societe-liee.reducer';
+import { ISocieteLiee } from 'app/shared/model/societe-liee.model';
 
 const renderValue = (value: React.ReactNode) =>
   value !== undefined && value !== null && value !== '' ? value : <span className="text-muted">--</span>;
 
-const formatDate = (value?: dayjs.Dayjs | string | null, format = 'DD MMM YYYY HH:mm') => (value ? dayjs(value).format(format) : '--');
-
-const CompanyViewPage = () => {
+const SocieteLieeViewPage = () => {
   const { id } = useParams<'id'>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -22,9 +19,9 @@ const CompanyViewPage = () => {
   const [clientsCount] = useState(0);
   const [demandsCount] = useState(0);
 
-  const company = useAppSelector(state => state.company.entity);
-  const loading = useAppSelector(state => state.company.loading);
-  const errorMessage = useAppSelector(state => state.company.errorMessage);
+  const societeLiee = useAppSelector(state => state.societeLiee.entity as ISocieteLiee);
+  const loading = useAppSelector(state => state.societeLiee.loading);
+  const errorMessage = useAppSelector(state => state.societeLiee.errorMessage);
 
   useEffect(() => {
     dispatch(reset());
@@ -37,19 +34,19 @@ const CompanyViewPage = () => {
     };
   }, [dispatch, id]);
 
-  const isNotFound = !loading && (!company || company.id === undefined || company.id === null);
+  const isNotFound = !loading && (!societeLiee || societeLiee.id === undefined || societeLiee.id === null);
 
   if (isNotFound) {
     return (
       <div className="client-view-page py-4">
         <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-          <Button color="link" tag={Link} to="/dashboard/company/list" className="px-0 text-decoration-none">
+          <Button color="link" tag={Link} to="/dashboard/societe-liee/list" className="px-0 text-decoration-none">
             <FontAwesomeIcon icon={faArrowLeft} className="me-2" />
             Retour à la liste
           </Button>
         </div>
         <Alert color="danger" className="text-center">
-          L&apos;entreprise n&apos;a pas été trouvée.
+          La société liée n&apos;a pas été trouvée.
         </Alert>
       </div>
     );
@@ -58,12 +55,12 @@ const CompanyViewPage = () => {
   return (
     <div className="client-view-page py-4">
       <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <Button color="link" tag={Link} to="/dashboard/company/list" className="px-0 text-decoration-none">
+        <Button color="link" tag={Link} to="/dashboard/societe-liee/list" className="px-0 text-decoration-none">
           <FontAwesomeIcon icon={faArrowLeft} className="me-2" />
           Retour à la liste
         </Button>
-        {company?.id ? (
-          <Button color="primary" tag={Link} to={`/dashboard/company/${company.id}/edit`} className="shadow-sm">
+        {societeLiee?.id ? (
+          <Button color="primary" tag={Link} to={`/dashboard/societe-liee/${societeLiee.id}/edit`} className="shadow-sm">
             <FontAwesomeIcon icon={faEdit} className="me-2" />
             Modifier
           </Button>
@@ -79,18 +76,18 @@ const CompanyViewPage = () => {
             <FontAwesomeIcon icon={faBuilding} size="lg" />
           </div>
           <div className="flex-grow-1">
-            <h4 className="mb-1">{renderValue(company?.name)}</h4>
-            <p className="mb-0 text-muted">Profil de l&apos;entreprise</p>
+            <h4 className="mb-1">{renderValue(societeLiee?.raisonSociale)}</h4>
+            <p className="mb-0 text-muted">Profil de la société liée</p>
           </div>
           <div className="d-flex flex-wrap gap-2">
-            {company?.industry ? (
+            {societeLiee?.secteurActivite ? (
               <Badge color="light" className="text-primary border border-primary">
-                {company.industry}
+                {societeLiee.secteurActivite}
               </Badge>
             ) : null}
-            {company?.country ? (
+            {societeLiee?.tailleEntreprise ? (
               <Badge color="light" className="text-secondary border border-secondary">
-                {company.country}
+                {societeLiee.tailleEntreprise}
               </Badge>
             ) : null}
           </div>
@@ -123,24 +120,51 @@ const CompanyViewPage = () => {
             <CardBody>
               <Row className="gy-3 gx-4">
                 <Col md="6">
-                  <div className="text-muted small">Nom</div>
-                  <div className="fw-semibold">{renderValue(company?.name)}</div>
+                  <div className="text-muted small">Raison sociale</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.raisonSociale)}</div>
                 </Col>
                 <Col md="6">
-                  <div className="text-muted small">Secteur</div>
-                  <div className="fw-semibold">{renderValue(company?.industry)}</div>
+                  <div className="text-muted small">Forme juridique</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.formeJuridique)}</div>
                 </Col>
                 <Col md="6">
-                  <div className="text-muted small">Site web</div>
-                  <div className="fw-semibold">{renderValue(company?.website)}</div>
+                  <div className="text-muted small">Secteur d&apos;activité</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.secteurActivite)}</div>
                 </Col>
                 <Col md="6">
-                  <div className="text-muted small">Créée le</div>
-                  <div className="fw-semibold">{renderValue(formatDate(company?.createdAt))}</div>
+                  <div className="text-muted small">Taille de l&apos;entreprise</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.tailleEntreprise)}</div>
                 </Col>
                 <Col md="6">
-                  <div className="text-muted small">Mise à jour le</div>
-                  <div className="fw-semibold">{renderValue(formatDate(company?.updatedAt))}</div>
+                  <div className="text-muted small">Représentant légal</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.representantLegal)}</div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+
+          <Card className="shadow-sm border-0 mb-4">
+            <CardHeader className="bg-white border-0">
+              <div className="d-flex align-items-center gap-2">
+                <span role="img" aria-label="id">
+                  🪪
+                </span>
+                <h6 className="mb-0">Identifiants</h6>
+              </div>
+            </CardHeader>
+            <CardBody>
+              <Row className="gy-3 gx-4">
+                <Col md="4">
+                  <div className="text-muted small">ICE</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.ice)}</div>
+                </Col>
+                <Col md="4">
+                  <div className="text-muted small">RC</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.rc)}</div>
+                </Col>
+                <Col md="4">
+                  <div className="text-muted small">NIF</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.nif)}</div>
                 </Col>
               </Row>
             </CardBody>
@@ -152,30 +176,14 @@ const CompanyViewPage = () => {
                 <span role="img" aria-label="globe">
                   🌍
                 </span>
-                <h6 className="mb-0">Localisation</h6>
+                <h6 className="mb-0">Coordonnées</h6>
               </div>
             </CardHeader>
             <CardBody>
               <Row className="gy-3 gx-4">
                 <Col md="12">
-                  <div className="text-muted small">Adresse</div>
-                  <div className="fw-semibold">{renderValue(company?.address)}</div>
-                </Col>
-                <Col md="4">
-                  <div className="text-muted small">Ville</div>
-                  <div className="fw-semibold">{renderValue(company?.city)}</div>
-                </Col>
-                <Col md="4">
-                  <div className="text-muted small">Pays</div>
-                  <div className="fw-semibold">{renderValue(company?.country)}</div>
-                </Col>
-                <Col md="4">
-                  <div className="text-muted small">Téléphone</div>
-                  <div className="fw-semibold">{renderValue(company?.phone)}</div>
-                </Col>
-                <Col md="6">
-                  <div className="text-muted small">Email</div>
-                  <div className="fw-semibold">{renderValue(company?.email)}</div>
+                  <div className="text-muted small">Adresse du siège</div>
+                  <div className="fw-semibold">{renderValue(societeLiee?.adresseSiege)}</div>
                 </Col>
               </Row>
             </CardBody>
@@ -195,7 +203,7 @@ const CompanyViewPage = () => {
                 <Col md="6">
                   <div className="text-muted small">Clients associés</div>
                   <div className="fw-semibold fs-5">{clientsCount}</div>
-                  <div className="text-muted">Nombre total de clients liés à cette entreprise.</div>
+                  <div className="text-muted">Nombre total de clients liés à cette société.</div>
                 </Col>
                 <Col md="6">
                   <div className="text-muted small">Demandes</div>
@@ -211,4 +219,4 @@ const CompanyViewPage = () => {
   );
 };
 
-export default CompanyViewPage;
+export default SocieteLieeViewPage;
