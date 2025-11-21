@@ -24,6 +24,8 @@ import DataDashboardPage from 'app/custom/dashboard/pages/data/DataDashboardPage
 import DataHistoryPage from 'app/custom/dashboard/pages/data/DataHistoryPage';
 import CompanyListPage from 'app/custom/dashboard/modules/company/CompanyListPage';
 import CompanyCreatePage from 'app/custom/dashboard/modules/company/CompanyCreatePage';
+import CompanyEditPage from 'app/custom/dashboard/modules/company/CompanyEditPage';
+import CompanyViewPage from 'app/custom/dashboard/modules/company/CompanyViewPage';
 import ClientListPage from 'app/custom/dashboard/modules/client/ClientListPage';
 import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
 import ClientDemandCreatePage from 'app/custom/dashboard/modules/client/ClientDemandCreatePage';
@@ -96,9 +98,13 @@ const AppRoutes = () => {
           <Route path="company">
             <Route path="list" element={<CompanyListPage />} />
             <Route path="new" element={<CompanyCreatePage />} />
+            <Route path=":id/edit" element={<CompanyEditPage />} />
+            <Route path=":id/view" element={<CompanyViewPage />} />
           </Route>
           <Route path="companies">
             <Route path="new" element={<CompanyCreatePage />} />
+            <Route path=":id/edit" element={<CompanyEditPage />} />
+            <Route path=":id/view" element={<CompanyViewPage />} />
           </Route>
           <Route
             path="data/history"

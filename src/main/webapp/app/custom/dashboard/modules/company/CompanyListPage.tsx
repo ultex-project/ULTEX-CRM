@@ -576,11 +576,11 @@ const CompanyListPage = () => {
                                 <FontAwesomeIcon icon={faEllipsisV} />
                               </DropdownToggle>
                               <DropdownMenu end className="rounded-3 shadow">
-                                <DropdownItem tag={Link} to={`/dashboard/companies/${company.id}/view`}>
+                                <DropdownItem tag={Link} to={`/dashboard/company/${company.id}/view`}>
                                   <FontAwesomeIcon icon={faEye} className="me-2" />
                                   <Translate contentKey="crmApp.company.dashboard.actions.view" />
                                 </DropdownItem>
-                                <DropdownItem tag={Link} to={`/dashboard/companies/${company.id}/edit`}>
+                                <DropdownItem tag={Link} to={`/dashboard/company/${company.id}/edit`}>
                                   <FontAwesomeIcon icon={faEdit} className="me-2" />
                                   <Translate contentKey="crmApp.company.dashboard.actions.edit" />
                                 </DropdownItem>
