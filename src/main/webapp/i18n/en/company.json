@@ -30,7 +30,81 @@
       "updatedAt": "Updated At",
       "clients": "Clients",
       "prospects": "Prospects",
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "dashboard": {
+        "status": {
+          "badge": "Companies"
+        },
+        "hero": {
+          "title": "Company workspace",
+          "subtitle": "Track organizations, understand their footprint, and keep your book of business healthy.",
+          "stats": {
+            "total": "Companies tracked",
+            "newThisWeek": "New this week",
+            "countries": "Countries represented"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Save segment",
+          "newCompany": "New company"
+        },
+        "metrics": {
+          "total": "Total companies",
+          "totalHint": "{{value}} companies in your workspace",
+          "newThisWeek": "New this week",
+          "newThisWeekHint": "Created during the last 7 days",
+          "countries": "Companies by country",
+          "countriesHint": "Unique countries represented",
+          "topIndustry": "Top industry",
+          "topIndustryHint": "Most common industry",
+          "noIndustry": "No industry set"
+        },
+        "searchPlaceholder": "Search name, email, industry, or country...",
+        "filters": {
+          "all": "All ({{count}})",
+          "label": "Advanced filters",
+          "unsupported": "Heads up: mixed OR conditions are not fully supported by the current API. Filters are applied as AND clauses."
+        },
+        "table": {
+          "title": "Company pipeline",
+          "summary": "Showing {{current}} of {{total}} filtered companies",
+          "sortedBy": "Sorted by {{field}} ({{direction}})",
+          "loading": "Loading companies...",
+          "empty": "No companies match the current filters.",
+          "unnamed": "Unnamed company",
+          "noEmail": "No email on file",
+          "noPhone": "No phone on file",
+          "pendingSync": "Pending sync"
+        },
+        "columns": {
+          "name": "Name",
+          "industry": "Industry",
+          "country": "Country",
+          "phone": "Phone",
+          "email": "Email",
+          "created": "Created",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "View",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "pagination": {
+          "page": "Page {{page}} of {{total}}"
+        },
+        "modal": {
+          "title": "Confirm delete operation",
+          "messagePrefix": "Are you sure you want to delete the company",
+          "cancel": "Cancel",
+          "confirm": "Delete",
+          "unknown": "this record"
+        }
+      }
     }
   }
 }

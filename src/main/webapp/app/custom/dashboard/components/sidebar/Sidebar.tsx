@@ -89,9 +89,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
     },
     {
       id: 'companies',
-      label: 'global.menu.companies',
+      label: 'crmApp.company.dashboard.status.badge',
       icon: faBuilding,
-      path: '/dashboard/company',
+      path: '/dashboard/company/list',
       roles: ['ROLE_ADMIN', 'ROLE_USER'],
     },
     {

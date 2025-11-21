@@ -22,6 +22,7 @@ import ProspectCreatePage from 'app/custom/dashboard/modules/contact/ProspectCre
 import ProspectViewPage from 'app/custom/dashboard/modules/contact/ProspectViewPage';
 import DataDashboardPage from 'app/custom/dashboard/pages/data/DataDashboardPage';
 import DataHistoryPage from 'app/custom/dashboard/pages/data/DataHistoryPage';
+import CompanyListPage from 'app/custom/dashboard/modules/company/CompanyListPage';
 import ClientListPage from 'app/custom/dashboard/modules/client/ClientListPage';
 import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
 import ClientDemandCreatePage from 'app/custom/dashboard/modules/client/ClientDemandCreatePage';
@@ -91,6 +92,9 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
+          <Route path="company">
+            <Route path="list" element={<CompanyListPage />} />
+          </Route>
           <Route
             path="data/history"
             element={
