@@ -17,15 +17,19 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link DemandeClient} and its DTO {@link DemandeClientDTO}.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { ProduitDemandeMapper.class })
 public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, DemandeClient> {
     @Mapping(target = "client", source = "client", qualifiedByName = "clientId")
     @Mapping(target = "devise", source = "devise", qualifiedByName = "deviseId")
     @Mapping(target = "incoterm", source = "incoterm", qualifiedByName = "incotermId")
     @Mapping(target = "sousServices", source = "sousServices", qualifiedByName = "sousServiceIdSet")
+    @Mapping(target = "produits", source = "produits")
     DemandeClientDTO toDto(DemandeClient s);
 
     @Mapping(target = "removeSousServices", ignore = true)
+    @Mapping(target = "removeProduits", ignore = true)
+    @Mapping(target = "sousServices", source = "sousServices", qualifiedByName = "sousServiceIdSetToEntity")
+    @Mapping(target = "produits", source = "produits")
     DemandeClient toEntity(DemandeClientDTO demandeClientDTO);
 
     @Named("clientId")
@@ -51,5 +55,21 @@ public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, Dema
     @Named("sousServiceIdSet")
     default Set<SousServiceDTO> toDtoSousServiceIdSet(Set<SousService> sousService) {
         return sousService.stream().map(this::toDtoSousServiceId).collect(Collectors.toSet());
+    }
+
+    @Named("sousServiceIdSetToEntity")
+    default Set<SousService> toEntitySousServiceIdSet(Set<SousServiceDTO> sousServices) {
+        if (sousServices == null) {
+            return new java.util.HashSet<>();
+        }
+        return sousServices
+            .stream()
+            .filter(java.util.Objects::nonNull)
+            .map(dto -> {
+                SousService entity = new SousService();
+                entity.setId(dto.getId());
+                return entity;
+            })
+            .collect(Collectors.toSet());
     }
 }
