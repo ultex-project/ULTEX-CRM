@@ -26,7 +26,46 @@
       "email": "Email",
       "autorisation": "Autorisation",
       "remarques": "Remarques",
-      "client": "Client"
+      "client": "Client",
+      "dashboard": {
+        "title": "Linked Contacts",
+        "subtitle": "Manage all contacts associated with this client",
+        "add": "Add a contact",
+        "empty": "No linked contacts for this client.",
+        "actions": {
+          "label": "Actions",
+          "view": "View"
+        },
+        "columns": {
+          "name": "Name"
+        },
+        "modal": {
+          "createTitle": "Add a contact",
+          "editTitle": "Edit contact",
+          "authorizationPlaceholder": "Select an authorization"
+        },
+        "viewTitle": "Contact details",
+        "deleteQuestion": "Are you sure you want to delete {{ name }} (ID {{ id }})?",
+        "messages": {
+          "createSuccess": "Contact created successfully.",
+          "updateSuccess": "Contact updated successfully.",
+          "saveError": "Unable to save this contact. Please try again.",
+          "deleteSuccess": "Contact deleted successfully.",
+          "deleteError": "Unable to delete this contact."
+        },
+        "validation": {
+          "generic": "Please correct the highlighted fields.",
+          "nom": "Last name is required.",
+          "prenom": "First name is required.",
+          "email": "Email is required.",
+          "emailInvalid": "Please enter a valid email address."
+        },
+        "authorizations": {
+          "Info": "Info",
+          "Mandataire": "Mandataire",
+          "Signataire": "Signatory"
+        }
+      }
     }
   }
 }

@@ -20,6 +20,18 @@ import AdminDashboard from 'app/custom/dashboard/AdminDashboard';
 import ProspectListPage from 'app/custom/dashboard/modules/contact/ProspectListPage';
 import ProspectCreatePage from 'app/custom/dashboard/modules/contact/ProspectCreatePage';
 import ProspectViewPage from 'app/custom/dashboard/modules/contact/ProspectViewPage';
+import DataDashboardPage from 'app/custom/dashboard/pages/data/DataDashboardPage';
+import DataHistoryPage from 'app/custom/dashboard/pages/data/DataHistoryPage';
+import SocieteLieeListPage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeListPage';
+import SocieteLieeCreatePage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeCreatePage';
+import SocieteLieeEditPage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeEditPage';
+import SocieteLieeViewPage from 'app/custom/dashboard/modules/societe-liee/SocieteLieeViewPage';
+import ClientListPage from 'app/custom/dashboard/modules/client/ClientListPage';
+import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
+import ClientDemandCreatePage from 'app/custom/dashboard/modules/client/ClientDemandCreatePage';
+import ClientCreatePage from 'app/custom/dashboard/modules/client/ClientCreatePage';
+import ClientEditPage from 'app/custom/dashboard/modules/client/ClientEditPage';
+import SousServiceListPage from 'app/custom/dashboard/modules/sous-service/SousServiceListPage';
 
 const loading = <div>loading ...</div>;
 
@@ -66,7 +78,7 @@ const AppRoutes = () => {
         <Route
           path="dashboard/*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER, AUTHORITIES.ADMIN, AUTHORITIES.DATA]}>
               <DashboardLayout />
             </PrivateRoute>
           }
@@ -75,6 +87,46 @@ const AppRoutes = () => {
           <Route path="contact/new" element={<ProspectCreatePage />} />
           <Route path="contact" element={<ProspectListPage />} />
           <Route path="prospect/:id/view" element={<ProspectViewPage />} />
+          <Route
+            path="data"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.DATA, AUTHORITIES.ADMIN]}>
+                <DataDashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route path="societe-liee">
+            <Route path="list" element={<SocieteLieeListPage />} />
+            <Route path="new" element={<SocieteLieeCreatePage />} />
+            <Route path=":id/edit" element={<SocieteLieeEditPage />} />
+            <Route path=":id/view" element={<SocieteLieeViewPage />} />
+          </Route>
+          <Route path="societes-liees">
+            <Route path="new" element={<SocieteLieeCreatePage />} />
+            <Route path=":id/edit" element={<SocieteLieeEditPage />} />
+            <Route path=":id/view" element={<SocieteLieeViewPage />} />
+          </Route>
+          <Route
+            path="data/history"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.DATA, AUTHORITIES.ADMIN]}>
+                <DataHistoryPage />
+              </PrivateRoute>
+            }
+          />
+          <Route path="clients" element={<ClientListPage />} />
+          <Route path="clients/new" element={<ClientCreatePage />} />
+          <Route path="clients/:id/view" element={<ClientViewPage />} />
+          <Route path="clients/:id/edit" element={<ClientEditPage />} />
+          <Route path="clients/:clientId/demands/new" element={<ClientDemandCreatePage />} />
+          <Route
+            path="sous-services"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.DATA, AUTHORITIES.ADMIN]}>
+                <SousServiceListPage />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route
           path="*"

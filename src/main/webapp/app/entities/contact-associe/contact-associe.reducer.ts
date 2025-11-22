@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
-import { ASC } from 'app/shared/util/pagination.constants';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { EntityState, IQueryParams, createEntitySlice, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IContactAssocie, defaultValue } from 'app/shared/model/contact-associe.model';
@@ -11,6 +10,7 @@ const initialState: EntityState<IContactAssocie> = {
   entities: [],
   entity: defaultValue,
   updating: false,
+  totalItems: 0,
   updateSuccess: false,
 };
 
@@ -20,8 +20,10 @@ const apiUrl = 'api/contact-associes';
 
 export const getEntities = createAsyncThunk(
   'contactAssocie/fetch_entity_list',
-  async ({ sort }: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+  async ({ page, size, sort, query }: IQueryParams = {}) => {
+    const paginationQuery = sort ? `page=${page ?? 0}&size=${size ?? 20}&sort=${sort}&` : '';
+    const filterQuery = query ? `${query}&` : '';
+    const requestUrl = `${apiUrl}?${paginationQuery}${filterQuery}cacheBuster=${new Date().getTime()}`;
     return axios.get<IContactAssocie[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -94,19 +96,13 @@ export const ContactAssocieSlice = createEntitySlice({
         state.entity = {};
       })
       .addMatcher(isFulfilled(getEntities), (state, action) => {
-        const { data } = action.payload;
+        const { data, headers } = action.payload;
 
         return {
           ...state,
           loading: false,
-          entities: data.sort((a, b) => {
-            if (!action.meta?.arg?.sort) {
-              return 1;
-            }
-            const order = action.meta.arg.sort.split(',')[1];
-            const predicate = action.meta.arg.sort.split(',')[0];
-            return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
-          }),
+          entities: data,
+          totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
       .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {

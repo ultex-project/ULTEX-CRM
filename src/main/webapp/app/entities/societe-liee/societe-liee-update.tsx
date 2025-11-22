@@ -24,7 +24,7 @@ export const SocieteLieeUpdate = () => {
   const updateSuccess = useAppSelector(state => state.societeLiee.updateSuccess);
 
   const handleClose = () => {
-    navigate('/societe-liee');
+    navigate(`/societe-liee${location.search}`);
   };
 
   useEffect(() => {

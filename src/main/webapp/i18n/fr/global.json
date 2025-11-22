@@ -9,16 +9,39 @@
       "deals": "Affaires",
       "reports": "Rapports",
       "calendar": "Calendrier",
+      "clients": {
+        "main": "Clients",
+        "list": "Liste des Clients",
+        "verification": "Vérification Données (DATA)",
+        "history": "Historique Vérifications"
+      },
+      "data": "Données",
       "home": "Accueil",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Entities",
+        "main": "Entités",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "client": "Client",
         "prospect": "Prospect",
         "opportunity": "Opportunity",
         "internalUser": "Internal User",
-        "history": "History"
+        "company": "Company",
+        "contact": "Contact",
+        "societeLiee": "Societe Liee",
+        "contactAssocie": "Contact Associe",
+        "documentClient": "Document Client",
+        "demandeClient": "Demande Client",
+        "produitDemande": "Produit Demande",
+        "historiqueCrm": "Historique CRM",
+        "kycClient": "Kyc Client",
+        "history": "History",
+        "devise": "Devise",
+        "incoterm": "Incoterm",
+        "pays": "Pays",
+        "sousService": "Sous Service",
+        "cycleActivation": "Cycle Activation",
+        "etatInteraction": "Etat Interaction",
+        "rappelAgent": "Rappel Agent"
       },
       "account": {
         "main": "Compte",
@@ -42,6 +65,7 @@
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Langue",
+      "sousServices": "Sous-services",
       "title": "Ultex"
     },
     "dashboard": {
@@ -108,6 +132,7 @@
       "addimage": "Ajouter image",
       "back": "Retour",
       "cancel": "Annuler",
+      "close": "Fermer",
       "edit": "Editer",
       "delete": "Supprimer",
       "open": "Ouvrir",

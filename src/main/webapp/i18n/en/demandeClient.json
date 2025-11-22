@@ -21,13 +21,51 @@
       "reference": "Reference",
       "dateDemande": "Date Demande",
       "servicePrincipal": "Service Principal",
-      "sousServices": "Sous Services",
+      "typeDemande": "Type Demande",
       "provenance": "Provenance",
-      "incoterm": "Incoterm",
-      "devise": "Devise",
-      "nombreProduits": "Nombre Produits",
       "remarqueGenerale": "Remarque Generale",
-      "client": "Client"
+      "client": "Client",
+      "devise": "Devise",
+      "incoterm": "Incoterm",
+      "sousServices": "Sous Services",
+      "create": {
+        "title": "Create a demand",
+        "subtitle": "Fill in the main request details and add the requested products.",
+        "back": "Back to client",
+        "save": "Save demand",
+        "selectPlaceholder": "Select an option",
+        "sousServicesPlaceholder": "Select one or more sub-services",
+        "sousServicesNoOptions": "No sub-services available",
+        "success": "Request created successfully.",
+        "errorSubmit": "Unable to save the request. Please try again.",
+        "breadcrumb": {
+          "client": "Client",
+          "current": "New demand"
+        },
+        "errors": {
+          "servicePrincipal": "Please choose the main service.",
+          "typeDemande": "Please select the request type.",
+          "provenance": "Provenance is required.",
+          "incoterm": "Select an incoterm.",
+          "devise": "Select a currency.",
+          "nombreProduits": "Add at least one product to the request."
+        }
+      },
+      "dashboard": {
+        "actions": {
+          "view": "View"
+        },
+        "messages": {
+          "deleteSuccess": "Demande deleted successfully.",
+          "deleteError": "Unable to delete this demande."
+        },
+        "viewTitle": "Demande details",
+        "products": {
+          "title": "Requested products",
+          "empty": "No products registered for this demande."
+        },
+        "deleteQuestion": "Are you sure you want to delete {{ reference }}?"
+      }
     }
   }
 }

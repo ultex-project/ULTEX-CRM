@@ -30,7 +30,81 @@
       "updatedAt": "Updated At",
       "clients": "Clients",
       "prospects": "Prospects",
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "dashboard": {
+        "status": {
+          "badge": "Entreprises"
+        },
+        "hero": {
+          "title": "Espace entreprises",
+          "subtitle": "Suivez les organisations, comprenez leur présence et gardez votre portefeuille en bonne santé.",
+          "stats": {
+            "total": "Entreprises suivies",
+            "newThisWeek": "Nouvelles cette semaine",
+            "countries": "Pays représentés"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Enregistrer le segment",
+          "newCompany": "Nouvelle entreprise"
+        },
+        "metrics": {
+          "total": "Total entreprises",
+          "totalHint": "{{value}} entreprises dans votre espace",
+          "newThisWeek": "Nouvelles cette semaine",
+          "newThisWeekHint": "Créées au cours des 7 derniers jours",
+          "countries": "Entreprises par pays",
+          "countriesHint": "Nombre de pays uniques",
+          "topIndustry": "Secteur principal",
+          "topIndustryHint": "Secteur le plus fréquent",
+          "noIndustry": "Aucun secteur défini"
+        },
+        "searchPlaceholder": "Rechercher nom, email, secteur ou pays...",
+        "filters": {
+          "all": "Toutes ({{count}})",
+          "label": "Filtres avancés",
+          "unsupported": "Attention : les conditions OR mixtes ne sont pas entièrement prises en charge. Les filtres sont appliqués en clauses AND."
+        },
+        "table": {
+          "title": "Pipeline entreprises",
+          "summary": "{{current}} sur {{total}} entreprises filtrées",
+          "sortedBy": "Trié par {{field}} ({{direction}})",
+          "loading": "Chargement des entreprises...",
+          "empty": "Aucune entreprise ne correspond aux filtres.",
+          "unnamed": "Entreprise sans nom",
+          "noEmail": "Aucun email",
+          "noPhone": "Aucun téléphone",
+          "pendingSync": "Synchronisation en attente"
+        },
+        "columns": {
+          "name": "Nom",
+          "industry": "Secteur",
+          "country": "Pays",
+          "phone": "Téléphone",
+          "email": "Email",
+          "created": "Créé",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "Voir",
+          "edit": "Modifier",
+          "delete": "Supprimer"
+        },
+        "pagination": {
+          "page": "Page {{page}} sur {{total}}"
+        },
+        "modal": {
+          "title": "Confirmer la suppression",
+          "messagePrefix": "Êtes-vous sûr de vouloir supprimer l'entreprise",
+          "cancel": "Annuler",
+          "confirm": "Supprimer",
+          "unknown": "cet enregistrement"
+        }
+      }
     }
   }
 }

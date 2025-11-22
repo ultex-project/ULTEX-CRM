@@ -5,9 +5,15 @@ import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhips
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
+import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getClients } from 'app/entities/client/client.reducer';
+import { getEntities as getDevises } from 'app/entities/devise/devise.reducer';
+import { getEntities as getIncoterms } from 'app/entities/incoterm/incoterm.reducer';
+import { getEntities as getSousServices } from 'app/entities/sous-service/sous-service.reducer';
+import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
+import { TypeDemande } from 'app/shared/model/enumerations/type-demande.model';
 import { createEntity, getEntity, reset, updateEntity } from './demande-client.reducer';
 
 export const DemandeClientUpdate = () => {
@@ -19,13 +25,18 @@ export const DemandeClientUpdate = () => {
   const isNew = id === undefined;
 
   const clients = useAppSelector(state => state.client.entities);
+  const devises = useAppSelector(state => state.devise.entities);
+  const incoterms = useAppSelector(state => state.incoterm.entities);
+  const sousServices = useAppSelector(state => state.sousService.entities);
   const demandeClientEntity = useAppSelector(state => state.demandeClient.entity);
   const loading = useAppSelector(state => state.demandeClient.loading);
   const updating = useAppSelector(state => state.demandeClient.updating);
   const updateSuccess = useAppSelector(state => state.demandeClient.updateSuccess);
+  const servicePrincipalValues = Object.keys(ServicePrincipal);
+  const typeDemandeValues = Object.keys(TypeDemande);
 
   const handleClose = () => {
-    navigate('/demande-client');
+    navigate(`/demande-client${location.search}`);
   };
 
   useEffect(() => {
@@ -36,6 +47,9 @@ export const DemandeClientUpdate = () => {
     }
 
     dispatch(getClients({}));
+    dispatch(getDevises({}));
+    dispatch(getIncoterms({}));
+    dispatch(getSousServices({}));
   }, []);
 
   useEffect(() => {
@@ -49,14 +63,14 @@ export const DemandeClientUpdate = () => {
       values.id = Number(values.id);
     }
     values.dateDemande = convertDateTimeToServer(values.dateDemande);
-    if (values.nombreProduits !== undefined && typeof values.nombreProduits !== 'number') {
-      values.nombreProduits = Number(values.nombreProduits);
-    }
 
     const entity = {
       ...demandeClientEntity,
       ...values,
       client: clients.find(it => it.id.toString() === values.client?.toString()),
+      devise: devises.find(it => it.id.toString() === values.devise?.toString()),
+      incoterm: incoterms.find(it => it.id.toString() === values.incoterm?.toString()),
+      sousServices: mapIdList(values.sousServices),
     };
 
     if (isNew) {
@@ -72,9 +86,14 @@ export const DemandeClientUpdate = () => {
           dateDemande: displayDefaultDateTime(),
         }
       : {
+          servicePrincipal: 'IMPORT',
+          typeDemande: 'PROFORMA',
           ...demandeClientEntity,
           dateDemande: convertDateTimeFromServer(demandeClientEntity.dateDemande),
           client: demandeClientEntity?.client?.id,
+          devise: demandeClientEntity?.devise?.id,
+          incoterm: demandeClientEntity?.incoterm?.id,
+          sousServices: demandeClientEntity?.sousServices?.map(e => e.id.toString()),
         };
 
   return (
@@ -128,41 +147,32 @@ export const DemandeClientUpdate = () => {
                 id="demande-client-servicePrincipal"
                 name="servicePrincipal"
                 data-cy="servicePrincipal"
-                type="text"
-              />
+                type="select"
+              >
+                {servicePrincipalValues.map(servicePrincipal => (
+                  <option value={servicePrincipal} key={servicePrincipal}>
+                    {translate(`crmApp.ServicePrincipal.${servicePrincipal}`)}
+                  </option>
+                ))}
+              </ValidatedField>
               <ValidatedField
-                label={translate('crmApp.demandeClient.sousServices')}
-                id="demande-client-sousServices"
-                name="sousServices"
-                data-cy="sousServices"
-                type="text"
-              />
+                label={translate('crmApp.demandeClient.typeDemande')}
+                id="demande-client-typeDemande"
+                name="typeDemande"
+                data-cy="typeDemande"
+                type="select"
+              >
+                {typeDemandeValues.map(typeDemande => (
+                  <option value={typeDemande} key={typeDemande}>
+                    {translate(`crmApp.TypeDemande.${typeDemande}`)}
+                  </option>
+                ))}
+              </ValidatedField>
               <ValidatedField
                 label={translate('crmApp.demandeClient.provenance')}
                 id="demande-client-provenance"
                 name="provenance"
                 data-cy="provenance"
-                type="text"
-              />
-              <ValidatedField
-                label={translate('crmApp.demandeClient.incoterm')}
-                id="demande-client-incoterm"
-                name="incoterm"
-                data-cy="incoterm"
-                type="text"
-              />
-              <ValidatedField
-                label={translate('crmApp.demandeClient.devise')}
-                id="demande-client-devise"
-                name="devise"
-                data-cy="devise"
-                type="text"
-              />
-              <ValidatedField
-                label={translate('crmApp.demandeClient.nombreProduits')}
-                id="demande-client-nombreProduits"
-                name="nombreProduits"
-                data-cy="nombreProduits"
                 type="text"
               />
               <ValidatedField
@@ -182,6 +192,55 @@ export const DemandeClientUpdate = () => {
                 <option value="" key="0" />
                 {clients
                   ? clients.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <ValidatedField
+                id="demande-client-devise"
+                name="devise"
+                data-cy="devise"
+                label={translate('crmApp.demandeClient.devise')}
+                type="select"
+              >
+                <option value="" key="0" />
+                {devises
+                  ? devises.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <ValidatedField
+                id="demande-client-incoterm"
+                name="incoterm"
+                data-cy="incoterm"
+                label={translate('crmApp.demandeClient.incoterm')}
+                type="select"
+              >
+                <option value="" key="0" />
+                {incoterms
+                  ? incoterms.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <ValidatedField
+                label={translate('crmApp.demandeClient.sousServices')}
+                id="demande-client-sousServices"
+                data-cy="sousServices"
+                type="select"
+                multiple
+                name="sousServices"
+              >
+                <option value="" key="0" />
+                {sousServices
+                  ? sousServices.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
                       </option>

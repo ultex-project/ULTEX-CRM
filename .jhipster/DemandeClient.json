@@ -17,27 +17,19 @@
     },
     {
       "fieldName": "servicePrincipal",
-      "fieldType": "String"
+      "fieldType": "ServicePrincipal",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "IMPORT,EXPORT"
     },
     {
-      "fieldName": "sousServices",
-      "fieldType": "String"
+      "fieldName": "typeDemande",
+      "fieldType": "TypeDemande",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PROFORMA,SOURCING,NEGOCIATION,AUTRE"
     },
     {
       "fieldName": "provenance",
       "fieldType": "String"
-    },
-    {
-      "fieldName": "incoterm",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "devise",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "nombreProduits",
-      "fieldType": "Integer"
     },
     {
       "fieldName": "remarqueGenerale",
@@ -45,12 +37,32 @@
     }
   ],
   "name": "DemandeClient",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "client",
       "relationshipName": "client",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "devise",
+      "relationshipName": "devise",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "incoterm",
+      "relationshipName": "incoterm",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "sousService",
+      "otherEntityRelationshipName": "demandes",
+      "relationshipName": "sousServices",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
     }
   ],
   "searchEngine": "no",

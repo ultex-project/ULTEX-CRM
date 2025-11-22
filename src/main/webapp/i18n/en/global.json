@@ -1,17 +1,8 @@
 {
   "global": {
-    "title": "ULTEx CRM",
+    "title": "CrmApp",
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
     "menu": {
-      "overview": "Overview",
-      "companies": "Companies",
-      "contacts": "Contacts",
-      "deals": "Deals",
-      "reports": "Reports",
-      "calendar": "Calendar",
-      "analytics": "Analytics",
-      "expand": "Expand sidebar",
-      "collapse": "Collapse sidebar",
       "home": "Home",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
@@ -21,7 +12,23 @@
         "prospect": "Prospect",
         "opportunity": "Opportunity",
         "internalUser": "Internal User",
-        "history": "History"
+        "company": "Company",
+        "contact": "Contact",
+        "societeLiee": "Societe Liee",
+        "contactAssocie": "Contact Associe",
+        "documentClient": "Document Client",
+        "demandeClient": "Demande Client",
+        "produitDemande": "Produit Demande",
+        "historiqueCrm": "Historique CRM",
+        "kycClient": "Kyc Client",
+        "history": "History",
+        "devise": "Devise",
+        "incoterm": "Incoterm",
+        "pays": "Pays",
+        "sousService": "Sous Service",
+        "cycleActivation": "Cycle Activation",
+        "etatInteraction": "Etat Interaction",
+        "rappelAgent": "Rappel Agent"
       },
       "account": {
         "main": "Account",
@@ -45,6 +52,7 @@
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Language",
+      "sousServices": "Sous-Services",
       "title": "Ultex"
     },
     "dashboard": {
@@ -111,6 +119,7 @@
       "addimage": "Add image",
       "back": "Back",
       "cancel": "Cancel",
+      "close": "Close",
       "delete": "Delete",
       "edit": "Edit",
       "open": "Open",

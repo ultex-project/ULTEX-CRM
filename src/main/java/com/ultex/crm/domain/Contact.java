@@ -61,7 +61,10 @@ public class Contact implements Serializable {
     private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        allowSetters = true
+    )
     private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)

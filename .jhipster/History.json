@@ -2,7 +2,8 @@
   "annotations": {
     "changelogDate": "20251005231809"
   },
-  "applications": "*",
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "entityName",
@@ -55,6 +56,8 @@
     }
   ],
   "name": "History",
+  "pagination": "pagination",
   "relationships": [],
-  "searchEngine": "no"
+  "searchEngine": "no",
+  "service": "serviceClass"
 }

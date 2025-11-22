@@ -23,7 +23,7 @@ export const HistoryUpdate = () => {
   const updateSuccess = useAppSelector(state => state.history.updateSuccess);
 
   const handleClose = () => {
-    navigate('/history');
+    navigate(`/history${location.search}`);
   };
 
   useEffect(() => {

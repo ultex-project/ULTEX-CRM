@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultex.crm.IntegrationTest;
 import com.ultex.crm.domain.History;
 import com.ultex.crm.repository.HistoryRepository;
+import com.ultex.crm.service.dto.HistoryDTO;
+import com.ultex.crm.service.mapper.HistoryMapper;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -78,6 +80,9 @@ class HistoryResourceIT {
 
     @Autowired
     private HistoryRepository historyRepository;
+
+    @Autowired
+    private HistoryMapper historyMapper;
 
     @Autowired
     private EntityManager em;
@@ -149,18 +154,20 @@ class HistoryResourceIT {
     void createHistory() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the History
-        var returnedHistory = om.readValue(
+        HistoryDTO historyDTO = historyMapper.toDto(history);
+        var returnedHistoryDTO = om.readValue(
             restHistoryMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString(),
-            History.class
+            HistoryDTO.class
         );
 
         // Validate the History in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
+        var returnedHistory = historyMapper.toEntity(returnedHistoryDTO);
         assertHistoryUpdatableFieldsEquals(returnedHistory, getPersistedHistory(returnedHistory));
 
         insertedHistory = returnedHistory;
@@ -171,12 +178,13 @@ class HistoryResourceIT {
     void createHistoryWithExistingId() throws Exception {
         // Create the History with an existing ID
         history.setId(1L);
+        HistoryDTO historyDTO = historyMapper.toDto(history);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restHistoryMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the History in the database
@@ -191,9 +199,10 @@ class HistoryResourceIT {
         history.setEntityName(null);
 
         // Create the History, which fails.
+        HistoryDTO historyDTO = historyMapper.toDto(history);
 
         restHistoryMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
@@ -207,9 +216,10 @@ class HistoryResourceIT {
         history.setEntityId(null);
 
         // Create the History, which fails.
+        HistoryDTO historyDTO = historyMapper.toDto(history);
 
         restHistoryMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
@@ -223,9 +233,10 @@ class HistoryResourceIT {
         history.setAction(null);
 
         // Create the History, which fails.
+        HistoryDTO historyDTO = historyMapper.toDto(history);
 
         restHistoryMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
@@ -239,9 +250,10 @@ class HistoryResourceIT {
         history.setPerformedBy(null);
 
         // Create the History, which fails.
+        HistoryDTO historyDTO = historyMapper.toDto(history);
 
         restHistoryMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
@@ -255,9 +267,10 @@ class HistoryResourceIT {
         history.setPerformedDate(null);
 
         // Create the History, which fails.
+        HistoryDTO historyDTO = historyMapper.toDto(history);
 
         restHistoryMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
@@ -344,12 +357,11 @@ class HistoryResourceIT {
             .details(UPDATED_DETAILS)
             .ipAddress(UPDATED_IP_ADDRESS)
             .userAgent(UPDATED_USER_AGENT);
+        HistoryDTO historyDTO = historyMapper.toDto(updatedHistory);
 
         restHistoryMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedHistory.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(om.writeValueAsBytes(updatedHistory))
+                put(ENTITY_API_URL_ID, historyDTO.getId()).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO))
             )
             .andExpect(status().isOk());
 
@@ -364,9 +376,14 @@ class HistoryResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         history.setId(longCount.incrementAndGet());
 
+        // Create the History
+        HistoryDTO historyDTO = historyMapper.toDto(history);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restHistoryMockMvc
-            .perform(put(ENTITY_API_URL_ID, history.getId()).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(
+                put(ENTITY_API_URL_ID, historyDTO.getId()).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the History in the database
@@ -379,12 +396,15 @@ class HistoryResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         history.setId(longCount.incrementAndGet());
 
+        // Create the History
+        HistoryDTO historyDTO = historyMapper.toDto(history);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restHistoryMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(om.writeValueAsBytes(history))
+                    .content(om.writeValueAsBytes(historyDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -398,9 +418,12 @@ class HistoryResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         history.setId(longCount.incrementAndGet());
 
+        // Create the History
+        HistoryDTO historyDTO = historyMapper.toDto(history);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restHistoryMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(history)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the History in the database
@@ -421,10 +444,11 @@ class HistoryResourceIT {
 
         partialUpdatedHistory
             .entityName(UPDATED_ENTITY_NAME)
-            .entityId(UPDATED_ENTITY_ID)
+            .action(UPDATED_ACTION)
+            .fieldChanged(UPDATED_FIELD_CHANGED)
             .oldValue(UPDATED_OLD_VALUE)
-            .performedDate(UPDATED_PERFORMED_DATE)
-            .userAgent(UPDATED_USER_AGENT);
+            .performedBy(UPDATED_PERFORMED_BY)
+            .ipAddress(UPDATED_IP_ADDRESS);
 
         restHistoryMockMvc
             .perform(
@@ -485,10 +509,15 @@ class HistoryResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         history.setId(longCount.incrementAndGet());
 
+        // Create the History
+        HistoryDTO historyDTO = historyMapper.toDto(history);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restHistoryMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, history.getId()).contentType("application/merge-patch+json").content(om.writeValueAsBytes(history))
+                patch(ENTITY_API_URL_ID, historyDTO.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(historyDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -502,12 +531,15 @@ class HistoryResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         history.setId(longCount.incrementAndGet());
 
+        // Create the History
+        HistoryDTO historyDTO = historyMapper.toDto(history);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restHistoryMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(om.writeValueAsBytes(history))
+                    .content(om.writeValueAsBytes(historyDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -521,9 +553,12 @@ class HistoryResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         history.setId(longCount.incrementAndGet());
 
+        // Create the History
+        HistoryDTO historyDTO = historyMapper.toDto(history);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restHistoryMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(history)))
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(historyDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the History in the database

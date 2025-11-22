@@ -77,6 +77,7 @@ public class ClientAsserts {
     public static void assertClientUpdatableRelationshipsEquals(Client expected, Client actual) {
         assertThat(actual)
             .as("Verify Client relationships")
+            .satisfies(a -> assertThat(a.getPays()).as("check pays").isEqualTo(expected.getPays()))
             .satisfies(a -> assertThat(a.getCompany()).as("check company").isEqualTo(expected.getCompany()));
     }
 }

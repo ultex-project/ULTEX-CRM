@@ -44,6 +44,7 @@
     }
   ],
   "name": "SocieteLiee",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "client",

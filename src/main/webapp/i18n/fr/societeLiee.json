@@ -27,7 +27,42 @@
       "tailleEntreprise": "Taille Entreprise",
       "adresseSiege": "Adresse Siege",
       "representantLegal": "Representant Legal",
-      "client": "Client"
+      "client": "Client",
+      "dashboard": {
+        "title": "Sociétés liées",
+        "subtitle": "Gérez les sociétés associées à ce client",
+        "add": "Ajouter une société",
+        "empty": "Aucune société liée pour ce client.",
+        "columns": {
+          "raisonSociale": "Raison sociale",
+          "formeJuridique": "Forme juridique",
+          "ice": "ICE",
+          "rc": "RC",
+          "representantLegal": "Représentant légal"
+        },
+        "actions": {
+          "label": "Actions",
+          "view": "Voir"
+        },
+        "modal": {
+          "createTitle": "Nouvelle société liée",
+          "editTitle": "Modifier société liée",
+          "viewTitle": "Détails société liée",
+          "viewInfo": "Consultation en lecture seule."
+        },
+        "validation": {
+          "generic": "Merci de corriger les champs en surbrillance.",
+          "raisonSociale": "La raison sociale est obligatoire."
+        },
+        "messages": {
+          "createSuccess": "Société liée créée avec succès.",
+          "updateSuccess": "Société liée mise à jour avec succès.",
+          "saveError": "Impossible d'enregistrer cette société. Veuillez réessayer.",
+          "deleteSuccess": "Société liée supprimée avec succès.",
+          "deleteError": "Impossible de supprimer cette société."
+        },
+        "deleteQuestion": "Voulez-vous vraiment supprimer {{ name }} (ID {{ id }}) ?"
+      }
     }
   }
 }

@@ -38,12 +38,6 @@ export const ProduitDemandeDetail = () => {
           </dt>
           <dd>{produitDemandeEntity.typeProduit}</dd>
           <dt>
-            <span id="typeDemande">
-              <Translate contentKey="crmApp.produitDemande.typeDemande">Type Demande</Translate>
-            </span>
-          </dt>
-          <dd>{produitDemandeEntity.typeDemande}</dd>
-          <dt>
             <span id="nomProduit">
               <Translate contentKey="crmApp.produitDemande.nomProduit">Nom Produit</Translate>
             </span>
@@ -74,12 +68,6 @@ export const ProduitDemandeDetail = () => {
           </dt>
           <dd>{produitDemandeEntity.prix}</dd>
           <dt>
-            <span id="fraisExpedition">
-              <Translate contentKey="crmApp.produitDemande.fraisExpedition">Frais Expedition</Translate>
-            </span>
-          </dt>
-          <dd>{produitDemandeEntity.fraisExpedition}</dd>
-          <dt>
             <span id="poidsKg">
               <Translate contentKey="crmApp.produitDemande.poidsKg">Poids Kg</Translate>
             </span>
@@ -98,18 +86,6 @@ export const ProduitDemandeDetail = () => {
           </dt>
           <dd>{produitDemandeEntity.dimensions}</dd>
           <dt>
-            <span id="nombreCartons">
-              <Translate contentKey="crmApp.produitDemande.nombreCartons">Nombre Cartons</Translate>
-            </span>
-          </dt>
-          <dd>{produitDemandeEntity.nombreCartons}</dd>
-          <dt>
-            <span id="piecesParCarton">
-              <Translate contentKey="crmApp.produitDemande.piecesParCarton">Pieces Par Carton</Translate>
-            </span>
-          </dt>
-          <dd>{produitDemandeEntity.piecesParCarton}</dd>
-          <dt>
             <span id="hsCode">
               <Translate contentKey="crmApp.produitDemande.hsCode">Hs Code</Translate>
             </span>
@@ -121,6 +97,36 @@ export const ProduitDemandeDetail = () => {
             </span>
           </dt>
           <dd>{produitDemandeEntity.prixCible}</dd>
+          <dt>
+            <span id="fraisExpedition">
+              <Translate contentKey="crmApp.produitDemande.fraisExpedition">Frais Expedition</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.fraisExpedition}</dd>
+          <dt>
+            <span id="origine">
+              <Translate contentKey="crmApp.produitDemande.origine">Origine</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.origine}</dd>
+          <dt>
+            <span id="fournisseur">
+              <Translate contentKey="crmApp.produitDemande.fournisseur">Fournisseur</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.fournisseur}</dd>
+          <dt>
+            <span id="adresseChargement">
+              <Translate contentKey="crmApp.produitDemande.adresseChargement">Adresse Chargement</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.adresseChargement}</dd>
+          <dt>
+            <span id="adresseDechargement">
+              <Translate contentKey="crmApp.produitDemande.adresseDechargement">Adresse Dechargement</Translate>
+            </span>
+          </dt>
+          <dd>{produitDemandeEntity.adresseDechargement}</dd>
           <dt>
             <span id="ficheTechniqueUrl">
               <Translate contentKey="crmApp.produitDemande.ficheTechniqueUrl">Fiche Technique Url</Translate>

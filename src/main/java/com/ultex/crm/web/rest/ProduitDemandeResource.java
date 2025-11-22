@@ -4,6 +4,8 @@ import com.ultex.crm.repository.ProduitDemandeRepository;
 import com.ultex.crm.service.ProduitDemandeService;
 import com.ultex.crm.service.dto.ProduitDemandeDTO;
 import com.ultex.crm.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -12,9 +14,14 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -48,7 +55,7 @@ public class ProduitDemandeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<ProduitDemandeDTO> createProduitDemande(@RequestBody ProduitDemandeDTO produitDemandeDTO)
+    public ResponseEntity<ProduitDemandeDTO> createProduitDemande(@Valid @RequestBody ProduitDemandeDTO produitDemandeDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save ProduitDemande : {}", produitDemandeDTO);
         if (produitDemandeDTO.getId() != null) {
@@ -73,7 +80,7 @@ public class ProduitDemandeResource {
     @PutMapping("/{id}")
     public ResponseEntity<ProduitDemandeDTO> updateProduitDemande(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ProduitDemandeDTO produitDemandeDTO
+        @Valid @RequestBody ProduitDemandeDTO produitDemandeDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to update ProduitDemande : {}, {}", id, produitDemandeDTO);
         if (produitDemandeDTO.getId() == null) {
@@ -107,7 +114,7 @@ public class ProduitDemandeResource {
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ProduitDemandeDTO> partialUpdateProduitDemande(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ProduitDemandeDTO produitDemandeDTO
+        @NotNull @RequestBody ProduitDemandeDTO produitDemandeDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to partial update ProduitDemande partially : {}, {}", id, produitDemandeDTO);
         if (produitDemandeDTO.getId() == null) {
@@ -132,12 +139,17 @@ public class ProduitDemandeResource {
     /**
      * {@code GET  /produit-demandes} : get all the produitDemandes.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of produitDemandes in body.
      */
     @GetMapping("")
-    public List<ProduitDemandeDTO> getAllProduitDemandes() {
-        LOG.debug("REST request to get all ProduitDemandes");
-        return produitDemandeService.findAll();
+    public ResponseEntity<List<ProduitDemandeDTO>> getAllProduitDemandes(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get a page of ProduitDemandes");
+        Page<ProduitDemandeDTO> page = produitDemandeService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**

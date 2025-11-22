@@ -24,7 +24,7 @@ export const KycClientUpdate = () => {
   const updateSuccess = useAppSelector(state => state.kycClient.updateSuccess);
 
   const handleClose = () => {
-    navigate('/kyc-client');
+    navigate(`/kyc-client${location.search}`);
   };
 
   useEffect(() => {

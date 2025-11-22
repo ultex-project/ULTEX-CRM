@@ -1,0 +1,9 @@
+{
+  "crmApp": {
+    "ServicePrincipal": {
+      "null": "",
+      "IMPORT": "IMPORT",
+      "EXPORT": "EXPORT"
+    }
+  }
+}

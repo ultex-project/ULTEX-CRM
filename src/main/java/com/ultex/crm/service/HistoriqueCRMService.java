@@ -4,12 +4,11 @@ import com.ultex.crm.domain.HistoriqueCRM;
 import com.ultex.crm.repository.HistoriqueCRMRepository;
 import com.ultex.crm.service.dto.HistoriqueCRMDTO;
 import com.ultex.crm.service.mapper.HistoriqueCRMMapper;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,12 +79,13 @@ public class HistoriqueCRMService {
     /**
      * Get all the historiqueCRMS.
      *
+     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<HistoriqueCRMDTO> findAll() {
+    public Page<HistoriqueCRMDTO> findAll(Pageable pageable) {
         LOG.debug("Request to get all HistoriqueCRMS");
-        return historiqueCRMRepository.findAll().stream().map(historiqueCRMMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return historiqueCRMRepository.findAll(pageable).map(historiqueCRMMapper::toDto);
     }
 
     /**

@@ -91,6 +91,19 @@
       "relationshipType": "one-to-many"
     },
     {
+      "otherEntityName": "cycleActivation",
+      "otherEntityRelationshipName": "client",
+      "relationshipName": "cyclesActivation",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "pays",
+      "relationshipName": "pays",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
       "otherEntityName": "company",
       "otherEntityRelationshipName": "clients",
       "relationshipName": "company",

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { Translate, getSortState } from 'react-jhipster';
+import { JhiItemCount, JhiPagination, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import { ASC, DESC } from 'app/shared/util/pagination.constants';
-import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities } from './produit-demande.reducer';
@@ -16,22 +16,27 @@ export const ProduitDemande = () => {
   const pageLocation = useLocation();
   const navigate = useNavigate();
 
-  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, 'id'), pageLocation.search));
+  const [paginationState, setPaginationState] = useState(
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
+  );
 
   const produitDemandeList = useAppSelector(state => state.produitDemande.entities);
   const loading = useAppSelector(state => state.produitDemande.loading);
+  const totalItems = useAppSelector(state => state.produitDemande.totalItems);
 
   const getAllEntities = () => {
     dispatch(
       getEntities({
-        sort: `${sortState.sort},${sortState.order}`,
+        page: paginationState.activePage - 1,
+        size: paginationState.itemsPerPage,
+        sort: `${paginationState.sort},${paginationState.order}`,
       }),
     );
   };
 
   const sortEntities = () => {
     getAllEntities();
-    const endURL = `?sort=${sortState.sort},${sortState.order}`;
+    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
     if (pageLocation.search !== endURL) {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
@@ -39,23 +44,44 @@ export const ProduitDemande = () => {
 
   useEffect(() => {
     sortEntities();
-  }, [sortState.order, sortState.sort]);
+  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(pageLocation.search);
+    const page = params.get('page');
+    const sort = params.get(SORT);
+    if (page && sort) {
+      const sortSplit = sort.split(',');
+      setPaginationState({
+        ...paginationState,
+        activePage: +page,
+        sort: sortSplit[0],
+        order: sortSplit[1],
+      });
+    }
+  }, [pageLocation.search]);
 
   const sort = p => () => {
-    setSortState({
-      ...sortState,
-      order: sortState.order === ASC ? DESC : ASC,
+    setPaginationState({
+      ...paginationState,
+      order: paginationState.order === ASC ? DESC : ASC,
       sort: p,
     });
   };
+
+  const handlePagination = currentPage =>
+    setPaginationState({
+      ...paginationState,
+      activePage: currentPage,
+    });
 
   const handleSyncList = () => {
     sortEntities();
   };
 
   const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = sortState.sort;
-    const order = sortState.order;
+    const sortFieldName = paginationState.sort;
+    const order = paginationState.order;
     if (sortFieldName !== fieldName) {
       return faSort;
     }
@@ -90,10 +116,6 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.typeProduit">Type Produit</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('typeProduit')} />
                 </th>
-                <th className="hand" onClick={sort('typeDemande')}>
-                  <Translate contentKey="crmApp.produitDemande.typeDemande">Type Demande</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('typeDemande')} />
-                </th>
                 <th className="hand" onClick={sort('nomProduit')}>
                   <Translate contentKey="crmApp.produitDemande.nomProduit">Nom Produit</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('nomProduit')} />
@@ -114,10 +136,6 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.prix">Prix</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('prix')} />
                 </th>
-                <th className="hand" onClick={sort('fraisExpedition')}>
-                  <Translate contentKey="crmApp.produitDemande.fraisExpedition">Frais Expedition</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('fraisExpedition')} />
-                </th>
                 <th className="hand" onClick={sort('poidsKg')}>
                   <Translate contentKey="crmApp.produitDemande.poidsKg">Poids Kg</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('poidsKg')} />
@@ -130,14 +148,6 @@ export const ProduitDemande = () => {
                   <Translate contentKey="crmApp.produitDemande.dimensions">Dimensions</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('dimensions')} />
                 </th>
-                <th className="hand" onClick={sort('nombreCartons')}>
-                  <Translate contentKey="crmApp.produitDemande.nombreCartons">Nombre Cartons</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('nombreCartons')} />
-                </th>
-                <th className="hand" onClick={sort('piecesParCarton')}>
-                  <Translate contentKey="crmApp.produitDemande.piecesParCarton">Pieces Par Carton</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('piecesParCarton')} />
-                </th>
                 <th className="hand" onClick={sort('hsCode')}>
                   <Translate contentKey="crmApp.produitDemande.hsCode">Hs Code</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('hsCode')} />
@@ -145,6 +155,26 @@ export const ProduitDemande = () => {
                 <th className="hand" onClick={sort('prixCible')}>
                   <Translate contentKey="crmApp.produitDemande.prixCible">Prix Cible</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('prixCible')} />
+                </th>
+                <th className="hand" onClick={sort('fraisExpedition')}>
+                  <Translate contentKey="crmApp.produitDemande.fraisExpedition">Frais Expedition</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('fraisExpedition')} />
+                </th>
+                <th className="hand" onClick={sort('origine')}>
+                  <Translate contentKey="crmApp.produitDemande.origine">Origine</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('origine')} />
+                </th>
+                <th className="hand" onClick={sort('fournisseur')}>
+                  <Translate contentKey="crmApp.produitDemande.fournisseur">Fournisseur</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('fournisseur')} />
+                </th>
+                <th className="hand" onClick={sort('adresseChargement')}>
+                  <Translate contentKey="crmApp.produitDemande.adresseChargement">Adresse Chargement</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('adresseChargement')} />
+                </th>
+                <th className="hand" onClick={sort('adresseDechargement')}>
+                  <Translate contentKey="crmApp.produitDemande.adresseDechargement">Adresse Dechargement</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('adresseDechargement')} />
                 </th>
                 <th className="hand" onClick={sort('ficheTechniqueUrl')}>
                   <Translate contentKey="crmApp.produitDemande.ficheTechniqueUrl">Fiche Technique Url</Translate>{' '}
@@ -172,21 +202,24 @@ export const ProduitDemande = () => {
                       {produitDemande.id}
                     </Button>
                   </td>
-                  <td>{produitDemande.typeProduit}</td>
-                  <td>{produitDemande.typeDemande}</td>
+                  <td>
+                    <Translate contentKey={`crmApp.TypeProduit.${produitDemande.typeProduit}`} />
+                  </td>
                   <td>{produitDemande.nomProduit}</td>
                   <td>{produitDemande.description}</td>
                   <td>{produitDemande.quantite}</td>
                   <td>{produitDemande.unite}</td>
                   <td>{produitDemande.prix}</td>
-                  <td>{produitDemande.fraisExpedition}</td>
                   <td>{produitDemande.poidsKg}</td>
                   <td>{produitDemande.volumeTotalCbm}</td>
                   <td>{produitDemande.dimensions}</td>
-                  <td>{produitDemande.nombreCartons}</td>
-                  <td>{produitDemande.piecesParCarton}</td>
                   <td>{produitDemande.hsCode}</td>
                   <td>{produitDemande.prixCible}</td>
+                  <td>{produitDemande.fraisExpedition}</td>
+                  <td>{produitDemande.origine}</td>
+                  <td>{produitDemande.fournisseur}</td>
+                  <td>{produitDemande.adresseChargement}</td>
+                  <td>{produitDemande.adresseDechargement}</td>
                   <td>{produitDemande.ficheTechniqueUrl}</td>
                   <td>{produitDemande.photosUrl}</td>
                   <td>{produitDemande.piecesJointesUrl}</td>
@@ -207,7 +240,7 @@ export const ProduitDemande = () => {
                       </Button>
                       <Button
                         tag={Link}
-                        to={`/produit-demande/${produitDemande.id}/edit`}
+                        to={`/produit-demande/${produitDemande.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="primary"
                         size="sm"
                         data-cy="entityEditButton"
@@ -218,7 +251,9 @@ export const ProduitDemande = () => {
                         </span>
                       </Button>
                       <Button
-                        onClick={() => (window.location.href = `/produit-demande/${produitDemande.id}/delete`)}
+                        onClick={() =>
+                          (window.location.href = `/produit-demande/${produitDemande.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                        }
                         color="danger"
                         size="sm"
                         data-cy="entityDeleteButton"
@@ -242,6 +277,24 @@ export const ProduitDemande = () => {
           )
         )}
       </div>
+      {totalItems ? (
+        <div className={produitDemandeList && produitDemandeList.length > 0 ? '' : 'd-none'}>
+          <div className="justify-content-center d-flex">
+            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
+          </div>
+          <div className="justify-content-center d-flex">
+            <JhiPagination
+              activePage={paginationState.activePage}
+              onSelect={handlePagination}
+              maxButtons={5}
+              itemsPerPage={paginationState.itemsPerPage}
+              totalItems={totalItems}
+            />
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

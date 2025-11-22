@@ -9,7 +9,8 @@
         "createClient": "+ Create Client",
         "createProspect": "+ Create Prospect",
         "createOpportunity": "+ Create Opportunity",
-        "convertProspect": "Convert Prospect"
+        "convertProspect": "Convert Prospect",
+        "createDemandeClient": "Create Demande"
       }
     }
   }

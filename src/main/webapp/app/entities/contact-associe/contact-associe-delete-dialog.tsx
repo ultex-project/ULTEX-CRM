@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import { deleteEntity, getEntity } from './contact-associe.reducer';
 
 export const ContactAssocieDeleteDialog = () => {
   const dispatch = useAppDispatch();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
   const { id } = useParams<'id'>();
 
@@ -23,7 +24,7 @@ export const ContactAssocieDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.contactAssocie.updateSuccess);
 
   const handleClose = () => {
-    navigate('/contact-associe');
+    navigate(`/contact-associe${pageLocation.search}`);
   };
 
   useEffect(() => {

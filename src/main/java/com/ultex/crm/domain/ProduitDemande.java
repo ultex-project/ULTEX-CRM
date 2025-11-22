@@ -1,7 +1,9 @@
 package com.ultex.crm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ultex.crm.domain.enumeration.TypeProduit;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -23,13 +25,13 @@ public class ProduitDemande implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "type_produit")
-    private String typeProduit;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_produit", nullable = false)
+    private TypeProduit typeProduit;
 
-    @Column(name = "type_demande")
-    private String typeDemande;
-
-    @Column(name = "nom_produit")
+    @NotNull
+    @Column(name = "nom_produit", nullable = false)
     private String nomProduit;
 
     @Lob
@@ -45,9 +47,6 @@ public class ProduitDemande implements Serializable {
     @Column(name = "prix")
     private Double prix;
 
-    @Column(name = "frais_expedition")
-    private Double fraisExpedition;
-
     @Column(name = "poids_kg")
     private Double poidsKg;
 
@@ -57,17 +56,26 @@ public class ProduitDemande implements Serializable {
     @Column(name = "dimensions")
     private String dimensions;
 
-    @Column(name = "nombre_cartons")
-    private Integer nombreCartons;
-
-    @Column(name = "pieces_par_carton")
-    private Integer piecesParCarton;
-
     @Column(name = "hs_code")
     private String hsCode;
 
     @Column(name = "prix_cible")
     private Double prixCible;
+
+    @Column(name = "frais_expedition")
+    private Double fraisExpedition;
+
+    @Column(name = "origine")
+    private String origine;
+
+    @Column(name = "fournisseur")
+    private String fournisseur;
+
+    @Column(name = "adresse_chargement")
+    private String adresseChargement;
+
+    @Column(name = "adresse_dechargement")
+    private String adresseDechargement;
 
     @Column(name = "fiche_technique_url")
     private String ficheTechniqueUrl;
@@ -79,7 +87,7 @@ public class ProduitDemande implements Serializable {
     private String piecesJointesUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "client" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "client", "devise", "incoterm", "sousServices", "produits" }, allowSetters = true)
     private DemandeClient demande;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -97,30 +105,17 @@ public class ProduitDemande implements Serializable {
         this.id = id;
     }
 
-    public String getTypeProduit() {
+    public TypeProduit getTypeProduit() {
         return this.typeProduit;
     }
 
-    public ProduitDemande typeProduit(String typeProduit) {
+    public ProduitDemande typeProduit(TypeProduit typeProduit) {
         this.setTypeProduit(typeProduit);
         return this;
     }
 
-    public void setTypeProduit(String typeProduit) {
+    public void setTypeProduit(TypeProduit typeProduit) {
         this.typeProduit = typeProduit;
-    }
-
-    public String getTypeDemande() {
-        return this.typeDemande;
-    }
-
-    public ProduitDemande typeDemande(String typeDemande) {
-        this.setTypeDemande(typeDemande);
-        return this;
-    }
-
-    public void setTypeDemande(String typeDemande) {
-        this.typeDemande = typeDemande;
     }
 
     public String getNomProduit() {
@@ -188,19 +183,6 @@ public class ProduitDemande implements Serializable {
         this.prix = prix;
     }
 
-    public Double getFraisExpedition() {
-        return this.fraisExpedition;
-    }
-
-    public ProduitDemande fraisExpedition(Double fraisExpedition) {
-        this.setFraisExpedition(fraisExpedition);
-        return this;
-    }
-
-    public void setFraisExpedition(Double fraisExpedition) {
-        this.fraisExpedition = fraisExpedition;
-    }
-
     public Double getPoidsKg() {
         return this.poidsKg;
     }
@@ -240,32 +222,6 @@ public class ProduitDemande implements Serializable {
         this.dimensions = dimensions;
     }
 
-    public Integer getNombreCartons() {
-        return this.nombreCartons;
-    }
-
-    public ProduitDemande nombreCartons(Integer nombreCartons) {
-        this.setNombreCartons(nombreCartons);
-        return this;
-    }
-
-    public void setNombreCartons(Integer nombreCartons) {
-        this.nombreCartons = nombreCartons;
-    }
-
-    public Integer getPiecesParCarton() {
-        return this.piecesParCarton;
-    }
-
-    public ProduitDemande piecesParCarton(Integer piecesParCarton) {
-        this.setPiecesParCarton(piecesParCarton);
-        return this;
-    }
-
-    public void setPiecesParCarton(Integer piecesParCarton) {
-        this.piecesParCarton = piecesParCarton;
-    }
-
     public String getHsCode() {
         return this.hsCode;
     }
@@ -290,6 +246,71 @@ public class ProduitDemande implements Serializable {
 
     public void setPrixCible(Double prixCible) {
         this.prixCible = prixCible;
+    }
+
+    public Double getFraisExpedition() {
+        return this.fraisExpedition;
+    }
+
+    public ProduitDemande fraisExpedition(Double fraisExpedition) {
+        this.setFraisExpedition(fraisExpedition);
+        return this;
+    }
+
+    public void setFraisExpedition(Double fraisExpedition) {
+        this.fraisExpedition = fraisExpedition;
+    }
+
+    public String getOrigine() {
+        return this.origine;
+    }
+
+    public ProduitDemande origine(String origine) {
+        this.setOrigine(origine);
+        return this;
+    }
+
+    public void setOrigine(String origine) {
+        this.origine = origine;
+    }
+
+    public String getFournisseur() {
+        return this.fournisseur;
+    }
+
+    public ProduitDemande fournisseur(String fournisseur) {
+        this.setFournisseur(fournisseur);
+        return this;
+    }
+
+    public void setFournisseur(String fournisseur) {
+        this.fournisseur = fournisseur;
+    }
+
+    public String getAdresseChargement() {
+        return this.adresseChargement;
+    }
+
+    public ProduitDemande adresseChargement(String adresseChargement) {
+        this.setAdresseChargement(adresseChargement);
+        return this;
+    }
+
+    public void setAdresseChargement(String adresseChargement) {
+        this.adresseChargement = adresseChargement;
+    }
+
+    public String getAdresseDechargement() {
+        return this.adresseDechargement;
+    }
+
+    public ProduitDemande adresseDechargement(String adresseDechargement) {
+        this.setAdresseDechargement(adresseDechargement);
+        return this;
+    }
+
+    public void setAdresseDechargement(String adresseDechargement) {
+        this.adresseDechargement = adresseDechargement;
     }
 
     public String getFicheTechniqueUrl() {
@@ -369,20 +390,21 @@ public class ProduitDemande implements Serializable {
         return "ProduitDemande{" +
             "id=" + getId() +
             ", typeProduit='" + getTypeProduit() + "'" +
-            ", typeDemande='" + getTypeDemande() + "'" +
             ", nomProduit='" + getNomProduit() + "'" +
             ", description='" + getDescription() + "'" +
             ", quantite=" + getQuantite() +
             ", unite='" + getUnite() + "'" +
             ", prix=" + getPrix() +
-            ", fraisExpedition=" + getFraisExpedition() +
             ", poidsKg=" + getPoidsKg() +
             ", volumeTotalCbm=" + getVolumeTotalCbm() +
             ", dimensions='" + getDimensions() + "'" +
-            ", nombreCartons=" + getNombreCartons() +
-            ", piecesParCarton=" + getPiecesParCarton() +
             ", hsCode='" + getHsCode() + "'" +
             ", prixCible=" + getPrixCible() +
+            ", fraisExpedition=" + getFraisExpedition() +
+            ", origine='" + getOrigine() + "'" +
+            ", fournisseur='" + getFournisseur() + "'" +
+            ", adresseChargement='" + getAdresseChargement() + "'" +
+            ", adresseDechargement='" + getAdresseDechargement() + "'" +
             ", ficheTechniqueUrl='" + getFicheTechniqueUrl() + "'" +
             ", photosUrl='" + getPhotosUrl() + "'" +
             ", piecesJointesUrl='" + getPiecesJointesUrl() + "'" +

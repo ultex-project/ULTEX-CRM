@@ -46,7 +46,10 @@ public class HistoriqueCRM implements Serializable {
     private String observation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        allowSetters = true
+    )
     private Client client;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

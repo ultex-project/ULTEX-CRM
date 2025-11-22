@@ -1,9 +1,8 @@
-﻿// src/main/webapp/app/entities/prospect/ProspectListPage.tsx
+﻿// src/main/webapp/app/entities/prospect/ClientListPage.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Alert,
-  Badge,
   Button,
   ButtonGroup,
   Card,
@@ -55,7 +54,9 @@ import { IProspect } from 'app/shared/model/prospect.model';
 import { ProspectStatus } from 'app/shared/model/enumerations/prospect-status.model';
 import { deleteEntity, getEntities, reset } from 'app/entities/prospect/prospect.reducer';
 import AdvancedFilterBuilder from './AdvancedFilterBuilder';
-import { AdvancedFilterPayload, GroupNode, RuleNode, isGroupNode } from './advanced-filter.types';
+import { AdvancedFilterPayload, GroupNode, RuleNode, isGroupNode } from '../advanced-filter.types';
+import { buildQueryStringFromAdvancedFilters } from 'app/custom/dashboard/filters/advanced-filter-query';
+import StatusBadge, { StatusBadgeVariant } from 'app/custom/dashboard/components/status-badge/StatusBadge';
 
 type ProspectStatusKey = keyof typeof ProspectStatus;
 type StatusFilterOption = 'ALL' | ProspectStatusKey;
@@ -71,100 +72,11 @@ const QUICK_FILTERS: StatusFilterOption[] = ['ALL', 'NEW', 'CONTACTED', 'QUALIFI
 
 const isProspectStatusKey = (value: unknown): value is ProspectStatusKey => typeof value === 'string' && value in STATUS_META;
 
-interface FlattenedRule {
-  rule: RuleNode;
-  negate: boolean;
-}
-
-interface FlattenResult {
-  rules: FlattenedRule[];
-  hasOrCondition: boolean;
-}
-
-const HTTP_OPERATOR_MAP: Record<string, string> = {
-  equals: 'equals',
-  notEquals: 'notEquals',
-  contains: 'contains',
-  doesNotContain: 'doesNotContain',
-  specified: 'specified',
-  notSpecified: 'specified',
-};
-
-const NEGATED_HTTP_OPERATOR_MAP: Record<string, string> = {
-  equals: 'notEquals',
-  notEquals: 'equals',
-  contains: 'doesNotContain',
-  doesNotContain: 'contains',
-  specified: 'specified',
-};
-
-const buildRuleQueryString = (rule: RuleNode, negate: boolean): string | null => {
-  const fieldKey = rule.field?.trim();
-  if (!fieldKey) {
-    return null;
-  }
-
-  const normalizedOperator = HTTP_OPERATOR_MAP[rule.operator] ?? 'contains';
-  const operatorKey = negate ? (NEGATED_HTTP_OPERATOR_MAP[normalizedOperator] ?? normalizedOperator) : normalizedOperator;
-
-  let value = rule.value?.toString().trim() ?? '';
-
-  if (normalizedOperator === 'specified') {
-    const baseValue = rule.operator === 'notSpecified' ? 'false' : 'true';
-    value = negate ? (baseValue === 'true' ? 'false' : 'true') : baseValue;
-  }
-
-  if (!value && operatorKey !== 'specified') {
-    return null;
-  }
-
-  const encodedKey = encodeURIComponent(`${fieldKey}.${operatorKey}`);
-  const encodedValue = encodeURIComponent(value);
-  return `${encodedKey}=${encodedValue}`;
-};
-
-const flattenFilterGroup = (group: GroupNode, inheritedNegate = false): FlattenResult => {
-  const groupNegate = inheritedNegate || group.condition === 'AND NOT';
-  let hasOrCondition = group.condition === 'OR';
-  const collected: FlattenedRule[] = [];
-
-  group.rules.forEach(child => {
-    if (isGroupNode(child)) {
-      const nested = flattenFilterGroup(child, groupNegate);
-      collected.push(...nested.rules);
-      if (child.condition === 'OR' || nested.hasOrCondition) {
-        hasOrCondition = true;
-      }
-    } else {
-      collected.push({ rule: child, negate: groupNegate || !!child.not });
-    }
-  });
-
-  return { rules: collected, hasOrCondition };
-};
-
-const buildQueryStringFromFilters = (payload: AdvancedFilterPayload) => {
-  const { rules, hasOrCondition } = flattenFilterGroup(payload.rootGroup);
-  const fragments: string[] = [];
-
-  rules.forEach(item => {
-    const fragment = buildRuleQueryString(item.rule, item.negate);
-    if (fragment) {
-      fragments.push(fragment);
-    }
-  });
-
-  if (payload.globalRule) {
-    const fragment = buildRuleQueryString(payload.globalRule, !!payload.globalRule.not);
-    if (fragment) {
-      fragments.push(fragment);
-    }
-  }
-
-  return {
-    hasOrCondition,
-    query: fragments.join('&'),
-  };
+const STATUS_BADGE_VARIANT: Record<ProspectStatusKey, StatusBadgeVariant> = {
+  NEW: 'pipeline',
+  CONTACTED: 'active',
+  QUALIFIED: 'completed',
+  LOST: 'failed',
 };
 
 const renderAvatar = (firstName: string, lastName: string) => {
@@ -213,6 +125,8 @@ const ProspectListPage = () => {
   const [prospectToDelete, setProspectToDelete] = useState<IProspect | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('[ProspectListPage] Fetching with query:', currentQuery || '(none)');
     dispatch(getEntities({ page, size, sort, query: currentQuery }));
     return () => {
       dispatch(reset());
@@ -261,12 +175,15 @@ const ProspectListPage = () => {
   };
 
   const handleAdvancedSearch = (payload: AdvancedFilterPayload) => {
-    const { query, hasOrCondition } = buildQueryStringFromFilters(payload);
+    const { query, hasOrCondition } = buildQueryStringFromAdvancedFilters(payload);
 
     setHasUnsupportedConditions(hasOrCondition);
 
     const nextPage = 0;
     setPage(nextPage);
+
+    // eslint-disable-next-line no-console
+    console.log('[ProspectListPage] Applying advanced filter query:', query || '(none)');
 
     if (query === currentQuery) {
       dispatch(getEntities({ page: nextPage, size, sort, query }));
@@ -278,6 +195,8 @@ const ProspectListPage = () => {
   const handleAdvancedReset = () => {
     setHasUnsupportedConditions(false);
     setPage(0);
+    // eslint-disable-next-line no-console
+    console.log('[ProspectListPage] Resetting advanced filters');
     setCurrentQuery('');
   };
 
@@ -358,18 +277,12 @@ const ProspectListPage = () => {
 
   const renderStatusBadge = (status?: ProspectStatusKey | null) => {
     if (!status) {
-      return (
-        <Badge pill color="light" className="prospect-status-badge text-muted">
-          Unassigned
-        </Badge>
-      );
+      return <StatusBadge status="pending" label="Unassigned" />;
     }
+
     const meta = STATUS_META[status];
-    return (
-      <Badge pill className="prospect-status-badge" style={{ backgroundColor: meta.background, color: meta.color }}>
-        {meta.label}
-      </Badge>
-    );
+    const variant = STATUS_BADGE_VARIANT[status] ?? 'pending';
+    return <StatusBadge status={variant} label={meta.label} />;
   };
 
   return (
@@ -378,9 +291,7 @@ const ProspectListPage = () => {
         <CardBody>
           <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
             <div>
-              <Badge pill className="prospect-hero__badge text-uppercase fw-semibold mb-3">
-                Pipeline
-              </Badge>
+              <StatusBadge status="pipeline" label="Pipeline" className="prospect-hero__badge mb-3" />
               <h2 className="prospect-hero__title mb-2">Prospect workspace</h2>
               <p className="text-muted mb-3">
                 Monitor the quality of your funnel, keep conversations warm, and convert leads without leaving the dashboard.

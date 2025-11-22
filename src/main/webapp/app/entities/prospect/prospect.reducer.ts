@@ -20,28 +20,10 @@ const apiUrl = 'api/prospects';
 
 export const getEntities = createAsyncThunk(
   'prospect/fetch_entity_list',
-  async ({ page, size, sort, query }: IQueryParams) => {
-    const params: string[] = [];
-
-    if (query) {
-      params.push(query);
-    }
-
-    if (typeof page === 'number') {
-      params.push(`page=${page}`);
-    }
-
-    if (typeof size === 'number') {
-      params.push(`size=${size}`);
-    }
-
-    if (sort) {
-      params.push(`sort=${sort}`);
-    }
-
-    params.push(`cacheBuster=${new Date().getTime()}`);
-
-    const requestUrl = `${apiUrl}?${params.join('&')}`;
+  async ({ page, size, sort, query }: IQueryParams = {}) => {
+    const paginationQuery = sort ? `page=${page ?? 0}&size=${size ?? 20}&sort=${sort}&` : '';
+    const filterQuery = query ? `${query}&` : '';
+    const requestUrl = `${apiUrl}?${paginationQuery}${filterQuery}cacheBuster=${new Date().getTime()}`;
     return axios.get<IProspect[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -115,12 +97,13 @@ export const ProspectSlice = createEntitySlice({
       })
       .addMatcher(isFulfilled(getEntities), (state, action) => {
         const { data, headers } = action.payload;
+        const totalItemsHeader = headers['x-total-count'];
 
         return {
           ...state,
           loading: false,
           entities: data,
-          totalItems: parseInt(headers['x-total-count'], 10),
+          totalItems: totalItemsHeader ? parseInt(totalItemsHeader, 10) : data.length,
         };
       })
       .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {

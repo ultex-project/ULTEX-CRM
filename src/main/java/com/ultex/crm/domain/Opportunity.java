@@ -59,7 +59,10 @@ public class Opportunity implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        allowSetters = true
+    )
     private Client client;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

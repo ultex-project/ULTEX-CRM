@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20251011233014"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "libelle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "SousService",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "demandeClient",
+      "otherEntityRelationshipName": "sousServices",
+      "relationshipName": "demandes",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

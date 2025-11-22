@@ -1,0 +1,30 @@
+{
+  "crmApp": {
+    "cycleActivation": {
+      "home": {
+        "title": "Cycle Activations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Cycle Activation",
+        "createOrEditLabel": "Create or edit a Cycle Activation",
+        "notFound": "No Cycle Activations found"
+      },
+      "created": "A new Cycle Activation is created with identifier {{ param }}",
+      "updated": "A Cycle Activation is updated with identifier {{ param }}",
+      "deleted": "A Cycle Activation is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Cycle Activation {{ id }}?"
+      },
+      "detail": {
+        "title": "Cycle Activation"
+      },
+      "id": "ID",
+      "numeroCycle": "Numero Cycle",
+      "dateDebut": "Date Debut",
+      "dateFin": "Date Fin",
+      "statutCycle": "Statut Cycle",
+      "commentaire": "Commentaire",
+      "etats": "Etats",
+      "client": "Client"
+    }
+  }
+}

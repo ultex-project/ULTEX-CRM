@@ -1,0 +1,29 @@
+{
+  "crmApp": {
+    "etatInteraction": {
+      "home": {
+        "title": "EtatInteractions",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Etat Interaction",
+        "createOrEditLabel": "Créer ou éditer un Etat Interaction",
+        "notFound": "Aucun Etat Interaction trouvé"
+      },
+      "created": "Un nouveau Etat Interaction a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Etat Interaction avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Etat Interaction avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Etat Interaction {{ id }} ?"
+      },
+      "detail": {
+        "title": "Etat Interaction"
+      },
+      "id": "ID",
+      "etat": "Etat",
+      "dateEtat": "Date Etat",
+      "agent": "Agent",
+      "observation": "Observation",
+      "historique": "Historique",
+      "cycle": "Cycle"
+    }
+  }
+}

@@ -52,6 +52,7 @@ public class CacheConfiguration {
             createCache(cm, com.ultex.crm.domain.User.class.getName() + ".authorities");
             createCache(cm, com.ultex.crm.domain.Client.class.getName());
             createCache(cm, com.ultex.crm.domain.Client.class.getName() + ".opportunities");
+            createCache(cm, com.ultex.crm.domain.Client.class.getName() + ".cyclesActivations");
             createCache(cm, com.ultex.crm.domain.Client.class.getName() + ".contacts");
             createCache(cm, com.ultex.crm.domain.Prospect.class.getName());
             createCache(cm, com.ultex.crm.domain.Prospect.class.getName() + ".contacts");
@@ -68,10 +69,20 @@ public class CacheConfiguration {
             createCache(cm, com.ultex.crm.domain.ContactAssocie.class.getName());
             createCache(cm, com.ultex.crm.domain.DocumentClient.class.getName());
             createCache(cm, com.ultex.crm.domain.DemandeClient.class.getName());
+            createCache(cm, com.ultex.crm.domain.DemandeClient.class.getName() + ".sousServices");
             createCache(cm, com.ultex.crm.domain.ProduitDemande.class.getName());
             createCache(cm, com.ultex.crm.domain.HistoriqueCRM.class.getName());
             createCache(cm, com.ultex.crm.domain.KycClient.class.getName());
             createCache(cm, com.ultex.crm.domain.History.class.getName());
+            createCache(cm, com.ultex.crm.domain.Devise.class.getName());
+            createCache(cm, com.ultex.crm.domain.Incoterm.class.getName());
+            createCache(cm, com.ultex.crm.domain.Pays.class.getName());
+            createCache(cm, com.ultex.crm.domain.SousService.class.getName());
+            createCache(cm, com.ultex.crm.domain.SousService.class.getName() + ".demandes");
+            createCache(cm, com.ultex.crm.domain.CycleActivation.class.getName());
+            createCache(cm, com.ultex.crm.domain.CycleActivation.class.getName() + ".etats");
+            createCache(cm, com.ultex.crm.domain.EtatInteraction.class.getName());
+            createCache(cm, com.ultex.crm.domain.RappelAgent.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

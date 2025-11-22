@@ -14,6 +14,11 @@
       "delete": {
         "question": "Are you sure you want to delete Client {{ id }}?"
       },
+      "documentsTitle": "Client documents",
+      "addDocument": "Add document",
+      "editDocument": "Edit document",
+      "deleteConfirm": "Confirm deletion",
+      "deleteMessage": "Do you really want to delete this document?",
       "detail": {
         "title": "Client"
       },
@@ -36,10 +41,162 @@
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "opportunities": "Opportunities",
+      "cyclesActivation": "Cycles Activation",
+      "pays": "Pays",
       "company": "Company",
       "convertedFromProspect": "Converted From Prospect",
       "contacts": "Contacts",
-      "kycClient": "Kyc Client"
+      "kycClient": "Kyc Client",
+      "dashboard": {
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive",
+          "archived": "Archived",
+          "unassigned": "Unassigned",
+          "badge": "Accounts"
+        },
+        "hero": {
+          "title": "Client workspace",
+          "subtitle": "Grow long-term relationships, keep segments healthy, and act on customer signals in real time.",
+          "stats": {
+            "total": "Clients tracked",
+            "active": "Active clients",
+            "updated": "Updated in the last 30 days"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Save segment",
+          "newClient": "New Client"
+        },
+        "metrics": {
+          "activeShare": "Retention health",
+          "activeShareHint": "{{value}}% of clients are active",
+          "inactive": "Inactive clients",
+          "inactiveHint": "{{value}}% require attention",
+          "newThisWeek": "New this week",
+          "newThisWeekHint": "Created during the last 7 days",
+          "archived": "Archived clients",
+          "archivedHint": "Review or re-engage soon"
+        },
+        "searchPlaceholder": "Search name, email, phone, or company...",
+        "filters": {
+          "fields": {
+            "status": "Status"
+          },
+          "all": "All ({{count}})",
+          "active": "{{label}} ({{count}})",
+          "inactive": "{{label}} ({{count}})",
+          "archived": "{{label}} ({{count}})",
+          "label": "Advanced filters",
+          "unsupported": "Heads up: mixed OR conditions are not fully supported by the current API. Filters are applied as AND clauses."
+        },
+        "languages": {
+          "fr": "French",
+          "en": "English",
+          "ar": "Arabic"
+        },
+        "table": {
+          "title": "Client pipeline",
+          "summary": "Showing {{current}} of {{total}} filtered clients",
+          "sortedBy": "Sorted by {{field}} ({{direction}})",
+          "loading": "Loading clients...",
+          "empty": "No clients match the current filters.",
+          "unnamed": "Unnamed client",
+          "noEmail": "No email on file",
+          "noPhone": "No phone on file",
+          "pendingSync": "Pending sync"
+        },
+        "columns": {
+          "client": "Client",
+          "company": "Company",
+          "status": "Status",
+          "nationality": "Nationality",
+          "language": "Preferred language",
+          "created": "Created",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "View",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "pagination": {
+          "page": "Page {{page}} of {{total}}"
+        },
+        "modal": {
+          "title": "Confirm delete operation",
+          "messagePrefix": "Are you sure you want to delete the client",
+          "cancel": "Cancel",
+          "confirm": "Delete",
+          "unknown": "this record"
+        }
+      },
+      "view": {
+        "back": "Back to clients",
+        "edit": "Edit client",
+        "error": "Unable to load client details right now.",
+        "empty": "No data available",
+        "header": {
+          "created": "Created {{date}}",
+          "updated": "Updated {{date}}"
+        },
+        "sections": {
+          "general": "General information",
+          "contacts": "Associated contacts",
+          "companies": "Linked companies",
+          "documents": "Documents",
+          "kyc": "KYC overview",
+          "requests": "Requests",
+          "opportunities": "Opportunities",
+          "history": "CRM history"
+        },
+        "documents": {
+          "actions": "Actions",
+          "download": "Download"
+        },
+        "kyc": {
+          "completude": "KYC completeness",
+          "score": "Staff score",
+          "behaviors": "Behaviors",
+          "responsable": "Owner",
+          "notes": "Remarks"
+        },
+        "company": {
+          "representant": "Legal representative: {{value}}"
+        }
+      },
+      "form": {
+        "createTitle": "Add a new client",
+        "editTitle": "Modifier le Client",
+        "createSubtitle": "Enter the information below to create the client.",
+        "editSubtitle": "Update the client details and save the changes.",
+        "cancelCreate": "Back to list",
+        "cancelEdit": "Cancel",
+        "save": "Save",
+        "select": "Select",
+        "assignedUser": "Owner",
+        "genericError": "An error occurred while saving the client.",
+        "errors": {
+          "nomComplet": "Full name is required",
+          "nationalite": "Nationality is required",
+          "telephonePrincipalRequired": "Primary phone is required",
+          "telephonePrincipalFormat": "Format must follow +XXXXXXXX"
+        }
+      },
+      "edit": {
+        "loadError": "Unable to load client information.",
+        "success": "Client mis à jour avec succès",
+        "notFound": "No client data available.",
+        "breadcrumb": {
+          "dashboard": "Dashboard",
+          "clients": "Clients",
+          "current": "Edit"
+        }
+      }
     }
   }
 }

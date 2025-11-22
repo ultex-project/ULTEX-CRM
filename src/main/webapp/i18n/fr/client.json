@@ -14,6 +14,11 @@
       "delete": {
         "question": "Êtes-vous certain de vouloir supprimer le Client {{ id }} ?"
       },
+      "documentsTitle": "Documents du client",
+      "addDocument": "Ajouter un document",
+      "editDocument": "Modifier le document",
+      "deleteConfirm": "Confirmer la suppression",
+      "deleteMessage": "Voulez-vous vraiment supprimer ce document ?",
       "detail": {
         "title": "Client"
       },
@@ -36,10 +41,162 @@
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "opportunities": "Opportunities",
+      "cyclesActivation": "Cycles Activation",
+      "pays": "Pays",
       "company": "Company",
       "convertedFromProspect": "Converted From Prospect",
       "contacts": "Contacts",
-      "kycClient": "Kyc Client"
+      "kycClient": "Kyc Client",
+      "dashboard": {
+        "status": {
+          "active": "Actif",
+          "inactive": "Inactif",
+          "archived": "Archivé",
+          "unassigned": "Non assigné",
+          "badge": "Comptes"
+        },
+        "hero": {
+          "title": "Espace clients",
+          "subtitle": "Développez des relations durables, gardez vos segments en forme et exploitez les signaux clients en temps réel.",
+          "stats": {
+            "total": "Clients suivis",
+            "active": "Clients actifs",
+            "updated": "Mis à jour ces 30 derniers jours"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Enregistrer le segment",
+          "newClient": "Nouveau client"
+        },
+        "metrics": {
+          "activeShare": "Santé de la relation",
+          "activeShareHint": "{{value}}% des clients sont actifs",
+          "inactive": "Clients inactifs",
+          "inactiveHint": "{{value}}% nécessitent une attention",
+          "newThisWeek": "Nouveaux cette semaine",
+          "newThisWeekHint": "Créés au cours des 7 derniers jours",
+          "archived": "Clients archivés",
+          "archivedHint": "À revoir ou relancer bientôt"
+        },
+        "searchPlaceholder": "Rechercher par nom, email, téléphone ou entreprise...",
+        "filters": {
+          "fields": {
+            "status": "Statut"
+          },
+          "all": "Tous ({{count}})",
+          "active": "{{label}} ({{count}})",
+          "inactive": "{{label}} ({{count}})",
+          "archived": "{{label}} ({{count}})",
+          "label": "Filtres avancés",
+          "unsupported": "Attention : les conditions OR combinées ne sont pas entièrement prises en charge par l'API actuelle. Les filtres sont appliqués comme des clauses AND."
+        },
+        "languages": {
+          "fr": "Français",
+          "en": "Anglais",
+          "ar": "Arabe"
+        },
+        "table": {
+          "title": "Pipeline client",
+          "summary": "Affichage de {{current}} sur {{total}} clients filtrés",
+          "sortedBy": "Trié par {{field}} ({{direction}})",
+          "loading": "Chargement des clients...",
+          "empty": "Aucun client ne correspond aux filtres actuels.",
+          "unnamed": "Client sans nom",
+          "noEmail": "Aucun email disponible",
+          "noPhone": "Aucun téléphone disponible",
+          "pendingSync": "Synchronisation en attente"
+        },
+        "columns": {
+          "client": "Client",
+          "company": "Entreprise",
+          "status": "Statut",
+          "nationality": "Nationalité",
+          "language": "Langue préférée",
+          "created": "Créé le",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "Voir",
+          "edit": "Modifier",
+          "delete": "Supprimer"
+        },
+        "pagination": {
+          "page": "Page {{page}} sur {{total}}"
+        },
+        "modal": {
+          "title": "Confirmer la suppression",
+          "messagePrefix": "Voulez-vous vraiment supprimer le client",
+          "cancel": "Annuler",
+          "confirm": "Supprimer",
+          "unknown": "cet enregistrement"
+        }
+      },
+      "view": {
+        "back": "Retour aux clients",
+        "edit": "Modifier",
+        "error": "Impossible de charger les détails du client pour le moment.",
+        "empty": "Aucune donnée disponible",
+        "header": {
+          "created": "Créé le {{date}}",
+          "updated": "Mis à jour le {{date}}"
+        },
+        "sections": {
+          "general": "Informations générales",
+          "contacts": "Contacts associés",
+          "companies": "Sociétés liées",
+          "documents": "Documents",
+          "kyc": "KYC client",
+          "requests": "Demandes",
+          "opportunities": "Opportunités",
+          "history": "Historique CRM"
+        },
+        "documents": {
+          "actions": "Actions",
+          "download": "Télécharger"
+        },
+        "kyc": {
+          "completude": "Complétude KYC",
+          "score": "Score staff",
+          "behaviors": "Comportements",
+          "responsable": "Responsable",
+          "notes": "Remarques"
+        },
+        "company": {
+          "representant": "Représentant légal : {{value}}"
+        }
+      },
+      "form": {
+        "createTitle": "Ajouter un nouveau client",
+        "editTitle": "Modifier le Client",
+        "createSubtitle": "Renseignez les informations ci-dessous pour créer le client.",
+        "editSubtitle": "Mettez à jour les informations du client puis enregistrez.",
+        "cancelCreate": "Retour à la liste",
+        "cancelEdit": "Annuler",
+        "save": "Enregistrer",
+        "select": "Sélectionnez",
+        "assignedUser": "Responsable",
+        "genericError": "Une erreur est survenue lors de l'enregistrement du client.",
+        "errors": {
+          "nomComplet": "Le nom complet est requis",
+          "nationalite": "La nationalité est requise",
+          "telephonePrincipalRequired": "Le téléphone principal est requis",
+          "telephonePrincipalFormat": "Format invalide (+XXXXXXXX)"
+        }
+      },
+      "edit": {
+        "loadError": "Impossible de charger les informations du client.",
+        "success": "Client mis à jour avec succès",
+        "notFound": "Aucune donnée disponible.",
+        "breadcrumb": {
+          "dashboard": "Tableau de bord",
+          "clients": "Clients",
+          "current": "Modifier"
+        }
+      }
     }
   }
 }

@@ -55,35 +55,17 @@ export const DemandeClientDetail = () => {
           </dt>
           <dd>{demandeClientEntity.servicePrincipal}</dd>
           <dt>
-            <span id="sousServices">
-              <Translate contentKey="crmApp.demandeClient.sousServices">Sous Services</Translate>
+            <span id="typeDemande">
+              <Translate contentKey="crmApp.demandeClient.typeDemande">Type Demande</Translate>
             </span>
           </dt>
-          <dd>{demandeClientEntity.sousServices}</dd>
+          <dd>{demandeClientEntity.typeDemande}</dd>
           <dt>
             <span id="provenance">
               <Translate contentKey="crmApp.demandeClient.provenance">Provenance</Translate>
             </span>
           </dt>
           <dd>{demandeClientEntity.provenance}</dd>
-          <dt>
-            <span id="incoterm">
-              <Translate contentKey="crmApp.demandeClient.incoterm">Incoterm</Translate>
-            </span>
-          </dt>
-          <dd>{demandeClientEntity.incoterm}</dd>
-          <dt>
-            <span id="devise">
-              <Translate contentKey="crmApp.demandeClient.devise">Devise</Translate>
-            </span>
-          </dt>
-          <dd>{demandeClientEntity.devise}</dd>
-          <dt>
-            <span id="nombreProduits">
-              <Translate contentKey="crmApp.demandeClient.nombreProduits">Nombre Produits</Translate>
-            </span>
-          </dt>
-          <dd>{demandeClientEntity.nombreProduits}</dd>
           <dt>
             <span id="remarqueGenerale">
               <Translate contentKey="crmApp.demandeClient.remarqueGenerale">Remarque Generale</Translate>
@@ -94,6 +76,27 @@ export const DemandeClientDetail = () => {
             <Translate contentKey="crmApp.demandeClient.client">Client</Translate>
           </dt>
           <dd>{demandeClientEntity.client ? demandeClientEntity.client.id : ''}</dd>
+          <dt>
+            <Translate contentKey="crmApp.demandeClient.devise">Devise</Translate>
+          </dt>
+          <dd>{demandeClientEntity.devise ? demandeClientEntity.devise.id : ''}</dd>
+          <dt>
+            <Translate contentKey="crmApp.demandeClient.incoterm">Incoterm</Translate>
+          </dt>
+          <dd>{demandeClientEntity.incoterm ? demandeClientEntity.incoterm.id : ''}</dd>
+          <dt>
+            <Translate contentKey="crmApp.demandeClient.sousServices">Sous Services</Translate>
+          </dt>
+          <dd>
+            {demandeClientEntity.sousServices
+              ? demandeClientEntity.sousServices.map((val, i) => (
+                  <span key={val.id}>
+                    <a>{val.id}</a>
+                    {demandeClientEntity.sousServices && i === demandeClientEntity.sousServices.length - 1 ? '' : ', '}
+                  </span>
+                ))
+              : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/demande-client" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

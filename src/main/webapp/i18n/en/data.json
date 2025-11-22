@@ -1,0 +1,28 @@
+{
+  "crmApp": {
+    "data": {
+      "title": "Data verification workspace",
+      "subtitle": "Review and validate client submissions, ensuring data accuracy across the organisation.",
+      "empty": {
+        "title": "No verification tasks yet",
+        "subtitle": "Once there are pending submissions, they will show up here so you can validate, reject or annotate them."
+      },
+      "history": {
+        "title": "Data verification history",
+        "subtitle": "Track every validation action, including comments and decisions applied to client records.",
+        "empty": {
+          "title": "No historical entries yet",
+          "subtitle": "When verifications are completed, you will see the activity log here for auditing purposes."
+        },
+        "columns": {
+          "id": "ID",
+          "entity": "Entity",
+          "status": "Status",
+          "performedBy": "Performed By",
+          "performedAt": "Performed At",
+          "note": "Note"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-// src/main/webapp/app/entities/prospect/ProspectListPage.scss
+// src/main/webapp/app/entities/prospect/ClientListPage.scss
 
 .prospect-page {
   .prospect-hero {
@@ -130,13 +130,6 @@
       background: #ffffff;
       border-color: rgba(199, 210, 254, 0.75);
     }
-  }
-
-  .prospect-status-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
   }
 
   .prospect-table-card {

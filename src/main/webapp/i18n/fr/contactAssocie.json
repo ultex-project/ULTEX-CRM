@@ -26,7 +26,46 @@
       "email": "Email",
       "autorisation": "Autorisation",
       "remarques": "Remarques",
-      "client": "Client"
+      "client": "Client",
+      "dashboard": {
+        "title": "Contacts Associés",
+        "subtitle": "Gérez tous les contacts liés à ce client",
+        "add": "Ajouter un contact",
+        "empty": "Aucun contact associé pour ce client.",
+        "actions": {
+          "label": "Actions",
+          "view": "Voir"
+        },
+        "columns": {
+          "name": "Nom et prénom"
+        },
+        "modal": {
+          "createTitle": "Ajouter un contact",
+          "editTitle": "Modifier le contact",
+          "authorizationPlaceholder": "Sélectionner une autorisation"
+        },
+        "viewTitle": "Détails du contact",
+        "deleteQuestion": "Voulez-vous vraiment supprimer {{ name }} (ID {{ id }}) ?",
+        "messages": {
+          "createSuccess": "Contact créé avec succès.",
+          "updateSuccess": "Contact mis à jour avec succès.",
+          "saveError": "Impossible d'enregistrer ce contact. Veuillez réessayer.",
+          "deleteSuccess": "Contact supprimé avec succès.",
+          "deleteError": "Impossible de supprimer ce contact."
+        },
+        "validation": {
+          "generic": "Merci de corriger les champs en surbrillance.",
+          "nom": "Le nom est obligatoire.",
+          "prenom": "Le prénom est obligatoire.",
+          "email": "L'adresse e-mail est obligatoire.",
+          "emailInvalid": "Veuillez saisir une adresse e-mail valide."
+        },
+        "authorizations": {
+          "Info": "Info",
+          "Mandataire": "Mandataire",
+          "Signataire": "Signataire"
+        }
+      }
     }
   }
 }

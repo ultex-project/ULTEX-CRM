@@ -21,13 +21,51 @@
       "reference": "Reference",
       "dateDemande": "Date Demande",
       "servicePrincipal": "Service Principal",
-      "sousServices": "Sous Services",
+      "typeDemande": "Type Demande",
       "provenance": "Provenance",
-      "incoterm": "Incoterm",
-      "devise": "Devise",
-      "nombreProduits": "Nombre Produits",
       "remarqueGenerale": "Remarque Generale",
-      "client": "Client"
+      "client": "Client",
+      "devise": "Devise",
+      "incoterm": "Incoterm",
+      "sousServices": "Sous Services",
+      "create": {
+        "title": "Créer une nouvelle demande",
+        "subtitle": "Renseignez les informations principales et ajoutez les produits demandés.",
+        "back": "Retour au client",
+        "save": "Enregistrer la demande",
+        "selectPlaceholder": "Sélectionnez une option",
+        "sousServicesPlaceholder": "Sélectionnez un ou plusieurs sous-services",
+        "sousServicesNoOptions": "Aucun sous-service disponible",
+        "success": "Demande créée avec succès.",
+        "errorSubmit": "Impossible d'enregistrer la demande. Veuillez réessayer.",
+        "breadcrumb": {
+          "client": "Client",
+          "current": "Nouvelle demande"
+        },
+        "errors": {
+          "servicePrincipal": "Veuillez choisir le service principal.",
+          "typeDemande": "Choisissez le type de demande.",
+          "provenance": "La provenance est obligatoire.",
+          "incoterm": "Sélectionnez un incoterm.",
+          "devise": "Sélectionnez une devise.",
+          "nombreProduits": "Ajoutez au moins un produit à la demande."
+        }
+      },
+      "dashboard": {
+        "actions": {
+          "view": "Voir"
+        },
+        "messages": {
+          "deleteSuccess": "Demande supprimée avec succès.",
+          "deleteError": "Impossible de supprimer cette demande."
+        },
+        "viewTitle": "Détails de la demande",
+        "products": {
+          "title": "Produits demandés",
+          "empty": "Aucun produit n'est enregistré pour cette demande."
+        },
+        "deleteQuestion": "Voulez-vous vraiment supprimer {{ reference }} ?"
+      }
     }
   }
 }

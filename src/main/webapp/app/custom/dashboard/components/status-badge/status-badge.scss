@@ -1,0 +1,53 @@
+$status-badge-config: (
+  pipeline: #4f46e5,
+  active: #10b981,
+  pending: #f59e0b,
+  completed: #2563eb,
+  failed: #ef4444,
+);
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  line-height: 1;
+
+  &--pill {
+    border-radius: 9999px;
+  }
+
+  @each $name, $color in $status-badge-config {
+    &--#{$name} {
+      color: $color;
+      border-color: $color;
+      background-color: rgba($color, 0.05);
+
+      &:hover,
+      &:focus-visible {
+        background-color: rgba($color, 0.1);
+      }
+    }
+  }
+
+  &--default {
+    color: #4b5563;
+    border-color: rgba(75, 85, 99, 0.4);
+    background-color: rgba(75, 85, 99, 0.08);
+
+    &:hover,
+    &:focus-visible {
+      background-color: rgba(75, 85, 99, 0.12);
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "crmApp": {
+    "sousService": {
+      "home": {
+        "title": "Sous Services",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Sous Service",
+        "createOrEditLabel": "Create or edit a Sous Service",
+        "notFound": "No Sous Services found"
+      },
+      "created": "A new Sous Service is created with identifier {{ param }}",
+      "updated": "A Sous Service is updated with identifier {{ param }}",
+      "deleted": "A Sous Service is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Sous Service {{ id }}?"
+      },
+      "detail": {
+        "title": "Sous Service"
+      },
+      "id": "ID",
+      "code": "Code",
+      "libelle": "Libelle",
+      "demandes": "Demandes"
+    }
+  }
+}

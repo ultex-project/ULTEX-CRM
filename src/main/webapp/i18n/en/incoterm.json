@@ -1,0 +1,25 @@
+{
+  "crmApp": {
+    "incoterm": {
+      "home": {
+        "title": "Incoterms",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Incoterm",
+        "createOrEditLabel": "Create or edit a Incoterm",
+        "notFound": "No Incoterms found"
+      },
+      "created": "A new Incoterm is created with identifier {{ param }}",
+      "updated": "A Incoterm is updated with identifier {{ param }}",
+      "deleted": "A Incoterm is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Incoterm {{ id }}?"
+      },
+      "detail": {
+        "title": "Incoterm"
+      },
+      "id": "ID",
+      "code": "Code",
+      "description": "Description"
+    }
+  }
+}

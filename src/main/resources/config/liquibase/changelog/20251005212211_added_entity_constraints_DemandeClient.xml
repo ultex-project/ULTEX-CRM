@@ -16,5 +16,33 @@
                                  referencedColumnNames="id"
                                  referencedTableName="client"
                                  />
+
+        <addForeignKeyConstraint baseColumnNames="devise_id"
+                                 baseTableName="demande_client"
+                                 constraintName="fk_demande_client__devise_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="devise"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="incoterm_id"
+                                 baseTableName="demande_client"
+                                 constraintName="fk_demande_client__incoterm_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="incoterm"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="demande_client_id"
+                                 baseTableName="rel_demande_client__sous_services"
+                                 constraintName="fk_rel_demande_client__sous_services__demande_client_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="demande_client"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="sous_services_id"
+                                 baseTableName="rel_demande_client__sous_services"
+                                 constraintName="fk_rel_demande_client__sous_services__sous_services_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sous_service"
+                                 />
     </changeSet>
 </databaseChangeLog>

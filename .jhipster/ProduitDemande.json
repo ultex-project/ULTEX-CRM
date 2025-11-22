@@ -7,15 +7,14 @@
   "fields": [
     {
       "fieldName": "typeProduit",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "typeDemande",
-      "fieldType": "String"
+      "fieldType": "TypeProduit",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "VEHICULE,MACHINE,PRODUIT_FINAL,MATIERE_PREMIERE,AUTRE"
     },
     {
       "fieldName": "nomProduit",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "description",
@@ -34,10 +33,6 @@
       "fieldType": "Double"
     },
     {
-      "fieldName": "fraisExpedition",
-      "fieldType": "Double"
-    },
-    {
       "fieldName": "poidsKg",
       "fieldType": "Double"
     },
@@ -50,20 +45,32 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "nombreCartons",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "piecesParCarton",
-      "fieldType": "Integer"
-    },
-    {
       "fieldName": "hsCode",
       "fieldType": "String"
     },
     {
       "fieldName": "prixCible",
       "fieldType": "Double"
+    },
+    {
+      "fieldName": "fraisExpedition",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "origine",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fournisseur",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adresseChargement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adresseDechargement",
+      "fieldType": "String"
     },
     {
       "fieldName": "ficheTechniqueUrl",
@@ -79,6 +86,7 @@
     }
   ],
   "name": "ProduitDemande",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "demandeClient",

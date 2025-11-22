@@ -35,6 +35,34 @@ entity Client {
   createdAt Instant,
   updatedAt Instant
 }
+// =========================
+// REFERENCE ENTITIES
+// =========================
+
+entity Devise {
+  code String required unique, // e.g., "USD"
+  nomComplet String required,  // e.g., "US Dollar"
+  symbole String,              // e.g., "$"
+  pays String                  // optional, e.g., "United States"
+}
+enum TypeProduit {
+  VEHICULE,
+  MACHINE,
+  PRODUIT_FINAL,
+  MATIERE_PREMIERE,
+  AUTRE
+}
+entity Incoterm {
+  code String required unique, // e.g., "FOB"
+  description String required  // e.g., "Free On Board"
+}
+
+entity Pays {
+  code String required unique, // e.g., "MA"
+  nom String required,         // e.g., "Maroc"
+  indicatif String             // e.g., "+212"
+}
+
 entity History {
   entityName String required,
   entityId Long required,
@@ -76,39 +104,62 @@ entity DocumentClient {
   numeroDocument String,
   fichierUrl String
 }
-
+entity SousService {
+  code String required unique,
+  libelle String required
+}
 entity DemandeClient {
   reference String required,
   dateDemande Instant required,
-  servicePrincipal String, // Import / Export
-  sousServices String, // multi-sélection
+  servicePrincipal ServicePrincipal required,
+  typeDemande TypeDemande required,
   provenance String,
-  incoterm String,
-  devise String,
-  nombreProduits Integer,
   remarqueGenerale String
 }
 
 entity ProduitDemande {
-  typeProduit String,
-  typeDemande String, // Proforma, Sourcing, Négociation...
-  nomProduit String,
+  typeProduit TypeProduit required,
+  nomProduit String required,
   description TextBlob,
   quantite Double,
-  unite String,
+  unite String, // kg, pcs, etc.
   prix Double,
-  fraisExpedition Double,
   poidsKg Double,
   volumeTotalCbm Double,
   dimensions String,
-  nombreCartons Integer,
-  piecesParCarton Integer,
   hsCode String,
   prixCible Double,
+  fraisExpedition Double,
+  origine String,
+  fournisseur String,
+  adresseChargement String, // for export
+  adresseDechargement String, // for export
   ficheTechniqueUrl String,
   photosUrl String,
   piecesJointesUrl String
 }
+
+// ===============================
+// ENTITY: CycleActivation
+// ===============================
+entity CycleActivation {
+  numeroCycle Integer required, // e.g., 1, 2, 3
+  dateDebut Instant required,
+  dateFin Instant,
+  statutCycle String, // e.g., "En cours", "Terminé"
+  commentaire TextBlob
+}
+
+// ===============================
+// ENTITY: EtatInteraction (historique des états)
+// ===============================
+entity EtatInteraction {
+  etat EtatCRM required, // Enum defined below
+  dateEtat Instant required,
+  agent String, // Nom de l’agent
+  observation TextBlob
+}
+
 
 entity HistoriqueCRM {
   dateInteraction Instant required,
@@ -178,6 +229,19 @@ entity Company {
   createdAt Instant,
   updatedAt Instant
 }
+entity RappelAgent {
+  rappelDate Instant required,
+  rappelMessage String,
+  statutRappel StatutRappel required, // PENDING, DONE, MISSED
+  createdAt Instant,
+  updatedAt Instant
+}
+
+enum StatutRappel {
+  PENDING,
+  DONE,
+  MISSED
+}
 
 entity Contact {
   firstName String required,
@@ -207,14 +271,52 @@ enum OpportunityStage {
 enum UserRole {
   ADMIN, MANAGER, COMMERCIAL
 }
+// ===============================
+// ENUM: EtatCRM
+// ===============================
+enum EtatCRM {
+  TRAITE,
+  EN_COURS,
+  FAIBLE_QUALITE,
+  PAS_PRET,
+  PAS_INTERESSE,
+  ACTIVE,
+  PAS_DE_REPONSE,
+  DOUBLE_CODAGE,
+  NUMERO_ERRONE,
+  AUTRE
+}
+enum TypeDemande {
+  PROFORMA,
+  SOURCING,
+  NEGOCIATION,
+  AUTRE
+}
 
+enum ServicePrincipal {
+  IMPORT,
+  EXPORT
+}
 /* RELATIONSHIPS */
 
 // --- Core Business Logic Relationships ---
 
 // Client has many Opportunities
+relationship ManyToMany {
+  DemandeClient{sousServices} to SousService{demandes}
+}
 relationship OneToMany {
   Client{opportunities} to Opportunity{client required}
+}
+// Each reminder is linked to an EtatInteraction and the agent responsible
+relationship ManyToOne {
+  RappelAgent{etat} to EtatInteraction
+}
+relationship ManyToOne {
+  RappelAgent{client} to Client
+}
+relationship ManyToOne {
+  RappelAgent{agent} to InternalUser
 }
 relationship ManyToOne {
   ContactAssocie{client} to Client
@@ -237,6 +339,34 @@ relationship ManyToOne {
 }
 relationship OneToOne {
   KycClient{client} to Client
+}
+// Each DemandeClient uses a Devise and an Incoterm
+relationship ManyToOne {
+  DemandeClient{devise} to Devise,
+  DemandeClient{incoterm} to Incoterm
+}
+
+// ===============================
+// RELATIONS
+// ===============================
+
+// A Client can have multiple activation cycles
+relationship OneToMany {
+  Client{cyclesActivation} to CycleActivation{client required}
+}
+
+// Each cycle belongs to one client and contains multiple états
+relationship OneToMany {
+  CycleActivation{etats} to EtatInteraction{cycle required}
+}
+
+// Optionally, link EtatInteraction to HistoriqueCRM for traceability
+relationship ManyToOne {
+  EtatInteraction{historique} to HistoriqueCRM
+}
+// Each Client is associated with a country
+relationship ManyToOne {
+  Client{pays} to Pays
 }
 
 // --- Conversion Flow ---
@@ -284,7 +414,7 @@ relationship ManyToOne {
 }
 /* OPTIONS */
 
-paginate Client, Prospect, Opportunity, Company, Contact with pagination
+paginate * with pagination
 service all with serviceClass
 dto all with mapstruct
 search all with elasticsearch

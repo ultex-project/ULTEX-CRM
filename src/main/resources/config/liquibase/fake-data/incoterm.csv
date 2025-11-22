@@ -1,0 +1,12 @@
+id;code;description
+1;EXW;Ex Works – le vendeur met les marchandises à disposition dans ses locaux, l'acheteur supporte tous les coûts et risques.
+2;FCA;Free Carrier – le vendeur livre la marchandise au transporteur désigné par l'acheteur.
+3;CPT;Carriage Paid To – le vendeur paie le transport jusqu'au lieu convenu, mais le risque est transféré au premier transporteur.
+4;CIP;Carriage and Insurance Paid To – même principe que CPT, mais le vendeur doit aussi souscrire une assurance transport.
+5;DAP;Delivered At Place – le vendeur assume tous les coûts et risques jusqu’au lieu de destination convenu.
+6;DPU;Delivered at Place Unloaded – le vendeur livre et décharge la marchandise au lieu convenu (remplace l'ancien DAT).
+7;DDP;Delivered Duty Paid – le vendeur livre la marchandise dédouanée et paye tous les droits et taxes d’importation.
+8;FAS;Free Alongside Ship – le vendeur livre la marchandise le long du navire, au port d’embarquement convenu.
+9;FOB;Free On Board – le vendeur livre la marchandise à bord du navire désigné par l’acheteur au port d’embarquement.
+10;CFR;Cost and Freight – le vendeur paie le coût et le fret jusqu'au port de destination, mais le risque est transféré à bord du navire.
+11;CIF;Cost, Insurance and Freight – identique à CFR mais le vendeur paie aussi l’assurance maritime.

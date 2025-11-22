@@ -41,6 +41,7 @@
     }
   ],
   "name": "ContactAssocie",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "client",

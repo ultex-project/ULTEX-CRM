@@ -1,0 +1,11 @@
+{
+  "crmApp": {
+    "TypeDemande": {
+      "null": "",
+      "PROFORMA": "PROFORMA",
+      "SOURCING": "SOURCING",
+      "NEGOCIATION": "NEGOCIATION",
+      "AUTRE": "AUTRE"
+    }
+  }
+}

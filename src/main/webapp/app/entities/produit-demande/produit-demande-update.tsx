@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities as getDemandeClients } from 'app/entities/demande-client/demande-client.reducer';
+import { TypeProduit } from 'app/shared/model/enumerations/type-produit.model';
 import { createEntity, getEntity, reset, updateEntity } from './produit-demande.reducer';
 
 export const ProduitDemandeUpdate = () => {
@@ -22,9 +23,10 @@ export const ProduitDemandeUpdate = () => {
   const loading = useAppSelector(state => state.produitDemande.loading);
   const updating = useAppSelector(state => state.produitDemande.updating);
   const updateSuccess = useAppSelector(state => state.produitDemande.updateSuccess);
+  const typeProduitValues = Object.keys(TypeProduit);
 
   const handleClose = () => {
-    navigate('/produit-demande');
+    navigate(`/produit-demande${location.search}`);
   };
 
   useEffect(() => {
@@ -53,23 +55,17 @@ export const ProduitDemandeUpdate = () => {
     if (values.prix !== undefined && typeof values.prix !== 'number') {
       values.prix = Number(values.prix);
     }
-    if (values.fraisExpedition !== undefined && typeof values.fraisExpedition !== 'number') {
-      values.fraisExpedition = Number(values.fraisExpedition);
-    }
     if (values.poidsKg !== undefined && typeof values.poidsKg !== 'number') {
       values.poidsKg = Number(values.poidsKg);
     }
     if (values.volumeTotalCbm !== undefined && typeof values.volumeTotalCbm !== 'number') {
       values.volumeTotalCbm = Number(values.volumeTotalCbm);
     }
-    if (values.nombreCartons !== undefined && typeof values.nombreCartons !== 'number') {
-      values.nombreCartons = Number(values.nombreCartons);
-    }
-    if (values.piecesParCarton !== undefined && typeof values.piecesParCarton !== 'number') {
-      values.piecesParCarton = Number(values.piecesParCarton);
-    }
     if (values.prixCible !== undefined && typeof values.prixCible !== 'number') {
       values.prixCible = Number(values.prixCible);
+    }
+    if (values.fraisExpedition !== undefined && typeof values.fraisExpedition !== 'number') {
+      values.fraisExpedition = Number(values.fraisExpedition);
     }
 
     const entity = {
@@ -89,6 +85,7 @@ export const ProduitDemandeUpdate = () => {
     isNew
       ? {}
       : {
+          typeProduit: 'VEHICULE',
           ...produitDemandeEntity,
           demande: produitDemandeEntity?.demande?.id,
         };
@@ -123,21 +120,23 @@ export const ProduitDemandeUpdate = () => {
                 id="produit-demande-typeProduit"
                 name="typeProduit"
                 data-cy="typeProduit"
-                type="text"
-              />
-              <ValidatedField
-                label={translate('crmApp.produitDemande.typeDemande')}
-                id="produit-demande-typeDemande"
-                name="typeDemande"
-                data-cy="typeDemande"
-                type="text"
-              />
+                type="select"
+              >
+                {typeProduitValues.map(typeProduit => (
+                  <option value={typeProduit} key={typeProduit}>
+                    {translate(`crmApp.TypeProduit.${typeProduit}`)}
+                  </option>
+                ))}
+              </ValidatedField>
               <ValidatedField
                 label={translate('crmApp.produitDemande.nomProduit')}
                 id="produit-demande-nomProduit"
                 name="nomProduit"
                 data-cy="nomProduit"
                 type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
               />
               <ValidatedField
                 label={translate('crmApp.produitDemande.description')}
@@ -168,13 +167,6 @@ export const ProduitDemandeUpdate = () => {
                 type="text"
               />
               <ValidatedField
-                label={translate('crmApp.produitDemande.fraisExpedition')}
-                id="produit-demande-fraisExpedition"
-                name="fraisExpedition"
-                data-cy="fraisExpedition"
-                type="text"
-              />
-              <ValidatedField
                 label={translate('crmApp.produitDemande.poidsKg')}
                 id="produit-demande-poidsKg"
                 name="poidsKg"
@@ -196,20 +188,6 @@ export const ProduitDemandeUpdate = () => {
                 type="text"
               />
               <ValidatedField
-                label={translate('crmApp.produitDemande.nombreCartons')}
-                id="produit-demande-nombreCartons"
-                name="nombreCartons"
-                data-cy="nombreCartons"
-                type="text"
-              />
-              <ValidatedField
-                label={translate('crmApp.produitDemande.piecesParCarton')}
-                id="produit-demande-piecesParCarton"
-                name="piecesParCarton"
-                data-cy="piecesParCarton"
-                type="text"
-              />
-              <ValidatedField
                 label={translate('crmApp.produitDemande.hsCode')}
                 id="produit-demande-hsCode"
                 name="hsCode"
@@ -221,6 +199,41 @@ export const ProduitDemandeUpdate = () => {
                 id="produit-demande-prixCible"
                 name="prixCible"
                 data-cy="prixCible"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.fraisExpedition')}
+                id="produit-demande-fraisExpedition"
+                name="fraisExpedition"
+                data-cy="fraisExpedition"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.origine')}
+                id="produit-demande-origine"
+                name="origine"
+                data-cy="origine"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.fournisseur')}
+                id="produit-demande-fournisseur"
+                name="fournisseur"
+                data-cy="fournisseur"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.adresseChargement')}
+                id="produit-demande-adresseChargement"
+                name="adresseChargement"
+                data-cy="adresseChargement"
+                type="text"
+              />
+              <ValidatedField
+                label={translate('crmApp.produitDemande.adresseDechargement')}
+                id="produit-demande-adresseDechargement"
+                name="adresseDechargement"
+                data-cy="adresseDechargement"
                 type="text"
               />
               <ValidatedField

@@ -1,10 +1,14 @@
 package com.ultex.crm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ultex.crm.domain.enumeration.ServicePrincipal;
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,30 +37,48 @@ public class DemandeClient implements Serializable {
     @Column(name = "date_demande", nullable = false)
     private Instant dateDemande;
 
-    @Column(name = "service_principal")
-    private String servicePrincipal;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "service_principal", nullable = false)
+    private ServicePrincipal servicePrincipal;
 
-    @Column(name = "sous_services")
-    private String sousServices;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_demande", nullable = false)
+    private TypeDemande typeDemande;
 
     @Column(name = "provenance")
     private String provenance;
-
-    @Column(name = "incoterm")
-    private String incoterm;
-
-    @Column(name = "devise")
-    private String devise;
-
-    @Column(name = "nombre_produits")
-    private Integer nombreProduits;
 
     @Column(name = "remarque_generale")
     private String remarqueGenerale;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "opportunities", "company", "convertedFromProspect", "contacts", "kycClient" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        allowSetters = true
+    )
     private Client client;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Devise devise;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Incoterm incoterm;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "rel_demande_client__sous_services",
+        joinColumns = @JoinColumn(name = "demande_client_id"),
+        inverseJoinColumns = @JoinColumn(name = "sous_services_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "demandes" }, allowSetters = true)
+    private Set<SousService> sousServices = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "demande", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
+    private Set<ProduitDemande> produits = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -99,30 +121,30 @@ public class DemandeClient implements Serializable {
         this.dateDemande = dateDemande;
     }
 
-    public String getServicePrincipal() {
+    public ServicePrincipal getServicePrincipal() {
         return this.servicePrincipal;
     }
 
-    public DemandeClient servicePrincipal(String servicePrincipal) {
+    public DemandeClient servicePrincipal(ServicePrincipal servicePrincipal) {
         this.setServicePrincipal(servicePrincipal);
         return this;
     }
 
-    public void setServicePrincipal(String servicePrincipal) {
+    public void setServicePrincipal(ServicePrincipal servicePrincipal) {
         this.servicePrincipal = servicePrincipal;
     }
 
-    public String getSousServices() {
-        return this.sousServices;
+    public TypeDemande getTypeDemande() {
+        return this.typeDemande;
     }
 
-    public DemandeClient sousServices(String sousServices) {
-        this.setSousServices(sousServices);
+    public DemandeClient typeDemande(TypeDemande typeDemande) {
+        this.setTypeDemande(typeDemande);
         return this;
     }
 
-    public void setSousServices(String sousServices) {
-        this.sousServices = sousServices;
+    public void setTypeDemande(TypeDemande typeDemande) {
+        this.typeDemande = typeDemande;
     }
 
     public String getProvenance() {
@@ -136,45 +158,6 @@ public class DemandeClient implements Serializable {
 
     public void setProvenance(String provenance) {
         this.provenance = provenance;
-    }
-
-    public String getIncoterm() {
-        return this.incoterm;
-    }
-
-    public DemandeClient incoterm(String incoterm) {
-        this.setIncoterm(incoterm);
-        return this;
-    }
-
-    public void setIncoterm(String incoterm) {
-        this.incoterm = incoterm;
-    }
-
-    public String getDevise() {
-        return this.devise;
-    }
-
-    public DemandeClient devise(String devise) {
-        this.setDevise(devise);
-        return this;
-    }
-
-    public void setDevise(String devise) {
-        this.devise = devise;
-    }
-
-    public Integer getNombreProduits() {
-        return this.nombreProduits;
-    }
-
-    public DemandeClient nombreProduits(Integer nombreProduits) {
-        this.setNombreProduits(nombreProduits);
-        return this;
-    }
-
-    public void setNombreProduits(Integer nombreProduits) {
-        this.nombreProduits = nombreProduits;
     }
 
     public String getRemarqueGenerale() {
@@ -200,6 +183,94 @@ public class DemandeClient implements Serializable {
 
     public DemandeClient client(Client client) {
         this.setClient(client);
+        return this;
+    }
+
+    public Devise getDevise() {
+        return this.devise;
+    }
+
+    public void setDevise(Devise devise) {
+        this.devise = devise;
+    }
+
+    public DemandeClient devise(Devise devise) {
+        this.setDevise(devise);
+        return this;
+    }
+
+    public Incoterm getIncoterm() {
+        return this.incoterm;
+    }
+
+    public void setIncoterm(Incoterm incoterm) {
+        this.incoterm = incoterm;
+    }
+
+    public DemandeClient incoterm(Incoterm incoterm) {
+        this.setIncoterm(incoterm);
+        return this;
+    }
+
+    public Set<SousService> getSousServices() {
+        return this.sousServices;
+    }
+
+    public void setSousServices(Set<SousService> sousServices) {
+        if (this.sousServices != null) {
+            this.sousServices.forEach(i -> i.getDemandes().remove(this));
+        }
+        if (sousServices != null) {
+            sousServices.forEach(i -> i.getDemandes().add(this));
+        }
+        this.sousServices = sousServices;
+    }
+
+    public DemandeClient sousServices(Set<SousService> sousServices) {
+        this.setSousServices(sousServices);
+        return this;
+    }
+
+    public DemandeClient addSousServices(SousService sousService) {
+        this.sousServices.add(sousService);
+        sousService.getDemandes().add(this);
+        return this;
+    }
+
+    public DemandeClient removeSousServices(SousService sousService) {
+        this.sousServices.remove(sousService);
+        sousService.getDemandes().remove(this);
+        return this;
+    }
+
+    public Set<ProduitDemande> getProduits() {
+        return this.produits;
+    }
+
+    public void setProduits(Set<ProduitDemande> produitDemandes) {
+        if (this.produits != null) {
+            this.produits.forEach(i -> i.setDemande(null));
+        }
+        if (produitDemandes != null) {
+            produitDemandes.forEach(i -> i.setDemande(this));
+        }
+        this.produits = produitDemandes;
+    }
+
+    public DemandeClient produits(Set<ProduitDemande> produitDemandes) {
+        this.setProduits(produitDemandes);
+        return this;
+    }
+
+    public DemandeClient addProduits(ProduitDemande produitDemande) {
+        this.produits.add(produitDemande);
+        produitDemande.setDemande(this);
+        return this;
+    }
+
+    public DemandeClient removeProduits(ProduitDemande produitDemande) {
+        this.produits.remove(produitDemande);
+        produitDemande.setDemande(null);
         return this;
     }
 
@@ -230,11 +301,8 @@ public class DemandeClient implements Serializable {
             ", reference='" + getReference() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", servicePrincipal='" + getServicePrincipal() + "'" +
-            ", sousServices='" + getSousServices() + "'" +
+            ", typeDemande='" + getTypeDemande() + "'" +
             ", provenance='" + getProvenance() + "'" +
-            ", incoterm='" + getIncoterm() + "'" +
-            ", devise='" + getDevise() + "'" +
-            ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +
             "}";
     }

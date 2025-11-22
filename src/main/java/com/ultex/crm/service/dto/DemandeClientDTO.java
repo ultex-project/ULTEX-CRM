@@ -1,9 +1,13 @@
 package com.ultex.crm.service.dto;
 
+import com.ultex.crm.domain.enumeration.ServicePrincipal;
+import com.ultex.crm.domain.enumeration.TypeDemande;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.ultex.crm.domain.DemandeClient} entity.
@@ -19,21 +23,25 @@ public class DemandeClientDTO implements Serializable {
     @NotNull
     private Instant dateDemande;
 
-    private String servicePrincipal;
+    @NotNull
+    private ServicePrincipal servicePrincipal;
 
-    private String sousServices;
+    @NotNull
+    private TypeDemande typeDemande;
 
     private String provenance;
-
-    private String incoterm;
-
-    private String devise;
-
-    private Integer nombreProduits;
 
     private String remarqueGenerale;
 
     private ClientDTO client;
+
+    private DeviseDTO devise;
+
+    private IncotermDTO incoterm;
+
+    private Set<SousServiceDTO> sousServices = new HashSet<>();
+
+    private Set<ProduitDemandeDTO> produits = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -59,20 +67,20 @@ public class DemandeClientDTO implements Serializable {
         this.dateDemande = dateDemande;
     }
 
-    public String getServicePrincipal() {
+    public ServicePrincipal getServicePrincipal() {
         return servicePrincipal;
     }
 
-    public void setServicePrincipal(String servicePrincipal) {
+    public void setServicePrincipal(ServicePrincipal servicePrincipal) {
         this.servicePrincipal = servicePrincipal;
     }
 
-    public String getSousServices() {
-        return sousServices;
+    public TypeDemande getTypeDemande() {
+        return typeDemande;
     }
 
-    public void setSousServices(String sousServices) {
-        this.sousServices = sousServices;
+    public void setTypeDemande(TypeDemande typeDemande) {
+        this.typeDemande = typeDemande;
     }
 
     public String getProvenance() {
@@ -81,30 +89,6 @@ public class DemandeClientDTO implements Serializable {
 
     public void setProvenance(String provenance) {
         this.provenance = provenance;
-    }
-
-    public String getIncoterm() {
-        return incoterm;
-    }
-
-    public void setIncoterm(String incoterm) {
-        this.incoterm = incoterm;
-    }
-
-    public String getDevise() {
-        return devise;
-    }
-
-    public void setDevise(String devise) {
-        this.devise = devise;
-    }
-
-    public Integer getNombreProduits() {
-        return nombreProduits;
-    }
-
-    public void setNombreProduits(Integer nombreProduits) {
-        this.nombreProduits = nombreProduits;
     }
 
     public String getRemarqueGenerale() {
@@ -121,6 +105,38 @@ public class DemandeClientDTO implements Serializable {
 
     public void setClient(ClientDTO client) {
         this.client = client;
+    }
+
+    public DeviseDTO getDevise() {
+        return devise;
+    }
+
+    public void setDevise(DeviseDTO devise) {
+        this.devise = devise;
+    }
+
+    public IncotermDTO getIncoterm() {
+        return incoterm;
+    }
+
+    public void setIncoterm(IncotermDTO incoterm) {
+        this.incoterm = incoterm;
+    }
+
+    public Set<SousServiceDTO> getSousServices() {
+        return sousServices;
+    }
+
+    public void setSousServices(Set<SousServiceDTO> sousServices) {
+        this.sousServices = sousServices;
+    }
+
+    public Set<ProduitDemandeDTO> getProduits() {
+        return produits;
+    }
+
+    public void setProduits(Set<ProduitDemandeDTO> produits) {
+        this.produits = produits;
     }
 
     @Override
@@ -152,13 +168,14 @@ public class DemandeClientDTO implements Serializable {
             ", reference='" + getReference() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", servicePrincipal='" + getServicePrincipal() + "'" +
-            ", sousServices='" + getSousServices() + "'" +
+            ", typeDemande='" + getTypeDemande() + "'" +
             ", provenance='" + getProvenance() + "'" +
-            ", incoterm='" + getIncoterm() + "'" +
-            ", devise='" + getDevise() + "'" +
-            ", nombreProduits=" + getNombreProduits() +
             ", remarqueGenerale='" + getRemarqueGenerale() + "'" +
             ", client=" + getClient() +
+            ", devise=" + getDevise() +
+            ", incoterm=" + getIncoterm() +
+            ", sousServices=" + getSousServices() +
+            ", produits=" + getProduits() +
             "}";
     }
 }

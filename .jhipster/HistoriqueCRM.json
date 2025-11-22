@@ -33,6 +33,7 @@
     }
   ],
   "name": "HistoriqueCRM",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "client",

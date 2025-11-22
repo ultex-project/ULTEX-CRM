@@ -1,0 +1,10 @@
+id;code;libelle
+1;A_Z;Service A-Z
+2;ACCOMP;Accompagnement
+3;TRANSIT;Transit
+4;TRANSPORT;Transport
+5;CERTIF;Certification
+6;VERIF;Vérification
+7;ECHANT;Échantillon
+8;RECH_FOURN;Recherche fournisseur
+9;ETUDE;Étude

@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultex.crm.IntegrationTest;
 import com.ultex.crm.domain.ProduitDemande;
+import com.ultex.crm.domain.enumeration.TypeProduit;
 import com.ultex.crm.repository.ProduitDemandeRepository;
 import com.ultex.crm.service.dto.ProduitDemandeDTO;
 import com.ultex.crm.service.mapper.ProduitDemandeMapper;
@@ -34,11 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ProduitDemandeResourceIT {
 
-    private static final String DEFAULT_TYPE_PRODUIT = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE_PRODUIT = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TYPE_DEMANDE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE_DEMANDE = "BBBBBBBBBB";
+    private static final TypeProduit DEFAULT_TYPE_PRODUIT = TypeProduit.VEHICULE;
+    private static final TypeProduit UPDATED_TYPE_PRODUIT = TypeProduit.MACHINE;
 
     private static final String DEFAULT_NOM_PRODUIT = "AAAAAAAAAA";
     private static final String UPDATED_NOM_PRODUIT = "BBBBBBBBBB";
@@ -55,9 +53,6 @@ class ProduitDemandeResourceIT {
     private static final Double DEFAULT_PRIX = 1D;
     private static final Double UPDATED_PRIX = 2D;
 
-    private static final Double DEFAULT_FRAIS_EXPEDITION = 1D;
-    private static final Double UPDATED_FRAIS_EXPEDITION = 2D;
-
     private static final Double DEFAULT_POIDS_KG = 1D;
     private static final Double UPDATED_POIDS_KG = 2D;
 
@@ -67,17 +62,26 @@ class ProduitDemandeResourceIT {
     private static final String DEFAULT_DIMENSIONS = "AAAAAAAAAA";
     private static final String UPDATED_DIMENSIONS = "BBBBBBBBBB";
 
-    private static final Integer DEFAULT_NOMBRE_CARTONS = 1;
-    private static final Integer UPDATED_NOMBRE_CARTONS = 2;
-
-    private static final Integer DEFAULT_PIECES_PAR_CARTON = 1;
-    private static final Integer UPDATED_PIECES_PAR_CARTON = 2;
-
     private static final String DEFAULT_HS_CODE = "AAAAAAAAAA";
     private static final String UPDATED_HS_CODE = "BBBBBBBBBB";
 
     private static final Double DEFAULT_PRIX_CIBLE = 1D;
     private static final Double UPDATED_PRIX_CIBLE = 2D;
+
+    private static final Double DEFAULT_FRAIS_EXPEDITION = 1D;
+    private static final Double UPDATED_FRAIS_EXPEDITION = 2D;
+
+    private static final String DEFAULT_ORIGINE = "AAAAAAAAAA";
+    private static final String UPDATED_ORIGINE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FOURNISSEUR = "AAAAAAAAAA";
+    private static final String UPDATED_FOURNISSEUR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADRESSE_CHARGEMENT = "AAAAAAAAAA";
+    private static final String UPDATED_ADRESSE_CHARGEMENT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADRESSE_DECHARGEMENT = "AAAAAAAAAA";
+    private static final String UPDATED_ADRESSE_DECHARGEMENT = "BBBBBBBBBB";
 
     private static final String DEFAULT_FICHE_TECHNIQUE_URL = "AAAAAAAAAA";
     private static final String UPDATED_FICHE_TECHNIQUE_URL = "BBBBBBBBBB";
@@ -122,20 +126,21 @@ class ProduitDemandeResourceIT {
     public static ProduitDemande createEntity() {
         return new ProduitDemande()
             .typeProduit(DEFAULT_TYPE_PRODUIT)
-            .typeDemande(DEFAULT_TYPE_DEMANDE)
             .nomProduit(DEFAULT_NOM_PRODUIT)
             .description(DEFAULT_DESCRIPTION)
             .quantite(DEFAULT_QUANTITE)
             .unite(DEFAULT_UNITE)
             .prix(DEFAULT_PRIX)
-            .fraisExpedition(DEFAULT_FRAIS_EXPEDITION)
             .poidsKg(DEFAULT_POIDS_KG)
             .volumeTotalCbm(DEFAULT_VOLUME_TOTAL_CBM)
             .dimensions(DEFAULT_DIMENSIONS)
-            .nombreCartons(DEFAULT_NOMBRE_CARTONS)
-            .piecesParCarton(DEFAULT_PIECES_PAR_CARTON)
             .hsCode(DEFAULT_HS_CODE)
             .prixCible(DEFAULT_PRIX_CIBLE)
+            .fraisExpedition(DEFAULT_FRAIS_EXPEDITION)
+            .origine(DEFAULT_ORIGINE)
+            .fournisseur(DEFAULT_FOURNISSEUR)
+            .adresseChargement(DEFAULT_ADRESSE_CHARGEMENT)
+            .adresseDechargement(DEFAULT_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(DEFAULT_FICHE_TECHNIQUE_URL)
             .photosUrl(DEFAULT_PHOTOS_URL)
             .piecesJointesUrl(DEFAULT_PIECES_JOINTES_URL);
@@ -150,20 +155,21 @@ class ProduitDemandeResourceIT {
     public static ProduitDemande createUpdatedEntity() {
         return new ProduitDemande()
             .typeProduit(UPDATED_TYPE_PRODUIT)
-            .typeDemande(UPDATED_TYPE_DEMANDE)
             .nomProduit(UPDATED_NOM_PRODUIT)
             .description(UPDATED_DESCRIPTION)
             .quantite(UPDATED_QUANTITE)
             .unite(UPDATED_UNITE)
             .prix(UPDATED_PRIX)
-            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
             .poidsKg(UPDATED_POIDS_KG)
             .volumeTotalCbm(UPDATED_VOLUME_TOTAL_CBM)
             .dimensions(UPDATED_DIMENSIONS)
-            .nombreCartons(UPDATED_NOMBRE_CARTONS)
-            .piecesParCarton(UPDATED_PIECES_PAR_CARTON)
             .hsCode(UPDATED_HS_CODE)
             .prixCible(UPDATED_PRIX_CIBLE)
+            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
+            .origine(UPDATED_ORIGINE)
+            .fournisseur(UPDATED_FOURNISSEUR)
+            .adresseChargement(UPDATED_ADRESSE_CHARGEMENT)
+            .adresseDechargement(UPDATED_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
             .photosUrl(UPDATED_PHOTOS_URL)
             .piecesJointesUrl(UPDATED_PIECES_JOINTES_URL);
@@ -226,6 +232,40 @@ class ProduitDemandeResourceIT {
 
     @Test
     @Transactional
+    void checkTypeProduitIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        produitDemande.setTypeProduit(null);
+
+        // Create the ProduitDemande, which fails.
+        ProduitDemandeDTO produitDemandeDTO = produitDemandeMapper.toDto(produitDemande);
+
+        restProduitDemandeMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(produitDemandeDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkNomProduitIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        produitDemande.setNomProduit(null);
+
+        // Create the ProduitDemande, which fails.
+        ProduitDemandeDTO produitDemandeDTO = produitDemandeMapper.toDto(produitDemande);
+
+        restProduitDemandeMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(produitDemandeDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllProduitDemandes() throws Exception {
         // Initialize the database
         insertedProduitDemande = produitDemandeRepository.saveAndFlush(produitDemande);
@@ -236,21 +276,22 @@ class ProduitDemandeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(produitDemande.getId().intValue())))
-            .andExpect(jsonPath("$.[*].typeProduit").value(hasItem(DEFAULT_TYPE_PRODUIT)))
-            .andExpect(jsonPath("$.[*].typeDemande").value(hasItem(DEFAULT_TYPE_DEMANDE)))
+            .andExpect(jsonPath("$.[*].typeProduit").value(hasItem(DEFAULT_TYPE_PRODUIT.toString())))
             .andExpect(jsonPath("$.[*].nomProduit").value(hasItem(DEFAULT_NOM_PRODUIT)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].quantite").value(hasItem(DEFAULT_QUANTITE)))
             .andExpect(jsonPath("$.[*].unite").value(hasItem(DEFAULT_UNITE)))
             .andExpect(jsonPath("$.[*].prix").value(hasItem(DEFAULT_PRIX)))
-            .andExpect(jsonPath("$.[*].fraisExpedition").value(hasItem(DEFAULT_FRAIS_EXPEDITION)))
             .andExpect(jsonPath("$.[*].poidsKg").value(hasItem(DEFAULT_POIDS_KG)))
             .andExpect(jsonPath("$.[*].volumeTotalCbm").value(hasItem(DEFAULT_VOLUME_TOTAL_CBM)))
             .andExpect(jsonPath("$.[*].dimensions").value(hasItem(DEFAULT_DIMENSIONS)))
-            .andExpect(jsonPath("$.[*].nombreCartons").value(hasItem(DEFAULT_NOMBRE_CARTONS)))
-            .andExpect(jsonPath("$.[*].piecesParCarton").value(hasItem(DEFAULT_PIECES_PAR_CARTON)))
             .andExpect(jsonPath("$.[*].hsCode").value(hasItem(DEFAULT_HS_CODE)))
             .andExpect(jsonPath("$.[*].prixCible").value(hasItem(DEFAULT_PRIX_CIBLE)))
+            .andExpect(jsonPath("$.[*].fraisExpedition").value(hasItem(DEFAULT_FRAIS_EXPEDITION)))
+            .andExpect(jsonPath("$.[*].origine").value(hasItem(DEFAULT_ORIGINE)))
+            .andExpect(jsonPath("$.[*].fournisseur").value(hasItem(DEFAULT_FOURNISSEUR)))
+            .andExpect(jsonPath("$.[*].adresseChargement").value(hasItem(DEFAULT_ADRESSE_CHARGEMENT)))
+            .andExpect(jsonPath("$.[*].adresseDechargement").value(hasItem(DEFAULT_ADRESSE_DECHARGEMENT)))
             .andExpect(jsonPath("$.[*].ficheTechniqueUrl").value(hasItem(DEFAULT_FICHE_TECHNIQUE_URL)))
             .andExpect(jsonPath("$.[*].photosUrl").value(hasItem(DEFAULT_PHOTOS_URL)))
             .andExpect(jsonPath("$.[*].piecesJointesUrl").value(hasItem(DEFAULT_PIECES_JOINTES_URL)));
@@ -268,21 +309,22 @@ class ProduitDemandeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(produitDemande.getId().intValue()))
-            .andExpect(jsonPath("$.typeProduit").value(DEFAULT_TYPE_PRODUIT))
-            .andExpect(jsonPath("$.typeDemande").value(DEFAULT_TYPE_DEMANDE))
+            .andExpect(jsonPath("$.typeProduit").value(DEFAULT_TYPE_PRODUIT.toString()))
             .andExpect(jsonPath("$.nomProduit").value(DEFAULT_NOM_PRODUIT))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.quantite").value(DEFAULT_QUANTITE))
             .andExpect(jsonPath("$.unite").value(DEFAULT_UNITE))
             .andExpect(jsonPath("$.prix").value(DEFAULT_PRIX))
-            .andExpect(jsonPath("$.fraisExpedition").value(DEFAULT_FRAIS_EXPEDITION))
             .andExpect(jsonPath("$.poidsKg").value(DEFAULT_POIDS_KG))
             .andExpect(jsonPath("$.volumeTotalCbm").value(DEFAULT_VOLUME_TOTAL_CBM))
             .andExpect(jsonPath("$.dimensions").value(DEFAULT_DIMENSIONS))
-            .andExpect(jsonPath("$.nombreCartons").value(DEFAULT_NOMBRE_CARTONS))
-            .andExpect(jsonPath("$.piecesParCarton").value(DEFAULT_PIECES_PAR_CARTON))
             .andExpect(jsonPath("$.hsCode").value(DEFAULT_HS_CODE))
             .andExpect(jsonPath("$.prixCible").value(DEFAULT_PRIX_CIBLE))
+            .andExpect(jsonPath("$.fraisExpedition").value(DEFAULT_FRAIS_EXPEDITION))
+            .andExpect(jsonPath("$.origine").value(DEFAULT_ORIGINE))
+            .andExpect(jsonPath("$.fournisseur").value(DEFAULT_FOURNISSEUR))
+            .andExpect(jsonPath("$.adresseChargement").value(DEFAULT_ADRESSE_CHARGEMENT))
+            .andExpect(jsonPath("$.adresseDechargement").value(DEFAULT_ADRESSE_DECHARGEMENT))
             .andExpect(jsonPath("$.ficheTechniqueUrl").value(DEFAULT_FICHE_TECHNIQUE_URL))
             .andExpect(jsonPath("$.photosUrl").value(DEFAULT_PHOTOS_URL))
             .andExpect(jsonPath("$.piecesJointesUrl").value(DEFAULT_PIECES_JOINTES_URL));
@@ -309,20 +351,21 @@ class ProduitDemandeResourceIT {
         em.detach(updatedProduitDemande);
         updatedProduitDemande
             .typeProduit(UPDATED_TYPE_PRODUIT)
-            .typeDemande(UPDATED_TYPE_DEMANDE)
             .nomProduit(UPDATED_NOM_PRODUIT)
             .description(UPDATED_DESCRIPTION)
             .quantite(UPDATED_QUANTITE)
             .unite(UPDATED_UNITE)
             .prix(UPDATED_PRIX)
-            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
             .poidsKg(UPDATED_POIDS_KG)
             .volumeTotalCbm(UPDATED_VOLUME_TOTAL_CBM)
             .dimensions(UPDATED_DIMENSIONS)
-            .nombreCartons(UPDATED_NOMBRE_CARTONS)
-            .piecesParCarton(UPDATED_PIECES_PAR_CARTON)
             .hsCode(UPDATED_HS_CODE)
             .prixCible(UPDATED_PRIX_CIBLE)
+            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
+            .origine(UPDATED_ORIGINE)
+            .fournisseur(UPDATED_FOURNISSEUR)
+            .adresseChargement(UPDATED_ADRESSE_CHARGEMENT)
+            .adresseDechargement(UPDATED_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
             .photosUrl(UPDATED_PHOTOS_URL)
             .piecesJointesUrl(UPDATED_PIECES_JOINTES_URL);
@@ -417,16 +460,16 @@ class ProduitDemandeResourceIT {
 
         partialUpdatedProduitDemande
             .typeProduit(UPDATED_TYPE_PRODUIT)
-            .typeDemande(UPDATED_TYPE_DEMANDE)
-            .quantite(UPDATED_QUANTITE)
-            .prix(UPDATED_PRIX)
-            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
+            .nomProduit(UPDATED_NOM_PRODUIT)
+            .unite(UPDATED_UNITE)
+            .poidsKg(UPDATED_POIDS_KG)
             .volumeTotalCbm(UPDATED_VOLUME_TOTAL_CBM)
-            .nombreCartons(UPDATED_NOMBRE_CARTONS)
             .hsCode(UPDATED_HS_CODE)
-            .prixCible(UPDATED_PRIX_CIBLE)
-            .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
-            .photosUrl(UPDATED_PHOTOS_URL);
+            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
+            .fournisseur(UPDATED_FOURNISSEUR)
+            .adresseChargement(UPDATED_ADRESSE_CHARGEMENT)
+            .adresseDechargement(UPDATED_ADRESSE_DECHARGEMENT)
+            .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL);
 
         restProduitDemandeMockMvc
             .perform(
@@ -459,20 +502,21 @@ class ProduitDemandeResourceIT {
 
         partialUpdatedProduitDemande
             .typeProduit(UPDATED_TYPE_PRODUIT)
-            .typeDemande(UPDATED_TYPE_DEMANDE)
             .nomProduit(UPDATED_NOM_PRODUIT)
             .description(UPDATED_DESCRIPTION)
             .quantite(UPDATED_QUANTITE)
             .unite(UPDATED_UNITE)
             .prix(UPDATED_PRIX)
-            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
             .poidsKg(UPDATED_POIDS_KG)
             .volumeTotalCbm(UPDATED_VOLUME_TOTAL_CBM)
             .dimensions(UPDATED_DIMENSIONS)
-            .nombreCartons(UPDATED_NOMBRE_CARTONS)
-            .piecesParCarton(UPDATED_PIECES_PAR_CARTON)
             .hsCode(UPDATED_HS_CODE)
             .prixCible(UPDATED_PRIX_CIBLE)
+            .fraisExpedition(UPDATED_FRAIS_EXPEDITION)
+            .origine(UPDATED_ORIGINE)
+            .fournisseur(UPDATED_FOURNISSEUR)
+            .adresseChargement(UPDATED_ADRESSE_CHARGEMENT)
+            .adresseDechargement(UPDATED_ADRESSE_DECHARGEMENT)
             .ficheTechniqueUrl(UPDATED_FICHE_TECHNIQUE_URL)
             .photosUrl(UPDATED_PHOTOS_URL)
             .piecesJointesUrl(UPDATED_PIECES_JOINTES_URL);
