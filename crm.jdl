@@ -120,7 +120,7 @@ entity DemandeClient {
 entity ProduitDemande {
   typeProduit TypeProduit required,
   nomProduit String required,
-  description TextBlob,
+  description String,
   quantite Double,
   unite String, // kg, pcs, etc.
   prix Double,

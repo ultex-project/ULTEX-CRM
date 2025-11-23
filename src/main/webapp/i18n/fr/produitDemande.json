@@ -37,7 +37,94 @@
       "ficheTechniqueUrl": "Fiche Technique Url",
       "photosUrl": "Photos Url",
       "piecesJointesUrl": "Pieces Jointes Url",
-      "demande": "Demande"
+      "demande": "Demande",
+      "dashboard": {
+        "status": {
+          "badge": "Produits",
+          "unassigned": "Non assigné"
+        },
+        "hero": {
+          "title": "Espace produit",
+          "subtitle": "Suivez les produits demandés, les prix et la logistique pour sécuriser les achats.",
+          "stats": {
+            "total": "Produits suivis",
+            "priced": "Produits tarifés",
+            "quantity": "Quantité totale"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Enregistrer le segment",
+          "newProduct": "Nouveau produit"
+        },
+        "metrics": {
+          "typeShare": "Part du type dominant",
+          "typeShareHint": "{{value}}% des produits sont du type majoritaire",
+          "priced": "Produits tarifés",
+          "pricedHint": "{{value}}% ont un prix",
+          "averagePrice": "Prix moyen",
+          "averagePriceHint": "Sur les produits tarifés",
+          "weight": "Poids total",
+          "weightHint": "Somme des poids de tous les produits"
+        },
+        "searchPlaceholder": "Rechercher nom produit, HS code, fournisseur ou origine...",
+        "filters": {
+          "all": "Tous ({{count}})",
+          "vehicule": "{{label}} ({{count}})",
+          "machine": "{{label}} ({{count}})",
+          "produit_final": "{{label}} ({{count}})",
+          "matiere_premiere": "{{label}} ({{count}})",
+          "autre": "{{label}} ({{count}})",
+          "label": "Filtres avancés",
+          "unsupported": "Attention : les conditions avec OU ne sont pas pleinement supportées. Les filtres sont appliqués en ET."
+        },
+        "table": {
+          "title": "Pipeline produit",
+          "summary": "{{current}} sur {{total}} produits filtrés",
+          "sortedBy": "Trié par {{field}} ({{direction}})",
+          "loading": "Chargement des produits...",
+          "empty": "Aucun produit ne correspond aux filtres.",
+          "unnamed": "Produit sans nom",
+          "noDescription": "Pas de description",
+          "noHsCode": "Pas de HS code",
+          "pendingSync": "En attente de synchro"
+        },
+        "columns": {
+          "product": "Produit",
+          "type": "Type",
+          "price": "Prix",
+          "quantity": "Quantité",
+          "origin": "Origine",
+          "supplier": "Fournisseur",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "Voir",
+          "edit": "Modifier",
+          "delete": "Supprimer"
+        },
+        "pagination": {
+          "page": "Page {{page}} sur {{total}}"
+        },
+        "modal": {
+          "title": "Confirmer la suppression",
+          "messagePrefix": "Voulez-vous supprimer le produit",
+          "cancel": "Annuler",
+          "confirm": "Supprimer",
+          "unknown": "cet enregistrement"
+        },
+        "type": {
+          "unassigned": "Non assigné"
+        },
+        "sections": {
+          "details": "Détails",
+          "logistics": "Logistique",
+          "attachments": "Pièces jointes"
+        }
+      }
     }
   }
 }

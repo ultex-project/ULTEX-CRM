@@ -17,6 +17,7 @@ import {
   faChevronDown,
   faDatabase,
   faList,
+  faBoxOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from 'app/config/store';
 import './sidebar.scss';
@@ -122,6 +123,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
           roles: ['ROLE_ADMIN'],
         },
       ],
+    },
+    {
+      id: 'products',
+      label: 'global.menu.products',
+      icon: faBoxOpen,
+      path: '/dashboard/products',
+      roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
     },
     {
       id: 'data',

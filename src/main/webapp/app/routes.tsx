@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 
 import Loadable from 'react-loadable';
 
@@ -31,7 +31,12 @@ import ClientViewPage from 'app/custom/dashboard/modules/client/ClientViewPage';
 import ClientDemandCreatePage from 'app/custom/dashboard/modules/client/ClientDemandCreatePage';
 import ClientCreatePage from 'app/custom/dashboard/modules/client/ClientCreatePage';
 import ClientEditPage from 'app/custom/dashboard/modules/client/ClientEditPage';
+import ProductListPage from 'app/custom/dashboard/modules/product/ProductListPage';
+import ProductCreatePage from 'app/custom/dashboard/modules/product/ProductCreatePage';
+import ProductEditPage from 'app/custom/dashboard/modules/product/ProductEditPage';
+import ProductViewPage from 'app/custom/dashboard/modules/product/ProductViewPage';
 import SousServiceListPage from 'app/custom/dashboard/modules/sous-service/SousServiceListPage';
+import DemandeListPage from 'app/custom/dashboard/modules/demande/DemandeListPage';
 
 const loading = <div>loading ...</div>;
 
@@ -119,6 +124,11 @@ const AppRoutes = () => {
           <Route path="clients/:id/view" element={<ClientViewPage />} />
           <Route path="clients/:id/edit" element={<ClientEditPage />} />
           <Route path="clients/:clientId/demands/new" element={<ClientDemandCreatePage />} />
+          <Route path="products" element={<ProductListPage />} />
+          <Route path="products/new" element={<ProductCreatePage />} />
+          <Route path="products/:id/view" element={<ProductViewPage />} />
+          <Route path="products/:id/edit" element={<ProductEditPage />} />
+          <Route path="demande/list" element={<DemandeListPage />} />
           <Route
             path="sous-services"
             element={

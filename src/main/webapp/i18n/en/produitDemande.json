@@ -37,7 +37,94 @@
       "ficheTechniqueUrl": "Fiche Technique Url",
       "photosUrl": "Photos Url",
       "piecesJointesUrl": "Pieces Jointes Url",
-      "demande": "Demande"
+      "demande": "Demande",
+      "dashboard": {
+        "status": {
+          "badge": "Products",
+          "unassigned": "Unassigned"
+        },
+        "hero": {
+          "title": "Product workspace",
+          "subtitle": "Track requested products, pricing, and logistics to keep sourcing on pace.",
+          "stats": {
+            "total": "Products tracked",
+            "priced": "Priced products",
+            "quantity": "Total units"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Save segment",
+          "newProduct": "New product"
+        },
+        "metrics": {
+          "typeShare": "Top type share",
+          "typeShareHint": "{{value}}% of products are of the top type",
+          "priced": "Priced products",
+          "pricedHint": "{{value}}% have a price",
+          "averagePrice": "Average price",
+          "averagePriceHint": "Across priced products",
+          "weight": "Total weight",
+          "weightHint": "Sum of weight for all products"
+        },
+        "searchPlaceholder": "Search product name, HS code, supplier, or origin...",
+        "filters": {
+          "all": "All ({{count}})",
+          "vehicule": "{{label}} ({{count}})",
+          "machine": "{{label}} ({{count}})",
+          "produit_final": "{{label}} ({{count}})",
+          "matiere_premiere": "{{label}} ({{count}})",
+          "autre": "{{label}} ({{count}})",
+          "label": "Advanced filters",
+          "unsupported": "Heads up: mixed OR conditions are not fully supported by the current API. Filters are applied as AND clauses."
+        },
+        "table": {
+          "title": "Product pipeline",
+          "summary": "Showing {{current}} of {{total}} filtered products",
+          "sortedBy": "Sorted by {{field}} ({{direction}})",
+          "loading": "Loading products...",
+          "empty": "No products match the current filters.",
+          "unnamed": "Unnamed product",
+          "noDescription": "No description",
+          "noHsCode": "No HS code",
+          "pendingSync": "Pending sync"
+        },
+        "columns": {
+          "product": "Product",
+          "type": "Type",
+          "price": "Price",
+          "quantity": "Quantity",
+          "origin": "Origin",
+          "supplier": "Supplier",
+          "actions": "Actions"
+        },
+        "direction": {
+          "asc": "asc",
+          "desc": "desc"
+        },
+        "actions": {
+          "view": "View",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "pagination": {
+          "page": "Page {{page}} of {{total}}"
+        },
+        "modal": {
+          "title": "Confirm delete operation",
+          "messagePrefix": "Are you sure you want to delete the product",
+          "cancel": "Cancel",
+          "confirm": "Delete",
+          "unknown": "this record"
+        },
+        "type": {
+          "unassigned": "Unassigned"
+        },
+        "sections": {
+          "details": "Details",
+          "logistics": "Logistics",
+          "attachments": "Attachments"
+        }
+      }
     }
   }
 }
