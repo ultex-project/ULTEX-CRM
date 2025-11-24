@@ -75,7 +75,11 @@
         },
         "products": {
           "title": "Requested products",
-          "empty": "No products registered for this demande."
+          "empty": "No products registered for this demande.",
+          "linkExisting": "Link an existing product",
+          "searchPlaceholder": "Search by name, HS code, supplier, or origin",
+          "loading": "Loading products...",
+          "select": "Select"
         },
         "modal": {
           "unknown": "this demande"

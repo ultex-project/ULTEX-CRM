@@ -1,11 +1,34 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { Alert, Breadcrumb, BreadcrumbItem, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
+import {
+  Alert,
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Spinner,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ListGroup,
+  ListGroupItem,
+  InputGroup,
+  InputGroupText,
+} from 'reactstrap';
 import Select, { MultiValue, SingleValue } from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faSave, faLink, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -15,6 +38,7 @@ import { getEntities as getDevises } from 'app/entities/devise/devise.reducer';
 import { getEntities as getIncoterms } from 'app/entities/incoterm/incoterm.reducer';
 import { getEntities as getSousServices } from 'app/entities/sous-service/sous-service.reducer';
 import { IDemandeClient } from 'app/shared/model/demande-client.model';
+import { IProduitDemande } from 'app/shared/model/produit-demande.model';
 import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
 import { TypeDemande } from 'app/shared/model/enumerations/type-demande.model';
 
@@ -87,6 +111,13 @@ const DemandeCreatePage = () => {
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [productModalOpen, setProductModalOpen] = useState(false);
+  const [productSearch, setProductSearch] = useState('');
+  const [existingProducts, setExistingProducts] = useState<IProduitDemande[]>([]);
+  const [productsLoading, setProductsLoading] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<IProduitDemande[]>([]);
+  const [productError, setProductError] = useState<string | null>(null);
+  const productSectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     dispatch(resetDemande());
@@ -95,6 +126,23 @@ const DemandeCreatePage = () => {
     dispatch(getIncoterms({}));
     dispatch(getSousServices({}));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!productModalOpen || existingProducts.length > 0) {
+      return;
+    }
+    setProductsLoading(true);
+    axios
+      .get<IProduitDemande[]>('api/produit-demandes', {
+        params: {
+          size: 1000,
+          cacheBuster: Date.now(),
+        },
+      })
+      .then(response => setExistingProducts(response.data ?? []))
+      .catch(() => setExistingProducts([]))
+      .finally(() => setProductsLoading(false));
+  }, [productModalOpen, existingProducts.length]);
 
   const handleChange =
     (field: keyof FormState) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -163,6 +211,16 @@ const DemandeCreatePage = () => {
     if (!validate()) {
       return;
     }
+    const produitsPayload = selectedProducts
+      .map(product => product.id)
+      .filter((id): id is number => id !== undefined && id !== null)
+      .map(id => ({ id }));
+
+    if (produitsPayload.length === 0) {
+      setProductError('La demande doit contenir au moins un produit.');
+      productSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
 
     setSubmitting(true);
     setSubmitError(null);
@@ -175,6 +233,7 @@ const DemandeCreatePage = () => {
       servicePrincipal: formValues.servicePrincipal as keyof typeof ServicePrincipal,
       typeDemande: formValues.typeDemande as keyof typeof TypeDemande,
       sousServices: sousServicesPayload,
+      produits: produitsPayload,
       provenance: formValues.provenance.trim(),
       incoterm: formValues.incotermId ? { id: Number(formValues.incotermId) } : undefined,
       devise: formValues.deviseId ? { id: Number(formValues.deviseId) } : undefined,
@@ -200,6 +259,42 @@ const DemandeCreatePage = () => {
 
   const renderError = (field: keyof FormState) =>
     formErrors[field] ? <div className="text-danger small mt-1">{formErrors[field]}</div> : null;
+
+  const filteredProducts = useMemo(() => {
+    const term = productSearch.trim().toLowerCase();
+    if (!term) return existingProducts;
+    return existingProducts.filter(product => {
+      const values = [product.nomProduit, product.hsCode, product.fournisseur, product.origine]
+        .filter(Boolean)
+        .map(v => String(v).toLowerCase());
+      return values.some(value => value.includes(term));
+    });
+  }, [existingProducts, productSearch]);
+
+  const closeProductModal = () => {
+    setProductModalOpen(false);
+    setProductSearch('');
+  };
+
+  const handleSelectProduct = (product: IProduitDemande) => {
+    if (!product.id) {
+      return;
+    }
+    setProductError(null);
+    setSelectedProducts(prev => {
+      if (prev.some(item => item.id === product.id)) {
+        return prev;
+      }
+      return [...prev, product];
+    });
+    closeProductModal();
+  };
+
+  const handleRemoveProduct = (productId?: number | null) => {
+    if (!productId) return;
+    setSelectedProducts(prev => prev.filter(product => product.id !== productId));
+    setProductError(null);
+  };
 
   return (
     <div className="client-demand-create-page py-4">
@@ -431,6 +526,97 @@ const DemandeCreatePage = () => {
           </Form>
         </CardBody>
       </Card>
+      <div ref={productSectionRef}>
+        <Card className="shadow-sm border-0 mt-4">
+          <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.title" />
+            </h5>
+            <Button color="secondary" outline size="sm" onClick={() => setProductModalOpen(true)}>
+              <FontAwesomeIcon icon={faLink} className="me-2" />
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.linkExisting" />
+            </Button>
+          </CardHeader>
+          <CardBody>
+            {productError ? <div className="text-danger mb-2">{productError}</div> : null}
+            {selectedProducts.length === 0 ? (
+              <div className="text-muted">
+                <Translate contentKey="crmApp.demandeClient.dashboard.products.empty" />
+              </div>
+            ) : (
+              <ListGroup flush>
+                {selectedProducts.map(product => (
+                  <ListGroupItem key={product.id ?? product.nomProduit} className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <div className="fw-semibold">{product.nomProduit ?? '--'}</div>
+                      <div className="text-muted small">
+                        {[product.hsCode, product.fournisseur, product.origine].filter(Boolean).join(' • ')}
+                      </div>
+                    </div>
+                    <Button color="danger" size="sm" outline onClick={() => handleRemoveProduct(product.id)}>
+                      <Translate contentKey="entity.action.delete" />
+                    </Button>
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      <Modal isOpen={productModalOpen} toggle={closeProductModal} size="lg" centered>
+        <ModalHeader toggle={closeProductModal}>
+          <Translate contentKey="crmApp.demandeClient.dashboard.products.linkExisting" />
+        </ModalHeader>
+        <ModalBody>
+          <InputGroup className="mb-3">
+            <InputGroupText>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroupText>
+            <Input
+              placeholder={translate('crmApp.demandeClient.dashboard.products.searchPlaceholder')}
+              value={productSearch}
+              onChange={event => setProductSearch(event.target.value)}
+            />
+          </InputGroup>
+          {productsLoading ? (
+            <div className="text-center py-4">
+              <Spinner size="sm" color="primary" className="me-2" />
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.loading" />
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-muted">
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.empty" />
+            </div>
+          ) : (
+            <ListGroup flush>
+              {filteredProducts.map(product => (
+                <ListGroupItem key={product.id ?? product.nomProduit} className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div className="fw-semibold">{product.nomProduit ?? '--'}</div>
+                    <div className="text-muted small">
+                      {[product.hsCode, product.fournisseur, product.origine].filter(Boolean).join(' • ')}
+                    </div>
+                  </div>
+                  <Button
+                    color="primary"
+                    size="sm"
+                    disabled={selectedProducts.some(item => item.id === product.id)}
+                    onClick={() => handleSelectProduct(product)}
+                  >
+                    <Translate contentKey="crmApp.demandeClient.dashboard.products.select" />
+                  </Button>
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={closeProductModal}>
+            <Translate contentKey="entity.action.close" />
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };

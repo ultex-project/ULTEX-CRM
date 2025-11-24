@@ -75,7 +75,11 @@
         },
         "products": {
           "title": "Produits demandés",
-          "empty": "Aucun produit n'est enregistré pour cette demande."
+          "empty": "Aucun produit n'est enregistré pour cette demande.",
+          "linkExisting": "Lier un produit existant",
+          "searchPlaceholder": "Rechercher par nom, code SH, fournisseur ou origine",
+          "loading": "Chargement des produits...",
+          "select": "Sélectionner"
         },
         "modal": {
           "unknown": "cette demande"
