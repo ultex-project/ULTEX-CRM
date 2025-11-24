@@ -1,11 +1,11 @@
-id;reference;date_demande;service_principal;type_demande;provenance;remarque_generale
-1;tendre membre à vie blême;2025-10-05T03:32:06;IMPORT;PROFORMA;coin-coin monter;administration conquérir
-2;vlan tout pousser;2025-10-05T09:59:15;IMPORT;NEGOCIATION;hôte;partenaire
-3;ouch;2025-10-05T15:13:59;EXPORT;AUTRE;demander ci;vu que toutefois téméraire
-4;trop peu même si;2025-10-05T15:42:16;EXPORT;SOURCING;du fait que;vers ouch tout à fait
-5;peut-être sauf;2025-10-05T17:51:51;IMPORT;NEGOCIATION;à la merci apparemment pointer;grrr ah
-6;miaou lorsque;2025-10-05T02:31:10;IMPORT;AUTRE;administration;de façon à ce que
-7;jeune à seule fin de;2025-10-05T20:24:15;IMPORT;NEGOCIATION;timide immense;géométrique
-8;près tellement afin que;2025-10-05T16:33:08;IMPORT;PROFORMA;changer énergique aux environs de;jeune enfant au lieu de impromptu
-9;dense;2025-10-05T07:16:27;IMPORT;PROFORMA;vaste ainsi;zzzz
-10;groin groin oups ouch;2025-10-05T12:13:52;IMPORT;PROFORMA;que si bien que;gratis
+id;reference;date_demande;service_principal;type_demande;provenance;remarque_generale;client_id;devise_id;incoterm_id
+1;DEM-20241001-001;2024-10-01T09:30:00;IMPORT;PROFORMA;Salon International de l'Industrie;Client VIP à relancer avant fin de mois;1;1;1
+2;DEM-20241003-002;2024-10-03T14:15:00;IMPORT;NEGOCIATION;Salon Equipements Portuaires;Négociation en cours, attente devis fournisseur.;2;2;2
+3;DEM-20241005-003;2024-10-05T11:00:00;EXPORT;SOURCING;Réseau partenaire Afrique de l'Ouest;Client souhaite alternative fournisseur sous 10 jours.;3;3;3
+4;DEM-20241007-004;2024-10-07T16:45:00;IMPORT;PROFORMA;LinkedIn Campaign Q4;Valider incoterm et conditions de paiement.;4;1;4
+5;DEM-20241009-005;2024-10-09T10:20:00;EXPORT;AUTRE;Recommandation client historique;Demande urgente, confirmer capacité logistique.;5;2;2
+6;DEM-20241011-006;2024-10-11T08:55:00;IMPORT;NEGOCIATION;Webinar logistique;Comparer fournisseurs Asie vs Europe, priorité qualité.;6;3;1
+7;DEM-20241012-007;2024-10-12T13:10:00;IMPORT;PROFORMA;Salon Automotive Supply;Besoin fiche technique complète et échantillons.;7;1;3
+8;DEM-20241013-008;2024-10-13T09:05:00;EXPORT;SOURCING;Partner referral LATAM;Vérifier certification produit et délais FOB.;8;2;4
+9;DEM-20241014-009;2024-10-14T17:25:00;IMPORT;AUTRE;Campagne emailing;Client nouveau segment, prévoir call de cadrage.;9;3;2
+10;DEM-20241015-010;2024-10-15T15:40:00;IMPORT;NEGOCIATION;Réseau agents locaux;Aligner sur devise USD et incoterm FCA.;10;1;1

@@ -131,6 +131,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
       path: '/dashboard/products',
       roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
     },
+    {
+      id: 'demandes',
+      label: 'global.menu.demandes',
+      icon: faList,
+      path: '/dashboard/demandes',
+      roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
+    },
     // {
     //   id: 'data',
     //   label: 'global.menu.data',

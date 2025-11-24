@@ -19,7 +19,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { ProduitDemandeMapper.class })
 public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, DemandeClient> {
-    @Mapping(target = "client", source = "client", qualifiedByName = "clientId")
+    @Mapping(target = "client", source = "client", qualifiedByName = "clientSummary")
     @Mapping(target = "devise", source = "devise", qualifiedByName = "deviseId")
     @Mapping(target = "incoterm", source = "incoterm", qualifiedByName = "incotermId")
     @Mapping(target = "sousServices", source = "sousServices", qualifiedByName = "sousServiceIdSet")
@@ -32,10 +32,13 @@ public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, Dema
     @Mapping(target = "produits", source = "produits")
     DemandeClient toEntity(DemandeClientDTO demandeClientDTO);
 
-    @Named("clientId")
+    @Named("clientSummary")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    ClientDTO toDtoClientId(Client client);
+    @Mapping(target = "nomComplet", source = "nomComplet")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "photoUrl", source = "photoUrl")
+    ClientDTO toDtoClientSummary(Client client);
 
     @Named("deviseId")
     @BeanMapping(ignoreByDefault = true)

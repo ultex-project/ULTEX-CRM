@@ -324,7 +324,7 @@ const DemandeListPage = () => {
               </div>
             </div>
             <div className="d-flex flex-column flex-md-row gap-2 align-self-md-start align-self-lg-center">
-              <Button color="primary" tag={Link} to="/dashboard/demande/new" className="shadow-sm">
+              <Button color="primary" tag={Link} to="/dashboard/demandes/new" className="shadow-sm">
                 <FontAwesomeIcon icon={faPlus} className="me-2" />
                 Nouvelle demande
               </Button>
@@ -502,10 +502,23 @@ const DemandeListPage = () => {
                         <td className="fw-semibold">{demande.reference ?? '--'}</td>
                         <td>
                           <div className="d-flex align-items-center gap-3">
-                            <ClientAvatar name={demande.client?.nomComplet ?? ''} photoUrl={undefined} size={42} />
+                            <ClientAvatar
+                              name={demande.client?.nomComplet ?? ''}
+                              photoUrl={demande.client?.photoUrl ?? undefined}
+                              size={42}
+                            />
                             <div>
-                              <div className="fw-semibold text-capitalize">{demande.client?.nomComplet ?? 'Client inconnu'}</div>
-                              <div className="text-muted small">{demande.client?.email ?? 'Email non renseigné'}</div>
+                              {demande.client?.id ? (
+                                <Link
+                                  to={`/dashboard/clients/${demande.client.id}/view`}
+                                  className="fw-semibold text-capitalize text-decoration-none"
+                                >
+                                  {demande.client.nomComplet ?? '--'}
+                                </Link>
+                              ) : (
+                                <div className="fw-semibold text-capitalize">{demande.client?.nomComplet ?? '--'}</div>
+                              )}
+                              <div className="text-muted small">{demande.client?.email ?? '--'}</div>
                             </div>
                           </div>
                         </td>
@@ -526,11 +539,11 @@ const DemandeListPage = () => {
                                 <FontAwesomeIcon icon={faEllipsisV} />
                               </DropdownToggle>
                               <DropdownMenu end className="rounded-3 shadow">
-                                <DropdownItem tag={Link} to={`/dashboard/demande/${demande.id}/view`}>
+                                <DropdownItem tag={Link} to={`/dashboard/demandes/${demande.id}`}>
                                   <FontAwesomeIcon icon={faEye} className="me-2" />
                                   Voir
                                 </DropdownItem>
-                                <DropdownItem tag={Link} to={`/dashboard/demande/${demande.id}/edit`}>
+                                <DropdownItem tag={Link} to={`/dashboard/demandes/${demande.id}/edit`}>
                                   <FontAwesomeIcon icon={faEdit} className="me-2" />
                                   Modifier
                                 </DropdownItem>
