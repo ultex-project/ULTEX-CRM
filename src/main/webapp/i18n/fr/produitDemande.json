@@ -37,7 +37,93 @@
       "ficheTechniqueUrl": "Fiche Technique Url",
       "photosUrl": "Photos Url",
       "piecesJointesUrl": "Pieces Jointes Url",
-      "demande": "Demande"
+      "demande": "Demande",
+      "dashboard": {
+        "type": {
+          "unassigned": "Non attribué"
+        },
+        "direction": {
+          "asc": "croissant",
+          "desc": "décroissant"
+        },
+        "status": {
+          "badge": "Produits actifs"
+        },
+        "hero": {
+          "title": "Pipeline des produits",
+          "subtitle": "Suivez et gérez tous les produits demandés au même endroit.",
+          "stats": {
+            "total": "Total produits",
+            "priced": "Produits tarifés",
+            "quantity": "Quantité totale"
+          }
+        },
+        "buttons": {
+          "saveSegment": "Enregistrer le segment",
+          "newProduct": "Nouveau produit"
+        },
+        "metrics": {
+          "typeShare": "Type dominant",
+          "typeShareHint": "{{ value }}% des produits sont dans la catégorie principale.",
+          "priced": "Produits tarifés",
+          "pricedHint": "{{ value }}% des produits ont un prix",
+          "averagePrice": "Prix moyen",
+          "averagePriceHint": "Basé sur les produits avec un prix",
+          "weight": "Poids total",
+          "weightHint": "Somme des poids de tous les produits"
+        },
+        "searchPlaceholder": "Rechercher par nom, code SH ou fournisseur",
+        "filters": {
+          "all": "Tous les types ({{ count }})",
+          "vehicule": "{{ label }} ({{ count }})",
+          "machine": "{{ label }} ({{ count }})",
+          "produit_final": "{{ label }} ({{ count }})",
+          "matiere_premiere": "{{ label }} ({{ count }})",
+          "autre": "{{ label }} ({{ count }})",
+          "label": "Filtres avancés",
+          "unsupported": "Certains filtres n'ont pas pu être appliqués. Ajustez vos critères."
+        },
+        "table": {
+          "title": "Produits",
+          "summary": "{{ current }} sur {{ total }} produits",
+          "sortedBy": "Triés par {{ field }} ({{ direction }})",
+          "loading": "Chargement des produits...",
+          "empty": "Aucun produit ne correspond aux filtres.",
+          "unnamed": "Produit sans nom",
+          "noDescription": "Aucune description",
+          "noHsCode": "Pas de code SH",
+          "pendingSync": "Synchronisation..."
+        },
+        "columns": {
+          "product": "Produit",
+          "type": "Type",
+          "price": "Prix",
+          "quantity": "Quantité",
+          "origin": "Origine",
+          "supplier": "Fournisseur",
+          "actions": "Actions"
+        },
+        "actions": {
+          "view": "Voir",
+          "edit": "Modifier",
+          "delete": "Supprimer"
+        },
+        "pagination": {
+          "page": "Page {{ page }} sur {{ total }}"
+        },
+        "modal": {
+          "title": "Supprimer le produit",
+          "messagePrefix": "Supprimer",
+          "cancel": "Annuler",
+          "confirm": "Supprimer",
+          "unknown": "ce produit"
+        },
+        "sections": {
+          "details": "Détails",
+          "logistics": "Logistique",
+          "attachments": "Pièces jointes"
+        }
+      }
     }
   }
 }

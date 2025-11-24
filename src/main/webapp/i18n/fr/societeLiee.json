@@ -2,7 +2,7 @@
   "crmApp": {
     "societeLiee": {
       "home": {
-        "title": "SocieteLiees",
+        "title": "Companies",
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Societe Liee",
         "createOrEditLabel": "Créer ou éditer un Societe Liee",

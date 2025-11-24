@@ -14,7 +14,7 @@
         "internalUser": "Internal User",
         "company": "Company",
         "contact": "Contact",
-        "societeLiee": "Societe Liee",
+        "societeLiee": "Company",
         "contactAssocie": "Contact Associe",
         "documentClient": "Document Client",
         "demandeClient": "Demande Client",
@@ -53,6 +53,8 @@
       },
       "language": "Language",
       "sousServices": "Sous-Services",
+      "products": "Products",
+      "demandes": "Demands",
       "title": "Ultex"
     },
     "dashboard": {

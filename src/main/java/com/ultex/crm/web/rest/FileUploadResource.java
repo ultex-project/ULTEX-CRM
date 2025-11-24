@@ -4,7 +4,6 @@ import com.ultex.crm.security.AuthoritiesConstants;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.Map;
@@ -32,7 +31,7 @@ public class FileUploadResource {
     private static final long MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of("png", "jpg", "jpeg", "pdf");
     private static final Pattern SAFE_FILENAME_PATTERN = Pattern.compile("[^a-zA-Z0-9._-]");
-    private static final Path UPLOAD_ROOT = Paths.get("src/main/webapp/content/uploads/documents/clients");
+    private static final Path UPLOAD_ROOT = Path.of("src", "main", "webapp", "content", "uploads", "documents", "clients");
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadClientDocument(

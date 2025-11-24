@@ -52,6 +52,9 @@
         }
       },
       "dashboard": {
+        "status": {
+          "badge": "Demandes actives"
+        },
         "actions": {
           "view": "Voir"
         },
@@ -60,9 +63,26 @@
           "deleteError": "Impossible de supprimer cette demande."
         },
         "viewTitle": "Détails de la demande",
+        "filters": {
+          "label": "Filtres avancés",
+          "unsupported": "Certains filtres n'ont pas pu être appliqués. Ajustez vos critères."
+        },
+        "table": {
+          "sortedBy": "Trié par {{ field }} ({{ direction }})"
+        },
+        "pagination": {
+          "page": "Page {{ page }} sur {{ total }}"
+        },
         "products": {
           "title": "Produits demandés",
-          "empty": "Aucun produit n'est enregistré pour cette demande."
+          "empty": "Aucun produit n'est enregistré pour cette demande.",
+          "linkExisting": "Lier un produit existant",
+          "searchPlaceholder": "Rechercher par nom, code SH, fournisseur ou origine",
+          "loading": "Chargement des produits...",
+          "select": "Sélectionner"
+        },
+        "modal": {
+          "unknown": "cette demande"
         },
         "deleteQuestion": "Voulez-vous vraiment supprimer {{ reference }} ?"
       }

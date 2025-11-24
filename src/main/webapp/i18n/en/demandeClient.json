@@ -52,6 +52,9 @@
         }
       },
       "dashboard": {
+        "status": {
+          "badge": "Active demands"
+        },
         "actions": {
           "view": "View"
         },
@@ -60,9 +63,26 @@
           "deleteError": "Unable to delete this demande."
         },
         "viewTitle": "Demande details",
+        "filters": {
+          "label": "Advanced filters",
+          "unsupported": "Some filters could not be applied. Adjust your criteria."
+        },
+        "table": {
+          "sortedBy": "Sorted by {{ field }} ({{ direction }})"
+        },
+        "pagination": {
+          "page": "Page {{ page }} of {{ total }}"
+        },
         "products": {
           "title": "Requested products",
-          "empty": "No products registered for this demande."
+          "empty": "No products registered for this demande.",
+          "linkExisting": "Link an existing product",
+          "searchPlaceholder": "Search by name, HS code, supplier, or origin",
+          "loading": "Loading products...",
+          "select": "Select"
+        },
+        "modal": {
+          "unknown": "this demande"
         },
         "deleteQuestion": "Are you sure you want to delete {{ reference }}?"
       }

@@ -1,19 +1,44 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { Alert, Breadcrumb, BreadcrumbItem, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
-import Select, { MultiValue } from 'react-select';
+import {
+  Alert,
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Spinner,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ListGroup,
+  ListGroupItem,
+  InputGroup,
+  InputGroupText,
+} from 'reactstrap';
+import Select, { MultiValue, SingleValue } from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faSave, faLink, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { reset as resetDemande } from 'app/entities/demande-client/demande-client.reducer';
-import { IDemandeClient } from 'app/shared/model/demande-client.model';
+import { getEntities as getClients } from 'app/entities/client/client.reducer';
 import { getEntities as getDevises } from 'app/entities/devise/devise.reducer';
 import { getEntities as getIncoterms } from 'app/entities/incoterm/incoterm.reducer';
 import { getEntities as getSousServices } from 'app/entities/sous-service/sous-service.reducer';
+import { IDemandeClient } from 'app/shared/model/demande-client.model';
+import { IProduitDemande } from 'app/shared/model/produit-demande.model';
 import { ServicePrincipal } from 'app/shared/model/enumerations/service-principal.model';
 import { TypeDemande } from 'app/shared/model/enumerations/type-demande.model';
 
@@ -26,18 +51,21 @@ interface FormState {
   provenance: string;
   incotermId: string;
   deviseId: string;
+  clientId: string;
   remarqueGenerale: string;
 }
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
 type SousServiceOption = { value: string; label: string };
+type ClientOption = { value: string; label: string };
 
-const ClientDemandCreatePage = () => {
-  const { clientId } = useParams<'clientId'>();
+const DemandeCreatePage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const clients = useAppSelector(state => state.client.entities);
+  const clientsLoading = useAppSelector(state => state.client.loading);
   const devises = useAppSelector(state => state.devise.entities);
   const devisesLoading = useAppSelector(state => state.devise.loading);
   const incoterms = useAppSelector(state => state.incoterm.entities);
@@ -47,6 +75,16 @@ const ClientDemandCreatePage = () => {
 
   const servicePrincipalOptions = Object.keys(ServicePrincipal);
   const typeDemandeOptions = Object.keys(TypeDemande);
+  const clientOptions = useMemo<ClientOption[]>(
+    () =>
+      clients
+        .filter(c => c.id !== undefined && c.id !== null)
+        .map(c => ({
+          value: String(c.id),
+          label: c.nomComplet ?? c.email ?? String(c.id),
+        })),
+    [clients],
+  );
   const sousServiceOptions = useMemo<SousServiceOption[]>(
     () =>
       sousServices
@@ -67,26 +105,44 @@ const ClientDemandCreatePage = () => {
     provenance: '',
     incotermId: '',
     deviseId: '',
+    clientId: '',
     remarqueGenerale: '',
   }));
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const clientIdNumber = useMemo(() => (clientId ? Number(clientId) : null), [clientId]);
+  const [productModalOpen, setProductModalOpen] = useState(false);
+  const [productSearch, setProductSearch] = useState('');
+  const [existingProducts, setExistingProducts] = useState<IProduitDemande[]>([]);
+  const [productsLoading, setProductsLoading] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<IProduitDemande[]>([]);
+  const [productError, setProductError] = useState<string | null>(null);
+  const productSectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     dispatch(resetDemande());
+    dispatch(getClients({}));
     dispatch(getDevises({}));
     dispatch(getIncoterms({}));
     dispatch(getSousServices({}));
   }, [dispatch]);
 
   useEffect(() => {
-    if (!clientIdNumber) {
-      navigate('/dashboard/clients', { replace: true });
+    if (!productModalOpen || existingProducts.length > 0) {
+      return;
     }
-  }, [clientIdNumber, navigate]);
+    setProductsLoading(true);
+    axios
+      .get<IProduitDemande[]>('api/produit-demandes', {
+        params: {
+          size: 1000,
+          cacheBuster: Date.now(),
+        },
+      })
+      .then(response => setExistingProducts(response.data ?? []))
+      .catch(() => setExistingProducts([]))
+      .finally(() => setProductsLoading(false));
+  }, [productModalOpen, existingProducts.length]);
 
   const handleChange =
     (field: keyof FormState) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -105,10 +161,24 @@ const ClientDemandCreatePage = () => {
     () => sousServiceOptions.filter(option => formValues.sousServices.includes(option.value)),
     [sousServiceOptions, formValues.sousServices],
   );
+  const selectedClientOption = useMemo(
+    () => clientOptions.find(option => option.value === formValues.clientId) ?? null,
+    [clientOptions, formValues.clientId],
+  );
 
   const handleSousServicesChange = (selected: MultiValue<SousServiceOption>) => {
     const selectedOptions = selected.map(option => option.value);
     setFormValues(prev => ({ ...prev, sousServices: selectedOptions }));
+  };
+  const handleClientChange = (selected: SingleValue<ClientOption>) => {
+    setFormValues(prev => ({ ...prev, clientId: selected?.value ?? '' }));
+    if (formErrors.clientId) {
+      setFormErrors(prev => {
+        const next = { ...prev };
+        delete next.clientId;
+        return next;
+      });
+    }
   };
 
   const validate = () => {
@@ -128,6 +198,9 @@ const ClientDemandCreatePage = () => {
     if (!formValues.deviseId) {
       nextErrors.deviseId = translate('crmApp.demandeClient.create.errors.devise');
     }
+    if (!formValues.clientId) {
+      nextErrors.clientId = translate('crmApp.client.view.empty');
+    }
 
     setFormErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -135,10 +208,17 @@ const ClientDemandCreatePage = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!clientIdNumber) {
+    if (!validate()) {
       return;
     }
-    if (!validate()) {
+    const produitsPayload = selectedProducts
+      .map(product => product.id)
+      .filter((id): id is number => id !== undefined && id !== null)
+      .map(id => ({ id }));
+
+    if (produitsPayload.length === 0) {
+      setProductError('La demande doit contenir au moins un produit.');
+      productSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
 
@@ -153,17 +233,18 @@ const ClientDemandCreatePage = () => {
       servicePrincipal: formValues.servicePrincipal as keyof typeof ServicePrincipal,
       typeDemande: formValues.typeDemande as keyof typeof TypeDemande,
       sousServices: sousServicesPayload,
+      produits: produitsPayload,
       provenance: formValues.provenance.trim(),
       incoterm: formValues.incotermId ? { id: Number(formValues.incotermId) } : undefined,
       devise: formValues.deviseId ? { id: Number(formValues.deviseId) } : undefined,
       remarqueGenerale: formValues.remarqueGenerale.trim() || undefined,
-      client: { id: clientIdNumber },
+      client: formValues.clientId ? { id: Number(formValues.clientId) } : undefined,
     };
 
     axios
       .post('api/demande-clients', payload)
       .then(() => {
-        navigate(`/dashboard/clients/${clientIdNumber}/view`, {
+        navigate('/dashboard/demandes', {
           replace: true,
           state: { successMessage: translate('crmApp.demandeClient.create.success') },
         });
@@ -179,6 +260,42 @@ const ClientDemandCreatePage = () => {
   const renderError = (field: keyof FormState) =>
     formErrors[field] ? <div className="text-danger small mt-1">{formErrors[field]}</div> : null;
 
+  const filteredProducts = useMemo(() => {
+    const term = productSearch.trim().toLowerCase();
+    if (!term) return existingProducts;
+    return existingProducts.filter(product => {
+      const values = [product.nomProduit, product.hsCode, product.fournisseur, product.origine]
+        .filter(Boolean)
+        .map(v => String(v).toLowerCase());
+      return values.some(value => value.includes(term));
+    });
+  }, [existingProducts, productSearch]);
+
+  const closeProductModal = () => {
+    setProductModalOpen(false);
+    setProductSearch('');
+  };
+
+  const handleSelectProduct = (product: IProduitDemande) => {
+    if (!product.id) {
+      return;
+    }
+    setProductError(null);
+    setSelectedProducts(prev => {
+      if (prev.some(item => item.id === product.id)) {
+        return prev;
+      }
+      return [...prev, product];
+    });
+    closeProductModal();
+  };
+
+  const handleRemoveProduct = (productId?: number | null) => {
+    if (!productId) return;
+    setSelectedProducts(prev => prev.filter(product => product.id !== productId));
+    setProductError(null);
+  };
+
   return (
     <div className="client-demand-create-page py-4">
       <Breadcrumb listClassName="bg-transparent px-0">
@@ -188,17 +305,10 @@ const ClientDemandCreatePage = () => {
           </Link>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <Link to="/dashboard/clients">
+          <Link to="/dashboard/demandes">
             <Translate contentKey="crmApp.client.edit.breadcrumb.clients" />
           </Link>
         </BreadcrumbItem>
-        {clientIdNumber ? (
-          <BreadcrumbItem>
-            <Link to={`/dashboard/clients/${clientIdNumber}/view`}>
-              <Translate contentKey="crmApp.demandeClient.create.breadcrumb.client" />
-            </Link>
-          </BreadcrumbItem>
-        ) : null}
         <BreadcrumbItem active>
           <Translate contentKey="crmApp.demandeClient.create.breadcrumb.current" />
         </BreadcrumbItem>
@@ -216,12 +326,7 @@ const ClientDemandCreatePage = () => {
               </p>
             </div>
             <div className="d-flex gap-2">
-              <Button
-                color="secondary"
-                outline
-                tag={Link}
-                to={clientIdNumber ? `/dashboard/clients/${clientIdNumber}/view` : '/dashboard/clients'}
-              >
+              <Button color="secondary" outline tag={Link} to="/dashboard/demandes">
                 <FontAwesomeIcon icon={faArrowLeft} className="me-2" />
                 <Translate contentKey="crmApp.demandeClient.create.back" />
               </Button>
@@ -380,6 +485,29 @@ const ClientDemandCreatePage = () => {
                   {renderError('deviseId')}
                 </FormGroup>
               </Col>
+
+              <Col md="4">
+                <FormGroup>
+                  <Label for="demande-client">
+                    <Translate contentKey="crmApp.demandeClient.client" /> *
+                  </Label>
+                  <Select
+                    inputId="demande-client"
+                    classNamePrefix="react-select"
+                    isClearable
+                    isSearchable
+                    isDisabled={clientsLoading}
+                    isLoading={clientsLoading}
+                    options={clientOptions}
+                    value={selectedClientOption}
+                    onChange={handleClientChange}
+                    placeholder={translate('crmApp.demandeClient.create.selectPlaceholder')}
+                    noOptionsMessage={() => translate('crmApp.demandeClient.create.sousServicesNoOptions')}
+                  />
+                  {renderError('clientId')}
+                </FormGroup>
+              </Col>
+
               <Col md="12">
                 <FormGroup>
                   <Label for="demande-remarqueGenerale">
@@ -398,8 +526,99 @@ const ClientDemandCreatePage = () => {
           </Form>
         </CardBody>
       </Card>
+      <div ref={productSectionRef}>
+        <Card className="shadow-sm border-0 mt-4">
+          <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.title" />
+            </h5>
+            <Button color="secondary" outline size="sm" onClick={() => setProductModalOpen(true)}>
+              <FontAwesomeIcon icon={faLink} className="me-2" />
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.linkExisting" />
+            </Button>
+          </CardHeader>
+          <CardBody>
+            {productError ? <div className="text-danger mb-2">{productError}</div> : null}
+            {selectedProducts.length === 0 ? (
+              <div className="text-muted">
+                <Translate contentKey="crmApp.demandeClient.dashboard.products.empty" />
+              </div>
+            ) : (
+              <ListGroup flush>
+                {selectedProducts.map(product => (
+                  <ListGroupItem key={product.id ?? product.nomProduit} className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <div className="fw-semibold">{product.nomProduit ?? '--'}</div>
+                      <div className="text-muted small">
+                        {[product.hsCode, product.fournisseur, product.origine].filter(Boolean).join(' • ')}
+                      </div>
+                    </div>
+                    <Button color="danger" size="sm" outline onClick={() => handleRemoveProduct(product.id)}>
+                      <Translate contentKey="entity.action.delete" />
+                    </Button>
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      <Modal isOpen={productModalOpen} toggle={closeProductModal} size="lg" centered>
+        <ModalHeader toggle={closeProductModal}>
+          <Translate contentKey="crmApp.demandeClient.dashboard.products.linkExisting" />
+        </ModalHeader>
+        <ModalBody>
+          <InputGroup className="mb-3">
+            <InputGroupText>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroupText>
+            <Input
+              placeholder={translate('crmApp.demandeClient.dashboard.products.searchPlaceholder')}
+              value={productSearch}
+              onChange={event => setProductSearch(event.target.value)}
+            />
+          </InputGroup>
+          {productsLoading ? (
+            <div className="text-center py-4">
+              <Spinner size="sm" color="primary" className="me-2" />
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.loading" />
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-muted">
+              <Translate contentKey="crmApp.demandeClient.dashboard.products.empty" />
+            </div>
+          ) : (
+            <ListGroup flush>
+              {filteredProducts.map(product => (
+                <ListGroupItem key={product.id ?? product.nomProduit} className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div className="fw-semibold">{product.nomProduit ?? '--'}</div>
+                    <div className="text-muted small">
+                      {[product.hsCode, product.fournisseur, product.origine].filter(Boolean).join(' • ')}
+                    </div>
+                  </div>
+                  <Button
+                    color="primary"
+                    size="sm"
+                    disabled={selectedProducts.some(item => item.id === product.id)}
+                    onClick={() => handleSelectProduct(product)}
+                  >
+                    <Translate contentKey="crmApp.demandeClient.dashboard.products.select" />
+                  </Button>
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={closeProductModal}>
+            <Translate contentKey="entity.action.close" />
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };
 
-export default ClientDemandCreatePage;
+export default DemandeCreatePage;
