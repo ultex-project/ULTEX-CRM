@@ -1,7 +1,6 @@
 package com.ultex.crm.service.dto;
 
 import com.ultex.crm.domain.enumeration.TypeProduit;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,7 +19,6 @@ public class ProduitDemandeDTO implements Serializable {
     @NotNull
     private String nomProduit;
 
-    @Lob
     private String description;
 
     private Double quantite;

@@ -20,7 +20,7 @@
             <column name="nom_produit" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="${clobType}">
+            <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="quantite" type="double">
@@ -97,7 +97,7 @@
             <column name="id" type="numeric"/>
             <column name="type_produit" type="string"/>
             <column name="nom_produit" type="string"/>
-            <column name="description" type="clob"/>
+            <column name="description" type="string"/>
             <column name="quantite" type="numeric"/>
             <column name="unite" type="string"/>
             <column name="prix" type="numeric"/>

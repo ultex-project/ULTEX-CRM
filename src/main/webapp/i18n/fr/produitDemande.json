@@ -39,15 +39,21 @@
       "piecesJointesUrl": "Pieces Jointes Url",
       "demande": "Demande",
       "dashboard": {
+        "type": {
+          "unassigned": "Non attribué"
+        },
+        "direction": {
+          "asc": "croissant",
+          "desc": "décroissant"
+        },
         "status": {
-          "badge": "Produits",
-          "unassigned": "Non assigné"
+          "badge": "Produits actifs"
         },
         "hero": {
-          "title": "Espace produit",
-          "subtitle": "Suivez les produits demandés, les prix et la logistique pour sécuriser les achats.",
+          "title": "Pipeline des produits",
+          "subtitle": "Suivez et gérez tous les produits demandés au même endroit.",
           "stats": {
-            "total": "Produits suivis",
+            "total": "Total produits",
             "priced": "Produits tarifés",
             "quantity": "Quantité totale"
           }
@@ -57,36 +63,36 @@
           "newProduct": "Nouveau produit"
         },
         "metrics": {
-          "typeShare": "Part du type dominant",
-          "typeShareHint": "{{value}}% des produits sont du type majoritaire",
+          "typeShare": "Type dominant",
+          "typeShareHint": "{{ value }}% des produits sont dans la catégorie principale.",
           "priced": "Produits tarifés",
-          "pricedHint": "{{value}}% ont un prix",
+          "pricedHint": "{{ value }}% des produits ont un prix",
           "averagePrice": "Prix moyen",
-          "averagePriceHint": "Sur les produits tarifés",
+          "averagePriceHint": "Basé sur les produits avec un prix",
           "weight": "Poids total",
           "weightHint": "Somme des poids de tous les produits"
         },
-        "searchPlaceholder": "Rechercher nom produit, HS code, fournisseur ou origine...",
+        "searchPlaceholder": "Rechercher par nom, code SH ou fournisseur",
         "filters": {
-          "all": "Tous ({{count}})",
-          "vehicule": "{{label}} ({{count}})",
-          "machine": "{{label}} ({{count}})",
-          "produit_final": "{{label}} ({{count}})",
-          "matiere_premiere": "{{label}} ({{count}})",
-          "autre": "{{label}} ({{count}})",
+          "all": "Tous les types ({{ count }})",
+          "vehicule": "{{ label }} ({{ count }})",
+          "machine": "{{ label }} ({{ count }})",
+          "produit_final": "{{ label }} ({{ count }})",
+          "matiere_premiere": "{{ label }} ({{ count }})",
+          "autre": "{{ label }} ({{ count }})",
           "label": "Filtres avancés",
-          "unsupported": "Attention : les conditions avec OU ne sont pas pleinement supportées. Les filtres sont appliqués en ET."
+          "unsupported": "Certains filtres n'ont pas pu être appliqués. Ajustez vos critères."
         },
         "table": {
-          "title": "Pipeline produit",
-          "summary": "{{current}} sur {{total}} produits filtrés",
-          "sortedBy": "Trié par {{field}} ({{direction}})",
+          "title": "Produits",
+          "summary": "{{ current }} sur {{ total }} produits",
+          "sortedBy": "Triés par {{ field }} ({{ direction }})",
           "loading": "Chargement des produits...",
           "empty": "Aucun produit ne correspond aux filtres.",
           "unnamed": "Produit sans nom",
-          "noDescription": "Pas de description",
-          "noHsCode": "Pas de HS code",
-          "pendingSync": "En attente de synchro"
+          "noDescription": "Aucune description",
+          "noHsCode": "Pas de code SH",
+          "pendingSync": "Synchronisation..."
         },
         "columns": {
           "product": "Produit",
@@ -97,27 +103,20 @@
           "supplier": "Fournisseur",
           "actions": "Actions"
         },
-        "direction": {
-          "asc": "asc",
-          "desc": "desc"
-        },
         "actions": {
           "view": "Voir",
           "edit": "Modifier",
           "delete": "Supprimer"
         },
         "pagination": {
-          "page": "Page {{page}} sur {{total}}"
+          "page": "Page {{ page }} sur {{ total }}"
         },
         "modal": {
-          "title": "Confirmer la suppression",
-          "messagePrefix": "Voulez-vous supprimer le produit",
+          "title": "Supprimer le produit",
+          "messagePrefix": "Supprimer",
           "cancel": "Annuler",
           "confirm": "Supprimer",
-          "unknown": "cet enregistrement"
-        },
-        "type": {
-          "unassigned": "Non assigné"
+          "unknown": "ce produit"
         },
         "sections": {
           "details": "Détails",

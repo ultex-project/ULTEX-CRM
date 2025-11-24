@@ -39,17 +39,23 @@
       "piecesJointesUrl": "Pieces Jointes Url",
       "demande": "Demande",
       "dashboard": {
-        "status": {
-          "badge": "Products",
+        "type": {
           "unassigned": "Unassigned"
         },
+        "direction": {
+          "asc": "ascending",
+          "desc": "descending"
+        },
+        "status": {
+          "badge": "Active products"
+        },
         "hero": {
-          "title": "Product workspace",
-          "subtitle": "Track requested products, pricing, and logistics to keep sourcing on pace.",
+          "title": "Product pipeline",
+          "subtitle": "Track and manage every requested product in one place.",
           "stats": {
-            "total": "Products tracked",
-            "priced": "Priced products",
-            "quantity": "Total units"
+            "total": "Total products",
+            "priced": "Priced items",
+            "quantity": "Total quantity"
           }
         },
         "buttons": {
@@ -57,36 +63,36 @@
           "newProduct": "New product"
         },
         "metrics": {
-          "typeShare": "Top type share",
-          "typeShareHint": "{{value}}% of products are of the top type",
+          "typeShare": "Top product type",
+          "typeShareHint": "{{ value }}% of products are in the leading category.",
           "priced": "Priced products",
-          "pricedHint": "{{value}}% have a price",
+          "pricedHint": "{{ value }}% of products have pricing",
           "averagePrice": "Average price",
-          "averagePriceHint": "Across priced products",
+          "averagePriceHint": "Based on items with a price",
           "weight": "Total weight",
-          "weightHint": "Sum of weight for all products"
+          "weightHint": "Sum of weights for all products"
         },
-        "searchPlaceholder": "Search product name, HS code, supplier, or origin...",
+        "searchPlaceholder": "Search products by name, HS code, or supplier",
         "filters": {
-          "all": "All ({{count}})",
-          "vehicule": "{{label}} ({{count}})",
-          "machine": "{{label}} ({{count}})",
-          "produit_final": "{{label}} ({{count}})",
-          "matiere_premiere": "{{label}} ({{count}})",
-          "autre": "{{label}} ({{count}})",
+          "all": "All types ({{ count }})",
+          "vehicule": "{{ label }} ({{ count }})",
+          "machine": "{{ label }} ({{ count }})",
+          "produit_final": "{{ label }} ({{ count }})",
+          "matiere_premiere": "{{ label }} ({{ count }})",
+          "autre": "{{ label }} ({{ count }})",
           "label": "Advanced filters",
-          "unsupported": "Heads up: mixed OR conditions are not fully supported by the current API. Filters are applied as AND clauses."
+          "unsupported": "Some filters could not be applied. Adjust your criteria."
         },
         "table": {
-          "title": "Product pipeline",
-          "summary": "Showing {{current}} of {{total}} filtered products",
-          "sortedBy": "Sorted by {{field}} ({{direction}})",
+          "title": "Products",
+          "summary": "{{ current }} of {{ total }} products",
+          "sortedBy": "Sorted by {{ field }} ({{ direction }})",
           "loading": "Loading products...",
           "empty": "No products match the current filters.",
           "unnamed": "Unnamed product",
           "noDescription": "No description",
           "noHsCode": "No HS code",
-          "pendingSync": "Pending sync"
+          "pendingSync": "Syncing..."
         },
         "columns": {
           "product": "Product",
@@ -97,27 +103,20 @@
           "supplier": "Supplier",
           "actions": "Actions"
         },
-        "direction": {
-          "asc": "asc",
-          "desc": "desc"
-        },
         "actions": {
           "view": "View",
           "edit": "Edit",
           "delete": "Delete"
         },
         "pagination": {
-          "page": "Page {{page}} of {{total}}"
+          "page": "Page {{ page }} of {{ total }}"
         },
         "modal": {
-          "title": "Confirm delete operation",
-          "messagePrefix": "Are you sure you want to delete the product",
+          "title": "Delete product",
+          "messagePrefix": "Delete",
           "cancel": "Cancel",
           "confirm": "Delete",
-          "unknown": "this record"
-        },
-        "type": {
-          "unassigned": "Unassigned"
+          "unknown": "this product"
         },
         "sections": {
           "details": "Details",

@@ -143,7 +143,7 @@ export const ProduitDemandeUpdate = () => {
                 id="produit-demande-description"
                 name="description"
                 data-cy="description"
-                type="textarea"
+                type="text"
               />
               <ValidatedField
                 label={translate('crmApp.produitDemande.quantite')}

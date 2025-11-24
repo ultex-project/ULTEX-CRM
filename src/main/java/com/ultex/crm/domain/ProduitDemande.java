@@ -34,7 +34,6 @@ public class ProduitDemande implements Serializable {
     @Column(name = "nom_produit", nullable = false)
     private String nomProduit;
 
-    @Lob
     @Column(name = "description")
     private String description;
 
@@ -87,7 +86,7 @@ public class ProduitDemande implements Serializable {
     private String piecesJointesUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "client", "devise", "incoterm", "sousServices", "produits" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "client", "devise", "incoterm", "sousServices" }, allowSetters = true)
     private DemandeClient demande;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
