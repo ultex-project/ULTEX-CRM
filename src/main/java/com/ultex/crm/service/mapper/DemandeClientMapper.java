@@ -23,13 +23,10 @@ public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, Dema
     @Mapping(target = "devise", source = "devise", qualifiedByName = "deviseId")
     @Mapping(target = "incoterm", source = "incoterm", qualifiedByName = "incotermId")
     @Mapping(target = "sousServices", source = "sousServices", qualifiedByName = "sousServiceIdSet")
-    @Mapping(target = "produits", source = "produits")
     DemandeClientDTO toDto(DemandeClient s);
 
     @Mapping(target = "removeSousServices", ignore = true)
-    @Mapping(target = "removeProduits", ignore = true)
     @Mapping(target = "sousServices", source = "sousServices", qualifiedByName = "sousServiceIdSetToEntity")
-    @Mapping(target = "produits", source = "produits")
     DemandeClient toEntity(DemandeClientDTO demandeClientDTO);
 
     @Named("clientSummary")

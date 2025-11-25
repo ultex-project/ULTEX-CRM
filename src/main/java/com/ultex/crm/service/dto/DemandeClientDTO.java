@@ -41,8 +41,6 @@ public class DemandeClientDTO implements Serializable {
 
     private Set<SousServiceDTO> sousServices = new HashSet<>();
 
-    private Set<ProduitDemandeDTO> produits = new HashSet<>();
-
     public Long getId() {
         return id;
     }
@@ -131,14 +129,6 @@ public class DemandeClientDTO implements Serializable {
         this.sousServices = sousServices;
     }
 
-    public Set<ProduitDemandeDTO> getProduits() {
-        return produits;
-    }
-
-    public void setProduits(Set<ProduitDemandeDTO> produits) {
-        this.produits = produits;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -175,7 +165,6 @@ public class DemandeClientDTO implements Serializable {
             ", devise=" + getDevise() +
             ", incoterm=" + getIncoterm() +
             ", sousServices=" + getSousServices() +
-            ", produits=" + getProduits() +
             "}";
     }
 }
