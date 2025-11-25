@@ -69,6 +69,7 @@ public class CacheConfiguration {
             createCache(cm, com.ultex.crm.domain.ContactAssocie.class.getName());
             createCache(cm, com.ultex.crm.domain.DocumentClient.class.getName());
             createCache(cm, com.ultex.crm.domain.DemandeClient.class.getName());
+            createCache(cm, com.ultex.crm.domain.DemandeClient.class.getName() + ".produits");
             createCache(cm, com.ultex.crm.domain.DemandeClient.class.getName() + ".sousServices");
             createCache(cm, com.ultex.crm.domain.ProduitDemande.class.getName());
             createCache(cm, com.ultex.crm.domain.HistoriqueCRM.class.getName());

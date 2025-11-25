@@ -53,6 +53,11 @@ public class DemandeClient implements Serializable {
     @Column(name = "remarque_generale")
     private String remarqueGenerale;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "demande")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
+    private Set<ProduitDemande> produits = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
@@ -167,6 +172,37 @@ public class DemandeClient implements Serializable {
 
     public void setRemarqueGenerale(String remarqueGenerale) {
         this.remarqueGenerale = remarqueGenerale;
+    }
+
+    public Set<ProduitDemande> getProduits() {
+        return this.produits;
+    }
+
+    public void setProduits(Set<ProduitDemande> produitDemandes) {
+        if (this.produits != null) {
+            this.produits.forEach(i -> i.setDemande(null));
+        }
+        if (produitDemandes != null) {
+            produitDemandes.forEach(i -> i.setDemande(this));
+        }
+        this.produits = produitDemandes;
+    }
+
+    public DemandeClient produits(Set<ProduitDemande> produitDemandes) {
+        this.setProduits(produitDemandes);
+        return this;
+    }
+
+    public DemandeClient addProduits(ProduitDemande produitDemande) {
+        this.produits.add(produitDemande);
+        produitDemande.setDemande(this);
+        return this;
+    }
+
+    public DemandeClient removeProduits(ProduitDemande produitDemande) {
+        this.produits.remove(produitDemande);
+        produitDemande.setDemande(null);
+        return this;
     }
 
     public Client getClient() {

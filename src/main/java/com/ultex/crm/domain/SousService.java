@@ -36,7 +36,7 @@ public class SousService implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "sousServices")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "client", "devise", "incoterm", "sousServices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "produits", "client", "devise", "incoterm", "sousServices" }, allowSetters = true)
     private Set<DemandeClient> demandes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

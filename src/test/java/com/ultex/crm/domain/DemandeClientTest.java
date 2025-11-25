@@ -4,6 +4,7 @@ import static com.ultex.crm.domain.ClientTestSamples.*;
 import static com.ultex.crm.domain.DemandeClientTestSamples.*;
 import static com.ultex.crm.domain.DeviseTestSamples.*;
 import static com.ultex.crm.domain.IncotermTestSamples.*;
+import static com.ultex.crm.domain.ProduitDemandeTestSamples.*;
 import static com.ultex.crm.domain.SousServiceTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,6 +27,28 @@ class DemandeClientTest {
 
         demandeClient2 = getDemandeClientSample2();
         assertThat(demandeClient1).isNotEqualTo(demandeClient2);
+    }
+
+    @Test
+    void produitsTest() {
+        DemandeClient demandeClient = getDemandeClientRandomSampleGenerator();
+        ProduitDemande produitDemandeBack = getProduitDemandeRandomSampleGenerator();
+
+        demandeClient.addProduits(produitDemandeBack);
+        assertThat(demandeClient.getProduits()).containsOnly(produitDemandeBack);
+        assertThat(produitDemandeBack.getDemande()).isEqualTo(demandeClient);
+
+        demandeClient.removeProduits(produitDemandeBack);
+        assertThat(demandeClient.getProduits()).doesNotContain(produitDemandeBack);
+        assertThat(produitDemandeBack.getDemande()).isNull();
+
+        demandeClient.produits(new HashSet<>(Set.of(produitDemandeBack)));
+        assertThat(demandeClient.getProduits()).containsOnly(produitDemandeBack);
+        assertThat(produitDemandeBack.getDemande()).isEqualTo(demandeClient);
+
+        demandeClient.setProduits(new HashSet<>());
+        assertThat(demandeClient.getProduits()).doesNotContain(produitDemandeBack);
+        assertThat(produitDemandeBack.getDemande()).isNull();
     }
 
     @Test

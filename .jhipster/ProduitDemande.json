@@ -90,8 +90,9 @@
   "relationships": [
     {
       "otherEntityName": "demandeClient",
+      "otherEntityRelationshipName": "produits",
       "relationshipName": "demande",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }
   ],
