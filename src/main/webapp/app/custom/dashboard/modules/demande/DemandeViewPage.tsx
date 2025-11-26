@@ -113,16 +113,11 @@ const DemandeViewPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const [demandeResponse, productsResponse] = await Promise.all([
-          axios.get<IDemandeClient>(`api/demande-clients/${demandeId}`),
-          axios.get<IProduitDemande[]>('api/produit-demandes', {
-            params: { 'demandeId.equals': demandeId, size: 1000, cacheBuster: Date.now() },
-          }),
-        ]);
+        const demandeResponse = await axios.get<IDemandeClient>(`api/demande-clients/${demandeId}`);
 
         const demandeValue = demandeResponse.data ?? null;
         setDemande(demandeValue);
-        setProducts(productsResponse.data ?? []);
+        setProducts(demandeValue?.produits ?? []);
 
         if (!demandeValue) {
           setError(translate('crmApp.demandeClient.home.notFound'));
@@ -304,7 +299,7 @@ const DemandeViewPage = () => {
           </Card>
 
           <Card className="shadow-sm border-0">
-            <CardHeader className="bg-white border-bottom">
+            <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center">
               <h5 className="mb-0">
                 <Translate contentKey="crmApp.demandeClient.dashboard.products.title" />
               </h5>
@@ -320,14 +315,38 @@ const DemandeViewPage = () => {
                     <ListGroupItem key={product.id ?? product.nomProduit} className="border-0 px-0 py-3">
                       <div className="d-flex flex-column flex-md-row justify-content-between gap-2">
                         <div>
-                          <div className="fw-semibold">{renderValue(product.nomProduit)}</div>
+                          {product.id ? (
+                            <Link to={`/dashboard/products/${product.id}`} className="fw-semibold text-decoration-none">
+                              {renderValue(product.nomProduit)}
+                            </Link>
+                          ) : (
+                            <div className="fw-semibold">{renderValue(product.nomProduit)}</div>
+                          )}
                           {product.description ? <div className="text-muted small mt-1">{product.description}</div> : null}
+                          <div className="text-muted small mt-1">
+                            {[
+                              product.typeProduit ? translate(`crmApp.TypeProduit.${product.typeProduit}`) : null,
+                              product.quantite != null && product.unite ? `${product.quantite} ${product.unite}` : null,
+                              product.prix != null ? `${product.prix}` : null,
+                              product.hsCode,
+                              product.origine,
+                              product.fournisseur,
+                            ]
+                              .filter(Boolean)
+                              .join(' • ')}
+                          </div>
                         </div>
                         <div className="text-muted small text-md-end">
-                          <div>
-                            {renderValue(product.quantite)} {renderValue(product.unite)}
-                          </div>
-                          <div>{product.typeProduit ? translate(`crmApp.TypeProduit.${product.typeProduit}`) : '--'}</div>
+                          {product.poidsKg != null ? (
+                            <div>
+                              {translate('crmApp.produitDemande.poidsKg')}: {product.poidsKg}
+                            </div>
+                          ) : null}
+                          {product.volumeTotalCbm != null ? (
+                            <div>
+                              {translate('crmApp.produitDemande.volumeTotalCbm')}: {product.volumeTotalCbm}
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </ListGroupItem>

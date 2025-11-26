@@ -48,6 +48,7 @@ interface FormState {
   servicePrincipal: string;
   typeDemande: string;
   sousServices: string[];
+  produits: { id: number }[];
   provenance: string;
   incotermId: string;
   deviseId: string;
@@ -102,6 +103,7 @@ const DemandeCreatePage = () => {
     servicePrincipal: servicePrincipalOptions[0] ?? '',
     typeDemande: typeDemandeOptions[0] ?? '',
     sousServices: [],
+    produits: [],
     provenance: '',
     incotermId: '',
     deviseId: '',
@@ -211,10 +213,7 @@ const DemandeCreatePage = () => {
     if (!validate()) {
       return;
     }
-    const produitsPayload = selectedProducts
-      .map(product => product.id)
-      .filter((id): id is number => id !== undefined && id !== null)
-      .map(id => ({ id }));
+    const produitsPayload = formValues.produits;
 
     if (produitsPayload.length === 0) {
       setProductError('La demande doit contenir au moins un produit.');
@@ -287,12 +286,16 @@ const DemandeCreatePage = () => {
       }
       return [...prev, product];
     });
+    setFormValues(prev =>
+      prev.produits.some(p => p.id === product.id) ? prev : { ...prev, produits: [...prev.produits, { id: product.id }] },
+    );
     closeProductModal();
   };
 
   const handleRemoveProduct = (productId?: number | null) => {
     if (!productId) return;
     setSelectedProducts(prev => prev.filter(product => product.id !== productId));
+    setFormValues(prev => ({ ...prev, produits: prev.produits.filter(p => p.id !== productId) }));
     setProductError(null);
   };
 
@@ -550,7 +553,15 @@ const DemandeCreatePage = () => {
                     <div>
                       <div className="fw-semibold">{product.nomProduit ?? '--'}</div>
                       <div className="text-muted small">
-                        {[product.hsCode, product.fournisseur, product.origine].filter(Boolean).join(' • ')}
+                        {[
+                          product.typeProduit ? translate(`crmApp.TypeProduit.${product.typeProduit}`) : null,
+                          product.prix != null ? `${product.prix}` : null,
+                          product.hsCode,
+                          product.fournisseur,
+                          product.origine,
+                        ]
+                          .filter(Boolean)
+                          .join(' • ')}
                       </div>
                     </div>
                     <Button color="danger" size="sm" outline onClick={() => handleRemoveProduct(product.id)}>

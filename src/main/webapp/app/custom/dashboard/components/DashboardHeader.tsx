@@ -13,14 +13,14 @@ const DashboardHeader = () => {
   return (
     <Navbar color="light" light expand="md" className="px-3 shadow-sm border-bottom">
       {/* CENTER: Search */}
-      <Form className="d-none d-md-flex mx-4 flex-grow-1" style={{ maxWidth: '400px' }}>
+      {/* <Form className="d-none d-md-flex mx-4 flex-grow-1" style={{ maxWidth: '400px' }}>
         <InputGroup>
           <Input placeholder="Search clients, prospects..." />
           <Button color="secondary" type="submit">
             <FontAwesomeIcon icon={faSearch} />
           </Button>
         </InputGroup>
-      </Form>
+      </Form> */}
 
       {/* RIGHT: Icons */}
       <Nav className="ms-auto d-flex align-items-center" navbar>

@@ -265,9 +265,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
       {/* Footer */}
       <div className="sidebar-footer">
         <div className="user-info">
-          <div className="avatar">
-            <img src="content/images/adminIcon.jpg" alt="User" />
-          </div>
+          {!isCollapsed && (
+            <div className="avatar">
+              <img src="content/images/adminIcon.jpg" alt="User" />
+            </div>
+          )}
           {!isCollapsed && (
             <div className="user-details">
               <span className="username">{account?.login || 'Admin'}</span>
