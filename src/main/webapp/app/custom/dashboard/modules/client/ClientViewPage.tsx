@@ -24,6 +24,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBuilding, faEdit, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 import { toast } from 'react-toastify';
+import Select, { MultiValue } from 'react-select';
 
 import { IClient } from 'app/shared/model/client.model';
 import { ClientStatus } from 'app/shared/model/enumerations/client-status.model';
@@ -173,6 +174,7 @@ const useClientDashboardData = (clientId: number | null) => {
   const [data, setData] = useState<ClientDashboardData>(() => createEmptyClientData());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshIndex, setRefreshIndex] = useState(0);
 
   useEffect(() => {
     if (!clientId) {
@@ -246,9 +248,11 @@ const useClientDashboardData = (clientId: number | null) => {
     return () => {
       mounted = false;
     };
-  }, [clientId]);
+  }, [clientId, refreshIndex]);
 
-  return { ...data, loading, error };
+  const refresh = () => setRefreshIndex(prev => prev + 1);
+
+  return { ...data, loading, error, refresh };
 };
 
 const useSuccessMessage = (location: ReturnType<typeof useLocation>) => {
@@ -870,11 +874,14 @@ const HistoryCard: React.FC<{ history: IHistoriqueCRM[] }> = ({ history }) => (
   </Card>
 );
 
-const SocietesLieesCard: React.FC<{ societes: ISocieteLiee[]; loading: boolean; clientId: number | null }> = ({
-  societes,
-  loading,
-  clientId,
-}) => {
+type SocietesLieesCardProps = {
+  societes: ISocieteLiee[];
+  loading: boolean;
+  clientId: number | null;
+  onLinkExisting: () => void;
+};
+
+const SocietesLieesCard: React.FC<SocietesLieesCardProps> = ({ societes, loading, clientId, onLinkExisting }) => {
   const hasItems = societes.length > 0;
   const createHref = clientId ? `/dashboard/societe-liee/new?clientId=${clientId}` : '/dashboard/societe-liee/new';
 
@@ -889,10 +896,16 @@ const SocietesLieesCard: React.FC<{ societes: ISocieteLiee[]; loading: boolean; 
             <Translate contentKey="crmApp.societeLiee.dashboard.subtitle" />
           </small>
         </div>
-        <Button color="primary" size="sm" tag={Link} to={createHref} className="shadow-sm">
-          <FontAwesomeIcon icon={faPlus} className="me-2" />
-          <Translate contentKey="crmApp.societeLiee.dashboard.add" />
-        </Button>
+        <div className="d-flex flex-wrap gap-2">
+          <Button color="secondary" size="sm" outline onClick={onLinkExisting} disabled={!clientId}>
+            <FontAwesomeIcon icon={faPlus} className="me-2" />
+            Lier une société existante
+          </Button>
+          <Button color="primary" size="sm" tag={Link} to={createHref} className="shadow-sm">
+            <FontAwesomeIcon icon={faPlus} className="me-2" />
+            <Translate contentKey="crmApp.societeLiee.dashboard.add" />
+          </Button>
+        </div>
       </CardHeader>
       <CardBody className="p-0">
         {loading ? (
@@ -956,12 +969,113 @@ const ClientViewPage = () => {
   const location = useLocation();
   const clientId = id ? Number(id) : null;
 
-  const { client, contacts, kyc, requests, requestProducts, opportunities, history, societesLiees, loading, error } =
+  const { client, contacts, kyc, requests, requestProducts, opportunities, history, societesLiees, loading, error, refresh } =
     useClientDashboardData(clientId);
 
   const successMessage = useSuccessMessage(location);
 
   const produitsParDemande = useMemo(() => buildProductsByRequest(requestProducts), [requestProducts]);
+
+  type SocieteOption = { value: number; label: string; data: ISocieteLiee };
+
+  const [linkModalOpen, setLinkModalOpen] = useState(false);
+  const [linkOptions, setLinkOptions] = useState<SocieteOption[]>([]);
+  const [linkSelection, setLinkSelection] = useState<SocieteOption[]>([]);
+  const [linkLoading, setLinkLoading] = useState(false);
+  const [linkSaving, setLinkSaving] = useState(false);
+  const [linkError, setLinkError] = useState<string | null>(null);
+
+  const mapToOption = (societe: ISocieteLiee): SocieteOption | null => {
+    if (!societe.id) {
+      return null;
+    }
+    const parts = [societe.raisonSociale ?? translate('crmApp.societeLiee.dashboard.table.unnamed')];
+    if (societe.ice) parts.push(`ICE ${societe.ice}`);
+    if (societe.rc) parts.push(`RC ${societe.rc}`);
+    if (societe.secteurActivite) parts.push(societe.secteurActivite);
+    return {
+      value: societe.id,
+      label: parts.join(' • '),
+      data: societe,
+    };
+  };
+
+  const hydrateSelection = (options: SocieteOption[]) => {
+    const ids = new Set(societesLiees.map(item => item.id).filter((v): v is number => v !== undefined && v !== null));
+    const selected = options.filter(option => ids.has(option.value));
+    setLinkSelection(selected);
+  };
+
+  const fetchSocieteOptions = async () => {
+    setLinkLoading(true);
+    setLinkError(null);
+    try {
+      const response = await axios.get<ISocieteLiee[]>('/api/societe-liees', {
+        params: {
+          size: 1000,
+          sort: 'raisonSociale,asc',
+          cacheBuster: Date.now(),
+        },
+      });
+      const options = (response.data ?? []).map(mapToOption).filter((item): item is SocieteOption => item !== null);
+      setLinkOptions(options);
+      hydrateSelection(options);
+    } catch (err) {
+      setLinkError(translate('crmApp.client.form.genericError'));
+    } finally {
+      setLinkLoading(false);
+    }
+  };
+
+  const openLinkModal = () => {
+    if (!clientId) {
+      return;
+    }
+    setLinkModalOpen(true);
+    fetchSocieteOptions();
+  };
+
+  const closeLinkModal = () => {
+    if (linkSaving) {
+      return;
+    }
+    setLinkModalOpen(false);
+    setLinkError(null);
+  };
+
+  const handleLinkSave = async () => {
+    if (!client?.id) {
+      return;
+    }
+    setLinkSaving(true);
+    setLinkError(null);
+
+    const selectedIds = linkSelection.map(option => option.value);
+    const currentIds = societesLiees.map(item => item.id).filter((v): v is number => v !== undefined && v !== null);
+
+    const toAttach = selectedIds.filter(selectedId => !currentIds.includes(selectedId));
+    const toDetach = currentIds.filter(existingId => !selectedIds.includes(existingId));
+
+    if (toAttach.length === 0 && toDetach.length === 0) {
+      setLinkSaving(false);
+      setLinkModalOpen(false);
+      return;
+    }
+
+    try {
+      await Promise.all([
+        ...toAttach.map(societeId => axios.patch(`/api/societe-liees/${societeId}`, { id: societeId, client: { id: client.id } })),
+        ...toDetach.map(societeId => axios.patch(`/api/societe-liees/${societeId}`, { id: societeId, client: null })),
+      ]);
+      toast.success(translate('crmApp.societeLiee.dashboard.messages.updateSuccess'));
+      refresh();
+      setLinkModalOpen(false);
+    } catch (err) {
+      setLinkError(translate('crmApp.client.form.genericError'));
+    } finally {
+      setLinkSaving(false);
+    }
+  };
 
   return (
     <div className="client-view-page py-4">
@@ -1003,7 +1117,7 @@ const ClientViewPage = () => {
           <GeneralInfoCard client={client} />
           {client?.id ? (
             <>
-              <SocietesLieesCard societes={societesLiees} loading={loading} clientId={client.id} />
+              <SocietesLieesCard societes={societesLiees} loading={loading} clientId={client.id} onLinkExisting={openLinkModal} />
               <ClientContactsPanel clientId={client.id} />
               <ClientDocumentsPanel clientId={client.id} />
             </>
@@ -1014,6 +1128,42 @@ const ClientViewPage = () => {
           <HistoryCard history={history} />
         </>
       )}
+
+      <Modal isOpen={linkModalOpen} toggle={closeLinkModal} centered size="lg">
+        <ModalHeader toggle={closeLinkModal}>Lier une société existante</ModalHeader>
+        <ModalBody>
+          <p className="text-muted">Sélectionnez une ou plusieurs sociétés existantes pour les associer à ce client.</p>
+          {linkError ? (
+            <Alert color="danger" className="mb-3">
+              {linkError}
+            </Alert>
+          ) : null}
+          <Select
+            isMulti
+            classNamePrefix="react-select"
+            options={linkOptions}
+            value={linkSelection}
+            onChange={(value: MultiValue<{ value: number; label: string; data: ISocieteLiee }>) =>
+              setLinkSelection(value as SocieteOption[])
+            }
+            isLoading={linkLoading}
+            placeholder="Rechercher par raison sociale, ICE, RC..."
+            noOptionsMessage={() => (linkLoading ? translate('entity.action.loading') : 'Aucune société trouvée')}
+            styles={{
+              menu: provided => ({ ...provided, zIndex: 1060 }),
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={closeLinkModal} disabled={linkSaving}>
+            <Translate contentKey="entity.action.cancel" />
+          </Button>
+          <Button color="primary" onClick={handleLinkSave} disabled={linkSaving || linkLoading}>
+            {linkSaving ? <Spinner size="sm" className="me-2" /> : null}
+            Enregistrer le lien
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };
