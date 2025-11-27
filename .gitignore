@@ -7,7 +7,7 @@ node_modules/
 npm-debug.log.*
 /.awcache/*
 /.cache-loader/*
-
+/src/main/webapp/content/uploads
 ######################
 # SASS
 ######################

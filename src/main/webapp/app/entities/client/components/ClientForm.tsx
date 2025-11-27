@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
 import { getEntities as getInternalUsers } from 'app/entities/internal-user/internal-user.reducer';
@@ -48,6 +49,8 @@ type ClientFormState = {
 type FormErrors = Partial<Record<keyof ClientFormState, string>>;
 
 const CLIENT_FORM_ID = 'client-form';
+const CODE_MIN_NUMBER = 1000;
+const LETTER_OPTIONS = Array.from({ length: 26 }, (_, index) => String.fromCharCode(65 + index));
 
 const mapInitialDataToState = (data?: IClient): ClientFormState => ({
   code: data?.code ?? '',
@@ -106,7 +109,23 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [generated, setGenerated] = useState(false);
+  const [codePrefix, setCodePrefix] = useState<string>(() => {
+    const match = initialData?.code?.match(/^([A-Z])(\d+)$/i);
+    return match?.[1]?.toUpperCase() ?? LETTER_OPTIONS[0];
+  });
+  const [codeNumber, setCodeNumber] = useState<string>(() => {
+    const match = initialData?.code?.match(/^([A-Z])(\d+)$/i);
+    return match?.[2] ?? '';
+  });
+  const [initialCodePrefix, setInitialCodePrefix] = useState<string>(() => {
+    const match = initialData?.code?.match(/^([A-Z])(\d+)$/i);
+    return match?.[1]?.toUpperCase() ?? LETTER_OPTIONS[0];
+  });
+  const [initialCodeNumber, setInitialCodeNumber] = useState<string>(() => {
+    const match = initialData?.code?.match(/^([A-Z])(\d+)$/i);
+    return match?.[2] ?? '';
+  });
+  const [codeLoading, setCodeLoading] = useState(false);
 
   const referenceLoading = companyLoading || internalUserLoading;
 
@@ -121,19 +140,14 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
     }
     setFormValues(mapInitialDataToState(initialData));
     setFormErrors({});
+    const match = initialData.code?.match(/^([A-Z])(\d+)$/i);
+    const nextPrefix = match?.[1]?.toUpperCase() ?? LETTER_OPTIONS[0];
+    const nextNumber = match?.[2] ?? '';
+    setCodePrefix(nextPrefix);
+    setInitialCodePrefix(nextPrefix);
+    setInitialCodeNumber(nextNumber);
+    setCodeNumber(nextNumber);
   }, [initialData?.id]);
-
-  useEffect(() => {
-    if (mode === 'create' && !initialData && !generated) {
-      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const digits = '0123456789';
-      const pick = (source: string, length: number) =>
-        Array.from({ length }, () => source[Math.floor(Math.random() * source.length)]).join('');
-      const code = `${pick(letters, 2)}${pick(digits, 3)}`;
-      setFormValues(prev => ({ ...prev, code: prev.code || code }));
-      setGenerated(true);
-    }
-  }, [mode, initialData, generated]);
 
   const handleChange = (field: keyof ClientFormState) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const value = event.target.value;
@@ -153,6 +167,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
 
   const validate = () => {
     const errors: FormErrors = {};
+    if (!(formValues.code ?? '').trim()) {
+      errors.code = 'Le code client est requis';
+    }
     if (!formValues.nomComplet.trim()) {
       errors.nomComplet = translate('crmApp.client.form.errors.nomComplet');
     }
@@ -231,6 +248,80 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
     navigate(cancelTarget);
   };
 
+  const updateCodeFromParts = (prefix: string, number: string) => {
+    const combined = prefix && number ? `${prefix}${number}` : '';
+    setFormValues(prev => ({ ...prev, code: combined }));
+  };
+
+  useEffect(() => {
+    updateCodeFromParts(codePrefix, codeNumber);
+  }, [codePrefix, codeNumber]);
+
+  const fetchNextCodeNumber = async (prefix: string) => {
+    if (!prefix) {
+      setCodeNumber('');
+      return;
+    }
+
+    setCodeLoading(true);
+    setFormErrors(prev => {
+      const next = { ...prev };
+      delete next.code;
+      return next;
+    });
+
+    try {
+      const response = await axios.get<IClient[]>('/api/clients', {
+        params: {
+          page: 0,
+          'code.contains': prefix,
+          size: 2000,
+          sort: 'code,desc',
+          cacheBuster: Date.now(),
+        },
+      });
+      const items = response.data ?? [];
+      const highest = items.reduce((max, item) => {
+        const match = item.code?.match(new RegExp(`^${prefix}(\\d+)$`, 'i'));
+        if (!match) {
+          return max;
+        }
+        const numeric = parseInt(match[1], 10);
+        return Number.isFinite(numeric) && numeric > max ? numeric : max;
+      }, CODE_MIN_NUMBER - 1);
+
+      const nextNumber = String(Math.max(highest + 1, CODE_MIN_NUMBER)).padStart(4, '0');
+      setCodeNumber(nextNumber);
+    } catch (error) {
+      setFormErrors(prev => ({ ...prev, code: translate('crmApp.client.form.genericError') }));
+      const fallback = String((Date.now() % 9000) + CODE_MIN_NUMBER).padStart(4, '0');
+      setCodeNumber(fallback);
+    } finally {
+      setCodeLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (mode === 'create') {
+      fetchNextCodeNumber(codePrefix);
+    }
+  }, [codePrefix, mode]);
+
+  useEffect(() => {
+    if (mode === 'edit' && codePrefix !== initialCodePrefix) {
+      fetchNextCodeNumber(codePrefix);
+    }
+  }, [codePrefix, mode, initialCodePrefix]);
+
+  const handleCodePrefixChange = (next: string) => {
+    setCodePrefix(next);
+    if (mode === 'edit' && next === initialCodePrefix) {
+      setCodeNumber(initialCodeNumber);
+      return;
+    }
+    setCodeNumber('');
+  };
+
   return (
     <Card className="shadow-sm border-0 client-form-wrapper">
       <CardBody>
@@ -244,7 +335,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
               <FontAwesomeIcon icon={faArrowLeft} className="me-2" />
               <Translate contentKey={mode === 'create' ? 'crmApp.client.form.cancelCreate' : 'crmApp.client.form.cancelEdit'} />
             </Button>
-            <Button color="primary" type="submit" form={CLIENT_FORM_ID} disabled={submitting}>
+            <Button color="primary" type="submit" form={CLIENT_FORM_ID} disabled={submitting || codeLoading}>
               {submitting ? <Spinner size="sm" className="me-2" /> : <FontAwesomeIcon icon={faSave} className="me-2" />}
               <Translate contentKey="crmApp.client.form.save" />
             </Button>
@@ -259,16 +350,40 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
 
         <Form id={CLIENT_FORM_ID} onSubmit={submit}>
           <Row className="g-4">
-            <Col md="4">
+            <Col md="3">
+              <FormGroup>
+                <Label for="client-code-prefix">Lettre du code</Label>
+                <Input
+                  id="client-code-prefix"
+                  type="select"
+                  value={codePrefix}
+                  onChange={event => handleCodePrefixChange(event.target.value)}
+                  disabled={codeLoading}
+                >
+                  {LETTER_OPTIONS.map(letter => (
+                    <option key={letter} value={letter}>
+                      {letter}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Col>
+
+            <Col md="3">
               <FormGroup>
                 <Label for="client-code">
                   <Translate contentKey="crmApp.client.code" />
                 </Label>
-                <Input id="client-code" value={formValues.code} disabled={mode === 'create'} onChange={handleChange('code')} />
+                <Input id="client-code" value={formValues.code} readOnly placeholder="-" />
+                <div className="text-muted small mt-1 d-flex align-items-center gap-2">
+                  {codeLoading ? <Spinner size="sm" /> : null}
+                  <span>Le numéro est généré automatiquement.</span>
+                </div>
+                {renderError('code')}
               </FormGroup>
             </Col>
 
-            <Col md="8">
+            <Col md="6">
               <FormGroup>
                 <Label for="client-nomComplet">
                   <Translate contentKey="crmApp.client.nomComplet" /> *

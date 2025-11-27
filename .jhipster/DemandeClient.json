@@ -40,6 +40,13 @@
   "pagination": "pagination",
   "relationships": [
     {
+      "otherEntityName": "produitDemande",
+      "otherEntityRelationshipName": "demande",
+      "relationshipName": "produits",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
       "otherEntityName": "client",
       "relationshipName": "client",
       "relationshipSide": "left",

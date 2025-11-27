@@ -2,6 +2,7 @@ package com.ultex.crm.web.rest;
 
 import com.ultex.crm.repository.DemandeClientRepository;
 import com.ultex.crm.service.DemandeClientService;
+import com.ultex.crm.service.DemandeClientServiceExtension;
 import com.ultex.crm.service.dto.DemandeClientDTO;
 import com.ultex.crm.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -39,11 +40,17 @@ public class DemandeClientResource {
     private String applicationName;
 
     private final DemandeClientService demandeClientService;
+    private final DemandeClientServiceExtension demandeClientServiceExtension;
 
     private final DemandeClientRepository demandeClientRepository;
 
-    public DemandeClientResource(DemandeClientService demandeClientService, DemandeClientRepository demandeClientRepository) {
+    public DemandeClientResource(
+        DemandeClientService demandeClientService,
+        DemandeClientServiceExtension demandeClientServiceExtension,
+        DemandeClientRepository demandeClientRepository
+    ) {
         this.demandeClientService = demandeClientService;
+        this.demandeClientServiceExtension = demandeClientServiceExtension;
         this.demandeClientRepository = demandeClientRepository;
     }
 
@@ -61,7 +68,8 @@ public class DemandeClientResource {
         if (demandeClientDTO.getId() != null) {
             throw new BadRequestAlertException("A new demandeClient cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        demandeClientDTO = demandeClientService.save(demandeClientDTO);
+        // Use the extension service to hydrate linked products before saving
+        demandeClientDTO = demandeClientServiceExtension.save(demandeClientDTO);
         return ResponseEntity.created(new URI("/api/demande-clients/" + demandeClientDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, demandeClientDTO.getId().toString()))
             .body(demandeClientDTO);
@@ -94,7 +102,8 @@ public class DemandeClientResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        demandeClientDTO = demandeClientService.update(demandeClientDTO);
+        // Use the extension service to hydrate linked products before saving
+        demandeClientDTO = demandeClientServiceExtension.update(demandeClientDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, demandeClientDTO.getId().toString()))
             .body(demandeClientDTO);

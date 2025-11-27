@@ -53,6 +53,11 @@ public class DemandeClient implements Serializable {
     @Column(name = "remarque_generale")
     private String remarqueGenerale;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "demande")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
+    private Set<ProduitDemande> produits = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
@@ -75,10 +80,6 @@ public class DemandeClient implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "demandes" }, allowSetters = true)
     private Set<SousService> sousServices = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "demande", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
-    private Set<ProduitDemande> produits = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -173,6 +174,37 @@ public class DemandeClient implements Serializable {
         this.remarqueGenerale = remarqueGenerale;
     }
 
+    public Set<ProduitDemande> getProduits() {
+        return this.produits;
+    }
+
+    public void setProduits(Set<ProduitDemande> produitDemandes) {
+        if (this.produits != null) {
+            this.produits.forEach(i -> i.setDemande(null));
+        }
+        if (produitDemandes != null) {
+            produitDemandes.forEach(i -> i.setDemande(this));
+        }
+        this.produits = produitDemandes;
+    }
+
+    public DemandeClient produits(Set<ProduitDemande> produitDemandes) {
+        this.setProduits(produitDemandes);
+        return this;
+    }
+
+    public DemandeClient addProduits(ProduitDemande produitDemande) {
+        this.produits.add(produitDemande);
+        produitDemande.setDemande(this);
+        return this;
+    }
+
+    public DemandeClient removeProduits(ProduitDemande produitDemande) {
+        this.produits.remove(produitDemande);
+        produitDemande.setDemande(null);
+        return this;
+    }
+
     public Client getClient() {
         return this.client;
     }
@@ -217,12 +249,6 @@ public class DemandeClient implements Serializable {
     }
 
     public void setSousServices(Set<SousService> sousServices) {
-        if (this.sousServices != null) {
-            this.sousServices.forEach(i -> i.getDemandes().remove(this));
-        }
-        if (sousServices != null) {
-            sousServices.forEach(i -> i.getDemandes().add(this));
-        }
         this.sousServices = sousServices;
     }
 
@@ -233,44 +259,11 @@ public class DemandeClient implements Serializable {
 
     public DemandeClient addSousServices(SousService sousService) {
         this.sousServices.add(sousService);
-        sousService.getDemandes().add(this);
         return this;
     }
 
     public DemandeClient removeSousServices(SousService sousService) {
         this.sousServices.remove(sousService);
-        sousService.getDemandes().remove(this);
-        return this;
-    }
-
-    public Set<ProduitDemande> getProduits() {
-        return this.produits;
-    }
-
-    public void setProduits(Set<ProduitDemande> produitDemandes) {
-        if (this.produits != null) {
-            this.produits.forEach(i -> i.setDemande(null));
-        }
-        if (produitDemandes != null) {
-            produitDemandes.forEach(i -> i.setDemande(this));
-        }
-        this.produits = produitDemandes;
-    }
-
-    public DemandeClient produits(Set<ProduitDemande> produitDemandes) {
-        this.setProduits(produitDemandes);
-        return this;
-    }
-
-    public DemandeClient addProduits(ProduitDemande produitDemande) {
-        this.produits.add(produitDemande);
-        produitDemande.setDemande(this);
-        return this;
-    }
-
-    public DemandeClient removeProduits(ProduitDemande produitDemande) {
-        this.produits.remove(produitDemande);
-        produitDemande.setDemande(null);
         return this;
     }
 

@@ -14,6 +14,9 @@ public interface ProduitDemandeMapper extends EntityMapper<ProduitDemandeDTO, Pr
     @Mapping(target = "demande", source = "demande", qualifiedByName = "demandeClientId")
     ProduitDemandeDTO toDto(ProduitDemande s);
 
+    @Mapping(target = "demande", ignore = true)
+    ProduitDemande toEntity(ProduitDemandeDTO produitDemandeDTO);
+
     @Named("demandeClientId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

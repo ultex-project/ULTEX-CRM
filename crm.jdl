@@ -321,8 +321,8 @@ relationship ManyToOne {
 relationship ManyToOne {
   ContactAssocie{client} to Client
 }
-relationship ManyToOne {
-  ProduitDemande{demande} to DemandeClient
+relationship OneToMany {
+  DemandeClient{produits} to ProduitDemande{demande}
 }
 relationship ManyToOne {
   HistoriqueCRM{client} to Client

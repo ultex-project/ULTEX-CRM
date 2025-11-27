@@ -75,6 +75,7 @@ const QUICK_FILTERS: StatusFilterOption[] = ['ALL', 'ACTIVE', 'INACTIVE', 'ARCHI
 
 const SORT_LABELS: Record<string, string> = {
   nomComplet: 'crmApp.client.nomComplet',
+  code: 'crmApp.client.code',
   company: 'crmApp.client.company',
   status: 'crmApp.client.dashboard.columns.status',
   createdAt: 'crmApp.client.createdAt',
@@ -237,6 +238,7 @@ const ClientListPage = () => {
           { value: 'AR', label: translate('crmApp.client.dashboard.languages.ar') },
         ],
       },
+      { value: 'code', label: translate('crmApp.client.code'), type: 'text' },
       { value: 'companyId', label: translate('crmApp.client.company'), type: 'text' },
       { value: 'createdAt', label: translate('crmApp.client.createdAt'), type: 'date' },
     ];
@@ -253,6 +255,7 @@ const ClientListPage = () => {
         client.nomComplet,
         client.email,
         client.telephonePrincipal,
+        client.code,
         client.nationalite,
         client.languePreferee,
         client.company?.name,
@@ -568,6 +571,9 @@ const ClientListPage = () => {
                   <th role="button" onClick={() => handleSort('nomComplet')} className="sortable">
                     <Translate contentKey="crmApp.client.dashboard.columns.client" /> {renderSortIcon('nomComplet')}
                   </th>
+                  <th role="button" onClick={() => handleSort('code')} className="sortable">
+                    <Translate contentKey="crmApp.client.code" /> {renderSortIcon('code')}
+                  </th>
                   <th role="button" onClick={() => handleSort('company')} className="sortable">
                     <Translate contentKey="crmApp.client.dashboard.columns.company" /> {renderSortIcon('company')}
                   </th>
@@ -591,14 +597,14 @@ const ClientListPage = () => {
               <tbody>
                 {loading && statusFilteredClients.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-5">
+                    <td colSpan={8} className="text-center py-5">
                       <Spinner size="sm" color="primary" className="me-2" />
                       <Translate contentKey="crmApp.client.dashboard.table.loading" />
                     </td>
                   </tr>
                 ) : statusFilteredClients.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-5 text-muted">
+                    <td colSpan={8} className="text-center py-5 text-muted">
                       <FontAwesomeIcon icon={faLayerGroup} className="me-2" />
                       <Translate contentKey="crmApp.client.dashboard.table.empty" />
                     </td>
@@ -622,6 +628,15 @@ const ClientListPage = () => {
                               </div>
                             </div>
                           </div>
+                        </td>
+                        <td>
+                          {client.id ? (
+                            <Link to={`/dashboard/clients/${client.id}/view`} className="fw-semibold text-decoration-none">
+                              {client.code ?? '--'}
+                            </Link>
+                          ) : (
+                            <span className="text-muted">--</span>
+                          )}
                         </td>
                         <td>
                           <div className="d-flex flex-column">
