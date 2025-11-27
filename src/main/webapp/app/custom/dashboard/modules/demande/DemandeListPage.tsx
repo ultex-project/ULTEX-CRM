@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Alert,
   Button,
@@ -20,9 +20,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Row,
   Spinner,
   Table,
@@ -41,7 +38,9 @@ import {
   faSortUp,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { Translate, translate } from 'react-jhipster';
+import { Translate, translate, JhiPagination, JhiItemCount, getPaginationState } from 'react-jhipster';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import dayjs from 'dayjs';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -91,15 +90,17 @@ const getDemandeLabel = (demande?: IDemandeClient | null) => {
 
 const DemandeListPage = () => {
   const dispatch = useAppDispatch();
+  const pageLocation = useLocation();
+  const navigate = useNavigate();
   const currentLocale = useAppSelector(state => state.locale?.currentLocale);
   const demandes = useAppSelector(state => state.demandeClient.entities);
   const loading = useAppSelector(state => state.demandeClient.loading);
   const totalItems = useAppSelector(state => state.demandeClient.totalItems);
   const deleting = useAppSelector(state => state.demandeClient.updating);
 
-  const [page, setPage] = useState(0);
-  const [size] = useState(20);
-  const [sort, setSort] = useState('id,asc');
+  const [paginationState, setPaginationState] = useState(
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
+  );
   const [searchTerm, setSearchTerm] = useState('');
   const [serviceFilter, setServiceFilter] = useState<'ALL' | ServicePrincipalKey>('ALL');
   const [dropdownOpen, setDropdownOpen] = useState<Record<string, boolean>>({});
@@ -110,21 +111,56 @@ const DemandeListPage = () => {
   const [demandeToDelete, setDemandeToDelete] = useState<IDemandeClient | null>(null);
 
   useEffect(() => {
-    dispatch(getEntities({ page, size, sort, query: currentQuery }));
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch, page, size, sort, currentQuery]);
+    dispatch(
+      getEntities({
+        page: paginationState.activePage - 1,
+        size: paginationState.itemsPerPage,
+        sort: `${paginationState.sort},${paginationState.order}`,
+        query: currentQuery,
+      }),
+    );
+  }, [dispatch, paginationState.activePage, paginationState.itemsPerPage, paginationState.order, paginationState.sort, currentQuery]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(pageLocation.search);
+    const page = params.get('page');
+    const size = params.get('size');
+    const sort = params.get(SORT);
+
+    if (!page && !sort && !size) {
+      return;
+    }
+
+    setPaginationState(prev => {
+      const sortSplit = sort ? sort.split(',') : [prev.sort, prev.order];
+      const nextState = {
+        ...prev,
+        activePage: page ? +page : prev.activePage,
+        itemsPerPage: size ? Number(size) : prev.itemsPerPage,
+        sort: sortSplit[0],
+        order: sortSplit[1],
+      };
+
+      if (
+        nextState.activePage !== prev.activePage ||
+        nextState.itemsPerPage !== prev.itemsPerPage ||
+        nextState.sort !== prev.sort ||
+        nextState.order !== prev.order
+      ) {
+        return nextState;
+      }
+      return prev;
+    });
+  }, [pageLocation.search]);
 
   const handleSort = (key: string) => {
-    const isAscending = sort.startsWith(key) && sort.endsWith('asc');
-    setSort(`${key},${isAscending ? 'desc' : 'asc'}`);
-    setPage(0);
+    const order = paginationState.sort === key && paginationState.order === ASC ? DESC : ASC;
+    setPaginationState(prev => ({ ...prev, order, sort: key }));
   };
 
   const renderSortIcon = (key: string) => {
-    if (sort.startsWith(key)) {
-      return <FontAwesomeIcon icon={sort.endsWith('asc') ? faSortUp : faSortDown} size="sm" className="ms-1 text-muted" />;
+    if (paginationState.sort === key) {
+      return <FontAwesomeIcon icon={paginationState.order === ASC ? faSortUp : faSortDown} size="sm" className="ms-1 text-muted" />;
     }
     return <FontAwesomeIcon icon={faSort} size="sm" className="ms-1 text-muted" />;
   };
@@ -151,7 +187,14 @@ const DemandeListPage = () => {
     try {
       await dispatch(deleteEntity(demandeToDelete.id)).unwrap();
       closeDeleteModal();
-      dispatch(getEntities({ page, size, sort, query: currentQuery }));
+      dispatch(
+        getEntities({
+          page: paginationState.activePage - 1,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`,
+          query: currentQuery,
+        }),
+      );
     } catch (error) {
       // keep modal open for manual retry or cancel
     }
@@ -163,10 +206,17 @@ const DemandeListPage = () => {
     setHasUnsupportedConditions(hasOrCondition);
 
     const nextPage = 0;
-    setPage(nextPage);
+    setPaginationState(prev => ({ ...prev, activePage: nextPage + 1 }));
 
     if (query === currentQuery) {
-      dispatch(getEntities({ page: nextPage, size, sort, query }));
+      dispatch(
+        getEntities({
+          page: nextPage,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`,
+          query,
+        }),
+      );
     } else {
       setCurrentQuery(query);
     }
@@ -174,7 +224,7 @@ const DemandeListPage = () => {
 
   const handleAdvancedReset = () => {
     setHasUnsupportedConditions(false);
-    setPage(0);
+    setPaginationState(prev => ({ ...prev, activePage: 1 }));
     setCurrentQuery('');
   };
 
@@ -268,28 +318,25 @@ const DemandeListPage = () => {
   }, [demandes]);
 
   const totalDemandesCount = totalItems && totalItems > 0 ? totalItems : demandes.length;
-  const totalPages = totalItems > 0 ? Math.ceil(totalItems / size) : 0;
 
-  const goToPage = (index: number) => {
-    if (index >= 0 && (totalPages === 0 || index < totalPages) && index !== page) {
-      setPage(index);
-    }
-  };
-
-  const goToPrevious = () => {
-    setPage(prev => (prev > 0 ? prev - 1 : prev));
-  };
-
-  const goToNext = () => {
-    if (totalPages && page < totalPages - 1) {
-      setPage(prev => prev + 1);
-    }
-  };
-
-  const sortProperty = sort.split(',')[0];
-  const sortDirection = sort.endsWith('asc') ? 'asc' : 'desc';
+  const sortProperty = paginationState.sort;
+  const sortDirection = paginationState.order;
   const sortLabel = translate(SORT_LABELS[sortProperty] ?? sortProperty);
-  const sortDirectionLabel = sortDirection === 'asc' ? 'asc' : 'desc';
+  const sortDirectionLabel = translate(`crmApp.client.dashboard.direction.${sortDirection}`);
+
+  useEffect(() => {
+    const endURL = `?page=${paginationState.activePage}&size=${paginationState.itemsPerPage}&sort=${paginationState.sort},${paginationState.order}`;
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
+    }
+  }, [
+    paginationState.activePage,
+    paginationState.itemsPerPage,
+    paginationState.order,
+    paginationState.sort,
+    navigate,
+    pageLocation.pathname,
+  ]);
 
   return (
     <div className="client-page">
@@ -566,26 +613,40 @@ const DemandeListPage = () => {
             </Table>
           </div>
         </CardBody>
-        {totalPages > 1 && (
-          <CardFooter className="bg-white d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-            <span className="text-muted small">
-              <Translate contentKey="crmApp.demandeClient.dashboard.pagination.page" interpolate={{ page: page + 1, total: totalPages }} />
-            </span>
-            <Pagination className="m-0">
-              <PaginationItem disabled={page === 0}>
-                <PaginationLink previous onClick={goToPrevious} />
-              </PaginationItem>
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <PaginationItem key={`page-${index}`} active={index === page}>
-                  <PaginationLink onClick={() => goToPage(index)}>{index + 1}</PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem disabled={page >= totalPages - 1}>
-                <PaginationLink next onClick={goToNext} />
-              </PaginationItem>
-            </Pagination>
-          </CardFooter>
-        )}
+        <CardFooter className="bg-white d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+          <JhiItemCount page={paginationState.activePage} total={totalItems ?? 0} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
+          <div className="d-flex align-items-center gap-3">
+            <div className="d-flex align-items-center">
+              <span className="text-muted small me-2">Par page</span>
+              <Input
+                type="select"
+                bsSize="sm"
+                value={paginationState.itemsPerPage}
+                onChange={event =>
+                  setPaginationState(prev => ({
+                    ...prev,
+                    itemsPerPage: Number(event.target.value),
+                    activePage: 1,
+                  }))
+                }
+                style={{ width: '96px' }}
+              >
+                {[10, 20, 50, 100].map(option => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Input>
+            </div>
+            <JhiPagination
+              activePage={paginationState.activePage}
+              onSelect={(current: number) => setPaginationState(prev => ({ ...prev, activePage: current }))}
+              maxButtons={5}
+              itemsPerPage={paginationState.itemsPerPage}
+              totalItems={totalItems ?? 0}
+            />
+          </div>
+        </CardFooter>
       </Card>
 
       <Modal isOpen={deleteModalOpen} toggle={closeDeleteModal} centered>

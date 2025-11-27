@@ -137,24 +137,37 @@ const ProspectListPage = () => {
         query: currentQuery,
       }),
     );
-    return () => {
-      dispatch(reset());
-    };
   }, [dispatch, paginationState.activePage, paginationState.itemsPerPage, paginationState.order, paginationState.sort, currentQuery]);
 
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
     const page = params.get('page');
+    const size = params.get('size');
     const sort = params.get(SORT);
-    if (page && sort) {
-      const sortSplit = sort.split(',');
-      setPaginationState(prev => ({
+    if (!page && !sort && !size) {
+      return;
+    }
+
+    setPaginationState(prev => {
+      const sortSplit = sort ? sort.split(',') : [prev.sort, prev.order];
+      const nextState = {
         ...prev,
-        activePage: +page,
+        activePage: page ? +page : prev.activePage,
+        itemsPerPage: size ? Number(size) : prev.itemsPerPage,
         sort: sortSplit[0],
         order: sortSplit[1],
-      }));
-    }
+      };
+
+      if (
+        nextState.activePage !== prev.activePage ||
+        nextState.itemsPerPage !== prev.itemsPerPage ||
+        nextState.sort !== prev.sort ||
+        nextState.order !== prev.order
+      ) {
+        return nextState;
+      }
+      return prev;
+    });
   }, [pageLocation.search]);
 
   const handleSort = (key: string) => {
@@ -311,11 +324,19 @@ const ProspectListPage = () => {
   };
 
   useEffect(() => {
-    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    const endURL = `?page=${paginationState.activePage}&size=${paginationState.itemsPerPage}&sort=${paginationState.sort},${paginationState.order}`;
     if (pageLocation.search !== endURL) {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
-  }, [paginationState.activePage, paginationState.order, paginationState.sort, navigate, pageLocation.pathname, pageLocation.search]);
+  }, [
+    paginationState.activePage,
+    paginationState.itemsPerPage,
+    paginationState.order,
+    paginationState.sort,
+    navigate,
+    pageLocation.pathname,
+    pageLocation.search,
+  ]);
 
   return (
     <div className="prospect-page">
@@ -577,15 +598,39 @@ const ProspectListPage = () => {
             </Table>
           </div>
         </CardBody>
-        <CardFooter className="bg-white d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <CardFooter className="bg-white d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
           <JhiItemCount page={paginationState.activePage} total={totalItems ?? 0} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
-          <JhiPagination
-            activePage={paginationState.activePage}
-            onSelect={handlePagination}
-            maxButtons={5}
-            itemsPerPage={paginationState.itemsPerPage}
-            totalItems={totalItems ?? 0}
-          />
+          <div className="d-flex align-items-center gap-3">
+            <div className="d-flex align-items-center">
+              <span className="text-muted small me-2">Par page</span>
+              <Input
+                type="select"
+                bsSize="sm"
+                value={paginationState.itemsPerPage}
+                onChange={event =>
+                  setPaginationState(prev => ({
+                    ...prev,
+                    itemsPerPage: Number(event.target.value),
+                    activePage: 1,
+                  }))
+                }
+                style={{ width: '96px' }}
+              >
+                {[10, 20, 50, 100].map(option => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Input>
+            </div>
+            <JhiPagination
+              activePage={paginationState.activePage}
+              onSelect={handlePagination}
+              maxButtons={5}
+              itemsPerPage={paginationState.itemsPerPage}
+              totalItems={totalItems ?? 0}
+            />
+          </div>
         </CardFooter>
       </Card>
       <Modal isOpen={deleteModalOpen} toggle={closeDeleteModal} centered>
