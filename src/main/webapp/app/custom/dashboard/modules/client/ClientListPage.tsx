@@ -147,9 +147,6 @@ const ClientListPage = () => {
         query: currentQuery,
       }),
     );
-    return () => {
-      dispatch(reset());
-    };
   }, [dispatch, paginationState.activePage, paginationState.itemsPerPage, paginationState.order, paginationState.sort, currentQuery]);
 
   useEffect(() => {
@@ -404,7 +401,6 @@ const ClientListPage = () => {
     paginationState.sort,
     navigate,
     pageLocation.pathname,
-    pageLocation.search,
   ]);
 
   return (
