@@ -352,6 +352,14 @@ const GeneralInfoCard: React.FC<{ client: IClient | null }> = ({ client }) => (
         </Col>
         <Col md="4">
           <div className="d-flex flex-column">
+            <span className="text-uppercase text-muted small">
+              <Translate contentKey="crmApp.client.code" />
+            </span>
+            <span className="fw-semibold">{renderValue(client?.code)}</span>
+          </div>
+        </Col>
+        <Col md="4">
+          <div className="d-flex flex-column">
             <span className="text-uppercase text-muted small">WhatsApp</span>
             <span className="fw-semibold">{renderValue(client?.whatsapp)}</span>
           </div>
