@@ -21,7 +21,7 @@ import {
   Table,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEdit, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBuilding, faEdit, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Translate, translate } from 'react-jhipster';
 import { toast } from 'react-toastify';
 
@@ -38,7 +38,7 @@ import { IHistoriqueCRM } from 'app/shared/model/historique-crm.model';
 import ClientAvatar from 'app/custom/dashboard/modules/client/components/ClientAvatar';
 import ClientDocumentsPanel from 'app/custom/dashboard/modules/client/components/ClientDocumentsPanel';
 import ClientContactsPanel from 'app/custom/dashboard/modules/client/components/ClientContactsPanel';
-import ClientSocietesPanel from 'app/custom/dashboard/modules/client/components/ClientSocietesPanel';
+import { ISocieteLiee } from 'app/shared/model/societe-liee.model';
 
 const outlineBadgeClass = (tone: 'success' | 'secondary' | 'danger' | 'info' | 'warning' | 'primary') =>
   `badge rounded-pill fw-semibold px-3 py-1 bg-white border border-${tone} text-${tone}`;
@@ -155,6 +155,7 @@ type ClientDashboardData = {
   requestProducts: IProduitDemande[];
   opportunities: IOpportunity[];
   history: IHistoriqueCRM[];
+  societesLiees: ISocieteLiee[];
 };
 
 const createEmptyClientData = (): ClientDashboardData => ({
@@ -165,6 +166,7 @@ const createEmptyClientData = (): ClientDashboardData => ({
   requestProducts: [],
   opportunities: [],
   history: [],
+  societesLiees: [],
 });
 
 const useClientDashboardData = (clientId: number | null) => {
@@ -187,15 +189,17 @@ const useClientDashboardData = (clientId: number | null) => {
       setError(null);
 
       try {
-        const [clientResponse, contactsData, kycData, demandesData, produitsData, opportunitiesData, historyData] = await Promise.all([
-          axios.get<IClient>(`api/clients/${clientId}`),
-          createCollectionFetcher<IContactAssocie>('api/contact-associes'),
-          createCollectionFetcher<IKycClient>('api/kyc-clients'),
-          createCollectionFetcher<IDemandeClient>('api/demande-clients'),
-          createCollectionFetcher<IProduitDemande>('api/produit-demandes'),
-          createCollectionFetcher<IOpportunity>('api/opportunities'),
-          createCollectionFetcher<IHistoriqueCRM>('api/historique-crms'),
-        ]);
+        const [clientResponse, contactsData, kycData, demandesData, produitsData, opportunitiesData, historyData, societesData] =
+          await Promise.all([
+            axios.get<IClient>(`api/clients/${clientId}`),
+            createCollectionFetcher<IContactAssocie>('api/contact-associes'),
+            createCollectionFetcher<IKycClient>('api/kyc-clients'),
+            createCollectionFetcher<IDemandeClient>('api/demande-clients'),
+            createCollectionFetcher<IProduitDemande>('api/produit-demandes'),
+            createCollectionFetcher<IOpportunity>('api/opportunities'),
+            createCollectionFetcher<IHistoriqueCRM>('api/historique-crms'),
+            createCollectionFetcher<ISocieteLiee>('api/societe-liees'),
+          ]);
 
         if (!mounted) {
           return;
@@ -214,6 +218,7 @@ const useClientDashboardData = (clientId: number | null) => {
         });
         const opportunitiesForClient = opportunitiesData.filter(item => item.client?.id === clientId);
         const historyForClient = historyData.filter(item => item.client?.id === clientId);
+        const societesForClient = societesData.filter(item => item.client?.id === clientId);
 
         setData({
           client: clientValue,
@@ -223,6 +228,7 @@ const useClientDashboardData = (clientId: number | null) => {
           requestProducts: requestProductsForClient,
           opportunities: opportunitiesForClient,
           history: historyForClient,
+          societesLiees: societesForClient,
         });
       } catch (requestError) {
         if (mounted) {
@@ -864,12 +870,94 @@ const HistoryCard: React.FC<{ history: IHistoriqueCRM[] }> = ({ history }) => (
   </Card>
 );
 
+const SocietesLieesCard: React.FC<{ societes: ISocieteLiee[]; loading: boolean; clientId: number | null }> = ({
+  societes,
+  loading,
+  clientId,
+}) => {
+  const hasItems = societes.length > 0;
+  const createHref = clientId ? `/dashboard/societe-liee/new?clientId=${clientId}` : '/dashboard/societe-liee/new';
+
+  return (
+    <Card className="shadow-sm border-0 mb-4">
+      <CardHeader className="bg-white border-bottom d-flex justify-content-between align-items-center">
+        <div>
+          <h5 className="mb-0">
+            <Translate contentKey="crmApp.societeLiee.dashboard.title" />
+          </h5>
+          <small className="text-muted">
+            <Translate contentKey="crmApp.societeLiee.dashboard.subtitle" />
+          </small>
+        </div>
+        <Button color="primary" size="sm" tag={Link} to={createHref} className="shadow-sm">
+          <FontAwesomeIcon icon={faPlus} className="me-2" />
+          <Translate contentKey="crmApp.societeLiee.dashboard.add" />
+        </Button>
+      </CardHeader>
+      <CardBody className="p-0">
+        {loading ? (
+          <div className="text-center py-5">
+            <Spinner color="primary" />
+          </div>
+        ) : !hasItems ? (
+          <div className="text-center text-muted py-4">
+            <FontAwesomeIcon icon={faBuilding} size="2x" className="mb-3 text-secondary" />
+            <p className="mb-3">
+              <Translate contentKey="crmApp.societeLiee.dashboard.empty" />
+            </p>
+          </div>
+        ) : (
+          <div className="table-responsive">
+            <Table hover className="mb-0 align-middle">
+              <thead className="text-muted small">
+                <tr>
+                  <th className="ps-4">
+                    <Translate contentKey="crmApp.societeLiee.dashboard.columns.raisonSociale" />
+                  </th>
+                  <th>
+                    <Translate contentKey="crmApp.societeLiee.dashboard.columns.formeJuridique" />
+                  </th>
+                  <th>ICE</th>
+                  <th>RC</th>
+                  <th>
+                    <Translate contentKey="crmApp.societeLiee.secteurActivite" />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {societes.map(item => (
+                  <tr key={item.id ?? item.raisonSociale} className="align-middle">
+                    <td className="ps-4">
+                      {item.id ? (
+                        <Link to={`/dashboard/societe-liee/${item.id}/view`} className="fw-semibold text-decoration-none">
+                          {renderValue(item.raisonSociale)}
+                        </Link>
+                      ) : (
+                        <span className="fw-semibold">{renderValue(item.raisonSociale)}</span>
+                      )}
+                    </td>
+                    <td>{renderValue(item.formeJuridique)}</td>
+                    <td>{renderValue(item.ice)}</td>
+                    <td>{renderValue(item.rc)}</td>
+                    <td>{renderValue(item.secteurActivite)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        )}
+      </CardBody>
+    </Card>
+  );
+};
+
 const ClientViewPage = () => {
   const { id } = useParams<'id'>();
   const location = useLocation();
   const clientId = id ? Number(id) : null;
 
-  const { client, contacts, kyc, requests, requestProducts, opportunities, history, loading, error } = useClientDashboardData(clientId);
+  const { client, contacts, kyc, requests, requestProducts, opportunities, history, societesLiees, loading, error } =
+    useClientDashboardData(clientId);
 
   const successMessage = useSuccessMessage(location);
 
@@ -915,7 +1003,7 @@ const ClientViewPage = () => {
           <GeneralInfoCard client={client} />
           {client?.id ? (
             <>
-              <ClientSocietesPanel clientId={client.id} />
+              <SocietesLieesCard societes={societesLiees} loading={loading} clientId={client.id} />
               <ClientContactsPanel clientId={client.id} />
               <ClientDocumentsPanel clientId={client.id} />
             </>
