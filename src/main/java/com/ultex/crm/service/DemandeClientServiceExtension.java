@@ -68,7 +68,15 @@ public class DemandeClientServiceExtension {
      * Map DTO to entity while hydrating/attaching ProduitDemande children.
      */
     private DemandeClient mapDemandeWithProduits(DemandeClientDTO demandeClientDTO) {
-        DemandeClient demandeClient = demandeClientMapper.toEntity(demandeClientDTO);
+        DemandeClient demandeClient;
+
+        if (demandeClientDTO.getId() != null) {
+            // Load existing entity (with produits) so removed produits can be detached
+            demandeClient = demandeClientRepository.findOneWithEagerRelationships(demandeClientDTO.getId()).orElseGet(DemandeClient::new);
+            demandeClientMapper.partialUpdate(demandeClient, demandeClientDTO);
+        } else {
+            demandeClient = demandeClientMapper.toEntity(demandeClientDTO);
+        }
 
         Set<ProduitDemandeDTO> produitsDTO = demandeClientDTO.getProduits() != null
             ? demandeClientDTO.getProduits()

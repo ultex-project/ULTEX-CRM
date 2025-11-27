@@ -20,8 +20,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = { ProduitDemandeMapper.class })
 public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, DemandeClient> {
     @Mapping(target = "client", source = "client", qualifiedByName = "clientSummary")
-    @Mapping(target = "devise", source = "devise", qualifiedByName = "deviseId")
-    @Mapping(target = "incoterm", source = "incoterm", qualifiedByName = "incotermId")
+    @Mapping(target = "devise", source = "devise", qualifiedByName = "deviseSummary")
+    @Mapping(target = "incoterm", source = "incoterm", qualifiedByName = "incotermSummary")
     @Mapping(target = "sousServices", source = "sousServices", qualifiedByName = "sousServiceIdSet")
     @Mapping(target = "produits", source = "produits")
     DemandeClientDTO toDto(DemandeClient s);
@@ -44,10 +44,25 @@ public interface DemandeClientMapper extends EntityMapper<DemandeClientDTO, Dema
     @Mapping(target = "id", source = "id")
     DeviseDTO toDtoDeviseId(Devise devise);
 
+    @Named("deviseSummary")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "code", source = "code")
+    @Mapping(target = "nomComplet", source = "nomComplet")
+    @Mapping(target = "symbole", source = "symbole")
+    DeviseDTO toDtoDeviseSummary(Devise devise);
+
     @Named("incotermId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     IncotermDTO toDtoIncotermId(Incoterm incoterm);
+
+    @Named("incotermSummary")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "code", source = "code")
+    @Mapping(target = "description", source = "description")
+    IncotermDTO toDtoIncotermSummary(Incoterm incoterm);
 
     @Named("sousServiceId")
     @BeanMapping(ignoreByDefault = true)
