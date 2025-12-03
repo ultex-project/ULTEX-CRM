@@ -69,11 +69,20 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/activate")).permitAll()
                     .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                     .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/account/**")).authenticated()
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/data/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DATA)
                     .requestMatchers(mvc.pattern("/dashboard/data/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DATA)
-                    .requestMatchers(mvc.pattern("/api/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
-                    .requestMatchers(mvc.pattern("/dashboard/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
+                    .requestMatchers(mvc.pattern("/api/**")).hasAnyAuthority(
+                        AuthoritiesConstants.ADMIN,
+                        AuthoritiesConstants.USER,
+                        AuthoritiesConstants.DATA
+                    )
+                    .requestMatchers(mvc.pattern("/dashboard/**")).hasAnyAuthority(
+                        AuthoritiesConstants.ADMIN,
+                        AuthoritiesConstants.USER,
+                        AuthoritiesConstants.DATA
+                    )
                     .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/management/health")).permitAll()
                     .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
