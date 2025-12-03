@@ -44,7 +44,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
   const authorities = account?.authorities ?? [];
 
   const ROLE_DATA = 'ROLE_DATA';
-  const dataRoleMenuIds = new Set(['overview', 'contacts', 'clients', 'data']);
 
   // Use prop if provided, otherwise use local state
   const isCollapsed = propCollapsed !== undefined ? propCollapsed : localCollapsed;
@@ -74,8 +73,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
   // Menu structure with i18n keys
   const hasRoleAccess = (roles?: string[]) => !roles || roles.some(role => authorities.includes(role));
 
-  const isDataOnly = authorities.includes(ROLE_DATA) && authorities.every(role => role === ROLE_DATA);
-
   const toggleSubmenu = (id: string) => {
     setExpandedMenus(prev => ({ ...prev, [id]: !prev[id] }));
   };
@@ -93,7 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
       label: 'crmApp.societeLiee.home.title',
       icon: faBuilding,
       path: '/dashboard/societe-liee/list',
-      roles: ['ROLE_ADMIN', 'ROLE_USER'],
+      roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
     },
     {
       id: 'contacts',
@@ -183,7 +180,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
   ];
 
   const filteredMenuItems = menuItems
-    .filter(item => !isDataOnly || dataRoleMenuIds.has(item.id))
     .map(item => {
       if (item.children) {
         const visibleChildren = item.children.filter(child => hasRoleAccess(child.roles));
