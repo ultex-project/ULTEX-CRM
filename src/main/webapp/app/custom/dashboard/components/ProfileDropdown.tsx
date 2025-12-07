@@ -84,8 +84,8 @@ const ProfileDropdown = () => {
           </DropdownItem>
 
           <DropdownItem
-            tag="button"
-            onClick={() => (window.location.href = '/account/settings')}
+            tag={Link}
+            to="/dashboard/account-settings"
             className="d-flex align-items-center gap-3 px-4 py-2 rounded-0"
             style={{
               fontSize: '0.875rem',
