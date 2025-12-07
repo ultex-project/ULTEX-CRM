@@ -1,0 +1,11 @@
+{
+  "editProfile": {
+    "title": "Edit Profile",
+    "subtitle": "Update your personal information",
+    "passwordNote": "To change your password, go to the Password section in Account Settings.",
+    "avatarHint": "Use a square image for best results.",
+    "avatarNotSupported": "Avatar upload is not available on this server.",
+    "save": "Save Changes",
+    "cancel": "Cancel"
+  }
+}

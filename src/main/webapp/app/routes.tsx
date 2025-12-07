@@ -36,6 +36,7 @@ import ProductCreatePage from 'app/custom/dashboard/modules/product/ProductCreat
 import ProductEditPage from 'app/custom/dashboard/modules/product/ProductEditPage';
 import ProductViewPage from 'app/custom/dashboard/modules/product/ProductViewPage';
 import SousServiceListPage from 'app/custom/dashboard/modules/sous-service/SousServiceListPage';
+import EditProfilePage from 'app/custom/dashboard/edit-profile';
 import DemandeListPage from 'app/custom/dashboard/modules/demande/DemandeListPage';
 import DemandeCreatePage from 'app/custom/dashboard/modules/demande/DemandeCreatePage';
 import DemandeEditPage from 'app/custom/dashboard/modules/demande/DemandeEditPage';
@@ -131,6 +132,7 @@ const AppRoutes = () => {
           <Route path="products/new" element={<ProductCreatePage />} />
           <Route path="products/:id/view" element={<ProductViewPage />} />
           <Route path="products/:id/edit" element={<ProductEditPage />} />
+          <Route path="edit-profile" element={<EditProfilePage />} />
           <Route path="demandes" element={<DemandeListPage />} />
           <Route path="demandes/new" element={<DemandeCreatePage />} />
           <Route path="demandes/:id/edit" element={<DemandeEditPage />} />

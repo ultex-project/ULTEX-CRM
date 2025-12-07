@@ -64,6 +64,7 @@
       "sousServices": "Sous-Services",
       "products": "Products",
       "demandes": "Demands",
+      "editProfile": "Edit Profile",
       "title": "Ultex"
     },
     "dashboard": {
@@ -82,6 +83,12 @@
       "email.placeholder": "Your email"
     },
     "messages": {
+      "upload": {
+        "fail": "Unable to upload the file. Please try again."
+      },
+      "delete": {
+        "fail": "Unable to complete the deletion."
+      },
       "info": {
         "authenticated": {
           "prefix": "If you want to ",

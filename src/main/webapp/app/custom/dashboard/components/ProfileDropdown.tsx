@@ -1,5 +1,6 @@
 // src/main/webapp/app/shared/layout/ProfileDropdown.tsx
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCog, faInfoCircle, faSignOutAlt, faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -67,8 +68,8 @@ const ProfileDropdown = () => {
         {/* Menu Items */}
         <div className="py-2">
           <DropdownItem
-            tag="button"
-            onClick={() => (window.location.href = '/account/settings')}
+            tag={Link}
+            to="/dashboard/edit-profile"
             className="d-flex align-items-center gap-3 px-4 py-2 rounded-0"
             style={{
               fontSize: '0.875rem',

@@ -254,6 +254,25 @@ public class UserService {
             });
     }
 
+    /**
+     * Update imageUrl for the current user.
+     *
+     * @param imageUrl new image URL (can be null to clear).
+     * @return updated user, if present.
+     */
+    @Transactional
+    public Optional<User> updateCurrentUserImageUrl(String imageUrl) {
+        return SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .map(user -> {
+                user.setImageUrl(imageUrl);
+                userRepository.save(user);
+                this.clearUserCaches(user);
+                LOG.debug("Updated avatar for user: {}", user.getLogin());
+                return user;
+            });
+    }
+
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()

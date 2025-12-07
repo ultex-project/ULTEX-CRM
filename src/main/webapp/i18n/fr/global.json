@@ -68,6 +68,7 @@
       "sousServices": "Sous-services",
       "products": "Produits",
       "demandes": "Demandes",
+      "editProfile": "Modifier le profil",
       "title": "Ultex"
     },
     "dashboard": {
@@ -86,6 +87,12 @@
       "email.placeholder": "Votre email"
     },
     "messages": {
+      "upload": {
+        "fail": "Impossible de téléverser le fichier. Veuillez réessayer."
+      },
+      "delete": {
+        "fail": "Impossible de finaliser la suppression."
+      },
       "info": {
         "authenticated": {
           "prefix": "Si vous voulez vous ",

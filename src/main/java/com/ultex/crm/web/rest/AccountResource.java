@@ -12,11 +12,16 @@ import com.ultex.crm.web.rest.vm.KeyAndPasswordVM;
 import com.ultex.crm.web.rest.vm.ManagedUserVM;
 import jakarta.validation.Valid;
 import java.util.*;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * REST controller for managing the current user's account.
@@ -39,6 +44,8 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
+
+    private static final long AVATAR_MAX_BYTES = 2 * 1024 * 1024; // 2 MB
 
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
         this.userRepository = userRepository;
@@ -121,6 +128,51 @@ public class AccountResource {
     }
 
     /**
+     * {@code POST  /account/avatar} : upload an avatar for the current user.
+     *
+     * Accepts multipart/form-data with field "file".
+     */
+    @PostMapping(path = "/account/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar file is empty");
+        }
+        if (file.getSize() > AVATAR_MAX_BYTES) {
+            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "Avatar file exceeds 2MB");
+        }
+        try {
+            String contentType = StringUtils.defaultIfBlank(file.getContentType(), MediaType.IMAGE_JPEG_VALUE);
+            String base64 = Base64.encodeBase64String(file.getBytes());
+            String dataUri = "data:" + contentType + ";base64," + base64;
+
+            Optional<User> updated = userService.updateCurrentUserImageUrl(dataUri);
+            if (!updated.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            }
+            Map<String, String> body = new HashMap<>();
+            body.put("imageUrl", updated.get().getImageUrl());
+            return ResponseEntity.ok(body);
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            LOG.error("Failed to upload avatar", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody("Unable to upload avatar"));
+        }
+    }
+
+    /**
+     * {@code DELETE  /account/avatar} : remove the current user's avatar.
+     */
+    @DeleteMapping(path = "/account/avatar")
+    public ResponseEntity<Void> deleteAvatar() {
+        Optional<User> updated = userService.updateCurrentUserImageUrl(null);
+        if (!updated.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
      * {@code POST  /account/change-password} : changes the current user's password.
      *
      * @param passwordChangeDto current and new password.
@@ -176,5 +228,11 @@ public class AccountResource {
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
             password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
+    }
+
+    private Map<String, String> errorBody(String message) {
+        Map<String, String> body = new HashMap<>();
+        body.put("message", message);
+        return body;
     }
 }
