@@ -14,37 +14,68 @@ application {
   entities *
 }
 
-// ===== ENTITIES =====
+// =========================
+// NEW ENTITY: Langue
+// =========================
+
+entity Langue {
+  code String required unique, // FR, EN, AR, ES...
+  nom  String required         // Français, English, العربية...
+}
+
+// =========================
+// NEW ENTITY: ReseauSocial
+// =========================
+
+enum PlateformeSociale {
+  FACEBOOK,
+  INSTAGRAM,
+  WHATSAPP,
+  YOUTUBE,
+  X_TWITTER,
+  LINKEDIN,
+  TIKTOK,
+  SNAPCHAT,
+  TELEGRAM,
+  AUTRE
+}
+
+entity ReseauSocial {
+  plateforme PlateformeSociale required,
+  urlProfil String,
+  username String,
+  type String // Pro / Personnel / Autre
+}
+
+// =========================
+// ENTITIES (Original + Cleaned)
+// =========================
 
 entity Client {
-  code String required pattern(/[A-Z0-9]{4,}/), // généré automatiquement (lettre + chiffre)
+  code String required pattern(/[A-Z0-9]{4,}/),
   nomComplet String required,
-  photoUrl String, // pour identification rapide
+  photoUrl String,
   dateNaissance LocalDate,
   lieuNaissance String,
   nationalite String required,
-  genre String, // Homme / Femme
-  fonction String, // Importateur, Directeur Achats, etc.
-  languePreferee String, // FR / AR / EN / Autre
+  genre String,
+  fonction String,
   telephonePrincipal String required pattern(/^\+[0-9]{8,15}$/),
   whatsapp String,
   email String,
   adressePersonnelle String,
-  adressesLivraison String, // liste ou concat
-  reseauxSociaux String, // LinkedIn, Facebook, WeChat, etc.
+  adressesLivraison String,
   createdAt Instant,
   updatedAt Instant
 }
-// =========================
-// REFERENCE ENTITIES
-// =========================
 
 entity Devise {
-  code String required unique, // e.g., "USD"
-  nomComplet String required,  // e.g., "US Dollar"
-  symbole String,              // e.g., "$"
-  pays String                  // optional, e.g., "United States"
+  code String required unique,
+  nomComplet String required,
+  symbole String,
+  pays String
 }
+
 enum TypeProduit {
   VEHICULE,
   MACHINE,
@@ -52,15 +83,16 @@ enum TypeProduit {
   MATIERE_PREMIERE,
   AUTRE
 }
+
 entity Incoterm {
-  code String required unique, // e.g., "FOB"
-  description String required  // e.g., "Free On Board"
+  code String required unique,
+  description String required
 }
 
 entity Pays {
-  code String required unique, // e.g., "MA"
-  nom String required,         // e.g., "Maroc"
-  indicatif String             // e.g., "+212"
+  code String required unique,
+  nom String required,
+  indicatif String
 }
 
 entity History {
@@ -76,6 +108,7 @@ entity History {
   ipAddress String,
   userAgent String
 }
+
 entity SocieteLiee {
   raisonSociale String required,
   formeJuridique String,
@@ -95,19 +128,21 @@ entity ContactAssocie {
   telephone String,
   whatsapp String,
   email String,
-  autorisation String, // Info, Mandataire, Signataire
+  autorisation String,
   remarques String
 }
 
 entity DocumentClient {
-  typeDocument String required, // CIN, Passeport, RC, ICE, etc.
+  typeDocument String required,
   numeroDocument String,
   fichierUrl String
 }
+
 entity SousService {
   code String required unique,
   libelle String required
 }
+
 entity DemandeClient {
   reference String required,
   dateDemande Instant required,
@@ -122,7 +157,7 @@ entity ProduitDemande {
   nomProduit String required,
   description String,
   quantite Double,
-  unite String, // kg, pcs, etc.
+  unite String,
   prix Double,
   poidsKg Double,
   volumeTotalCbm Double,
@@ -132,52 +167,44 @@ entity ProduitDemande {
   fraisExpedition Double,
   origine String,
   fournisseur String,
-  adresseChargement String, // for export
-  adresseDechargement String, // for export
+  adresseChargement String,
+  adresseDechargement String,
   ficheTechniqueUrl String,
   photosUrl String,
   piecesJointesUrl String
 }
 
-// ===============================
-// ENTITY: CycleActivation
-// ===============================
 entity CycleActivation {
-  numeroCycle Integer required, // e.g., 1, 2, 3
+  numeroCycle Integer required,
   dateDebut Instant required,
   dateFin Instant,
-  statutCycle String, // e.g., "En cours", "Terminé"
+  statutCycle String,
   commentaire TextBlob
 }
 
-// ===============================
-// ENTITY: EtatInteraction (historique des états)
-// ===============================
 entity EtatInteraction {
-  etat EtatCRM required, // Enum defined below
+  etat EtatCRM required,
   dateEtat Instant required,
-  agent String, // Nom de l’agent
+  agent String,
   observation TextBlob
 }
 
-
 entity HistoriqueCRM {
   dateInteraction Instant required,
-  canal String, // WhatsApp, Email, Téléphone...
+  canal String,
   agent String,
   resume TextBlob,
-  etat String, // Traité, En cours, Faible qualité, etc.
+  etat String,
   observation String
 }
 
 entity KycClient {
   scoreStaff Integer,
-  comportements String, // multi-sélection : Bon payeur, Exigeant, Négociateur...
+  comportements String,
   remarques String,
-  completudeKyc Integer, // 0–100 %
+  completudeKyc Integer,
   responsable String
 }
-
 
 entity Prospect {
   firstName String required,
@@ -229,18 +256,13 @@ entity Company {
   createdAt Instant,
   updatedAt Instant
 }
+
 entity RappelAgent {
   rappelDate Instant required,
   rappelMessage String,
-  statutRappel StatutRappel required, // PENDING, DONE, MISSED
+  statutRappel StatutRappel required,
   createdAt Instant,
   updatedAt Instant
-}
-
-enum StatutRappel {
-  PENDING,
-  DONE,
-  MISSED
 }
 
 entity Contact {
@@ -250,12 +272,15 @@ entity Contact {
   phone String,
   cin String,
   position String,
-  quality String, // "Qualité du contact"
+  quality String,
   createdAt Instant,
   updatedAt Instant
 }
 
-/* ENUMS */
+// ===============================
+// ENUMS
+// ===============================
+
 enum ClientStatus {
   ACTIVE, INACTIVE, ARCHIVED
 }
@@ -271,9 +296,7 @@ enum OpportunityStage {
 enum UserRole {
   ADMIN, MANAGER, COMMERCIAL
 }
-// ===============================
-// ENUM: EtatCRM
-// ===============================
+
 enum EtatCRM {
   TRAITE,
   EN_COURS,
@@ -286,6 +309,7 @@ enum EtatCRM {
   NUMERO_ERRONE,
   AUTRE
 }
+
 enum TypeDemande {
   PROFORMA,
   SOURCING,
@@ -297,122 +321,131 @@ enum ServicePrincipal {
   IMPORT,
   EXPORT
 }
-/* RELATIONSHIPS */
 
-// --- Core Business Logic Relationships ---
+enum StatutRappel {
+  PENDING,
+  DONE,
+  MISSED
+}
 
-// Client has many Opportunities
+// ===============================
+// RELATIONSHIPS
+// ===============================
+
+// NEW: Client prefers a language
+relationship ManyToOne {
+  Client{languePreferee} to Langue
+}
+
+// NEW: Client has many social networks
+relationship OneToMany {
+  Client{reseauxSociaux} to ReseauSocial{client required}
+}
+
 relationship ManyToMany {
   DemandeClient{sousServices} to SousService{demandes}
 }
+
 relationship OneToMany {
   Client{opportunities} to Opportunity{client required}
 }
-// Each reminder is linked to an EtatInteraction and the agent responsible
+
 relationship ManyToOne {
   RappelAgent{etat} to EtatInteraction
 }
+
 relationship ManyToOne {
   RappelAgent{client} to Client
 }
+
 relationship ManyToOne {
   RappelAgent{agent} to InternalUser
 }
+
 relationship ManyToOne {
   ContactAssocie{client} to Client
 }
+
 relationship OneToMany {
   DemandeClient{produits} to ProduitDemande{demande}
 }
+
 relationship ManyToOne {
   HistoriqueCRM{client} to Client
 }
-// Opportunity is assigned to one InternalUser
+
 relationship ManyToOne {
   Opportunity{assignedTo required} to InternalUser{opportunities}
 }
+
 relationship ManyToOne {
   DocumentClient{client} to Client
 }
+
 relationship ManyToOne {
   DemandeClient{client} to Client
 }
+
 relationship OneToOne {
   KycClient{client} to Client
 }
-// Each DemandeClient uses a Devise and an Incoterm
+
 relationship ManyToOne {
   DemandeClient{devise} to Devise,
   DemandeClient{incoterm} to Incoterm
 }
 
-// ===============================
-// RELATIONS
-// ===============================
-
-// A Client can have multiple activation cycles
 relationship OneToMany {
   Client{cyclesActivation} to CycleActivation{client required}
 }
 
-// Each cycle belongs to one client and contains multiple états
 relationship OneToMany {
   CycleActivation{etats} to EtatInteraction{cycle required}
 }
 
-// Optionally, link EtatInteraction to HistoriqueCRM for traceability
 relationship ManyToOne {
   EtatInteraction{historique} to HistoriqueCRM
 }
-// Each Client is associated with a country
+
 relationship ManyToOne {
   Client{pays} to Pays
 }
 
-// --- Conversion Flow ---
-
-// Prospect can be converted into one Client (OneToOne)
 relationship OneToOne {
   Prospect{convertedTo} to Client{convertedFromProspect}
 }
 
-// Prospect was converted by one InternalUser
 relationship ManyToOne {
   Prospect{convertedBy required} to InternalUser{convertedProspects}
 }
 
-// --- Entity-Company Relationships ---
-
-// Client optionally belongs to one Company
 relationship ManyToOne {
   Client{company} to Company{clients}
 }
 
-// Prospect optionally belongs to one Company
 relationship ManyToOne {
   Prospect{company} to Company{prospects}
 }
 
-// Contact belongs to one Company (required)
 relationship ManyToOne {
   Contact{company required} to Company{contacts}
 }
 
-// --- Contact Linking Relationships ---
-
-// Contact optionally links to one Client
 relationship ManyToOne {
   Contact{client} to Client{contacts}
 }
 
-// Contact optionally links to one Prospect
 relationship ManyToOne {
   Contact{prospect} to Prospect{contacts}
 }
+
 relationship ManyToOne {
   SocieteLiee{client} to Client
 }
-/* OPTIONS */
+
+// ===============================
+// OPTIONS
+// ===============================
 
 paginate * with pagination
 service all with serviceClass
