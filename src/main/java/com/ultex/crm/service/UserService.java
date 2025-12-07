@@ -263,7 +263,7 @@ public class UserService {
     @Transactional
     public Optional<User> updateCurrentUserImageUrl(String imageUrl) {
         return SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
+            .flatMap(userRepository::findOneWithAuthoritiesByLogin)
             .map(user -> {
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);

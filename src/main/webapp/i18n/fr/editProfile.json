@@ -5,6 +5,7 @@
     "passwordNote": "Pour changer votre mot de passe, rendez-vous dans la section Mot de passe des Paramètres du compte.",
     "avatarHint": "Utilisez une image carrée pour un meilleur rendu.",
     "avatarNotSupported": "Le téléversement d'avatar n'est pas disponible sur ce serveur.",
+    "avatarTooLarge": "Veuillez choisir une image de moins de 2 Mo.",
     "save": "Enregistrer",
     "cancel": "Annuler"
   }

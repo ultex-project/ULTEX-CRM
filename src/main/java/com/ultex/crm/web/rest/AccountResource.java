@@ -3,6 +3,7 @@ package com.ultex.crm.web.rest;
 import com.ultex.crm.domain.User;
 import com.ultex.crm.repository.UserRepository;
 import com.ultex.crm.security.SecurityUtils;
+import com.ultex.crm.service.AvatarService;
 import com.ultex.crm.service.MailService;
 import com.ultex.crm.service.UserService;
 import com.ultex.crm.service.dto.AdminUserDTO;
@@ -11,8 +12,7 @@ import com.ultex.crm.web.rest.errors.*;
 import com.ultex.crm.web.rest.vm.KeyAndPasswordVM;
 import com.ultex.crm.web.rest.vm.ManagedUserVM;
 import jakarta.validation.Valid;
-import java.util.*;
-import org.apache.commons.codec.binary.Base64;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,12 +45,13 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    private static final long AVATAR_MAX_BYTES = 2 * 1024 * 1024; // 2 MB
+    private final AvatarService avatarService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, AvatarService avatarService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.avatarService = avatarService;
     }
 
     /**
@@ -133,43 +134,32 @@ public class AccountResource {
      * Accepts multipart/form-data with field "file".
      */
     @PostMapping(path = "/account/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Map<String, String>> uploadAvatar(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar file is empty");
-        }
-        if (file.getSize() > AVATAR_MAX_BYTES) {
-            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "Avatar file exceeds 2MB");
-        }
-        try {
-            String contentType = StringUtils.defaultIfBlank(file.getContentType(), MediaType.IMAGE_JPEG_VALUE);
-            String base64 = Base64.encodeBase64String(file.getBytes());
-            String dataUri = "data:" + contentType + ";base64," + base64;
+    public ResponseEntity<AdminUserDTO> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        String imageUrl = avatarService.storeAvatar(file, login);
 
-            Optional<User> updated = userService.updateCurrentUserImageUrl(dataUri);
-            if (!updated.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-            }
-            Map<String, String> body = new HashMap<>();
-            body.put("imageUrl", updated.get().getImageUrl());
-            return ResponseEntity.ok(body);
-        } catch (ResponseStatusException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            LOG.error("Failed to upload avatar", ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody("Unable to upload avatar"));
+        Optional<User> updated = userService.updateCurrentUserImageUrl(imageUrl);
+        if (!updated.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
+        LOG.debug("User {} uploaded new avatar {}", login, imageUrl);
+        return ResponseEntity.ok(new AdminUserDTO(updated.get()));
     }
 
     /**
      * {@code DELETE  /account/avatar} : remove the current user's avatar.
      */
     @DeleteMapping(path = "/account/avatar")
-    public ResponseEntity<Void> deleteAvatar() {
+    public ResponseEntity<AdminUserDTO> deleteAvatar() {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        avatarService.deleteAvatar(login);
+
         Optional<User> updated = userService.updateCurrentUserImageUrl(null);
         if (!updated.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        return ResponseEntity.noContent().build();
+        LOG.debug("User {} deleted their avatar", login);
+        return ResponseEntity.ok(new AdminUserDTO(updated.get()));
     }
 
     /**
@@ -228,11 +218,5 @@ public class AccountResource {
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
             password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
-    }
-
-    private Map<String, String> errorBody(String message) {
-        Map<String, String> body = new HashMap<>();
-        body.put("message", message);
-        return body;
     }
 }

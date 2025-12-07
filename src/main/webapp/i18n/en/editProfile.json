@@ -5,6 +5,7 @@
     "passwordNote": "To change your password, go to the Password section in Account Settings.",
     "avatarHint": "Use a square image for best results.",
     "avatarNotSupported": "Avatar upload is not available on this server.",
+    "avatarTooLarge": "Please choose an image under 2MB.",
     "save": "Save Changes",
     "cancel": "Cancel"
   }

@@ -27,7 +27,7 @@ const AvatarUploader: React.FC<Props> = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSelectFile = () => {
-    if (disabled) {
+    if (disabled || uploading || removing) {
       return;
     }
     fileInputRef.current?.click();
@@ -36,7 +36,7 @@ const AvatarUploader: React.FC<Props> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (!disabled) {
+      if (!disabled && !uploading && !removing) {
         onUpload(file);
       }
       event.target.value = '';
@@ -47,7 +47,7 @@ const AvatarUploader: React.FC<Props> = ({
     event.preventDefault();
     const file = event.dataTransfer.files?.[0];
     if (file) {
-      if (!disabled) {
+      if (!disabled && !uploading && !removing) {
         onUpload(file);
       }
     }

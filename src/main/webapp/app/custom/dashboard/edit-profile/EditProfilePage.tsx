@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Alert, Breadcrumb, BreadcrumbItem, Button, Card, CardBody, Col, Form, FormText, Row, Spinner } from 'reactstrap';
 import { Translate, isEmail, translate } from 'react-jhipster';
@@ -18,6 +18,12 @@ type AccountPayload = {
   phone?: string;
   langKey?: string;
   imageUrl?: string | null;
+};
+
+type AccountResponse = AccountPayload & {
+  id?: string | number;
+  activated?: boolean;
+  authorities?: string[];
 };
 
 const EditProfilePage = () => {
@@ -41,9 +47,27 @@ const EditProfilePage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [removingAvatar, setRemovingAvatar] = useState(false);
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | undefined>(undefined);
+  const temporaryPreviewRef = useRef<string | null>(null);
   const avatarFeatureEnabled =
     typeof process !== 'undefined' && process.env ? process.env.REACT_APP_ACCOUNT_AVATAR_ENABLED !== 'false' : true;
   const [avatarAvailable, setAvatarAvailable] = useState(avatarFeatureEnabled);
+  const AVATAR_MAX_BYTES = 2 * 1024 * 1024;
+
+  const setTemporaryPreview = (url: string) => {
+    if (temporaryPreviewRef.current) {
+      URL.revokeObjectURL(temporaryPreviewRef.current);
+    }
+    temporaryPreviewRef.current = url;
+    setAvatarPreviewUrl(url);
+  };
+
+  const clearTemporaryPreview = () => {
+    if (temporaryPreviewRef.current) {
+      URL.revokeObjectURL(temporaryPreviewRef.current);
+      temporaryPreviewRef.current = null;
+    }
+  };
 
   const languageOptions = useMemo(
     () =>
@@ -59,7 +83,7 @@ const EditProfilePage = () => {
       setLoading(true);
       setLoadingError(null);
       try {
-        const response = await axios.get<AccountPayload>('api/account');
+        const response = await axios.get<AccountResponse>('api/account');
         const data = response.data;
         setFormValues({
           firstName: data.firstName ?? '',
@@ -70,6 +94,7 @@ const EditProfilePage = () => {
           langKey: data.langKey ?? '',
           imageUrl: data.imageUrl ?? undefined,
         });
+        setAvatarPreviewUrl(data.imageUrl ?? undefined);
       } catch (error) {
         setLoadingError(translate('global.messages.loading.error') || 'Unable to load account');
       } finally {
@@ -79,6 +104,16 @@ const EditProfilePage = () => {
 
     loadAccount();
   }, []);
+
+  useEffect(
+    () => () => {
+      if (temporaryPreviewRef.current) {
+        URL.revokeObjectURL(temporaryPreviewRef.current);
+        temporaryPreviewRef.current = null;
+      }
+    },
+    [],
+  );
 
   const validate = (values: PersonalInfoFormValues) => {
     const errors: PersonalInfoFormErrors = {};
@@ -150,19 +185,31 @@ const EditProfilePage = () => {
       setSubmitError(translate('editProfile.avatarNotSupported'));
       return;
     }
+    if (file.size > AVATAR_MAX_BYTES) {
+      setSubmitError(translate('editProfile.avatarTooLarge') || 'Avatar must be under 2MB');
+      return;
+    }
+    const previousImageUrl = formValues.imageUrl ?? account?.imageUrl ?? undefined;
+    const previewUrl = URL.createObjectURL(file);
+    setTemporaryPreview(previewUrl);
     setUploadingAvatar(true);
     setSubmitError(null);
+    setSuccessMessage(null);
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const response = await axios.post<{ imageUrl?: string }>('api/account/avatar', formData, {
+      const response = await axios.post<AccountResponse>('api/account/avatar', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      const nextImageUrl = response.data?.imageUrl ?? formValues.imageUrl;
-      setFormValues(prev => ({ ...prev, imageUrl: nextImageUrl || URL.createObjectURL(file) }));
+      const nextImageUrl = response.data?.imageUrl ?? undefined;
+      clearTemporaryPreview();
+      setAvatarPreviewUrl(nextImageUrl);
+      setFormValues(prev => ({ ...prev, imageUrl: nextImageUrl }));
       setSuccessMessage(translate('settings.messages.success') || 'Profile updated successfully');
       dispatch(getSession());
     } catch (error) {
+      clearTemporaryPreview();
+      setAvatarPreviewUrl(previousImageUrl);
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         setAvatarAvailable(false);
         setSubmitError(translate('editProfile.avatarNotSupported'));
@@ -177,20 +224,23 @@ const EditProfilePage = () => {
   const handleAvatarRemove = async () => {
     if (!avatarAvailable) {
       setFormValues(prev => ({ ...prev, imageUrl: undefined }));
+      setAvatarPreviewUrl(undefined);
       return;
     }
+    clearTemporaryPreview();
     setRemovingAvatar(true);
     setSubmitError(null);
+    setSuccessMessage(null);
+    const previousImageUrl = formValues.imageUrl ?? account?.imageUrl ?? undefined;
     try {
-      try {
-        await axios.delete('api/account/avatar');
-      } catch (error) {
-        await axios.post('api/account', { ...formValues, imageUrl: null });
-      }
-      setFormValues(prev => ({ ...prev, imageUrl: undefined }));
+      const response = await axios.delete<AccountResponse>('api/account/avatar');
+      const nextImageUrl = response.data?.imageUrl ?? undefined;
+      setFormValues(prev => ({ ...prev, imageUrl: nextImageUrl }));
+      setAvatarPreviewUrl(nextImageUrl);
       setSuccessMessage(translate('settings.messages.success') || 'Profile updated successfully');
       dispatch(getSession());
     } catch (error) {
+      setAvatarPreviewUrl(previousImageUrl);
       if (axios.isAxiosError(error) && error.response?.status === 404) {
         setAvatarAvailable(false);
         setSubmitError(translate('editProfile.avatarNotSupported'));
@@ -202,8 +252,10 @@ const EditProfilePage = () => {
     }
   };
 
+  const displayedAvatar = avatarPreviewUrl ?? formValues.imageUrl ?? account?.imageUrl;
+
   const renderHeaderAvatar = () => {
-    const source = formValues.imageUrl || account?.imageUrl;
+    const source = displayedAvatar;
     if (!source) {
       return (
         <div className="edit-profile__avatar-fallback d-flex align-items-center justify-content-center">
@@ -281,7 +333,7 @@ const EditProfilePage = () => {
                 </Col>
                 <Col md="5" lg="4">
                   <AvatarUploader
-                    imageUrl={formValues.imageUrl}
+                    imageUrl={displayedAvatar}
                     uploading={uploadingAvatar}
                     removing={removingAvatar}
                     placeholderInitial={(account?.login ?? 'U')[0]?.toUpperCase()}
