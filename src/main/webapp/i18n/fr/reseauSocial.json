@@ -1,0 +1,28 @@
+{
+  "crmApp": {
+    "reseauSocial": {
+      "home": {
+        "title": "ReseauSocials",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Reseau Social",
+        "createOrEditLabel": "Créer ou éditer un Reseau Social",
+        "notFound": "Aucun Reseau Social trouvé"
+      },
+      "created": "Un nouveau Reseau Social a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Reseau Social avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Reseau Social avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Reseau Social {{ id }} ?"
+      },
+      "detail": {
+        "title": "Reseau Social"
+      },
+      "id": "ID",
+      "plateforme": "Plateforme",
+      "urlProfil": "Url Profil",
+      "username": "Username",
+      "type": "Type",
+      "client": "Client"
+    }
+  }
+}

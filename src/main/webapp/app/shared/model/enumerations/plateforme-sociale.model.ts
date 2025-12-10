@@ -1,0 +1,21 @@
+export enum PlateformeSociale {
+  FACEBOOK = 'FACEBOOK',
+
+  INSTAGRAM = 'INSTAGRAM',
+
+  WHATSAPP = 'WHATSAPP',
+
+  YOUTUBE = 'YOUTUBE',
+
+  X_TWITTER = 'X_TWITTER',
+
+  LINKEDIN = 'LINKEDIN',
+
+  TIKTOK = 'TIKTOK',
+
+  SNAPCHAT = 'SNAPCHAT',
+
+  TELEGRAM = 'TELEGRAM',
+
+  AUTRE = 'AUTRE',
+}

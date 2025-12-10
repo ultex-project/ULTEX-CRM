@@ -62,9 +62,6 @@ class ClientResourceIT {
     private static final String DEFAULT_FONCTION = "AAAAAAAAAA";
     private static final String UPDATED_FONCTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_LANGUE_PREFEREE = "AAAAAAAAAA";
-    private static final String UPDATED_LANGUE_PREFEREE = "BBBBBBBBBB";
-
     private static final String DEFAULT_TELEPHONE_PRINCIPAL = "+44002698195";
     private static final String UPDATED_TELEPHONE_PRINCIPAL = "+32734151477900";
 
@@ -79,9 +76,6 @@ class ClientResourceIT {
 
     private static final String DEFAULT_ADRESSES_LIVRAISON = "AAAAAAAAAA";
     private static final String UPDATED_ADRESSES_LIVRAISON = "BBBBBBBBBB";
-
-    private static final String DEFAULT_RESEAUX_SOCIAUX = "AAAAAAAAAA";
-    private static final String UPDATED_RESEAUX_SOCIAUX = "BBBBBBBBBB";
 
     private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -130,13 +124,11 @@ class ClientResourceIT {
             .nationalite(DEFAULT_NATIONALITE)
             .genre(DEFAULT_GENRE)
             .fonction(DEFAULT_FONCTION)
-            .languePreferee(DEFAULT_LANGUE_PREFEREE)
             .telephonePrincipal(DEFAULT_TELEPHONE_PRINCIPAL)
             .whatsapp(DEFAULT_WHATSAPP)
             .email(DEFAULT_EMAIL)
             .adressePersonnelle(DEFAULT_ADRESSE_PERSONNELLE)
             .adressesLivraison(DEFAULT_ADRESSES_LIVRAISON)
-            .reseauxSociaux(DEFAULT_RESEAUX_SOCIAUX)
             .createdAt(DEFAULT_CREATED_AT)
             .updatedAt(DEFAULT_UPDATED_AT);
     }
@@ -157,13 +149,11 @@ class ClientResourceIT {
             .nationalite(UPDATED_NATIONALITE)
             .genre(UPDATED_GENRE)
             .fonction(UPDATED_FONCTION)
-            .languePreferee(UPDATED_LANGUE_PREFEREE)
             .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
             .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
             .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
             .adressesLivraison(UPDATED_ADRESSES_LIVRAISON)
-            .reseauxSociaux(UPDATED_RESEAUX_SOCIAUX)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
     }
@@ -311,13 +301,11 @@ class ClientResourceIT {
             .andExpect(jsonPath("$.[*].nationalite").value(hasItem(DEFAULT_NATIONALITE)))
             .andExpect(jsonPath("$.[*].genre").value(hasItem(DEFAULT_GENRE)))
             .andExpect(jsonPath("$.[*].fonction").value(hasItem(DEFAULT_FONCTION)))
-            .andExpect(jsonPath("$.[*].languePreferee").value(hasItem(DEFAULT_LANGUE_PREFEREE)))
             .andExpect(jsonPath("$.[*].telephonePrincipal").value(hasItem(DEFAULT_TELEPHONE_PRINCIPAL)))
             .andExpect(jsonPath("$.[*].whatsapp").value(hasItem(DEFAULT_WHATSAPP)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].adressePersonnelle").value(hasItem(DEFAULT_ADRESSE_PERSONNELLE)))
             .andExpect(jsonPath("$.[*].adressesLivraison").value(hasItem(DEFAULT_ADRESSES_LIVRAISON)))
-            .andExpect(jsonPath("$.[*].reseauxSociaux").value(hasItem(DEFAULT_RESEAUX_SOCIAUX)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
     }
@@ -342,13 +330,11 @@ class ClientResourceIT {
             .andExpect(jsonPath("$.nationalite").value(DEFAULT_NATIONALITE))
             .andExpect(jsonPath("$.genre").value(DEFAULT_GENRE))
             .andExpect(jsonPath("$.fonction").value(DEFAULT_FONCTION))
-            .andExpect(jsonPath("$.languePreferee").value(DEFAULT_LANGUE_PREFEREE))
             .andExpect(jsonPath("$.telephonePrincipal").value(DEFAULT_TELEPHONE_PRINCIPAL))
             .andExpect(jsonPath("$.whatsapp").value(DEFAULT_WHATSAPP))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.adressePersonnelle").value(DEFAULT_ADRESSE_PERSONNELLE))
             .andExpect(jsonPath("$.adressesLivraison").value(DEFAULT_ADRESSES_LIVRAISON))
-            .andExpect(jsonPath("$.reseauxSociaux").value(DEFAULT_RESEAUX_SOCIAUX))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
             .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
     }
@@ -381,13 +367,11 @@ class ClientResourceIT {
             .nationalite(UPDATED_NATIONALITE)
             .genre(UPDATED_GENRE)
             .fonction(UPDATED_FONCTION)
-            .languePreferee(UPDATED_LANGUE_PREFEREE)
             .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
             .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
             .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
             .adressesLivraison(UPDATED_ADRESSES_LIVRAISON)
-            .reseauxSociaux(UPDATED_RESEAUX_SOCIAUX)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
         ClientDTO clientDTO = clientMapper.toDto(updatedClient);
@@ -483,7 +467,6 @@ class ClientResourceIT {
             .nationalite(UPDATED_NATIONALITE)
             .genre(UPDATED_GENRE)
             .fonction(UPDATED_FONCTION)
-            .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
             .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
             .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
@@ -525,13 +508,11 @@ class ClientResourceIT {
             .nationalite(UPDATED_NATIONALITE)
             .genre(UPDATED_GENRE)
             .fonction(UPDATED_FONCTION)
-            .languePreferee(UPDATED_LANGUE_PREFEREE)
             .telephonePrincipal(UPDATED_TELEPHONE_PRINCIPAL)
             .whatsapp(UPDATED_WHATSAPP)
             .email(UPDATED_EMAIL)
             .adressePersonnelle(UPDATED_ADRESSE_PERSONNELLE)
             .adressesLivraison(UPDATED_ADRESSES_LIVRAISON)
-            .reseauxSociaux(UPDATED_RESEAUX_SOCIAUX)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
 

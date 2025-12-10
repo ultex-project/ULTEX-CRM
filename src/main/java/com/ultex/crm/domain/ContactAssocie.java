@@ -52,7 +52,17 @@ public class ContactAssocie implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        value = {
+            "reseauxSociauxes",
+            "opportunities",
+            "cyclesActivations",
+            "languePreferee",
+            "pays",
+            "company",
+            "convertedFromProspect",
+            "contacts",
+            "kycClient",
+        },
         allowSetters = true
     )
     private Client client;

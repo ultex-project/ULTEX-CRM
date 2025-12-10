@@ -2,9 +2,11 @@ package com.ultex.crm.service.mapper;
 
 import com.ultex.crm.domain.Client;
 import com.ultex.crm.domain.Company;
+import com.ultex.crm.domain.Langue;
 import com.ultex.crm.domain.Pays;
 import com.ultex.crm.service.dto.ClientDTO;
 import com.ultex.crm.service.dto.CompanyDTO;
+import com.ultex.crm.service.dto.LangueDTO;
 import com.ultex.crm.service.dto.PaysDTO;
 import org.mapstruct.*;
 
@@ -13,9 +15,15 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ClientMapper extends EntityMapper<ClientDTO, Client> {
+    @Mapping(target = "languePreferee", source = "languePreferee", qualifiedByName = "langueId")
     @Mapping(target = "pays", source = "pays", qualifiedByName = "paysId")
     @Mapping(target = "company", source = "company", qualifiedByName = "companyId")
     ClientDTO toDto(Client s);
+
+    @Named("langueId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    LangueDTO toDtoLangueId(Langue langue);
 
     @Named("paysId")
     @BeanMapping(ignoreByDefault = true)

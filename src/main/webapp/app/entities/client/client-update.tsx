@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+import { getEntities as getLangues } from 'app/entities/langue/langue.reducer';
 import { getEntities as getPays } from 'app/entities/pays/pays.reducer';
 import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
 import { createEntity, getEntity, reset, updateEntity } from './client.reducer';
@@ -19,6 +20,7 @@ export const ClientUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const langues = useAppSelector(state => state.langue.entities);
   const pays = useAppSelector(state => state.pays.entities);
   const companies = useAppSelector(state => state.company.entities);
   const clientEntity = useAppSelector(state => state.client.entity);
@@ -37,6 +39,7 @@ export const ClientUpdate = () => {
       dispatch(getEntity(id));
     }
 
+    dispatch(getLangues({}));
     dispatch(getPays({}));
     dispatch(getCompanies({}));
   }, []);
@@ -57,6 +60,7 @@ export const ClientUpdate = () => {
     const entity = {
       ...clientEntity,
       ...values,
+      languePreferee: langues.find(it => it.id.toString() === values.languePreferee?.toString()),
       pays: pays.find(it => it.id.toString() === values.pays?.toString()),
       company: companies.find(it => it.id.toString() === values.company?.toString()),
     };
@@ -78,6 +82,7 @@ export const ClientUpdate = () => {
           ...clientEntity,
           createdAt: convertDateTimeFromServer(clientEntity.createdAt),
           updatedAt: convertDateTimeFromServer(clientEntity.updatedAt),
+          languePreferee: clientEntity?.languePreferee?.id,
           pays: clientEntity?.pays?.id,
           company: clientEntity?.company?.id,
         };
@@ -168,13 +173,6 @@ export const ClientUpdate = () => {
                 type="text"
               />
               <ValidatedField
-                label={translate('crmApp.client.languePreferee')}
-                id="client-languePreferee"
-                name="languePreferee"
-                data-cy="languePreferee"
-                type="text"
-              />
-              <ValidatedField
                 label={translate('crmApp.client.telephonePrincipal')}
                 id="client-telephonePrincipal"
                 name="telephonePrincipal"
@@ -208,13 +206,6 @@ export const ClientUpdate = () => {
                 type="text"
               />
               <ValidatedField
-                label={translate('crmApp.client.reseauxSociaux')}
-                id="client-reseauxSociaux"
-                name="reseauxSociaux"
-                data-cy="reseauxSociaux"
-                type="text"
-              />
-              <ValidatedField
                 label={translate('crmApp.client.createdAt')}
                 id="client-createdAt"
                 name="createdAt"
@@ -230,6 +221,22 @@ export const ClientUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
+              <ValidatedField
+                id="client-languePreferee"
+                name="languePreferee"
+                data-cy="languePreferee"
+                label={translate('crmApp.client.languePreferee')}
+                type="select"
+              >
+                <option value="" key="0" />
+                {langues
+                  ? langues.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
               <ValidatedField id="client-pays" name="pays" data-cy="pays" label={translate('crmApp.client.pays')} type="select">
                 <option value="" key="0" />
                 {pays

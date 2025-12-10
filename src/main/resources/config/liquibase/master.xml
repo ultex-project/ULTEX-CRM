@@ -33,6 +33,8 @@
     <include file="config/liquibase/changelog/20251017090411_added_entity_CycleActivation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251017090412_added_entity_EtatInteraction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251017090413_added_entity_RappelAgent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251209205629_added_entity_Langue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251209205630_added_entity_ReseauSocial.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250922204540_added_entity_constraints_Client.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250922204640_added_entity_constraints_Prospect.xml" relativeToChangelogFile="false"/>
@@ -48,6 +50,7 @@
     <include file="config/liquibase/changelog/20251017090411_added_entity_constraints_CycleActivation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251017090412_added_entity_constraints_EtatInteraction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251017090413_added_entity_constraints_RappelAgent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251209205630_added_entity_constraints_ReseauSocial.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

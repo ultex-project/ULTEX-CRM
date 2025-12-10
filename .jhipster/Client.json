@@ -42,10 +42,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "languePreferee",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "telephonePrincipal",
       "fieldType": "String",
       "fieldValidateRules": ["required", "pattern"],
@@ -68,10 +64,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "reseauxSociaux",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "createdAt",
       "fieldType": "Instant"
     },
@@ -83,6 +75,13 @@
   "name": "Client",
   "pagination": "pagination",
   "relationships": [
+    {
+      "otherEntityName": "reseauSocial",
+      "otherEntityRelationshipName": "client",
+      "relationshipName": "reseauxSociaux",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
     {
       "otherEntityName": "opportunity",
       "otherEntityRelationshipName": "client",
@@ -96,6 +95,12 @@
       "relationshipName": "cyclesActivation",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "langue",
+      "relationshipName": "languePreferee",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "pays",

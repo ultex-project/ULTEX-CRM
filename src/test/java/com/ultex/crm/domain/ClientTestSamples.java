@@ -19,13 +19,11 @@ public class ClientTestSamples {
             .nationalite("nationalite1")
             .genre("genre1")
             .fonction("fonction1")
-            .languePreferee("languePreferee1")
             .telephonePrincipal("telephonePrincipal1")
             .whatsapp("whatsapp1")
             .email("email1")
             .adressePersonnelle("adressePersonnelle1")
-            .adressesLivraison("adressesLivraison1")
-            .reseauxSociaux("reseauxSociaux1");
+            .adressesLivraison("adressesLivraison1");
     }
 
     public static Client getClientSample2() {
@@ -38,13 +36,11 @@ public class ClientTestSamples {
             .nationalite("nationalite2")
             .genre("genre2")
             .fonction("fonction2")
-            .languePreferee("languePreferee2")
             .telephonePrincipal("telephonePrincipal2")
             .whatsapp("whatsapp2")
             .email("email2")
             .adressePersonnelle("adressePersonnelle2")
-            .adressesLivraison("adressesLivraison2")
-            .reseauxSociaux("reseauxSociaux2");
+            .adressesLivraison("adressesLivraison2");
     }
 
     public static Client getClientRandomSampleGenerator() {
@@ -57,12 +53,10 @@ public class ClientTestSamples {
             .nationalite(UUID.randomUUID().toString())
             .genre(UUID.randomUUID().toString())
             .fonction(UUID.randomUUID().toString())
-            .languePreferee(UUID.randomUUID().toString())
             .telephonePrincipal(UUID.randomUUID().toString())
             .whatsapp(UUID.randomUUID().toString())
             .email(UUID.randomUUID().toString())
             .adressePersonnelle(UUID.randomUUID().toString())
-            .adressesLivraison(UUID.randomUUID().toString())
-            .reseauxSociaux(UUID.randomUUID().toString());
+            .adressesLivraison(UUID.randomUUID().toString());
     }
 }

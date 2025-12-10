@@ -34,8 +34,6 @@ public class ClientDTO implements Serializable {
 
     private String fonction;
 
-    private String languePreferee;
-
     @NotNull
     @Pattern(regexp = "^\\+[0-9]{8,15}$")
     private String telephonePrincipal;
@@ -48,11 +46,11 @@ public class ClientDTO implements Serializable {
 
     private String adressesLivraison;
 
-    private String reseauxSociaux;
-
     private Instant createdAt;
 
     private Instant updatedAt;
+
+    private LangueDTO languePreferee;
 
     private PaysDTO pays;
 
@@ -130,14 +128,6 @@ public class ClientDTO implements Serializable {
         this.fonction = fonction;
     }
 
-    public String getLanguePreferee() {
-        return languePreferee;
-    }
-
-    public void setLanguePreferee(String languePreferee) {
-        this.languePreferee = languePreferee;
-    }
-
     public String getTelephonePrincipal() {
         return telephonePrincipal;
     }
@@ -178,14 +168,6 @@ public class ClientDTO implements Serializable {
         this.adressesLivraison = adressesLivraison;
     }
 
-    public String getReseauxSociaux() {
-        return reseauxSociaux;
-    }
-
-    public void setReseauxSociaux(String reseauxSociaux) {
-        this.reseauxSociaux = reseauxSociaux;
-    }
-
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -200,6 +182,14 @@ public class ClientDTO implements Serializable {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public LangueDTO getLanguePreferee() {
+        return languePreferee;
+    }
+
+    public void setLanguePreferee(LangueDTO languePreferee) {
+        this.languePreferee = languePreferee;
     }
 
     public PaysDTO getPays() {
@@ -252,15 +242,14 @@ public class ClientDTO implements Serializable {
             ", nationalite='" + getNationalite() + "'" +
             ", genre='" + getGenre() + "'" +
             ", fonction='" + getFonction() + "'" +
-            ", languePreferee='" + getLanguePreferee() + "'" +
             ", telephonePrincipal='" + getTelephonePrincipal() + "'" +
             ", whatsapp='" + getWhatsapp() + "'" +
             ", email='" + getEmail() + "'" +
             ", adressePersonnelle='" + getAdressePersonnelle() + "'" +
             ", adressesLivraison='" + getAdressesLivraison() + "'" +
-            ", reseauxSociaux='" + getReseauxSociaux() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
+            ", languePreferee=" + getLanguePreferee() +
             ", pays=" + getPays() +
             ", company=" + getCompany() +
             "}";

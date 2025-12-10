@@ -1,0 +1,41 @@
+{
+  "annotations": {
+    "changelogDate": "20251209205630"
+  },
+  "applications": ["crmApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "plateforme",
+      "fieldType": "PlateformeSociale",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "FACEBOOK,INSTAGRAM,WHATSAPP,YOUTUBE,X_TWITTER,LINKEDIN,TIKTOK,SNAPCHAT,TELEGRAM,AUTRE"
+    },
+    {
+      "fieldName": "urlProfil",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "username",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    }
+  ],
+  "name": "ReseauSocial",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "client",
+      "otherEntityRelationshipName": "reseauxSociaux",
+      "relationshipName": "client",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

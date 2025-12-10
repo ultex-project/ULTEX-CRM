@@ -85,12 +85,6 @@ export const ClientDetail = () => {
           </dt>
           <dd>{clientEntity.fonction}</dd>
           <dt>
-            <span id="languePreferee">
-              <Translate contentKey="crmApp.client.languePreferee">Langue Preferee</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.languePreferee}</dd>
-          <dt>
             <span id="telephonePrincipal">
               <Translate contentKey="crmApp.client.telephonePrincipal">Telephone Principal</Translate>
             </span>
@@ -121,12 +115,6 @@ export const ClientDetail = () => {
           </dt>
           <dd>{clientEntity.adressesLivraison}</dd>
           <dt>
-            <span id="reseauxSociaux">
-              <Translate contentKey="crmApp.client.reseauxSociaux">Reseaux Sociaux</Translate>
-            </span>
-          </dt>
-          <dd>{clientEntity.reseauxSociaux}</dd>
-          <dt>
             <span id="createdAt">
               <Translate contentKey="crmApp.client.createdAt">Created At</Translate>
             </span>
@@ -138,6 +126,10 @@ export const ClientDetail = () => {
             </span>
           </dt>
           <dd>{clientEntity.updatedAt ? <TextFormat value={clientEntity.updatedAt} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
+          <dt>
+            <Translate contentKey="crmApp.client.languePreferee">Langue Preferee</Translate>
+          </dt>
+          <dd>{clientEntity.languePreferee ? clientEntity.languePreferee.id : ''}</dd>
           <dt>
             <Translate contentKey="crmApp.client.pays">Pays</Translate>
           </dt>

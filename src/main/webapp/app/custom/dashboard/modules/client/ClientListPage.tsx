@@ -280,7 +280,7 @@ const ClientListPage = () => {
       { value: 'telephonePrincipal', label: translate('crmApp.client.telephonePrincipal'), type: 'text' },
       { value: 'nationalite', label: translate('crmApp.client.nationalite'), type: 'text' },
       {
-        value: 'languePreferee',
+        value: 'languePrefereeId',
         label: translate('crmApp.client.languePreferee'),
         type: 'select',
         options: [

@@ -24,6 +24,8 @@ import SousService from './sous-service';
 import CycleActivation from './cycle-activation';
 import EtatInteraction from './etat-interaction';
 import RappelAgent from './rappel-agent';
+import Langue from './langue';
+import ReseauSocial from './reseau-social';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -52,6 +54,8 @@ export default () => {
         <Route path="cycle-activation/*" element={<CycleActivation />} />
         <Route path="etat-interaction/*" element={<EtatInteraction />} />
         <Route path="rappel-agent/*" element={<RappelAgent />} />
+        <Route path="langue/*" element={<Langue />} />
+        <Route path="reseau-social/*" element={<ReseauSocial />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

@@ -19,6 +19,8 @@ import sousService from 'app/entities/sous-service/sous-service.reducer';
 import cycleActivation from 'app/entities/cycle-activation/cycle-activation.reducer';
 import etatInteraction from 'app/entities/etat-interaction/etat-interaction.reducer';
 import rappelAgent from 'app/entities/rappel-agent/rappel-agent.reducer';
+import langue from 'app/entities/langue/langue.reducer';
+import reseauSocial from 'app/entities/reseau-social/reseau-social.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const entitiesReducers = {
@@ -43,6 +45,8 @@ const entitiesReducers = {
   cycleActivation,
   etatInteraction,
   rappelAgent,
+  langue,
+  reseauSocial,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

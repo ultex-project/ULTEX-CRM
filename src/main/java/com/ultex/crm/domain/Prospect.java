@@ -82,7 +82,17 @@ public class Prospect implements Serializable {
     private Instant updatedAt;
 
     @JsonIgnoreProperties(
-        value = { "opportunities", "cyclesActivations", "pays", "company", "convertedFromProspect", "contacts", "kycClient" },
+        value = {
+            "reseauxSociauxes",
+            "opportunities",
+            "cyclesActivations",
+            "languePreferee",
+            "pays",
+            "company",
+            "convertedFromProspect",
+            "contacts",
+            "kycClient",
+        },
         allowSetters = true
     )
     @OneToOne(fetch = FetchType.LAZY)

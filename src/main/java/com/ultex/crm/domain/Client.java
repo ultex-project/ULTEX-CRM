@@ -56,9 +56,6 @@ public class Client implements Serializable {
     @Column(name = "fonction")
     private String fonction;
 
-    @Column(name = "langue_preferee")
-    private String languePreferee;
-
     @NotNull
     @Pattern(regexp = "^\\+[0-9]{8,15}$")
     @Column(name = "telephone_principal", nullable = false)
@@ -76,14 +73,16 @@ public class Client implements Serializable {
     @Column(name = "adresses_livraison")
     private String adressesLivraison;
 
-    @Column(name = "reseaux_sociaux")
-    private String reseauxSociaux;
-
     @Column(name = "created_at")
     private Instant createdAt;
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "client" }, allowSetters = true)
+    private Set<ReseauSocial> reseauxSociauxes = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -94,6 +93,9 @@ public class Client implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "etats", "client" }, allowSetters = true)
     private Set<CycleActivation> cyclesActivations = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Langue languePreferee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Pays pays;
@@ -234,19 +236,6 @@ public class Client implements Serializable {
         this.fonction = fonction;
     }
 
-    public String getLanguePreferee() {
-        return this.languePreferee;
-    }
-
-    public Client languePreferee(String languePreferee) {
-        this.setLanguePreferee(languePreferee);
-        return this;
-    }
-
-    public void setLanguePreferee(String languePreferee) {
-        this.languePreferee = languePreferee;
-    }
-
     public String getTelephonePrincipal() {
         return this.telephonePrincipal;
     }
@@ -312,19 +301,6 @@ public class Client implements Serializable {
         this.adressesLivraison = adressesLivraison;
     }
 
-    public String getReseauxSociaux() {
-        return this.reseauxSociaux;
-    }
-
-    public Client reseauxSociaux(String reseauxSociaux) {
-        this.setReseauxSociaux(reseauxSociaux);
-        return this;
-    }
-
-    public void setReseauxSociaux(String reseauxSociaux) {
-        this.reseauxSociaux = reseauxSociaux;
-    }
-
     public Instant getCreatedAt() {
         return this.createdAt;
     }
@@ -349,6 +325,37 @@ public class Client implements Serializable {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Set<ReseauSocial> getReseauxSociauxes() {
+        return this.reseauxSociauxes;
+    }
+
+    public void setReseauxSociauxes(Set<ReseauSocial> reseauSocials) {
+        if (this.reseauxSociauxes != null) {
+            this.reseauxSociauxes.forEach(i -> i.setClient(null));
+        }
+        if (reseauSocials != null) {
+            reseauSocials.forEach(i -> i.setClient(this));
+        }
+        this.reseauxSociauxes = reseauSocials;
+    }
+
+    public Client reseauxSociauxes(Set<ReseauSocial> reseauSocials) {
+        this.setReseauxSociauxes(reseauSocials);
+        return this;
+    }
+
+    public Client addReseauxSociaux(ReseauSocial reseauSocial) {
+        this.reseauxSociauxes.add(reseauSocial);
+        reseauSocial.setClient(this);
+        return this;
+    }
+
+    public Client removeReseauxSociaux(ReseauSocial reseauSocial) {
+        this.reseauxSociauxes.remove(reseauSocial);
+        reseauSocial.setClient(null);
+        return this;
     }
 
     public Set<Opportunity> getOpportunities() {
@@ -410,6 +417,19 @@ public class Client implements Serializable {
     public Client removeCyclesActivation(CycleActivation cycleActivation) {
         this.cyclesActivations.remove(cycleActivation);
         cycleActivation.setClient(null);
+        return this;
+    }
+
+    public Langue getLanguePreferee() {
+        return this.languePreferee;
+    }
+
+    public void setLanguePreferee(Langue langue) {
+        this.languePreferee = langue;
+    }
+
+    public Client languePreferee(Langue langue) {
+        this.setLanguePreferee(langue);
         return this;
     }
 
@@ -540,13 +560,11 @@ public class Client implements Serializable {
             ", nationalite='" + getNationalite() + "'" +
             ", genre='" + getGenre() + "'" +
             ", fonction='" + getFonction() + "'" +
-            ", languePreferee='" + getLanguePreferee() + "'" +
             ", telephonePrincipal='" + getTelephonePrincipal() + "'" +
             ", whatsapp='" + getWhatsapp() + "'" +
             ", email='" + getEmail() + "'" +
             ", adressePersonnelle='" + getAdressePersonnelle() + "'" +
             ", adressesLivraison='" + getAdressesLivraison() + "'" +
-            ", reseauxSociaux='" + getReseauxSociaux() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             "}";

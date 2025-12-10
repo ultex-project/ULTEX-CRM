@@ -5,6 +5,7 @@ import com.ultex.crm.domain.Client_;
 import com.ultex.crm.domain.Company_;
 import com.ultex.crm.domain.Contact_;
 import com.ultex.crm.domain.KycClient_;
+import com.ultex.crm.domain.Langue_;
 import com.ultex.crm.domain.Opportunity_;
 import com.ultex.crm.domain.Prospect_;
 import com.ultex.crm.repository.ClientRepository;
@@ -91,8 +92,12 @@ public class ClientQueryService extends QueryService<Client> {
             if (criteria.getFonction() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFonction(), Client_.fonction));
             }
-            if (criteria.getLanguePreferee() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLanguePreferee(), Client_.languePreferee));
+            if (criteria.getLanguePrefereeId() != null) {
+                specification = specification.and(
+                    buildSpecification(criteria.getLanguePrefereeId(), root ->
+                        root.join(Client_.languePreferee, JoinType.LEFT).get(Langue_.id)
+                    )
+                );
             }
             if (criteria.getTelephonePrincipal() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTelephonePrincipal(), Client_.telephonePrincipal));
@@ -108,9 +113,6 @@ public class ClientQueryService extends QueryService<Client> {
             }
             if (criteria.getAdressesLivraison() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAdressesLivraison(), Client_.adressesLivraison));
-            }
-            if (criteria.getReseauxSociaux() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getReseauxSociaux(), Client_.reseauxSociaux));
             }
             if (criteria.getCreatedAt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), Client_.createdAt));

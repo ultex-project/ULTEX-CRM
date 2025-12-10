@@ -5,9 +5,11 @@ import static com.ultex.crm.domain.CompanyTestSamples.*;
 import static com.ultex.crm.domain.ContactTestSamples.*;
 import static com.ultex.crm.domain.CycleActivationTestSamples.*;
 import static com.ultex.crm.domain.KycClientTestSamples.*;
+import static com.ultex.crm.domain.LangueTestSamples.*;
 import static com.ultex.crm.domain.OpportunityTestSamples.*;
 import static com.ultex.crm.domain.PaysTestSamples.*;
 import static com.ultex.crm.domain.ProspectTestSamples.*;
+import static com.ultex.crm.domain.ReseauSocialTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ultex.crm.web.rest.TestUtil;
@@ -29,6 +31,28 @@ class ClientTest {
 
         client2 = getClientSample2();
         assertThat(client1).isNotEqualTo(client2);
+    }
+
+    @Test
+    void reseauxSociauxTest() {
+        Client client = getClientRandomSampleGenerator();
+        ReseauSocial reseauSocialBack = getReseauSocialRandomSampleGenerator();
+
+        client.addReseauxSociaux(reseauSocialBack);
+        assertThat(client.getReseauxSociauxes()).containsOnly(reseauSocialBack);
+        assertThat(reseauSocialBack.getClient()).isEqualTo(client);
+
+        client.removeReseauxSociaux(reseauSocialBack);
+        assertThat(client.getReseauxSociauxes()).doesNotContain(reseauSocialBack);
+        assertThat(reseauSocialBack.getClient()).isNull();
+
+        client.reseauxSociauxes(new HashSet<>(Set.of(reseauSocialBack)));
+        assertThat(client.getReseauxSociauxes()).containsOnly(reseauSocialBack);
+        assertThat(reseauSocialBack.getClient()).isEqualTo(client);
+
+        client.setReseauxSociauxes(new HashSet<>());
+        assertThat(client.getReseauxSociauxes()).doesNotContain(reseauSocialBack);
+        assertThat(reseauSocialBack.getClient()).isNull();
     }
 
     @Test
@@ -73,6 +97,18 @@ class ClientTest {
         client.setCyclesActivations(new HashSet<>());
         assertThat(client.getCyclesActivations()).doesNotContain(cycleActivationBack);
         assertThat(cycleActivationBack.getClient()).isNull();
+    }
+
+    @Test
+    void languePrefereeTest() {
+        Client client = getClientRandomSampleGenerator();
+        Langue langueBack = getLangueRandomSampleGenerator();
+
+        client.setLanguePreferee(langueBack);
+        assertThat(client.getLanguePreferee()).isEqualTo(langueBack);
+
+        client.languePreferee(null);
+        assertThat(client.getLanguePreferee()).isNull();
     }
 
     @Test

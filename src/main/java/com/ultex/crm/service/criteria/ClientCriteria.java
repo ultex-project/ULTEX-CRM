@@ -38,7 +38,7 @@ public class ClientCriteria implements Serializable, Criteria {
 
     private StringFilter fonction;
 
-    private StringFilter languePreferee;
+    private LongFilter languePrefereeId;
 
     private StringFilter telephonePrincipal;
 
@@ -49,8 +49,6 @@ public class ClientCriteria implements Serializable, Criteria {
     private StringFilter adressePersonnelle;
 
     private StringFilter adressesLivraison;
-
-    private StringFilter reseauxSociaux;
 
     private InstantFilter createdAt;
 
@@ -80,13 +78,12 @@ public class ClientCriteria implements Serializable, Criteria {
         this.nationalite = other.nationalite == null ? null : other.nationalite.copy();
         this.genre = other.genre == null ? null : other.genre.copy();
         this.fonction = other.fonction == null ? null : other.fonction.copy();
-        this.languePreferee = other.languePreferee == null ? null : other.languePreferee.copy();
+        this.languePrefereeId = other.languePrefereeId == null ? null : other.languePrefereeId.copy();
         this.telephonePrincipal = other.telephonePrincipal == null ? null : other.telephonePrincipal.copy();
         this.whatsapp = other.whatsapp == null ? null : other.whatsapp.copy();
         this.email = other.email == null ? null : other.email.copy();
         this.adressePersonnelle = other.adressePersonnelle == null ? null : other.adressePersonnelle.copy();
         this.adressesLivraison = other.adressesLivraison == null ? null : other.adressesLivraison.copy();
-        this.reseauxSociaux = other.reseauxSociaux == null ? null : other.reseauxSociaux.copy();
         this.createdAt = other.createdAt == null ? null : other.createdAt.copy();
         this.updatedAt = other.updatedAt == null ? null : other.updatedAt.copy();
         this.opportunitiesId = other.opportunitiesId == null ? null : other.opportunitiesId.copy();
@@ -174,12 +171,12 @@ public class ClientCriteria implements Serializable, Criteria {
         this.fonction = fonction;
     }
 
-    public StringFilter getLanguePreferee() {
-        return languePreferee;
+    public LongFilter getLanguePrefereeId() {
+        return languePrefereeId;
     }
 
-    public void setLanguePreferee(StringFilter languePreferee) {
-        this.languePreferee = languePreferee;
+    public void setLanguePrefereeId(LongFilter languePrefereeId) {
+        this.languePrefereeId = languePrefereeId;
     }
 
     public StringFilter getTelephonePrincipal() {
@@ -220,14 +217,6 @@ public class ClientCriteria implements Serializable, Criteria {
 
     public void setAdressesLivraison(StringFilter adressesLivraison) {
         this.adressesLivraison = adressesLivraison;
-    }
-
-    public StringFilter getReseauxSociaux() {
-        return reseauxSociaux;
-    }
-
-    public void setReseauxSociaux(StringFilter reseauxSociaux) {
-        this.reseauxSociaux = reseauxSociaux;
     }
 
     public InstantFilter getCreatedAt() {
@@ -313,13 +302,12 @@ public class ClientCriteria implements Serializable, Criteria {
             Objects.equals(nationalite, that.nationalite) &&
             Objects.equals(genre, that.genre) &&
             Objects.equals(fonction, that.fonction) &&
-            Objects.equals(languePreferee, that.languePreferee) &&
+            Objects.equals(languePrefereeId, that.languePrefereeId) &&
             Objects.equals(telephonePrincipal, that.telephonePrincipal) &&
             Objects.equals(whatsapp, that.whatsapp) &&
             Objects.equals(email, that.email) &&
             Objects.equals(adressePersonnelle, that.adressePersonnelle) &&
             Objects.equals(adressesLivraison, that.adressesLivraison) &&
-            Objects.equals(reseauxSociaux, that.reseauxSociaux) &&
             Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(updatedAt, that.updatedAt) &&
             Objects.equals(opportunitiesId, that.opportunitiesId) &&
@@ -343,13 +331,12 @@ public class ClientCriteria implements Serializable, Criteria {
             nationalite,
             genre,
             fonction,
-            languePreferee,
+            languePrefereeId,
             telephonePrincipal,
             whatsapp,
             email,
             adressePersonnelle,
             adressesLivraison,
-            reseauxSociaux,
             createdAt,
             updatedAt,
             opportunitiesId,
@@ -374,13 +361,12 @@ public class ClientCriteria implements Serializable, Criteria {
             (nationalite != null ? "nationalite=" + nationalite + ", " : "") +
             (genre != null ? "genre=" + genre + ", " : "") +
             (fonction != null ? "fonction=" + fonction + ", " : "") +
-            (languePreferee != null ? "languePreferee=" + languePreferee + ", " : "") +
+            (languePrefereeId != null ? "languePrefereeId=" + languePrefereeId + ", " : "") +
             (telephonePrincipal != null ? "telephonePrincipal=" + telephonePrincipal + ", " : "") +
             (whatsapp != null ? "whatsapp=" + whatsapp + ", " : "") +
             (email != null ? "email=" + email + ", " : "") +
             (adressePersonnelle != null ? "adressePersonnelle=" + adressePersonnelle + ", " : "") +
             (adressesLivraison != null ? "adressesLivraison=" + adressesLivraison + ", " : "") +
-            (reseauxSociaux != null ? "reseauxSociaux=" + reseauxSociaux + ", " : "") +
             (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
             (updatedAt != null ? "updatedAt=" + updatedAt + ", " : "") +
             (opportunitiesId != null ? "opportunitiesId=" + opportunitiesId + ", " : "") +

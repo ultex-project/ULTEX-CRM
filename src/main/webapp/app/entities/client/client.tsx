@@ -143,10 +143,6 @@ export const Client = () => {
                   <Translate contentKey="crmApp.client.fonction">Fonction</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('fonction')} />
                 </th>
-                <th className="hand" onClick={sort('languePreferee')}>
-                  <Translate contentKey="crmApp.client.languePreferee">Langue Preferee</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('languePreferee')} />
-                </th>
                 <th className="hand" onClick={sort('telephonePrincipal')}>
                   <Translate contentKey="crmApp.client.telephonePrincipal">Telephone Principal</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('telephonePrincipal')} />
@@ -166,10 +162,6 @@ export const Client = () => {
                   <Translate contentKey="crmApp.client.adressesLivraison">Adresses Livraison</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('adressesLivraison')} />
                 </th>
-                <th className="hand" onClick={sort('reseauxSociaux')}>
-                  <Translate contentKey="crmApp.client.reseauxSociaux">Reseaux Sociaux</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('reseauxSociaux')} />
-                </th>
                 <th className="hand" onClick={sort('createdAt')}>
                   <Translate contentKey="crmApp.client.createdAt">Created At</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('createdAt')} />
@@ -177,6 +169,9 @@ export const Client = () => {
                 <th className="hand" onClick={sort('updatedAt')}>
                   <Translate contentKey="crmApp.client.updatedAt">Updated At</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('updatedAt')} />
+                </th>
+                <th>
+                  <Translate contentKey="crmApp.client.languePreferee">Langue Preferee</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="crmApp.client.pays">Pays</Translate> <FontAwesomeIcon icon="sort" />
@@ -205,15 +200,14 @@ export const Client = () => {
                   <td>{client.nationalite}</td>
                   <td>{client.genre}</td>
                   <td>{client.fonction}</td>
-                  <td>{client.languePreferee}</td>
                   <td>{client.telephonePrincipal}</td>
                   <td>{client.whatsapp}</td>
                   <td>{client.email}</td>
                   <td>{client.adressePersonnelle}</td>
                   <td>{client.adressesLivraison}</td>
-                  <td>{client.reseauxSociaux}</td>
                   <td>{client.createdAt ? <TextFormat type="date" value={client.createdAt} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{client.updatedAt ? <TextFormat type="date" value={client.updatedAt} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{client.languePreferee ? <Link to={`/langue/${client.languePreferee.id}`}>{client.languePreferee.id}</Link> : ''}</td>
                   <td>{client.pays ? <Link to={`/pays/${client.pays.id}`}>{client.pays.id}</Link> : ''}</td>
                   <td>{client.company ? <Link to={`/company/${client.company.id}`}>{client.company.id}</Link> : ''}</td>
                   <td className="text-end">

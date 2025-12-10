@@ -55,7 +55,6 @@ public class ClientAsserts {
             .satisfies(a -> assertThat(a.getNationalite()).as("check nationalite").isEqualTo(expected.getNationalite()))
             .satisfies(a -> assertThat(a.getGenre()).as("check genre").isEqualTo(expected.getGenre()))
             .satisfies(a -> assertThat(a.getFonction()).as("check fonction").isEqualTo(expected.getFonction()))
-            .satisfies(a -> assertThat(a.getLanguePreferee()).as("check languePreferee").isEqualTo(expected.getLanguePreferee()))
             .satisfies(a -> assertThat(a.getTelephonePrincipal()).as("check telephonePrincipal").isEqualTo(expected.getTelephonePrincipal())
             )
             .satisfies(a -> assertThat(a.getWhatsapp()).as("check whatsapp").isEqualTo(expected.getWhatsapp()))
@@ -63,7 +62,6 @@ public class ClientAsserts {
             .satisfies(a -> assertThat(a.getAdressePersonnelle()).as("check adressePersonnelle").isEqualTo(expected.getAdressePersonnelle())
             )
             .satisfies(a -> assertThat(a.getAdressesLivraison()).as("check adressesLivraison").isEqualTo(expected.getAdressesLivraison()))
-            .satisfies(a -> assertThat(a.getReseauxSociaux()).as("check reseauxSociaux").isEqualTo(expected.getReseauxSociaux()))
             .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()))
             .satisfies(a -> assertThat(a.getUpdatedAt()).as("check updatedAt").isEqualTo(expected.getUpdatedAt()));
     }
@@ -77,6 +75,7 @@ public class ClientAsserts {
     public static void assertClientUpdatableRelationshipsEquals(Client expected, Client actual) {
         assertThat(actual)
             .as("Verify Client relationships")
+            .satisfies(a -> assertThat(a.getLanguePreferee()).as("check languePreferee").isEqualTo(expected.getLanguePreferee()))
             .satisfies(a -> assertThat(a.getPays()).as("check pays").isEqualTo(expected.getPays()))
             .satisfies(a -> assertThat(a.getCompany()).as("check company").isEqualTo(expected.getCompany()));
     }

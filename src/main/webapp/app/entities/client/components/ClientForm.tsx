@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
 import { getEntities as getInternalUsers } from 'app/entities/internal-user/internal-user.reducer';
+import { getEntities as getLangues } from 'app/entities/langue/langue.reducer';
 import { Alert, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
@@ -41,7 +42,6 @@ type ClientFormState = {
   email: string;
   adressePersonnelle: string;
   adressesLivraison: string;
-  reseauxSociaux: string;
   companyId: string;
   assignedUserId: string;
 };
@@ -61,13 +61,12 @@ const mapInitialDataToState = (data?: IClient): ClientFormState => ({
   nationalite: data?.nationalite ?? '',
   genre: data?.genre ?? '',
   fonction: data?.fonction ?? '',
-  languePreferee: data?.languePreferee ?? '',
+  languePreferee: data?.languePreferee?.id ? String(data.languePreferee.id) : '',
   telephonePrincipal: data?.telephonePrincipal ?? '',
   whatsapp: data?.whatsapp ?? '',
   email: data?.email ?? '',
   adressePersonnelle: data?.adressePersonnelle ?? '',
   adressesLivraison: data?.adressesLivraison ?? '',
-  reseauxSociaux: data?.reseauxSociaux ?? '',
   companyId: data?.company?.id ? String(data.company.id) : '',
   assignedUserId: '',
 });
@@ -82,13 +81,12 @@ const buildClientPayload = (values: ClientFormState, initial?: IClient): IClient
   nationalite: values.nationalite.trim(),
   genre: values.genre || undefined,
   fonction: values.fonction || undefined,
-  languePreferee: values.languePreferee || undefined,
+  languePreferee: values.languePreferee ? { id: Number(values.languePreferee) } : undefined,
   telephonePrincipal: values.telephonePrincipal.trim(),
   whatsapp: values.whatsapp || undefined,
   email: values.email || undefined,
   adressePersonnelle: values.adressePersonnelle || undefined,
   adressesLivraison: values.adressesLivraison || undefined,
-  reseauxSociaux: values.reseauxSociaux || undefined,
   company: values.companyId ? { id: Number(values.companyId) } : undefined,
 });
 
@@ -104,6 +102,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
   const companyLoading = useAppSelector(state => state.company.loading);
   const internalUsers = useAppSelector(state => state.internalUser.entities);
   const internalUserLoading = useAppSelector(state => state.internalUser.loading);
+  const langues = useAppSelector(state => state.langue.entities);
+  const langueLoading = useAppSelector(state => state.langue.loading);
 
   const [formValues, setFormValues] = useState<ClientFormState>(() => mapInitialDataToState(initialData));
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -132,6 +132,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
   useEffect(() => {
     dispatch(getCompanies({ page: 0, size: 100, sort: 'name,asc' }));
     dispatch(getInternalUsers({ sort: 'fullName,asc' }));
+    dispatch(getLangues({ page: 0, size: 100, sort: 'nom,asc' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -454,12 +455,19 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
                 <Label for="client-languePreferee">
                   <Translate contentKey="crmApp.client.languePreferee" />
                 </Label>
-                <Input type="select" id="client-languePreferee" value={formValues.languePreferee} onChange={handleChange('languePreferee')}>
+                <Input
+                  type="select"
+                  id="client-languePreferee"
+                  value={formValues.languePreferee}
+                  onChange={handleChange('languePreferee')}
+                  disabled={langueLoading}
+                >
                   <option value="">{translate('crmApp.client.form.select')}</option>
-                  <option value="FR">Français</option>
-                  <option value="AR">Arabe</option>
-                  <option value="EN">Anglais</option>
-                  <option value="Autre">Autre</option>
+                  {langues.map(langue => (
+                    <option key={langue.id} value={langue.id ?? ''}>
+                      {langue.nom ?? langue.code ?? langue.id}
+                    </option>
+                  ))}
                 </Input>
               </FormGroup>
             </Col>
@@ -519,15 +527,6 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
                   <Translate contentKey="crmApp.client.adressesLivraison" />
                 </Label>
                 <Input id="client-adressesLivraison" value={formValues.adressesLivraison} onChange={handleChange('adressesLivraison')} />
-              </FormGroup>
-            </Col>
-
-            <Col md="6">
-              <FormGroup>
-                <Label for="client-reseauxSociaux">
-                  <Translate contentKey="crmApp.client.reseauxSociaux" />
-                </Label>
-                <Input id="client-reseauxSociaux" value={formValues.reseauxSociaux} onChange={handleChange('reseauxSociaux')} />
               </FormGroup>
             </Col>
 

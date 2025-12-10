@@ -387,7 +387,7 @@ const GeneralInfoCard: React.FC<{ client: IClient | null }> = ({ client }) => (
             <span className="text-uppercase text-muted small">
               <Translate contentKey="crmApp.client.languePreferee" />
             </span>
-            <span className="fw-semibold">{renderValue(client?.languePreferee)}</span>
+            <span className="fw-semibold">{renderValue(client?.languePreferee?.nom ?? client?.languePreferee?.code)}</span>
           </div>
         </Col>
         <Col md="4">

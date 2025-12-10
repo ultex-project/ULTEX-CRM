@@ -51,6 +51,7 @@ public class CacheConfiguration {
             createCache(cm, com.ultex.crm.domain.Authority.class.getName());
             createCache(cm, com.ultex.crm.domain.User.class.getName() + ".authorities");
             createCache(cm, com.ultex.crm.domain.Client.class.getName());
+            createCache(cm, com.ultex.crm.domain.Client.class.getName() + ".reseauxSociauxes");
             createCache(cm, com.ultex.crm.domain.Client.class.getName() + ".opportunities");
             createCache(cm, com.ultex.crm.domain.Client.class.getName() + ".cyclesActivations");
             createCache(cm, com.ultex.crm.domain.Client.class.getName() + ".contacts");
@@ -84,6 +85,8 @@ public class CacheConfiguration {
             createCache(cm, com.ultex.crm.domain.CycleActivation.class.getName() + ".etats");
             createCache(cm, com.ultex.crm.domain.EtatInteraction.class.getName());
             createCache(cm, com.ultex.crm.domain.RappelAgent.class.getName());
+            createCache(cm, com.ultex.crm.domain.Langue.class.getName());
+            createCache(cm, com.ultex.crm.domain.ReseauSocial.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
