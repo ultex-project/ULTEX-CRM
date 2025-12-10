@@ -207,7 +207,15 @@ export const Client = () => {
                   <td>{client.adressesLivraison}</td>
                   <td>{client.createdAt ? <TextFormat type="date" value={client.createdAt} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{client.updatedAt ? <TextFormat type="date" value={client.updatedAt} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{client.languePreferee ? <Link to={`/langue/${client.languePreferee.id}`}>{client.languePreferee.id}</Link> : ''}</td>
+                  <td>
+                    {client.languePreferee ? (
+                      <Link to={`/langue/${client.languePreferee.id}`}>
+                        {client.languePreferee.nom ?? client.languePreferee.code ?? client.languePreferee.id}
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td>{client.pays ? <Link to={`/pays/${client.pays.id}`}>{client.pays.id}</Link> : ''}</td>
                   <td>{client.company ? <Link to={`/company/${client.company.id}`}>{client.company.id}</Link> : ''}</td>
                   <td className="text-end">

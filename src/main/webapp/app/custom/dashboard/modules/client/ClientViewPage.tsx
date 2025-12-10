@@ -148,6 +148,18 @@ const createCollectionFetcher = <T,>(endpoint: string) =>
     .then(response => response.data ?? [])
     .catch(() => []);
 
+const fetchContactsByClient = (clientId: number) =>
+  axios
+    .get<IContactAssocie[]>('/api/contact-associes', {
+      params: {
+        'clientId.equals': clientId,
+        size: 1000,
+        cacheBuster: Date.now(),
+      },
+    })
+    .then(response => (response.data ?? []).filter(contact => contact.client?.id === clientId))
+    .catch(() => []);
+
 type ClientDashboardData = {
   client: IClient | null;
   contacts: IContactAssocie[];
@@ -194,7 +206,7 @@ const useClientDashboardData = (clientId: number | null) => {
         const [clientResponse, contactsData, kycData, demandesData, produitsData, opportunitiesData, historyData, societesData] =
           await Promise.all([
             axios.get<IClient>(`api/clients/${clientId}`),
-            createCollectionFetcher<IContactAssocie>('api/contact-associes'),
+            fetchContactsByClient(clientId),
             createCollectionFetcher<IKycClient>('api/kyc-clients'),
             createCollectionFetcher<IDemandeClient>('api/demande-clients'),
             createCollectionFetcher<IProduitDemande>('api/produit-demandes'),
@@ -208,7 +220,7 @@ const useClientDashboardData = (clientId: number | null) => {
         }
 
         const clientValue = clientResponse.data ?? null;
-        const contactsForClient = contactsData.filter(item => item.client?.id === clientId);
+        const contactsForClient = contactsData;
         const kycForClient = kycData.find(item => item.client?.id === clientId) ?? null;
         const requestsForClient = demandesData.filter(item => item.client?.id === clientId);
         const requestIds = new Set(

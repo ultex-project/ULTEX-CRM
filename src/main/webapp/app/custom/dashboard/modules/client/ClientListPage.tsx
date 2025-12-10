@@ -81,6 +81,8 @@ const SORT_LABELS: Record<string, string> = {
   createdAt: 'crmApp.client.createdAt',
 };
 
+const formatLangueLabel = (langue?: IClient['languePreferee']) => langue?.nom ?? langue?.code ?? '';
+
 const isClientStatusKey = (value: unknown): value is ClientStatusKey =>
   typeof value === 'string' && Object.values(ClientStatus).includes(value as ClientStatus);
 
@@ -308,7 +310,7 @@ const ClientListPage = () => {
         client.telephonePrincipal,
         client.code,
         client.nationalite,
-        client.languePreferee,
+        formatLangueLabel(client.languePreferee),
         client.company?.name,
       ]
         .filter(Boolean)
@@ -698,7 +700,7 @@ const ClientListPage = () => {
                         </td>
                         <td>{renderStatusBadge(statusKey)}</td>
                         <td>{client.nationalite ?? '--'}</td>
-                        <td>{client.languePreferee ?? '--'}</td>
+                        <td>{formatLangueLabel(client.languePreferee) || '--'}</td>
                         <td>{client.createdAt ? dayjs(client.createdAt).format('DD MMM YYYY') : '--'}</td>
                         <td className="text-end pe-4">
                           {client.id ? (

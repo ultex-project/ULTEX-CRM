@@ -5,7 +5,7 @@
     "menu": {
       "overview": "Aperçu",
       "companies": "Entreprises",
-      "contacts": "Contacts",
+      "prospects": "Prospects",
       "deals": "Affaires",
       "reports": "Rapports",
       "calendar": "Calendrier",
@@ -68,6 +68,8 @@
       "sousServices": "Sous-services",
       "products": "Produits",
       "demandes": "Demandes",
+      "contactAssocie": "Contacts associés",
+      "contactAssocieList": "Liste des contacts associés",
       "editProfile": "Modifier le profil",
       "title": "Ultex"
     },

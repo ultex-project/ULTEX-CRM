@@ -42,6 +42,12 @@ import DemandeListPage from 'app/custom/dashboard/modules/demande/DemandeListPag
 import DemandeCreatePage from 'app/custom/dashboard/modules/demande/DemandeCreatePage';
 import DemandeEditPage from 'app/custom/dashboard/modules/demande/DemandeEditPage';
 import DemandeViewPage from 'app/custom/dashboard/modules/demande/DemandeViewPage';
+import ContactAssocieListPage from 'app/custom/dashboard/modules/contact-associe/ContactAssocieListPage';
+import ContactAssocieViewPage from 'app/custom/dashboard/modules/contact-associe/ContactAssocieViewPage';
+import ContactAssocieEditPage from 'app/custom/dashboard/modules/contact-associe/ContactAssocieEditPage';
+import ContactAssocieDetail from 'app/entities/contact-associe/contact-associe-detail';
+import ContactAssocieUpdate from 'app/entities/contact-associe/contact-associe-update';
+import ContactAssocieCreatePage from 'app/custom/dashboard/modules/contact-associe/ContactAssocieCreatePage';
 
 const loading = <div>loading ...</div>;
 
@@ -139,6 +145,10 @@ const AppRoutes = () => {
           <Route path="demandes/new" element={<DemandeCreatePage />} />
           <Route path="demandes/:id/edit" element={<DemandeEditPage />} />
           <Route path="demandes/:id" element={<DemandeViewPage />} />
+          <Route path="contact-associe" element={<ContactAssocieListPage />} />
+          <Route path="contact-associe/new" element={<ContactAssocieCreatePage />} />
+          <Route path="contact-associe/:id/edit" element={<ContactAssocieEditPage />} />
+          <Route path="contact-associe/:id/view" element={<ContactAssocieViewPage />} />
           <Route
             path="sous-services"
             element={

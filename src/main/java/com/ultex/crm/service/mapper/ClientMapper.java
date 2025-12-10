@@ -23,6 +23,8 @@ public interface ClientMapper extends EntityMapper<ClientDTO, Client> {
     @Named("langueId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "code", source = "code")
+    @Mapping(target = "nom", source = "nom")
     LangueDTO toDtoLangueId(Langue langue);
 
     @Named("paysId")

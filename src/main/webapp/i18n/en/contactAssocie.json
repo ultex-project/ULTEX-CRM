@@ -1,40 +1,52 @@
 {
   "crmApp": {
     "contactAssocie": {
+      "title": "Associated Contact",
       "home": {
-        "title": "Contact Associes",
+        "title": "Associated Contacts",
         "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Contact Associe",
-        "createOrEditLabel": "Create or edit a Contact Associe",
-        "notFound": "No Contact Associes found"
+        "createLabel": "Create a new associated contact",
+        "createOrEditLabel": "Create or edit an associated contact",
+        "notFound": "No associated contacts found"
       },
-      "created": "A new Contact Associe is created with identifier {{ param }}",
-      "updated": "A Contact Associe is updated with identifier {{ param }}",
-      "deleted": "A Contact Associe is deleted with identifier {{ param }}",
+      "created": "A new associated contact is created with identifier {{ param }}",
+      "updated": "An associated contact is updated with identifier {{ param }}",
+      "deleted": "An associated contact is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Are you sure you want to delete Contact Associe {{ id }}?"
+        "question": "Are you sure you want to delete associated contact {{ id }}?"
       },
       "detail": {
-        "title": "Contact Associe"
+        "title": "Associated Contact"
       },
       "id": "ID",
-      "nom": "Nom",
-      "prenom": "Prenom",
-      "relation": "Relation",
-      "telephone": "Telephone",
-      "whatsapp": "Whatsapp",
+      "nom": "Last name",
+      "prenom": "First name",
+      "relation": "Relationship",
+      "telephone": "Phone",
+      "whatsapp": "WhatsApp",
       "email": "Email",
-      "autorisation": "Autorisation",
-      "remarques": "Remarques",
+      "autorisation": "Authorization",
+      "remarques": "Notes",
       "client": "Client",
+      "actions": {
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete",
+        "back": "Back",
+        "save": "Save"
+      },
       "dashboard": {
         "title": "Linked Contacts",
         "subtitle": "Manage all contacts associated with this client",
+        "back": "Back to associated contacts",
+        "loadError": "Unable to load this associated contact.",
+        "linkExisting": "Link an associated contact",
         "add": "Add a contact",
         "empty": "No linked contacts for this client.",
         "actions": {
           "label": "Actions",
-          "view": "View"
+          "view": "View",
+          "unlink": "Unlink"
         },
         "columns": {
           "name": "Name"

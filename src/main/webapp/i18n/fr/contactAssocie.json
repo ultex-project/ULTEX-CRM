@@ -1,40 +1,52 @@
 {
   "crmApp": {
     "contactAssocie": {
+      "title": "Contact associé",
       "home": {
-        "title": "ContactAssocies",
+        "title": "Contacts associés",
         "refreshListLabel": "Actualiser la liste",
-        "createLabel": "Créer un nouveau Contact Associe",
-        "createOrEditLabel": "Créer ou éditer un Contact Associe",
-        "notFound": "Aucun Contact Associe trouvé"
+        "createLabel": "Créer un nouveau contact associé",
+        "createOrEditLabel": "Créer ou éditer un contact associé",
+        "notFound": "Aucun contact associé trouvé"
       },
-      "created": "Un nouveau Contact Associe a été créé avec l'identifiant {{ param }}",
-      "updated": "Le Contact Associe avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "Le Contact Associe avec l'identifiant {{ param }} a été supprimé",
+      "created": "Un nouveau contact associé a été créé avec l'identifiant {{ param }}",
+      "updated": "Le contact associé avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le contact associé avec l'identifiant {{ param }} a été supprimé",
       "delete": {
-        "question": "Êtes-vous certain de vouloir supprimer le Contact Associe {{ id }} ?"
+        "question": "Êtes-vous certain de vouloir supprimer le contact associé {{ id }} ?"
       },
       "detail": {
-        "title": "Contact Associe"
+        "title": "Contact associé"
       },
       "id": "ID",
       "nom": "Nom",
-      "prenom": "Prenom",
+      "prenom": "Prénom",
       "relation": "Relation",
-      "telephone": "Telephone",
-      "whatsapp": "Whatsapp",
+      "telephone": "Téléphone",
+      "whatsapp": "WhatsApp",
       "email": "Email",
       "autorisation": "Autorisation",
       "remarques": "Remarques",
       "client": "Client",
+      "actions": {
+        "view": "Voir",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "back": "Retour",
+        "save": "Enregistrer"
+      },
       "dashboard": {
         "title": "Contacts Associés",
         "subtitle": "Gérez tous les contacts liés à ce client",
+        "back": "Retour aux contacts associés",
+        "loadError": "Impossible de charger ce contact associé.",
+        "linkExisting": "Lier un contact associé",
         "add": "Ajouter un contact",
         "empty": "Aucun contact associé pour ce client.",
         "actions": {
           "label": "Actions",
-          "view": "Voir"
+          "view": "Voir",
+          "unlink": "Dissocier"
         },
         "columns": {
           "name": "Nom et prénom"

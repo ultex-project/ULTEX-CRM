@@ -129,7 +129,11 @@ export const ClientDetail = () => {
           <dt>
             <Translate contentKey="crmApp.client.languePreferee">Langue Preferee</Translate>
           </dt>
-          <dd>{clientEntity.languePreferee ? clientEntity.languePreferee.id : ''}</dd>
+          <dd>
+            {clientEntity.languePreferee
+              ? (clientEntity.languePreferee.nom ?? clientEntity.languePreferee.code ?? clientEntity.languePreferee.id)
+              : ''}
+          </dd>
           <dt>
             <Translate contentKey="crmApp.client.pays">Pays</Translate>
           </dt>

@@ -94,7 +94,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
     },
     {
       id: 'contacts',
-      label: 'global.menu.contacts',
+      label: 'global.menu.prospects',
       icon: faUserPlus,
       path: '/dashboard/contact',
       roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
@@ -110,6 +110,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed: propCollapsed, toggleCol
           label: 'global.menu.clients.list',
           icon: faFileAlt,
           path: '/dashboard/clients',
+          roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
+        },
+        {
+          id: 'clients-contacts',
+          label: 'crmApp.client.view.sections.contacts',
+          icon: faUserPlus,
+          path: '/dashboard/contact-associe',
           roles: ['ROLE_ADMIN', 'ROLE_USER', ROLE_DATA],
         },
         // {
