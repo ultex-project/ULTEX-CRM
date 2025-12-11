@@ -3,8 +3,6 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
-import { getEntities as getInternalUsers } from 'app/entities/internal-user/internal-user.reducer';
 import { getEntities as getLangues } from 'app/entities/langue/langue.reducer';
 import { Alert, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,8 +40,6 @@ type ClientFormState = {
   email: string;
   adressePersonnelle: string;
   adressesLivraison: string;
-  companyId: string;
-  assignedUserId: string;
 };
 
 type FormErrors = Partial<Record<keyof ClientFormState, string>>;
@@ -67,8 +63,6 @@ const mapInitialDataToState = (data?: IClient): ClientFormState => ({
   email: data?.email ?? '',
   adressePersonnelle: data?.adressePersonnelle ?? '',
   adressesLivraison: data?.adressesLivraison ?? '',
-  companyId: data?.company?.id ? String(data.company.id) : '',
-  assignedUserId: '',
 });
 
 const buildClientPayload = (values: ClientFormState, initial?: IClient): IClient => ({
@@ -87,7 +81,7 @@ const buildClientPayload = (values: ClientFormState, initial?: IClient): IClient
   email: values.email || undefined,
   adressePersonnelle: values.adressePersonnelle || undefined,
   adressesLivraison: values.adressesLivraison || undefined,
-  company: values.companyId ? { id: Number(values.companyId) } : undefined,
+  company: initial?.company, // keep existing company relation without exposing it in the form
 });
 
 const DefaultTelephoneInput: React.FC<TelephoneInputComponentProps> = ({ id, value, onChange, disabled }) => (
@@ -98,10 +92,6 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const companies = useAppSelector(state => state.company.entities);
-  const companyLoading = useAppSelector(state => state.company.loading);
-  const internalUsers = useAppSelector(state => state.internalUser.entities);
-  const internalUserLoading = useAppSelector(state => state.internalUser.loading);
   const langues = useAppSelector(state => state.langue.entities);
   const langueLoading = useAppSelector(state => state.langue.loading);
 
@@ -127,11 +117,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
   });
   const [codeLoading, setCodeLoading] = useState(false);
 
-  const referenceLoading = companyLoading || internalUserLoading;
-
   useEffect(() => {
-    dispatch(getCompanies({ page: 0, size: 100, sort: 'name,asc' }));
-    dispatch(getInternalUsers({ sort: 'fullName,asc' }));
     dispatch(getLangues({ page: 0, size: 100, sort: 'nom,asc' }));
   }, [dispatch]);
 
@@ -527,50 +513,6 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSubmit, mode, te
                   <Translate contentKey="crmApp.client.adressesLivraison" />
                 </Label>
                 <Input id="client-adressesLivraison" value={formValues.adressesLivraison} onChange={handleChange('adressesLivraison')} />
-              </FormGroup>
-            </Col>
-
-            <Col md="6">
-              <FormGroup>
-                <Label for="client-company">
-                  <Translate contentKey="crmApp.client.company" />
-                </Label>
-                <Input
-                  type="select"
-                  id="client-company"
-                  value={formValues.companyId}
-                  onChange={handleChange('companyId')}
-                  disabled={referenceLoading}
-                >
-                  <option value="">{translate('crmApp.client.form.select')}</option>
-                  {companies.map(company => (
-                    <option key={company.id} value={company.id ?? ''}>
-                      {company.name}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-            </Col>
-
-            <Col md="6">
-              <FormGroup>
-                <Label for="client-assignedUser">
-                  <Translate contentKey="crmApp.client.form.assignedUser" />
-                </Label>
-                <Input
-                  type="select"
-                  id="client-assignedUser"
-                  value={formValues.assignedUserId}
-                  onChange={handleChange('assignedUserId')}
-                  disabled={referenceLoading}
-                >
-                  <option value="">{translate('crmApp.client.form.select')}</option>
-                  {internalUsers.map(user => (
-                    <option key={user.id} value={user.id ?? ''}>
-                      {user.fullName ?? user.email ?? `Utilisateur #${user.id}`}
-                    </option>
-                  ))}
-                </Input>
               </FormGroup>
             </Col>
           </Row>
